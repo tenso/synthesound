@@ -1,21 +1,23 @@
 /*jshint strict: true */
+/*global getGenFreq */
+/*global setGenFreq */
+/*global startAudio */
+/*global stopAudio */
 
-function parseKeyUp(e) {
+function parseInput(e) {
     "use strict";
     setGenFreq(e.target.value);
-    if (e.keyCode === 13) {
-        playAudio(getGenFreq());
-    }
 }
 
 window.onload = function () {
     "use strict";
-    var freqSelect = document.getElementById("freqSelect");
-    if (!freqSelect) {
-        window.alert("did not find id");
-    }
-    freqSelect.addEventListener("keyup", parseKeyUp, false);
+    var freqSelect = document.getElementById("freqSelect"),
+        playButton = document.getElementById("play"),
+        stopButton = document.getElementById("stop");
     
-    var playButton = document.getElementById("play");
-    playButton.addEventListener("click", function() { playAudio(getGenFreq());}, false);
+    freqSelect.defaultValue = getGenFreq();
+    freqSelect.onchange = parseInput;
+    freqSelect.addEventListener("keyup", parseInput, false);
+    playButton.addEventListener("click", function () { startAudio(); }, false);
+    stopButton.addEventListener("click", function () { stopAudio(); }, false);
 };
