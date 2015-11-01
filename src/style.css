@@ -1,0 +1,30 @@
+body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.title {
+    font-size: 2em;
+    color: black;
+}
+.button {
+    margin: 1em;
+    padding: 0.5em;
+    background: #999;
+    border: 2px solid black;
+    border-radius: 4px;
+    color: black;
+    font-size: 2em;
+    display: inline-block;
+}
+
+.button:active {
+    background: #444;
+}
+
+.input-number {
+    font-size: 2em;
+}
