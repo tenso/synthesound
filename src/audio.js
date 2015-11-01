@@ -1,5 +1,7 @@
 /*jshint strict: true */
 
+/*global SinGen*/
+
 var genFreq = 220;
 function setGenFreq(freq) {
     "use strict";
@@ -10,40 +12,28 @@ function getGenFreq() {
     return genFreq;
 }
 
-var globalIndex = 0;
-function generateAudio(event) {
-    "use strict";
-    var outputBuffer = event.outputBuffer,
-        chan = 0,
-        amp = 0.5,
-        sample = 0,
-        outputData = null,
-        index = 0;
-    
-    for (chan = 0; chan < outputBuffer.numberOfChannels; chan += 1) {
-        outputData = outputBuffer.getChannelData(chan);
+var generators = [];
 
-        for (sample = 0; sample < outputBuffer.length; sample += 1) {
-            index = (globalIndex + sample) % outputBuffer.sampleRate;
-            outputData[sample] = amp * Math.sin(2 * Math.PI * getGenFreq() * index / outputBuffer.sampleRate);
-        }
-    }
-    globalIndex += outputBuffer.length;
-}
-
-var AudioContext = window.AudioContext || window.webkitAudioContext;
-var audioCtx = new AudioContext(),
-    channels = 2,
-    scriptNode = audioCtx.createScriptProcessor(4096, 1, 1);
-
-scriptNode.onaudioprocess = generateAudio;
+var AudioContext = window.AudioContext || window.webkitAudioContext,
+    audioCtx = new AudioContext();
 
 function startAudio(freq) {
     "use strict";
-    scriptNode.connect(audioCtx.destination);
+    
+    generators[0] = new SinGen(audioCtx);
+    generators[0].freq = 220;
+    generators[1] = new SinGen(audioCtx);
+    generators[1].freq = 439;
+    generators[2] = new SinGen(audioCtx);
+    generators[2].freq = 882;
+
+    window.console.log("start playback, sample rate is:" + audioCtx.sampleRate);
 }
 
 function stopAudio(freq) {
     "use strict";
-    scriptNode.disconnect(audioCtx.destination);
+    var i = 0;
+    for (i = 0; i < generators.length; i += 1) {
+        generators[i].free();
+    }
 }
