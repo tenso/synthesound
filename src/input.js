@@ -15,7 +15,7 @@ window.onload = function () {
         playButton = document.getElementById("play"),
         stopButton = document.getElementById("stop");
     
-    freqSelect.defaultValue = getGenFreq();
+    freqSelect.defaultValue = 110;
     freqSelect.onchange = parseInput;
     freqSelect.addEventListener("keyup", parseInput, false);
     playButton.addEventListener("click", function () { startAudio(); }, false);
