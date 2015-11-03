@@ -2,10 +2,10 @@
 
 function wNewSin(audioCtx, args) {
     var node = audioCtx.createScriptProcessor(4096, 1, 1);
-        
     node.runIndex = 0;
-    node.onaudioprocess = function(audioEvent) {
-        var index =0,
+    
+    node.onaudioprocess = function (audioEvent) {
+        var index = 0,
             i = 0,
             chan = 0,
             samplesDone = 0,
@@ -23,12 +23,14 @@ function wNewSin(audioCtx, args) {
             }
         }
         node.runIndex += samplesDone;
-    }
-    node.setArgs = function(args) {
+    };
+    
+    node.setArgs = function (args) {
         node.amp = args.amp || 0.10;
         node.freq = args.freq || 220;
-        node.phase = args.phase || 0;    
-    }
+        node.phase = args.phase || 0;
+    };
+    
     node.setArgs(args);
     
     return node;
