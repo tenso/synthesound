@@ -36,67 +36,70 @@ function SBase() {
     this.data = [];
     this.sampleRate = 0;
     this.runIndex = 0;
-    
-    this.getChannelData = function (chan) {
-        return this.data[chan];
-    };
-    
-    this.generate = function (sampleRate, frameSize) {
-        var chan;
-        this.sampleRate = sampleRate;
-        if (frameSize > this.maxFrameSize) {
-            this.maxFrameSize = frameSize * 2;
-            window.console.log("change framesize to:" + frameSize);
-            for (chan = 0; chan < this.channels; chan += 1) {
-                this.data[chan] = new Float32Array(this.maxFrameSize);
-            }
-        }
-        this.frameSize = frameSize;
-        
-        this.makeAudio();
-        this.runIndex += this.frameSize;
-    };
 }
 
+SBase.prototype.getChannelData = function (chan) {
+    return this.data[chan];
+};
+    
+SBase.prototype.generate = function (sampleRate, frameSize) {
+    var chan;
+    this.sampleRate = sampleRate;
+    if (frameSize > this.maxFrameSize) {
+        this.maxFrameSize = frameSize * 2;
+        window.console.log("change framesize to:" + frameSize);
+        for (chan = 0; chan < this.channels; chan += 1) {
+            this.data[chan] = new Float32Array(this.maxFrameSize);
+        }
+    }
+    this.frameSize = frameSize;
+
+    this.makeAudio();
+    this.runIndex += this.frameSize;
+};
+
 function SGen(args) {
+    SBase.call(this);
     
     this.amp = 0.1;
     this.phase = 0;
     this.freq = 220;
     this.type = "sine";
-            
-    this.makeAudio = function () {
-        var index = 0,
-            i = 0,
-            chan = 0,
-            chanData,
-            period,
-            inPeriod;
-        
-        for (chan = 0; chan < this.channels; chan += 1) {
-            chanData = this.data[chan];
-            
-            for (i = 0; i < chanData.length; i += 1) {
-                index = (this.runIndex + i);
-                
-                if (this.type === "sine") {
-                    chanData[i] = this.amp * Math.sin(2 * Math.PI * this.freq * index / this.sampleRate);
-                } else if (this.type === "square") {
-                    period = this.sampleRate / (2.0 * this.freq);
-                    inPeriod = index % period;
-                    chanData[i] = this.amp * (inPeriod < (period / 2.0) ? 1.0 : -1.0);
-                }
-            }
-        }
-    };
     
-    this.setArgs = function (args) {
-        this.amp = args.amp || this.amp;
-        this.freq = args.freq || this.freq;
-        this.phase = args.phase || this.phase;
-        this.type = args.type || this.type;
-    };
     this.setArgs(args);
 }
-SGen.prototype = new SBase();
+SGen.prototype = Object.create(SBase.prototype);
 SGen.prototype.constructor = SGen;
+
+SGen.prototype.makeAudio = function () {
+    var index = 0,
+        i = 0,
+        chan = 0,
+        chanData,
+        period,
+        inPeriod;
+
+    for (chan = 0; chan < this.channels; chan += 1) {
+        chanData = this.data[chan];
+
+        for (i = 0; i < chanData.length; i += 1) {
+            index = (this.runIndex + i);
+
+            if (this.type === "sine") {
+                chanData[i] = this.amp * Math.sin(2 * Math.PI * this.freq * index / this.sampleRate);
+            } else if (this.type === "square") {
+                period = this.sampleRate / (2.0 * this.freq);
+                inPeriod = index % period;
+                chanData[i] = this.amp * (inPeriod < (period / 2.0) ? 1.0 : -1.0);
+            }
+        }
+    }
+};
+    
+SGen.prototype.setArgs = function (args) {
+    this.amp = args.amp || this.amp;
+    this.freq = args.freq || this.freq;
+    this.phase = args.phase || this.phase;
+    this.type = args.type || this.type;
+};
+
