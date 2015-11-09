@@ -41,9 +41,9 @@ SGen.prototype.makeAudio = function () {
     
 SGen.prototype.setArgs = function (args) {
     if (args) {
-        this.amp = args.amp || this.amp;
-        this.freq = args.freq || this.freq;
-        this.phase = args.phase || this.phase;
-        this.type = args.type || this.type;
+        this.amp = typeof args.amp === "number" ? args.amp : this.amp;
+        this.freq = typeof args.freq === "number" ? args.freq : this.freq;
+        this.phase = typeof args.phase === "number" ? args.phase : this.phase;
+        this.type = typeof args.type === "string" ? args.type : this.type;
     }
 };
