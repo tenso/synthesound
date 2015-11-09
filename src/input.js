@@ -1,14 +1,16 @@
 "use strict";
 
-/*global getGenFreq */
-/*global setGenFreq */
+/*global keyUp */
+/*global keyDown */
 /*global startAudio */
 /*global stopAudio */
 /*global noteName */
 /*global noteHz */
 /*global noteNumFromStr */
 
-function parseInput(e) {
+var keyIsDown = 0;
+
+function parseInputDown(e) {
     var currentNote = document.getElementById("currentNote"),
         noteMap = {"a": "C", "w": "C#", "s": "D",
                    "e": "D#", "d": "E", "f": "F",
@@ -19,21 +21,38 @@ function parseInput(e) {
         key = String.fromCharCode(e.keyCode);
     
     key = key.toLowerCase();
-        
-    octave = 4;
+    
+    if (keyIsDown === key) {
+        return;
+    }
+    keyIsDown = key;
+    
+    octave = 3;
     if (e.shiftKey) {
-        octave = 3;
+        octave = 2;
     }
         
-    
     note = noteMap[key] || 1;
     note += octave;
+    
+    
     note = noteNumFromStr(note);
     if (note === -1) {
         return;
     }
     currentNote.innerText = noteName(note);
-    setGenFreq(noteHz(note));
+    keyDown(noteHz(note));
+}
+
+function parseInputUp(e) {
+    var key = String.fromCharCode(e.keyCode);
+    key = key.toLowerCase();
+    
+    if (keyIsDown !== key) {
+        return;
+    }
+    keyIsDown = 0;
+    keyUp();
 }
 
 window.onload = function () {
@@ -42,9 +61,9 @@ window.onload = function () {
         stopButton = document.getElementById("stop"),
         currentNote = document.getElementById("currentNote");
     
-    freqSelect.defaultValue = 110;
-    freqSelect.onchange = parseInput;
-    freqSelect.addEventListener("keydown", parseInput, false);
+    freqSelect.addEventListener("keydown", parseInputDown, false);
+    freqSelect.addEventListener("keyup", parseInputUp, false);
+    
     playButton.addEventListener("click", function () { startAudio(); }, false);
     stopButton.addEventListener("click", function () { stopAudio(); }, false);
 };
