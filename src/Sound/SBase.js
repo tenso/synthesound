@@ -2,6 +2,11 @@
 /*global Float32Array*/
 var frameSize = 4096;
 
+var extend = function (base, obj) {
+    obj.prototype = Object.create(base.prototype);
+    obj.prototype.constructor = obj;
+};
+
 function sOutNode(audioCtx) {
     var node = audioCtx.createScriptProcessor(frameSize, 1, 1);
     node.runIndex = 0;
@@ -36,11 +41,18 @@ function SBase() {
     this.data = [];
     this.sampleRate = 0;
     this.runIndex = 0;
+    this.inputs = [];
 }
 
-var extend = function (base, obj) {
-    obj.prototype = Object.create(base.prototype);
-    obj.prototype.constructor = obj;
+SBase.prototype.addInput = function (input) {
+    this.inputs.push(input);
+};
+
+SBase.prototype.generateInputs = function () {
+    var inputIndex;
+    for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
+        this.inputs[inputIndex].generate(this.sampleRate, this.frameSize);
+    }
 };
 
 SBase.prototype.getChannelData = function (chan) {

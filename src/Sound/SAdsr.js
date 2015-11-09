@@ -16,7 +16,6 @@ function SAdsr(args) {
     this.gainAtRelease = 0.0;
     
     this.lastGain = 0.0;
-    this.input = null;
     
     this.setArgs(args);
 }
@@ -34,7 +33,7 @@ SAdsr.prototype.makeAudio = function () {
         rLen = this.r * this.sampleRate;
         
 
-    this.input.generate(this.sampleRate, this.frameSize);
+    this.generateInputs();
     
     for (chan = 0; chan < this.channels; chan += 1) {
         chanData = this.data[chan];
@@ -61,17 +60,17 @@ SAdsr.prototype.makeAudio = function () {
                     this.lastGain = 0;
                 }
             }
-            chanData[i] = this.lastGain * this.input.data[chan][i];
+            chanData[i] = this.lastGain * this.inputs[0].data[chan][i];
         }
     }
 };
     
 SAdsr.prototype.setArgs = function (args) {
     if (args) {
-        this.a = args.a || this.a;
-        this.d = args.d || this.d;
-        this.s = args.s || this.s;
-        this.r = args.r || this.r;
+        this.a = typeof args.a === "number" ? args.a : this.a;
+        this.d = typeof args.d === "number" ? args.d : this.d;
+        this.s = typeof args.s === "number" ? args.s : this.s;
+        this.r = typeof args.r === "number" ? args.r : this.r;
     }
 };
 
@@ -83,8 +82,4 @@ SAdsr.prototype.setActive = function (active) {
         this.releaseIndex = this.runIndex;
     }
     this.active = active;
-};
-
-SAdsr.prototype.setInput = function (input) {
-    this.input = input;
 };

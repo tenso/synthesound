@@ -27,9 +27,9 @@ function parseInputDown(e) {
     }
     keyIsDown = key;
     
-    octave = 3;
+    octave = 2;
     if (e.shiftKey) {
-        octave = 2;
+        octave = 1;
     }
         
     note = noteMap[key] || 1;
@@ -66,4 +66,6 @@ window.onload = function () {
     
     playButton.addEventListener("click", function () { startAudio(); }, false);
     stopButton.addEventListener("click", function () { stopAudio(); }, false);
+    
+    startAudio();
 };

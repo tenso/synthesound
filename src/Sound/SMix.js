@@ -4,14 +4,9 @@
 
 function SMix() {
     SBase.call(this);
-    
-    this.inputs = [];
 }
 extend(SBase, SMix);
 
-SMix.prototype.addInput = function (input) {
-    this.inputs.push(input);
-};
 
 SMix.prototype.makeAudio = function () {
     var i = 0,
@@ -19,9 +14,7 @@ SMix.prototype.makeAudio = function () {
         chanData,
         inputIndex;
 
-    for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
-        this.inputs[inputIndex].generate(this.sampleRate, this.frameSize);
-    }
+    this.generateInputs();
     
     for (chan = 0; chan < this.channels; chan += 1) {
         chanData = this.data[chan];
