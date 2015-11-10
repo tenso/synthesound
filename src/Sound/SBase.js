@@ -21,7 +21,7 @@ function sOutNode(audioCtx) {
         buffer.normalize = false;
         
         for (chan = 0; chan < buffer.numberOfChannels; chan += 1) {
-            node.input.generate(audioCtx.sampleRate, frameSize);
+            node.input.generate(audioCtx.sampleRate, frameSize, node.runIndex);
             inData = node.input.getChannelData(chan);
             buffer.copyToChannel(inData, chan);
         }
@@ -41,6 +41,7 @@ function SBase() {
     this.data = [];
     this.sampleRate = 0;
     this.runIndex = 0;
+    this.genIndex = -1;
     this.inputs = [];
 }
 
@@ -51,7 +52,9 @@ SBase.prototype.addInput = function (input) {
 SBase.prototype.generateInputs = function () {
     var inputIndex;
     for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
-        this.inputs[inputIndex].generate(this.sampleRate, this.frameSize);
+        if (this.inputs.genIndex !== this.runIndex) {
+            this.inputs[inputIndex].generate(this.sampleRate, this.frameSize, this.runIndex);
+        }
     }
 };
 
@@ -59,9 +62,15 @@ SBase.prototype.getChannelData = function (chan) {
     return this.data[chan];
 };
     
-SBase.prototype.generate = function (sampleRate, frameSize) {
+SBase.prototype.generate = function (sampleRate, frameSize, runIndex) {
     var chan;
+    
+    if (this.genIndex === runIndex) {
+        return;
+    }
+    
     this.sampleRate = sampleRate;
+    this.runIndex = runIndex;
     if (frameSize > this.maxFrameSize) {
         this.maxFrameSize = frameSize * 2;
         for (chan = 0; chan < this.channels; chan += 1) {
@@ -71,5 +80,5 @@ SBase.prototype.generate = function (sampleRate, frameSize) {
     this.frameSize = frameSize;
 
     this.makeAudio();
-    this.runIndex += this.frameSize;
+    this.genIndex = runIndex;
 };
