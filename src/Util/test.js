@@ -1,4 +1,5 @@
 "use strict";
+/*global logInfo*/
 
 function verify(arg1, arg2) {
     if (arg1 !== arg2) {
@@ -30,10 +31,10 @@ function addTest(func, desc) {
 }
 
 function runTests() {
-    window.console.log("running tests");
+    logInfo("running tests...");
     var i;
     for (i = 0; i < tests.length; i += 1) {
-        window.console.log("test:" + tests[i][0]);
+        logInfo(" test:" + tests[i][0]);
         tests[i][1]();
     }
 }

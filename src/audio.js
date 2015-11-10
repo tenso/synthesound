@@ -3,6 +3,8 @@
 /*global SGen*/
 /*global SMix*/
 /*global SAdsr*/
+/*global logInfo*/
+/*global logError*/
 
 var generators = [],
     mixer,
@@ -14,8 +16,8 @@ function keyDown(freq) {
         return false;
     }
     generators[0].setArgs({"freq" : freq});
-    generators[1].setArgs({"freq" : freq*2});
-    generators[2].setArgs({"freq" : freq/2});
+    generators[1].setArgs({"freq" : freq * 2});
+    generators[2].setArgs({"freq" : freq / 2});
     adsr.setActive(false);
     adsr.setActive(true);
     return true;
@@ -58,7 +60,7 @@ function startAudio(freq) {
     out.connect(audioCtx.destination);
     
     audioRunning = true;
-    window.console.log("start playback, sample rate is:" + audioCtx.sampleRate);
+    logInfo("start playback, sample rate is:" + audioCtx.sampleRate);
     return true;
 }
 
