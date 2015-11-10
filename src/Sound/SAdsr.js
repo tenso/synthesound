@@ -28,6 +28,7 @@ SAdsr.prototype.makeAudio = function () {
         chanData,
         period,
         inPeriod,
+        inputIndex,
         aLen = this.a * this.sampleRate,
         dLen = this.d * this.sampleRate,
         rLen = this.r * this.sampleRate;
@@ -60,7 +61,9 @@ SAdsr.prototype.makeAudio = function () {
                     this.lastGain = 0;
                 }
             }
-            chanData[i] = this.lastGain * this.inputs[0].data[chan][i];
+            for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
+                chanData[i] = this.lastGain * this.inputs[inputIndex].data[chan][i];
+            }
         }
     }
 };

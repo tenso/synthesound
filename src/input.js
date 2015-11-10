@@ -1,12 +1,14 @@
 "use strict";
 
-/*global keyUp */
-/*global keyDown */
-/*global startAudio */
-/*global stopAudio */
-/*global noteName */
-/*global noteHz */
-/*global noteNumFromStr */
+/*global keyUp*/
+/*global keyDown*/
+/*global startAudio*/
+/*global stopAudio*/
+/*global noteName*/
+/*global noteHz*/
+/*global noteNumFromName*/
+/*global Float32RB*/
+/*global runTests*/
 
 var keyIsDown = 0;
 
@@ -36,7 +38,7 @@ function parseInputDown(e) {
     note += octave;
     
     
-    note = noteNumFromStr(note);
+    note = noteNumFromName(note);
     if (note === -1) {
         return;
     }
@@ -68,4 +70,7 @@ window.onload = function () {
     stopButton.addEventListener("click", function () { stopAudio(); }, false);
     
     startAudio();
+
+    /*testsuite*/
+    runTests();
 };

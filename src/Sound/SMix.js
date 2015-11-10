@@ -21,8 +21,12 @@ SMix.prototype.makeAudio = function () {
         chanData.fill(0);
         for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
             for (i = 0; i < chanData.length; i += 1) {
-                chanData[i] += this.inputs[inputIndex].data[chan][i];
+                chanData[i] += this.gain * this.inputs[inputIndex].data[chan][i];
             }
         }
     }
+};
+
+SMix.prototype.setGain = function (gain) {
+    this.gain = gain;
 };

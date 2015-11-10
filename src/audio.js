@@ -29,6 +29,10 @@ function keyUp(freq) {
 
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 
+if (!AudioContext) {
+    logError("no audiocontext, please use modern browser");
+}
+
 var audioCtx = new AudioContext();
 var audioRunning = false;
 
@@ -43,6 +47,7 @@ function startAudio(freq) {
     mixer.addInput(generators[0]);
     mixer.addInput(generators[1]);
     mixer.addInput(generators[2]);
+    mixer.setGain(1.0);
     
     adsr = new SAdsr({"a": 0.01, "d": 0.5, "s": 0.25, "r": 1});
 
