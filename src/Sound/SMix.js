@@ -4,6 +4,7 @@
 
 function SMix() {
     SBase.call(this);
+    this.gain = 1.0;
 }
 extend(SBase, SMix);
 

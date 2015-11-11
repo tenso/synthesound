@@ -3,12 +3,15 @@
 /*global SGen*/
 /*global SMix*/
 /*global SAdsr*/
+/*global SDelay*/
 /*global logInfo*/
 /*global logError*/
 
 var generators = [],
     mixer,
+    mixerOut,
     adsr,
+    delay,
     out;
 
 function keyDown(freq) {
@@ -43,20 +46,30 @@ function startAudio(freq) {
         return false;
     }
     mixer = new SMix();
-    generators[0] = new SGen({"freq": 220, "amp": 0.25, "type": "square"});
-    generators[1] = new SGen({"freq": 110, "amp": 0.25, "type": "square"});
-    generators[2] = new SGen({"freq": 110, "amp": 0.25, "type": "square"});
+    generators[0] = new SGen({"freq": 220, "amp": 0.25, "type": "sine"});
+    generators[1] = new SGen({"freq": 110, "amp": 0.25, "type": "sine"});
+    generators[2] = new SGen({"freq": 110, "amp": 0.25, "type": "sine"});
     mixer.addInput(generators[0]);
     mixer.addInput(generators[1]);
     mixer.addInput(generators[2]);
-    mixer.setGain(1.0);
+    mixer.setGain(0.25);
     
-    adsr = new SAdsr({"a": 0.01, "d": 0.5, "s": 0.25, "r": 1});
+    adsr = new SAdsr({"a": 0.1, "d": 0.15, "s": 0.5, "r": 0.05});
 
     adsr.addInput(mixer);
     
+    delay = new SDelay();
+    delay.setDelay(0.4);
+    delay.setGain(0.4);
+                
+    mixerOut = new SMix();
+    mixerOut.addInput(adsr);
+    mixerOut.addInput(delay);
+    
+    delay.addInput(mixerOut);
+    
     out = sOutNode(audioCtx);
-    out.setInput(adsr);
+    out.setInput(mixerOut);
     out.connect(audioCtx.destination);
     
     audioRunning = true;

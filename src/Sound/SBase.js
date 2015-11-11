@@ -68,11 +68,12 @@ SBase.prototype.generate = function (sampleRate, frameSize, runIndex) {
     if (this.genIndex === runIndex) {
         return;
     }
+    this.genIndex = runIndex;
     
     this.sampleRate = sampleRate;
     this.runIndex = runIndex;
     if (frameSize > this.maxFrameSize) {
-        this.maxFrameSize = frameSize * 2;
+        this.maxFrameSize = frameSize;
         for (chan = 0; chan < this.channels; chan += 1) {
             this.data[chan] = new Float32Array(this.maxFrameSize);
         }
@@ -80,5 +81,5 @@ SBase.prototype.generate = function (sampleRate, frameSize, runIndex) {
     this.frameSize = frameSize;
 
     this.makeAudio();
-    this.genIndex = runIndex;
+    
 };

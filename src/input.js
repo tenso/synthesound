@@ -29,9 +29,9 @@ function parseInputDown(e) {
     }
     keyIsDown = key;
     
-    octave = 2;
+    octave = 4;
     if (e.shiftKey) {
-        octave = 1;
+        octave = 3;
     }
         
     note = noteMap[key] || 1;

@@ -8,17 +8,18 @@
 function DelayBuffer(len) {
     this.bufferSize = len;
     this.buffer = new Float32Array(this.bufferSize);
-    this.buffer.fill(0);
+    this.buffer.fill(0.0);
     this.setIndex = 0;
 }
 
 DelayBuffer.prototype.get = function (delay) {
-    return this.buffer[mod(this.setIndex - delay, this.bufferSize)];
+    var index = mod(this.setIndex - delay, this.bufferSize);
+    return this.buffer[index];
+    
 };
 
 DelayBuffer.prototype.set = function (val) {
-    this.setIndex += 1;
-    this.setIndex %= this.bufferSize;
+    this.setIndex = mod(this.setIndex + 1,  this.bufferSize);
     this.buffer[this.setIndex] = val;
 };
 

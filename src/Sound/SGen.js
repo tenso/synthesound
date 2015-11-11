@@ -9,7 +9,7 @@ function SGen(args) {
     this.phase = 0;
     this.freq = 220;
     this.type = "sine";
-    
+    this.tick = 0;
     this.setArgs(args);
 }
 extend(SBase, SGen);
@@ -26,7 +26,7 @@ SGen.prototype.makeAudio = function () {
         chanData = this.data[chan];
 
         for (i = 0; i < chanData.length; i += 1) {
-            index = (this.runIndex + i);
+            index = (this.tick + i);
 
             if (this.type === "sine") {
                 chanData[i] = this.amp * Math.sin(2 * Math.PI * this.freq * index / this.sampleRate);
@@ -37,6 +37,7 @@ SGen.prototype.makeAudio = function () {
             }
         }
     }
+    this.tick += this.frameSize;
 };
     
 SGen.prototype.setArgs = function (args) {

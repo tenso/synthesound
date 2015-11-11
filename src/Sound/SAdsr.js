@@ -14,14 +14,15 @@ function SAdsr(args) {
     this.activeIndex = 0;
     this.releaseIndex = 0;
     this.gainAtRelease = 0.0;
-    
+    this.tick = 0;
     this.lastGain = 0.0;
-    
+
     this.setArgs(args);
 }
 extend(SBase, SAdsr);
 
 SAdsr.prototype.makeAudio = function () {
+    
     var index = 0,
         i = 0,
         chan = 0,
@@ -40,9 +41,9 @@ SAdsr.prototype.makeAudio = function () {
         chanData = this.data[chan];
 
         for (i = 0; i < chanData.length; i += 1) {
-            
+        
             if (this.active) {
-                index = this.runIndex - this.activeIndex + i;
+                index = this.tick - this.activeIndex + i;
                 
                 if (index < aLen) {
                     this.lastGain = index / aLen;
@@ -53,12 +54,11 @@ SAdsr.prototype.makeAudio = function () {
                     this.lastGain = this.s;
                 }
             } else {
-                index = this.runIndex - this.releaseIndex + i;
-                
-                if (index < rLen) {
+                index = this.tick - this.releaseIndex + i;
+                if (index <= rLen) {
                     this.lastGain = this.gainAtRelease * (1.0 - (index / rLen));
                 } else {
-                    this.lastGain = 0;
+                    this.lastGain = 0.0;
                 }
             }
             for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
@@ -66,6 +66,7 @@ SAdsr.prototype.makeAudio = function () {
             }
         }
     }
+    this.tick += this.frameSize;
 };
     
 SAdsr.prototype.setArgs = function (args) {
@@ -79,10 +80,10 @@ SAdsr.prototype.setArgs = function (args) {
 
 SAdsr.prototype.setActive = function (active) {
     if (!this.active && active) {
-        this.activeIndex = this.runIndex;
+        this.activeIndex = this.tick;
     } else if (this.active) {
         this.gainAtRelease = this.lastGain;
-        this.releaseIndex = this.runIndex;
+        this.releaseIndex = this.tick;
     }
     this.active = active;
 };

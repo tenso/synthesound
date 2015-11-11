@@ -25,5 +25,6 @@ function test_mod() {
     verify(mod(-4, -3), 2);
     verify(mod(-4, 3), 2);
     verify(mod(4, -3), 1);
+    verify(mod(-48000, 480000), 432000);
 }
 addTest(test_mod, "mod()");
