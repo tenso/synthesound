@@ -45,6 +45,33 @@ function keyUp(freq) {
     }
 }
 
+var graphData = new DelayBuffer(48000);
+
+function redrawGraph(chan, newData) {
+    var canvas = document.getElementById("audio-scope"),
+        ctx = canvas.getContext("2d"),
+        i = 0,
+        x = 0,
+        y = 0;
+    
+    if (chan !== 0) {
+        return;
+    }
+    graphData.setArray(newData);
+            
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+    ctx.strokeStyle = "#484";
+    ctx.beginPath();
+    
+    ctx.moveTo(0, canvas.height / 2 + (canvas.height / 2.0) * graphData.get(0));
+    for (i = 1; i < graphData.length; i+=100) {
+        x = canvas.width * i / graphData.length;
+        y = canvas.height / 2 + (canvas.height / 2.0) * graphData.get(i);
+        ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+}
+
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 
 if (!AudioContext) {
@@ -72,7 +99,7 @@ function startAudio(freq) {
     adsr.addInput(mixer);
     
     delay = new SDelay();
-    delay.setDelay(0.3);
+    delay.setDelay(0.03);
     delay.setGain(0.7);
                 
     mixerOut = new SMix();
@@ -82,6 +109,7 @@ function startAudio(freq) {
     delay.addInput(mixerOut);
     
     out = sOutNode(audioCtx);
+    out.refreshGraph = redrawGraph;
     out.setInput(mixerOut);
     out.connect(audioCtx.destination);
     

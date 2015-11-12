@@ -5,8 +5,8 @@
 /*global addTest*/
 
 function Float32RB(len) {
-    this.bufferSize = len + 1;
-    this.buffer = new Float32Array(this.bufferSize);
+    this.length = len + 1;
+    this.buffer = new Float32Array(this.length);
     this.buffer.fill(0);
     this.setIndex = 0;
     this.getIndex = 0;
@@ -15,21 +15,28 @@ function Float32RB(len) {
 Float32RB.prototype.get = function () {
     var retVal = this.buffer[this.getIndex];
     this.getIndex += 1;
-    this.getIndex %= this.bufferSize;
+    this.getIndex %= this.length;
     return retVal;
 };
 
 Float32RB.prototype.set = function (val) {
     this.buffer[this.setIndex] = val;
     this.setIndex += 1;
-    this.setIndex %= this.bufferSize;
+    this.setIndex %= this.length;
+};
+
+Float32RB.prototype.setArray = function (array) {
+    var i = 0;
+    for (i = 0; i < array.length; i += 1) {
+        this.set(array[i]);
+    }
 };
 
 Float32RB.prototype.count = function () {
     if (this.setIndex >= this.getIndex) {
         return this.setIndex - this.getIndex;
     } else {
-        return this.bufferSize - this.getIndex - this.setIndex;
+        return this.length - this.getIndex - this.setIndex;
     }
     
 };
@@ -62,11 +69,9 @@ function test_Float32RB() {
     verify(rb.get(), 3);
     verify(rb.count(), 0);
         
-    rb.set(4);
-    rb.set(5);
+    rb.setArray([4, 5, 6]);
     verify(rb.get(), 4);
-    verify(rb.count(), 1);
-    rb.set(6);
+    verify(rb.count(), 2);
     rb.set(7);
     verify(rb.count(), 3);
     verify(rb.get(), 5);

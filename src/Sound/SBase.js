@@ -24,6 +24,7 @@ function sOutNode(audioCtx) {
             node.input.generate(audioCtx.sampleRate, frameSize, node.runIndex);
             inData = node.input.getChannelData(chan);
             buffer.copyToChannel(inData, chan);
+            node.refreshGraph(chan, buffer.getChannelData(chan));
         }
         node.runIndex += frameSize;
     };
@@ -31,6 +32,11 @@ function sOutNode(audioCtx) {
     node.setInput = function (input) {
         node.input = input;
     };
+    
+    node.refreshGraph = function (chan, newData) {
+        
+    };
+    
     return node;
 }
 

@@ -29,3 +29,11 @@ body {
     font-size: 2em;
     width: 5em;
 }
+
+.audio-scope {
+    background: #444;
+    width: 800px; 
+    height: 200px;
+    border: 2px solid black;
+    border-width: 2px;
+}

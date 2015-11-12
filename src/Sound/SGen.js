@@ -29,7 +29,7 @@ SGen.prototype.makeAudio = function () {
             this.genData[i] = this.amp * Math.sin(this.inPhase + this.phase);
         } else if (this.type === "square") {
             this.inPhase += 1;
-            inPeriod = (this.inPhase + this.phase) % period; //FIXME: correct phase!
+            inPeriod = (this.inPhase + this.phase) % period;
             this.genData[i] = this.amp * (inPeriod < (period / 2.0) ? 1.0 : -1.0);
         }
     }

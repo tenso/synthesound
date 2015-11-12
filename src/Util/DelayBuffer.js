@@ -6,21 +6,28 @@
 /*global addTest*/
 
 function DelayBuffer(len) {
-    this.bufferSize = len;
-    this.buffer = new Float32Array(this.bufferSize);
+    this.length = len;
+    this.buffer = new Float32Array(this.length);
     this.buffer.fill(0.0);
     this.setIndex = 0;
 }
 
 DelayBuffer.prototype.get = function (delay) {
-    var index = mod(this.setIndex - delay, this.bufferSize);
+    var index = mod(this.setIndex - delay, this.length);
     return this.buffer[index];
     
 };
 
 DelayBuffer.prototype.set = function (val) {
-    this.setIndex = mod(this.setIndex + 1,  this.bufferSize);
+    this.setIndex = mod(this.setIndex + 1,  this.length);
     this.buffer[this.setIndex] = val;
+};
+
+DelayBuffer.prototype.setArray = function (array) {
+    var i = 0;
+    for (i = 0; i < array.length; i += 1) {
+        this.set(array[i]);
+    }
 };
 
 DelayBuffer.prototype.toString = function () {
@@ -52,8 +59,7 @@ function test_DelayBuffer() {
     verify(rb.get(1), 3);
     verify(rb.get(2), 2);
     verify(rb.get(3), 1);
-    rb.set(5);
-    rb.set(6);
+    rb.setArray([5, 6]);
     verify(rb.get(3), 3);
     verify(rb.get(1), 5);
     verify(rb.get(2), 4);
