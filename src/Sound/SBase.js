@@ -39,6 +39,7 @@ function SBase() {
     this.frameSize = 0;
     this.maxFrameSize = 0;
     this.data = [];
+    this.genData = null;
     this.sampleRate = 0;
     this.runIndex = 0;
     this.genIndex = -1;
@@ -74,6 +75,9 @@ SBase.prototype.generate = function (sampleRate, frameSize, runIndex) {
     this.runIndex = runIndex;
     if (frameSize > this.maxFrameSize) {
         this.maxFrameSize = frameSize;
+        
+        this.genData = new Float32Array(this.maxFrameSize);
+        
         for (chan = 0; chan < this.channels; chan += 1) {
             this.data[chan] = new Float32Array(this.maxFrameSize);
         }

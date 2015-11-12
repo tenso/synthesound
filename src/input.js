@@ -4,6 +4,7 @@
 /*global keyDown*/
 /*global startAudio*/
 /*global stopAudio*/
+/*global changeType*/
 /*global noteName*/
 /*global noteHz*/
 /*global noteNumFromName*/
@@ -29,9 +30,9 @@ function parseInputDown(e) {
     }
     keyIsDown = key;
     
-    octave = 4;
+    octave = 3;
     if (e.shiftKey) {
-        octave = 3;
+        octave = 2;
     }
         
     note = noteMap[key] || 1;
@@ -66,7 +67,7 @@ window.onload = function () {
     freqSelect.addEventListener("keydown", parseInputDown, false);
     freqSelect.addEventListener("keyup", parseInputUp, false);
     
-    playButton.addEventListener("click", function () { startAudio(); }, false);
+    playButton.addEventListener("click", function () { changeType(); }, false);
     stopButton.addEventListener("click", function () { stopAudio(); }, false);
     
     startAudio();

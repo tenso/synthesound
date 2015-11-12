@@ -9,35 +9,34 @@ function SGen(args) {
     this.phase = 0;
     this.freq = 220;
     this.type = "sine";
-    this.tick = 0;
+    this.inPhase = 0;
     this.setArgs(args);
 }
 extend(SBase, SGen);
 
 SGen.prototype.makeAudio = function () {
-    var index = 0,
-        i = 0,
+    var i = 0,
         chan = 0,
-        chanData,
-        period,
+        T = (2 * Math.PI * this.freq) / this.sampleRate,
+        period = this.sampleRate / (this.freq),
+        phaseStep,
         inPeriod;
-
-    for (chan = 0; chan < this.channels; chan += 1) {
-        chanData = this.data[chan];
-
-        for (i = 0; i < chanData.length; i += 1) {
-            index = (this.tick + i);
-
-            if (this.type === "sine") {
-                chanData[i] = this.amp * Math.sin(2 * Math.PI * this.freq * index / this.sampleRate);
-            } else if (this.type === "square") {
-                period = this.sampleRate / (2.0 * this.freq);
-                inPeriod = index % period;
-                chanData[i] = this.amp * (inPeriod < (period / 2.0) ? 1.0 : -1.0);
-            }
+    
+    for (i = 0; i < this.frameSize; i += 1) {
+        
+        if (this.type === "sine") {
+            this.inPhase += T;
+            this.genData[i] = this.amp * Math.sin(this.inPhase + this.phase);
+        } else if (this.type === "square") {
+            this.inPhase += 1;
+            inPeriod = (this.inPhase + this.phase) % period; //FIXME: correct phase!
+            this.genData[i] = this.amp * (inPeriod < (period / 2.0) ? 1.0 : -1.0);
         }
     }
-    this.tick += this.frameSize;
+    
+    for (chan = 0; chan < this.channels; chan += 1) {
+        this.data[chan] = this.genData.slice();
+    }
 };
     
 SGen.prototype.setArgs = function (args) {

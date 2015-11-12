@@ -80,7 +80,7 @@ SAdsr.prototype.setArgs = function (args) {
 
 SAdsr.prototype.setActive = function (active) {
     if (!this.active && active) {
-        this.activeIndex = this.tick;
+        this.activeIndex = this.tick - (this.lastGain * this.a * this.sampleRate);
     } else if (this.active) {
         this.gainAtRelease = this.lastGain;
         this.releaseIndex = this.tick;
