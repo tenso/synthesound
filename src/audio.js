@@ -1,11 +1,14 @@
 "use strict";
+/*global logInfo*/
+/*global logError*/
+
 /*global sOutNode*/
 /*global SGen*/
 /*global SMix*/
 /*global SAdsr*/
 /*global SDelay*/
-/*global logInfo*/
-/*global logError*/
+
+/*global GScope*/
 
 var type = "sine",
     generators = [],
@@ -13,7 +16,8 @@ var type = "sine",
     mixerOut,
     adsr,
     delay,
-    out;
+    out,
+    scope = [];
 
 function changeType() {
     if (type === "sine") {
@@ -45,31 +49,9 @@ function keyUp(freq) {
     }
 }
 
-var graphData = new DelayBuffer(48000);
-
-function redrawGraph(chan, newData) {
-    var canvas = document.getElementById("audio-scope"),
-        ctx = canvas.getContext("2d"),
-        i = 0,
-        x = 0,
-        y = 0;
-    
-    if (chan !== 0) {
-        return;
-    }
-    graphData.setArray(newData);
-            
-    ctx.clearRect(0,0, canvas.width, canvas.height);
-    ctx.strokeStyle = "#484";
-    ctx.beginPath();
-    
-    ctx.moveTo(0, canvas.height / 2 + (canvas.height / 2.0) * graphData.get(0));
-    for (i = 1; i < graphData.length; i+=100) {
-        x = canvas.width * i / graphData.length;
-        y = canvas.height / 2 + (canvas.height / 2.0) * graphData.get(i);
-        ctx.lineTo(x, y);
-    }
-    ctx.stroke();
+function drawScopes(chan, data) {
+    //console.log(chan + " : " + data[0]);
+    scope[chan].drawGraph(data);
 }
 
 var AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -92,9 +74,10 @@ function startAudio(freq) {
     mixer.addInput(generators[0]);
     mixer.addInput(generators[1]);
     mixer.addInput(generators[2]);
-    mixer.setGain(0.5);
+    mixer.setGain(0, 0.25);
+    mixer.setGain(1, 0.25);
     
-    adsr = new SAdsr({"a": 0.1, "d": 0.15, "s": 0.5, "r": 1.05});
+    adsr = new SAdsr({"a": 0.1, "d": 0.15, "s": 1, "r": 1.05});
 
     adsr.addInput(mixer);
     
@@ -104,17 +87,20 @@ function startAudio(freq) {
                 
     mixerOut = new SMix();
     mixerOut.addInput(adsr);
-    mixerOut.addInput(delay);
     
+    mixerOut.addInput(delay);
     delay.addInput(mixerOut);
     
-    out = sOutNode(audioCtx);
-    out.refreshGraph = redrawGraph;
+    out = sOutNode(audioCtx, 2, 4096);
     out.setInput(mixerOut);
     out.connect(audioCtx.destination);
     
+    scope[0] = new GScope(document.getElementById("audio-scope-l"), 0);
+    scope[1] = new GScope(document.getElementById("audio-scope-r"), 1);
+    mixerOut.chanUpdated = function (chan, data) { drawScopes(chan, data); };
+        
     audioRunning = true;
-    logInfo("start playback, sample rate is:" + audioCtx.sampleRate);
+    logInfo("start playback, sample rate:" + out.sampleRate + " channels " + out.channels);
     return true;
 }
 

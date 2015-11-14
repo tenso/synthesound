@@ -25,7 +25,7 @@ SDelay.prototype.makeAudio = function () {
     
     for (chan = 0; chan < this.channels; chan += 1) {
         chanData = this.data[chan];
-        //FIXME: does not support multiple input!
+        
         for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
             for (i = 0; i < chanData.length; i += 1) {
                 this.delayBuffer[chan].set(this.inputs[inputIndex].data[chan][i]);
