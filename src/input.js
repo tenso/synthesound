@@ -79,7 +79,7 @@ window.onload = function () {
     adsrSliders = new GSliders(document.getElementById("adsrSliders"));
     adsrSliders.add("a", getParam("a"), 0.001, 1.0, function (e) { setParam("a", e.target.value); });
     adsrSliders.add("d", getParam("d"), 0.001, 1.0, function (e) { setParam("d", e.target.value); });
-    adsrSliders.add("s", getParam("s"), 0.001, 1.0, function (e) { setParam("s", e.target.value); });
+    adsrSliders.add("s", getParam("s"), 0.0, 1.0, function (e) { setParam("s", e.target.value); });
     adsrSliders.add("r", getParam("r"), 0.001, 1.0, function (e) { setParam("r", e.target.value); });
     
     /*testsuite*/
