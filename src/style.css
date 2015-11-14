@@ -44,9 +44,17 @@ body {
     margin: 1em;
 }
 
+.h-slider:focus {
+    outline: none;
+}
+
+.h-slider-label {
+    font-size: 2em;
+    text-align: center;
+}
+
 .box {
-    width: 11em;
-    height: 10em;
+    display: inline-block;
     background: "#888";
     border: 2px solid black;
     border-radius: 8px;

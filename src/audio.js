@@ -118,8 +118,8 @@ function startAudio(freq) {
     out.setInput(mixerOut);
     out.connect(audioCtx.destination);
     
-    scope[0] = new GScope(document.getElementById("audio-scope-l"), 0);
-    scope[1] = new GScope(document.getElementById("audio-scope-r"), 1);
+    scope[0] = new GScope(document.getElementById("audioScopeL"), 0);
+    scope[1] = new GScope(document.getElementById("audioScopeR"), 1);
     mixerOut.chanUpdated = function (chan, data) { drawScopes(chan, data); };
         
     audioRunning = true;

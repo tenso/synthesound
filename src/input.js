@@ -7,6 +7,7 @@
 /*global startAudio*/
 /*global stopAudio*/
 /*global changeType*/
+/*global GSliders*/
 /*global noteName*/
 /*global noteHz*/
 /*global noteNumFromName*/
@@ -65,28 +66,21 @@ window.onload = function () {
         playButton = document.getElementById("play"),
         stopButton = document.getElementById("stop"),
         currentNote = document.getElementById("currentNote"),
-        aSlider = document.getElementById("aSlider"),
-        dSlider = document.getElementById("dSlider"),
-        sSlider = document.getElementById("sSlider"),
-        rSlider = document.getElementById("rSlider");
+        adsrSliders;
     
     freqSelect.addEventListener("keydown", parseInputDown, false);
     freqSelect.addEventListener("keyup", parseInputUp, false);
     
     playButton.addEventListener("click", function () { changeType(); }, false);
     stopButton.addEventListener("click", function () { stopAudio(); }, false);
-    
-    aSlider.addEventListener("input", function (e) { setParam("a", e.target.value); });
-    dSlider.addEventListener("input", function (e) { setParam("d", e.target.value); });
-    sSlider.addEventListener("input", function (e) { setParam("s", e.target.value); });
-    rSlider.addEventListener("input", function (e) { setParam("r", e.target.value); });
-            
+                
     startAudio();
-
-    aSlider.value = getParam("a");
-    dSlider.value = getParam("d");
-    sSlider.value = getParam("s");
-    rSlider.value = getParam("r");
+    
+    adsrSliders = new GSliders(document.getElementById("adsrSliders"));
+    adsrSliders.add("a", getParam("a"), 0.001, 1.0, function (e) { setParam("a", e.target.value); });
+    adsrSliders.add("d", getParam("d"), 0.001, 1.0, function (e) { setParam("d", e.target.value); });
+    adsrSliders.add("s", getParam("s"), 0.001, 1.0, function (e) { setParam("s", e.target.value); });
+    adsrSliders.add("r", getParam("r"), 0.001, 1.0, function (e) { setParam("r", e.target.value); });
     
     /*testsuite*/
     runTests();
