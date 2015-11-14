@@ -61,12 +61,37 @@ function parseInputUp(e) {
     keyUp();
 }
 
+var lastClientX = 0,
+    lastClientY = 0;
+var mouseCapturer = null;
+
+function setMouseCapturer(e) {
+    lastClientX = e.clientX;
+    lastClientY = e.clientY;
+    mouseCapturer = e.target;
+}
+
 window.onload = function () {
     var freqSelect = document.getElementById("freqSelect"),
         playButton = document.getElementById("play"),
         stopButton = document.getElementById("stop"),
         currentNote = document.getElementById("currentNote"),
         adsrSliders;
+            
+    document.body.onmouseup = function (e) {
+        mouseCapturer = null;
+    };
+    document.body.onmousemove = function (e) {
+        var dx = e.clientX - lastClientX,
+            dy = e.clientY - lastClientY;
+        
+        lastClientX = e.clientX;
+        lastClientY = e.clientY;
+        
+        if (mouseCapturer) {
+            mouseCapturer.mouseMove(mouseCapturer, dx, dy);
+        }
+    };
     
     freqSelect.addEventListener("keydown", parseInputDown, false);
     freqSelect.addEventListener("keyup", parseInputUp, false);
@@ -77,10 +102,10 @@ window.onload = function () {
     startAudio();
     
     adsrSliders = new GSliders(document.getElementById("adsrSliders"));
-    adsrSliders.add("a", getParam("a"), 0.001, 1.0, function (e) { setParam("a", e.target.value); });
-    adsrSliders.add("d", getParam("d"), 0.001, 1.0, function (e) { setParam("d", e.target.value); });
-    adsrSliders.add("s", getParam("s"), 0.0, 1.0, function (e) { setParam("s", e.target.value); });
-    adsrSliders.add("r", getParam("r"), 0.001, 1.0, function (e) { setParam("r", e.target.value); });
+    adsrSliders.add("A", getParam("a"), 0.001, 1.0, function (value) { setParam("a", value); });
+    adsrSliders.add("D", getParam("d"), 0.001, 1.0, function (value) { setParam("d", value); });
+    adsrSliders.add("S", getParam("s"), 0.0, 1.0, function (value) { setParam("s", value); });
+    adsrSliders.add("R", getParam("r"), 0.001, 1.0, function (value) { setParam("r", value); });
     
     /*testsuite*/
     runTests();

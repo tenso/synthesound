@@ -37,19 +37,26 @@ body {
     border-radius: 8px;
 }
 
-.h-slider {
-    width: 1em;
+.h-slider-track {
+    width: 0.75em;
     height: 10em;
-    -webkit-appearance: slider-vertical;
     margin: 1em;
+    background: #888;
+    border: 2px solid black;
+    border-radius: 8px;
 }
 
-.h-slider:focus {
-    outline: none;
+.h-slider-knob {
+    width: 1.5em;
+    height: 2.5em;
+    background: #444;
+    border: 2px solid black;
+    border-radius: 8px;
+    margin-left: -0.5em;
 }
 
 .h-slider-label {
-    font-size: 2em;
+    font-size: 1.5em;
     text-align: center;
 }
 
