@@ -58,6 +58,10 @@ function setParam(param, val) {
         adsr.s = val;
     } else if (param === "r") {
         adsr.r = val;
+    } else if (param === "L") {
+        return mixerOut.setGain(0, val);
+    } else if (param === "R") {
+        return mixerOut.setGain(1, val);
     }
 }
 function getParam(param) {
@@ -69,6 +73,10 @@ function getParam(param) {
         return adsr.s;
     } else if (param === "r") {
         return adsr.r;
+    } else if (param === "L") {
+        return mixerOut.gain[0];
+    } else if (param === "R") {
+        return mixerOut.gain[1];
     }
 }
 
@@ -121,7 +129,7 @@ function startAudio(freq) {
     scope[0] = new GScope(document.getElementById("audioScopeL"), 0);
     scope[1] = new GScope(document.getElementById("audioScopeR"), 1);
     mixerOut.chanUpdated = function (chan, data) { drawScopes(chan, data); };
-        
+    
     audioRunning = true;
     logInfo("start playback, sample rate:" + out.sampleRate + " channels " + out.channels);
     return true;

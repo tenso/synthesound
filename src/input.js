@@ -76,6 +76,7 @@ window.onload = function () {
         playButton = document.getElementById("play"),
         stopButton = document.getElementById("stop"),
         currentNote = document.getElementById("currentNote"),
+        volSliders,
         adsrSliders;
             
     document.body.onmouseup = function (e) {
@@ -106,6 +107,10 @@ window.onload = function () {
     adsrSliders.add("D", getParam("d"), 0.001, 1.0, function (value) { setParam("d", value); });
     adsrSliders.add("S", getParam("s"), 0.0, 1.0, function (value) { setParam("s", value); });
     adsrSliders.add("R", getParam("r"), 0.001, 1.0, function (value) { setParam("r", value); });
+    
+    volSliders = new GSliders(document.getElementById("volSliders"));
+    volSliders.add("Lg", getParam("L"), 0.0, 1.0, function (value) { setParam("L", value); });
+    volSliders.add("Rg", getParam("R"), 0.0, 1.0, function (value) { setParam("R", value); });
     
     /*testsuite*/
     runTests();
