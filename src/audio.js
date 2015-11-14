@@ -49,6 +49,29 @@ function keyUp(freq) {
     }
 }
 
+function setParam(param, val) {
+    if (param === "a") {
+        adsr.a = val;
+    } else if (param === "d") {
+        adsr.d = val;
+    } else if (param === "s") {
+        adsr.s = val;
+    } else if (param === "r") {
+        adsr.r = val;
+    }
+}
+function getParam(param) {
+    if (param === "a") {
+        return adsr.a;
+    } else if (param === "d") {
+        return adsr.d;
+    } else if (param === "s") {
+        return adsr.s;
+    } else if (param === "r") {
+        return adsr.r;
+    }
+}
+
 function drawScopes(chan, data) {
     //console.log(chan + " : " + data[0]);
     scope[chan].drawGraph(data);
@@ -77,7 +100,7 @@ function startAudio(freq) {
     mixer.setGain(0, 0.25);
     mixer.setGain(1, 0.25);
     
-    adsr = new SAdsr({"a": 0.1, "d": 0.15, "s": 1, "r": 1.05});
+    adsr = new SAdsr({"a": 0.1, "d": 0.15, "s": 1, "r": 1.0});
 
     adsr.addInput(mixer);
     

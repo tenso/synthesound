@@ -11,11 +11,10 @@ body {
     color: black;
 }
 .button {
-    margin: 1em;
-    padding: 0.5em;
+    padding: 0.25em;
     background: #999;
     border: 2px solid black;
-    border-radius: 4px;
+    border-radius: 8px;
     color: black;
     font-size: 2em;
     display: inline-block;
@@ -35,5 +34,20 @@ body {
     width: 800px; 
     height: 50px;
     border: 2px solid black;
-    border-width: 2px;
+    border-radius: 8px;
+}
+
+.h-slider {
+    width: 1em;
+    height: 10em;
+    -webkit-appearance: slider-vertical;
+    margin: 1em;
+}
+
+.box {
+    width: 11em;
+    height: 10em;
+    background: "#888";
+    border: 2px solid black;
+    border-radius: 8px;
 }
