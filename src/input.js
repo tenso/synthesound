@@ -82,11 +82,16 @@ window.onload = function () {
         adsrSliders;
             
     document.body.onmouseup = function (e) {
+        if (mouseCapturer && mouseCapturer.onmouseup) {
+            mouseCapturer.onmouseup(e);
+        }
         mouseCapturer = null;
     };
     document.body.onmousemove = function (e) {
         if (mouseCapturer) {
-            mouseCapturer.mouseMove(mouseCapturer, e.movementX, e.movementY);
+            if (mouseCapturer.mouseMove) {
+                mouseCapturer.mouseMove(mouseCapturer, e.movementX, e.movementY);
+            }
         }
     };
     

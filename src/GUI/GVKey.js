@@ -1,6 +1,7 @@
 "use strict";
 
 /*global getStyleInt*/
+/*global setMouseCapturer*/
 
 function GVKey(container, keyDown, keyUp) {
     var i = 0,
@@ -21,7 +22,10 @@ function GVKey(container, keyDown, keyUp) {
         key.keyDown = this.keyDown;
         key.keyUp = this.keyUp;
         key.note = note;
-        key.onmousedown = function (e) {key.keyDown(key.note); };
+        key.onmousedown = function (e) {
+            setMouseCapturer(e);
+            key.keyDown(key.note);
+        };
         key.onmouseup = function (e) {key.keyUp(key.note); };
         
         container.appendChild(key);

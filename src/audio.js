@@ -112,7 +112,7 @@ function startAudio(freq) {
     mixer.setGain(0, 0.5);
     mixer.setGain(1, 0.5);
     
-    adsr = new SAdsr({"a": 0.01, "d": 0.15, "s": 0.0, "r": 0.01});
+    adsr = new SAdsr({"a": 0.01, "d": 0.15, "s": 0.5, "r": 0.01});
 
     adsr.addInput(mixer);
     
