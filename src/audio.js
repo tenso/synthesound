@@ -126,7 +126,7 @@ function startAudio(freq) {
     mixerOut.addInput(delay);
     delay.addInput(mixerOut);
     
-    out = sOutNode(audioCtx, 2, 1024);
+    out = sOutNode(audioCtx, 2, 4096);
     out.setInput(mixerOut);
     out.connect(audioCtx.destination);
     
