@@ -109,8 +109,8 @@ function startAudio(freq) {
     mixer.addInput(generators[0]);
     mixer.addInput(generators[1]);
     mixer.addInput(generators[2]);
-    mixer.setGain(0, 0.25);
-    mixer.setGain(1, 0.25);
+    mixer.setGain(0, 0.5);
+    mixer.setGain(1, 0.5);
     
     adsr = new SAdsr({"a": 0.01, "d": 0.15, "s": 0.0, "r": 0.01});
 
@@ -126,7 +126,7 @@ function startAudio(freq) {
     mixerOut.addInput(delay);
     delay.addInput(mixerOut);
     
-    out = sOutNode(audioCtx, 2, 4096);
+    out = sOutNode(audioCtx, 2, 1024);
     out.setInput(mixerOut);
     out.connect(audioCtx.destination);
     

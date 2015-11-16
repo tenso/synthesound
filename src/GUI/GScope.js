@@ -2,7 +2,7 @@
 /*global DelayBuffer*/
 
 function GScope(canvasElement, chan) {
-    this.length = 4096;
+    this.length = 1024;
     this.graphData = new DelayBuffer(this.length);
     this.canvas = canvasElement;
     this.ctx = this.canvas.getContext("2d");
@@ -12,6 +12,7 @@ function GScope(canvasElement, chan) {
     this.halfH = this.canvas.height / 2.0;
     this.ctx.strokeStyle = "#8f4";
     this.ctx.lineWidth = 2;
+    this.gotData = 0;
 }
 
 GScope.prototype.drawGraph = function (data) {
@@ -19,6 +20,11 @@ GScope.prototype.drawGraph = function (data) {
         x = 0,
         y = 0;
     
+    this.gotData += data.length;
+    if (this.gotData < this.length) {
+        return;
+    }
+    this.gotData = 0;
     this.graphData.setArray(data);
             
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

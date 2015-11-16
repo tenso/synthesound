@@ -53,6 +53,7 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
         this.value = value;
         maxY = sliderH - knobH;
         this.style.top = (maxY - ((this.value - this.min) / (this.max - this.min)) * maxY) + "px";
+        this.callback(this.value);
     };
     
     track.id = "h-slider-track-" + id;
