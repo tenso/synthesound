@@ -10,6 +10,8 @@
 
 /*global GScope*/
 
+/*global noteHz*/
+
 var type = "sine",
     generators = [],
     mixer,
@@ -30,7 +32,9 @@ function changeType() {
     generators[2].type = type;
 }
 
-function keyDown(freq) {
+function keyDown(note) {
+    var freq = noteHz(note);
+    
     if (generators.length === 0) {
         return false;
     }
@@ -43,7 +47,7 @@ function keyDown(freq) {
     return true;
 }
 
-function keyUp(freq) {
+function keyUp(note) {
     if (adsr) {
         adsr.setActive(false);
     }
@@ -108,7 +112,7 @@ function startAudio(freq) {
     mixer.setGain(0, 0.25);
     mixer.setGain(1, 0.25);
     
-    adsr = new SAdsr({"a": 0.1, "d": 0.15, "s": 0.5, "r": 1.0});
+    adsr = new SAdsr({"a": 0.01, "d": 0.15, "s": 0.0, "r": 0.01});
 
     adsr.addInput(mixer);
     

@@ -1,0 +1,33 @@
+.vkey-container {
+    display: inline-block;
+    background: "#a8a";
+    height: 10em;
+    width: 800px;
+}
+.vkey-key-flat {
+    position: absolute;
+    width: 2em;
+    height: 10em;
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 2px;
+    z-index: 1;
+}
+
+.vkey-key-flat:active {
+    background: #999;
+}
+
+.vkey-key-sharp {
+    position: absolute;
+    width: 1.5em;
+    height: 6em;
+    background: #000;
+    border: 1px solid #fff;
+    border-radius: 2px;
+    z-index: 2;
+}
+
+.vkey-key-sharp:active {
+    background: #888;
+}

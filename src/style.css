@@ -8,14 +8,14 @@ body {
 }
 .title {
     font-size: 2em;
-    color: black;
+    color: #000;
 }
 .button {
     padding: 0.25em;
     background: #999;
-    border: 2px solid black;
+    border: 2px solid #000;
     border-radius: 8px;
-    color: black;
+    color: #000;
     font-size: 2em;
     display: inline-block;
 }
@@ -33,13 +33,13 @@ body {
     background: #444;
     width: 800px; 
     height: 50px;
-    border: 2px solid black;
+    border: 2px solid #000;
     border-radius: 8px;
 }
 
 .box {
     display: inline-block;
     background: "#888";
-    border: 2px solid black;
+    border: 2px solid #000;
     border-radius: 8px;
 }

@@ -8,6 +8,7 @@
 /*global stopAudio*/
 /*global changeType*/
 /*global GSliders*/
+/*global GVKey*/
 /*global noteName*/
 /*global noteHz*/
 /*global noteNumFromName*/
@@ -15,6 +16,10 @@
 /*global runTests*/
 
 var keyIsDown = 0;
+
+function mapKeyToNote(e) {
+    
+}
 
 function parseInputDown(e) {
     var currentNote = document.getElementById("currentNote"),
@@ -47,7 +52,7 @@ function parseInputDown(e) {
         return;
     }
     currentNote.innerText = noteName(note);
-    keyDown(noteHz(note));
+    keyDown(note);
 }
 
 function parseInputUp(e) {
@@ -58,7 +63,7 @@ function parseInputUp(e) {
         return;
     }
     keyIsDown = 0;
-    keyUp();
+    keyUp(0);
 }
 
 var mouseCapturer = null;
@@ -72,6 +77,7 @@ window.onload = function () {
         playButton = document.getElementById("play"),
         stopButton = document.getElementById("stop"),
         currentNote = document.getElementById("currentNote"),
+        vkey,
         volSliders,
         adsrSliders;
             
@@ -101,6 +107,8 @@ window.onload = function () {
     volSliders = new GSliders(document.getElementById("volSliders"));
     volSliders.add("Lg", getParam("L"), 0.0, 1.0, function (value) { setParam("L", value); });
     volSliders.add("Rg", getParam("R"), 0.0, 1.0, function (value) { setParam("R", value); });
+    
+    vkey = new GVKey(document.getElementById("vkey"), function(note) {keyDown(note);}, function(note) {keyUp(note);});
     
     /*testsuite*/
     runTests();
