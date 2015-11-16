@@ -61,13 +61,9 @@ function parseInputUp(e) {
     keyUp();
 }
 
-var lastClientX = 0,
-    lastClientY = 0;
 var mouseCapturer = null;
 
 function setMouseCapturer(e) {
-    lastClientX = e.clientX;
-    lastClientY = e.clientY;
     mouseCapturer = e.target;
 }
 
@@ -83,14 +79,8 @@ window.onload = function () {
         mouseCapturer = null;
     };
     document.body.onmousemove = function (e) {
-        var dx = e.clientX - lastClientX,
-            dy = e.clientY - lastClientY;
-        
-        lastClientX = e.clientX;
-        lastClientY = e.clientY;
-        
         if (mouseCapturer) {
-            mouseCapturer.mouseMove(mouseCapturer, dx, dy);
+            mouseCapturer.mouseMove(mouseCapturer, e.movementX, e.movementY);
         }
     };
     

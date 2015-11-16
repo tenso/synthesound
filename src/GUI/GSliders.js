@@ -1,5 +1,7 @@
 "use strict";
 /*global setMouseCapturer*/
+/*global getStyle*/
+/*global getStyleInt*/
 
 function GSliders(container) {
     this.sliders = [];
@@ -14,9 +16,6 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
     var track = document.createElement("div"),
         knob = document.createElement("div");
     
-    track.id = "h-slider-track-" + id;
-    track.className = "h-slider-track";
-    
     knob.className = "h-slider-knob";
     knob.isDown = false;
     knob.style.position = "relative";
@@ -26,11 +25,9 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
     knob.min = min;
     knob.max = max;
     knob.callback = callback;
-       
-    
-    //knob.style.top = (1.0 - knob.value) * knob.offsetHeight + "px";
     
     knob.onmousedown = function (e) {
+        e.stopPropagation();
         setMouseCapturer(e);
     };
     
@@ -48,15 +45,21 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
         target.callback(target.value);
     };
     
-    //use computed style so it works initialy
-    knob.setValue = function(value) {
-        var sliderH = parseInt(window.getComputedStyle(this.parentElement, null).getPropertyValue("height"), 10),
-            knobH = parseInt(window.getComputedStyle(knob, null).getPropertyValue("height"), 10),
+    knob.setValue = function (value) {
+        var sliderH = getStyleInt(this.parentElement, "height"),
+            knobH = getStyleInt(knob, "height"),
             maxY;
         
         this.value = value;
         maxY = sliderH - knobH;
         this.style.top = (maxY - ((this.value - this.min) / (this.max - this.min)) * maxY) + "px";
+    };
+    
+    track.id = "h-slider-track-" + id;
+    track.className = "h-slider-track";
+    track.knob = knob;
+    track.onmousedown = function (e) {
+        e.target.knob.setValue(1.0 - (e.offsetY / e.target.offsetHeight));
     };
     
     track.appendChild(knob);
