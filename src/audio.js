@@ -66,6 +66,10 @@ function setParam(param, val) {
         return mixerOut.setGain(0, val);
     } else if (param === "R") {
         return mixerOut.setGain(1, val);
+    } else if (param === "Dt") {
+        delay.setDelay(val);
+    } else if (param === "Dg") {
+        delay.setGain(val);
     }
 }
 function getParam(param) {
@@ -81,6 +85,10 @@ function getParam(param) {
         return mixerOut.gain[0];
     } else if (param === "R") {
         return mixerOut.gain[1];
+    } else if (param === "Dt") {
+        return delay.delay;
+    } else if (param === "Dg") {
+        return delay.gain;
     }
 }
 

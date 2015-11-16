@@ -79,6 +79,7 @@ window.onload = function () {
         currentNote = document.getElementById("currentNote"),
         vkey,
         volSliders,
+        delSliders,
         adsrSliders;
             
     document.body.onmouseup = function (e) {
@@ -112,6 +113,10 @@ window.onload = function () {
     volSliders = new GSliders(document.getElementById("volSliders"));
     volSliders.add("Lg", getParam("L"), 0.0, 1.0, function (value) { setParam("L", value); });
     volSliders.add("Rg", getParam("R"), 0.0, 1.0, function (value) { setParam("R", value); });
+    
+    delSliders = new GSliders(document.getElementById("delSliders"));
+    delSliders.add("Dt", getParam("Dt"), 0.0, 0.1, function (value) { setParam("Dt", value); });
+    delSliders.add("Dg", getParam("Dg"), 0.0, 0.9, function (value) { setParam("Dg", value); });
     
     vkey = new GVKey(document.getElementById("vkey"), function(note) {keyDown(note);}, function(note) {keyUp(note);});
     
