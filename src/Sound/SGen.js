@@ -11,6 +11,7 @@ function SGen(args) {
     this.type = "sine";
     this.inPhase = 0;
     this.setArgs(args);
+    this.isOn = true;
 }
 extend(SBase, SGen);
 
@@ -23,8 +24,10 @@ SGen.prototype.makeAudio = function () {
         inPeriod;
     
     for (i = 0; i < this.frameSize; i += 1) {
-        
-        if (this.type === "sine") {
+
+        if (!this.isOn) {
+            this.genData[i] = 0;    
+        } else if (this.type === "sine") {
             this.inPhase += T;
             this.genData[i] = this.amp * Math.sin(this.inPhase + this.phase);
         } else if (this.type === "square") {

@@ -85,3 +85,11 @@ GRadios.prototype.set = function (index) {
     }
     this.buttons[index].set();
 };
+
+GRadios.prototype.setValue = function (index, value) {
+    if (index < 0 || index >= this.buttons.length) {
+        logError("index oob in GRadios");
+        return;
+    }
+    this.buttons[index].setValue(value);
+};

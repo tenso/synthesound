@@ -39,3 +39,7 @@ hr {
     width: 64em;
     display: inline-block; 
 }
+
+.panicButton {
+    color: #f88;
+}

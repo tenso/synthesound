@@ -72,6 +72,12 @@ function setParam(param, val) {
         delay.setGain(val);
     } else if (param == "shape") {
         setShape(val);
+    } else if (param === "osc0") {
+        return generators[0].isOn = val;
+    } else if (param === "osc1") {
+        return generators[1].isOn = val;
+    } else if (param === "osc2") {
+        return generators[2].isOn = val;
     }
 }
 function getParam(param) {
@@ -93,6 +99,12 @@ function getParam(param) {
         return delay.gain;
     } else if (param === "shape") {
         return generators[0].type;
+    } else if (param === "osc0") {
+        return generators[0].isOn;
+    } else if (param === "osc1") {
+        return generators[1].isOn;
+    } else if (param === "osc2") {
+        return generators[2].isOn;
     }
 }
 

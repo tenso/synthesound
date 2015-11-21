@@ -76,6 +76,7 @@ window.onload = function () {
         stopButton = document.getElementById("stop"),
         currentNote = document.getElementById("currentNote"),
         shapeSelect = document.getElementById("shapeSelect"),
+        oscSelect = document.getElementById("oscSelect"),
         vkey,
         volSliders,
         delSliders,
@@ -122,9 +123,19 @@ window.onload = function () {
     vkey = new GVKey(document.getElementById("vkey"), function (note) {keyDown(note); }, function (note) {keyUp(note); });
     
     shapeSelect = new GRadios(document.getElementById("shapeSelect"), "Shape");
-    shapeSelect.add("sine", function (val) {if (val) {setParam("shape", "sine"); }}, true);
-    shapeSelect.add("square", function (val) {if (val) {setParam("shape", "square"); }}, true);
+    shapeSelect.add("Sine", function (val) {if (val) {setParam("shape", "sine"); }}, true);
+    shapeSelect.add("Square", function (val) {if (val) {setParam("shape", "square"); }}, true);
     shapeSelect.set(0);
+    
+    oscSelect = new GRadios(document.getElementById("oscSelect"), "Oscillators");
+    oscSelect.add("Osc 0", function (val) {setParam("osc0", val); }, false);
+    oscSelect.add("Osc 1", function (val) {setParam("osc1", val); }, false);
+    oscSelect.add("Osc 2", function (val) {setParam("osc2", val); }, false);
+    oscSelect.setValue(0, true);
+    oscSelect.setValue(1, true);
+    oscSelect.setValue(2, true);
+    
+    
     /*testsuite*/
     runTests();
 };
