@@ -1,5 +1,12 @@
 "use strict";
 /*global logInfo*/
+/*global logError*/
+
+function verifyFunctionality(func, message) {
+    if (!func) {
+        logError("no " + message + ", please use modern browser");
+    }
+}
 
 function verify(arg1, arg2) {
     if (arg1 !== arg2) {

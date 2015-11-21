@@ -22,8 +22,7 @@ function mapKeyToNote(e) {
 }
 
 function parseInputDown(e) {
-    var currentNote = document.getElementById("currentNote"),
-        noteMap = {"a": "C", "w": "C#", "s": "D",
+    var noteMap = {"a": "C", "w": "C#", "s": "D",
                    "e": "D#", "d": "E", "f": "F",
                    "t": "F#", "g": "G", "y": "G#",
                    "h" : "A", "u": "A#", "j": "B"},
@@ -51,7 +50,6 @@ function parseInputDown(e) {
     if (note === -1) {
         return;
     }
-    currentNote.innerText = noteName(note);
     keyDown(note);
 }
 
@@ -82,6 +80,8 @@ window.onload = function () {
         delSliders,
         adsrSliders;
             
+    currentNote.innerText = "--";
+    
     document.body.onmouseup = function (e) {
         if (mouseCapturer && mouseCapturer.onmouseup) {
             mouseCapturer.onmouseup(e);
@@ -104,19 +104,20 @@ window.onload = function () {
                 
     startAudio();
     
-    adsrSliders = new GSliders(document.getElementById("adsrSliders"));
+    adsrSliders = new GSliders(document.getElementById("adsrSliders"), "Envelope");
     adsrSliders.add("A", getParam("a"), 0.001, 1.0, function (value) { setParam("a", value); });
     adsrSliders.add("D", getParam("d"), 0.001, 1.0, function (value) { setParam("d", value); });
     adsrSliders.add("S", getParam("s"), 0.0, 1.0, function (value) { setParam("s", value); });
     adsrSliders.add("R", getParam("r"), 0.001, 1.0, function (value) { setParam("r", value); });
+
+    delSliders = new GSliders(document.getElementById("delSliders"), "FB-D");
+    delSliders.add("T", getParam("Dt"), 0.0, 0.1, function (value) { setParam("Dt", value); });
+    delSliders.add("G", getParam("Dg"), 0.0, 0.9, function (value) { setParam("Dg", value); });
+
+    volSliders = new GSliders(document.getElementById("volSliders"), "VOL");
+    volSliders.add("L", getParam("L"), 0.0, 1.0, function (value) { setParam("L", value); });
+    volSliders.add("R", getParam("R"), 0.0, 1.0, function (value) { setParam("R", value); });
     
-    volSliders = new GSliders(document.getElementById("volSliders"));
-    volSliders.add("Lg", getParam("L"), 0.0, 1.0, function (value) { setParam("L", value); });
-    volSliders.add("Rg", getParam("R"), 0.0, 1.0, function (value) { setParam("R", value); });
-    
-    delSliders = new GSliders(document.getElementById("delSliders"));
-    delSliders.add("Dt", getParam("Dt"), 0.0, 0.1, function (value) { setParam("Dt", value); });
-    delSliders.add("Dg", getParam("Dg"), 0.0, 0.9, function (value) { setParam("Dg", value); });
     
     vkey = new GVKey(document.getElementById("vkey"), function(note) {keyDown(note);}, function(note) {keyUp(note);});
     

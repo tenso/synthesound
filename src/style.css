@@ -5,23 +5,33 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    margin: 1em;
+    background: #666;
 }
-.title {
+hr {
+    visibility: hidden;
+    height: 0px;
+    margin: -1px;
+    padding: 0px;
+}
+.currentNote {
     font-size: 2em;
-    color: #000;
+    color: #8f8;
+    background: #444;
+    display: inline-block;
+    width: 2em;
 }
 .button {
     padding: 0.25em;
-    background: #999;
-    border: 2px solid #000;
-    border-radius: 8px;
-    color: #000;
+    color: #fff;
+    background: #444;
+    border: 2px solid #fff;
     font-size: 2em;
     display: inline-block;
 }
 
 .button:active {
-    background: #444;
+    background: #888;
 }
 
 .input-number {
@@ -33,13 +43,31 @@ body {
     background: #444;
     width: 800px; 
     height: 50px;
-    border: 2px solid #000;
-    border-radius: 8px;
+    margin: 0em;
+    padding: 0em;
 }
 
 .box {
     display: inline-block;
-    background: "#888";
+    background: #fff;
     border: 2px solid #000;
     border-radius: 8px;
+    padding: 0.5em;
+}
+
+.collection {
+    display: inline-block;
+    background: #444;
+    padding: 0.5em;
+}
+
+.collection-row {
+    vertical-align: top;
+}
+
+.vkey {
+    background: #444; 
+    padding: 1em;
+    width: 64em;
+    display: inline-block; 
 }

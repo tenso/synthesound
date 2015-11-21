@@ -23,28 +23,36 @@
     <link href="GUI/GSliders.css" rel="stylesheet" type="text/css">
     <script src="GUI/GVKey.js"></script>
     <link href="GUI/GVKey.css" rel="stylesheet" type="text/css">
+
+    <head>
+        <title>WebSynth</title>
+    </head>
     
     <body id="freqSelect">
-        <div id="title" class="title">
-            WebSynth
-        </div>
-        <div id="currentNote" >--</div>
         <div id="play" class="button">
             Toggle WF
         </div>
         <div id="stop" class="button">
-            STOP
+            Panic!
         </div>
-        <br>
+        <hr/>
         <canvas id="audioScopeL" class="audio-scope"></canvas>
-        <br>
+        <hr>
         <canvas id="audioScopeR" class="audio-scope"></canvas>
-        <br>
-        <div id="vkey"></div>
-        <div>
-            <div id="adsrSliders"></div>
-            <div id="delSliders"></div>
-            <div id="volSliders"></div>
-        </div>
+        <hr/>
+        <table class="collection">
+            <tr class="collection-row">
+                <td id="vkey" class="vkey"></td>
+                <td id="currentNote" class="currentNote"></td>
+            </tr>
+        </table>
+        <hr/>
+        <table class="collection">
+            <tr class="collection-row">
+                <td id="adsrSliders"></td>
+                <td id="delSliders"></td>
+                <td id="volSliders"></td>
+            </tr>
+        </table>
     </body>
 </html>

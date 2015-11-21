@@ -3,13 +3,20 @@
 /*global getStyle*/
 /*global getStyleInt*/
 
-function GSliders(container) {
+function GSliders(container, title) {
     this.sliders = [];
     this.container = container;
+    this.title = title;
+    this.contId = container.id;
     
     this.box = document.createElement("tr");
     this.box.className = "box";
     this.container.appendChild(this.box);
+    
+    var titleElem = document.createElement("div");
+    titleElem.innerText = this.title;
+    titleElem.className = "h-slider-title";
+    this.box.appendChild(titleElem);
 }
 
 GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
@@ -20,7 +27,7 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
     knob.isDown = false;
     knob.style.position = "relative";
         
-    knob.id = "h-slider-knob-" + id;
+    knob.id = "h-slider-knob-" + this.contId + "-" + id;
     knob.value = val;
     knob.min = min;
     knob.max = max;
@@ -56,7 +63,7 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
         this.callback(this.value);
     };
     
-    track.id = "h-slider-track-" + id;
+    track.id = "h-slider-track-" + this.contId + "-" + id;
     track.className = "h-slider-track";
     track.knob = knob;
     track.onmousedown = function (e) {
@@ -68,15 +75,15 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
     return track;
 };
 
-GSliders.prototype.add = function (id, val, min, max, callback) {
+GSliders.prototype.add = function (label, val, min, max, callback) {
     var cont = document.createElement("td"),
         sliderLabel = document.createElement("div"),
-        slider = this.makeSlider(id, val, min, max, callback),
+        slider = this.makeSlider(label, val, min, max, callback),
         knob,
         knobPos,
         maxY;
             
-    sliderLabel.innerText = id;
+    sliderLabel.innerText = label;
     sliderLabel.className = "h-slider-label";
     cont.appendChild(sliderLabel);
     
@@ -85,6 +92,6 @@ GSliders.prototype.add = function (id, val, min, max, callback) {
     this.box.appendChild(cont);
     
     //FIXME: ugly set initial pos...
-    knob = document.getElementById("h-slider-knob-" + id);
+    knob = document.getElementById("h-slider-knob-" + this.contId + "-" + label);
     knob.setValue(knob.value);
 };

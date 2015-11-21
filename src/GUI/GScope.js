@@ -10,7 +10,7 @@ function GScope(canvasElement, chan) {
     this.step = 8;
     this.xStep = this.canvas.width / this.graphData.length;
     this.halfH = this.canvas.height / 2.0;
-    this.ctx.strokeStyle = "#8f4";
+    this.ctx.strokeStyle = "#8f8";
     this.ctx.lineWidth = 2;
     this.gotData = 0;
 }

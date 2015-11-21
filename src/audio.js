@@ -2,6 +2,8 @@
 /*global logInfo*/
 /*global logError*/
 
+/*global verifyFunctionality*/
+
 /*global sOutNode*/
 /*global SGen*/
 /*global SMix*/
@@ -11,7 +13,7 @@
 /*global GScope*/
 
 /*global noteHz*/
-
+/*global noteName*/
 var type = "sine",
     generators = [],
     mixer,
@@ -33,7 +35,8 @@ function changeType() {
 }
 
 function keyDown(note) {
-    var freq = noteHz(note);
+    var freq = noteHz(note),
+        currentNote = document.getElementById("currentNote");
     
     if (generators.length === 0) {
         return false;
@@ -44,6 +47,9 @@ function keyDown(note) {
     
     adsr.setActive(false);
     adsr.setActive(true);
+    
+    currentNote.innerText = noteName(note);
+    
     return true;
 }
 
@@ -99,9 +105,8 @@ function drawScopes(chan, data) {
 
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 
-if (!AudioContext) {
-    logError("no audiocontext, please use modern browser");
-}
+verifyFunctionality(AudioContext, "AudioContext");
+verifyFunctionality(Array.prototype.fill, "Array fill");
 
 var audioCtx = new AudioContext();
 var audioRunning = false;

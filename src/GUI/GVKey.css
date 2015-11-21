@@ -1,8 +1,7 @@
 .vkey-container {
-    display: inline-block;
-    background: "#a8a";
+    width: 64em;
     height: 10em;
-    width: 800px;
+    position: relative;
 }
 .vkey-key-flat {
     position: absolute;
@@ -29,5 +28,5 @@
 }
 
 .vkey-key-sharp:active {
-    background: #888;
+    background: #999;
 }

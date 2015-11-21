@@ -61,7 +61,7 @@ function GVKey(container, keyDown, keyUp) {
         }
         
         key.style.left = keyX + "px";
-        
+        key.style.top = 0 + "px";
         return key;
     };
     
