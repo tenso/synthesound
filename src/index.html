@@ -1,5 +1,6 @@
 <html>
     <link href="style.css" rel="stylesheet" type="text/css">
+    
     <script src="Util/log.js"></script>
     <script src="Util/test.js"></script>
     <script src="Util/math.js"></script>
@@ -29,25 +30,25 @@
     </head>
     
     <body id="freqSelect">
-        <div id="play" class="button">
+        <div id="play" class="button-class button">
             Toggle WF
         </div>
-        <div id="stop" class="button">
+        <div id="stop" class="button-class button">
             Panic!
         </div>
         <hr/>
-        <canvas id="audioScopeL" class="audio-scope"></canvas>
+        <canvas id="audioScopeL" class="collection audio-scope"></canvas>
         <hr>
-        <canvas id="audioScopeR" class="audio-scope"></canvas>
+        <canvas id="audioScopeR" class="collection audio-scope"></canvas>
         <hr/>
-        <table class="collection">
+        <table class="collection collection-table">
             <tr class="collection-row">
-                <td id="vkey" class="vkey"></td>
-                <td id="currentNote" class="currentNote"></td>
+                <td id="vkey" class="collection vkey"></td>
+                <td id="currentNote" class="label currentNote"></td>
             </tr>
         </table>
         <hr/>
-        <table class="collection">
+        <table class="collection collection-table">
             <tr class="collection-row">
                 <td id="adsrSliders"></td>
                 <td id="delSliders"></td>

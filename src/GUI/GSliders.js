@@ -9,21 +9,28 @@ function GSliders(container, title) {
     this.title = title;
     this.contId = container.id;
     
-    this.box = document.createElement("tr");
-    this.box.className = "box";
-    this.container.appendChild(this.box);
+    this.table = document.createElement("table");
+    this.table.className = "collection-table component";
+
+    this.container.appendChild(this.table);
     
-    var titleElem = document.createElement("div");
+    var titleRow = document.createElement("tr");
+    var titleElem = document.createElement("td");
     titleElem.innerText = this.title;
-    titleElem.className = "h-slider-title";
-    this.box.appendChild(titleElem);
+    titleElem.className = "label";
+    titleElem.colSpan = 10000;
+    titleRow.appendChild(titleElem);
+    this.table.appendChild(titleRow);
+    
+    this.sliders = document.createElement("tr");
+    this.table.appendChild(this.sliders);
 }
 
 GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
     var track = document.createElement("div"),
         knob = document.createElement("div");
     
-    knob.className = "h-slider-knob";
+    knob.className = "button-class knob h-slider-knob";
     knob.isDown = false;
     knob.style.position = "relative";
         
@@ -64,7 +71,7 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
     };
     
     track.id = "h-slider-track-" + this.contId + "-" + id;
-    track.className = "h-slider-track";
+    track.className = "h-slider-track track";
     track.knob = knob;
     track.onmousedown = function (e) {
         e.target.knob.setValue(1.0 - (e.offsetY / e.target.offsetHeight));
@@ -89,7 +96,7 @@ GSliders.prototype.add = function (label, val, min, max, callback) {
     
     cont.appendChild(slider);
     
-    this.box.appendChild(cont);
+    this.sliders.appendChild(cont);
     
     //FIXME: ugly set initial pos...
     knob = document.getElementById("h-slider-knob-" + this.contId + "-" + label);
