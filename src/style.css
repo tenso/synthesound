@@ -15,27 +15,11 @@ hr {
     margin: -1px;
     padding: 0px;
 }
+
 .currentNote {
-    display: inline-block;
     width: 2em;
-}
-
-.button-class {
-    background: #444;
-    border-radius: 0.25em;
-}
-
-.button {
-    padding: 0.25em;
-    color: #fff;
-    border: 2px solid #fff;
-    font-size: 2em;
-    display: inline-block;
-}
-
-.button-class:active {
-    border-color: #8f8;
-    color: #8f8;
+    height: 2em;
+    line-height: 2em;
 }
 
 .input-number {
@@ -50,47 +34,8 @@ hr {
     padding: 0em;
 }
 
-.component {
-    background: #fff;
-    border: 2px solid #000;
-    border-radius: 0.25em;
-}
-
-.collection {
-    background: #444;
-}
-
-.collection-table {
-    display: inline-block;
-    padding: 0.5em;
-}
-
-.collection-row {
-    vertical-align: top;
-}
-
 .vkey {
     padding: 1em;
     width: 64em;
     display: inline-block; 
-}
-
-.label {
-    color: #8f8;
-    font-size: 1.25em;
-    text-align: center;
-    background: #444;
-    border-radius: 0.25em;
-    margin-top: 0.25em;
-    margin-bottom: 0.25em;
-}
-
-.knob {
-    border: 2px solid #000;
-}
-
-.track {
-    background: #888;
-    border: 2px solid #000;
-    border-radius: 8px;
 }

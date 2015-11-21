@@ -6,8 +6,8 @@
 /*global getParam*/
 /*global startAudio*/
 /*global stopAudio*/
-/*global changeType*/
 /*global GSliders*/
+/*global GRadios*/
 /*global GVKey*/
 /*global noteName*/
 /*global noteHz*/
@@ -75,6 +75,7 @@ window.onload = function () {
         playButton = document.getElementById("play"),
         stopButton = document.getElementById("stop"),
         currentNote = document.getElementById("currentNote"),
+        shapeSelect = document.getElementById("shapeSelect"),
         vkey,
         volSliders,
         delSliders,
@@ -99,7 +100,6 @@ window.onload = function () {
     freqSelect.addEventListener("keydown", parseInputDown, false);
     freqSelect.addEventListener("keyup", parseInputUp, false);
     
-    playButton.addEventListener("click", function () { changeType(); }, false);
     stopButton.addEventListener("click", function () { stopAudio(); }, false);
                 
     startAudio();
@@ -119,8 +119,12 @@ window.onload = function () {
     volSliders.add("R", getParam("R"), 0.0, 1.0, function (value) { setParam("R", value); });
     
     
-    vkey = new GVKey(document.getElementById("vkey"), function(note) {keyDown(note);}, function(note) {keyUp(note);});
+    vkey = new GVKey(document.getElementById("vkey"), function (note) {keyDown(note); }, function (note) {keyUp(note); });
     
+    shapeSelect = new GRadios(document.getElementById("shapeSelect"), "Shape");
+    shapeSelect.add("sine", function (val) {if (val) {setParam("shape", "sine"); }}, true);
+    shapeSelect.add("square", function (val) {if (val) {setParam("shape", "square"); }}, true);
+    shapeSelect.set(0);
     /*testsuite*/
     runTests();
 };

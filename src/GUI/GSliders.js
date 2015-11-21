@@ -4,7 +4,6 @@
 /*global getStyleInt*/
 
 function GSliders(container, title) {
-    this.sliders = [];
     this.container = container;
     this.title = title;
     this.contId = container.id;
@@ -14,8 +13,8 @@ function GSliders(container, title) {
 
     this.container.appendChild(this.table);
     
-    var titleRow = document.createElement("tr");
-    var titleElem = document.createElement("td");
+    var titleRow = document.createElement("tr"),
+        titleElem = document.createElement("td");
     titleElem.innerText = this.title;
     titleElem.className = "label";
     titleElem.colSpan = 10000;
@@ -31,7 +30,6 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
         knob = document.createElement("div");
     
     knob.className = "button-class knob h-slider-knob";
-    knob.isDown = false;
     knob.style.position = "relative";
         
     knob.id = "h-slider-knob-" + this.contId + "-" + id;
@@ -74,7 +72,7 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
     track.className = "h-slider-track track";
     track.knob = knob;
     track.onmousedown = function (e) {
-        e.target.knob.setValue(1.0 - (e.offsetY / e.target.offsetHeight));
+        this.knob.setValue(1.0 - (e.offsetY / this.offsetHeight));
     };
     
     track.appendChild(knob);
@@ -91,7 +89,7 @@ GSliders.prototype.add = function (label, val, min, max, callback) {
         maxY;
             
     sliderLabel.innerText = label;
-    sliderLabel.className = "h-slider-label";
+    sliderLabel.className = "component-label";
     cont.appendChild(sliderLabel);
     
     cont.appendChild(slider);

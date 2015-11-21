@@ -1,0 +1,11 @@
+.radio-button-active {
+    width: 4em;
+    height: 2em;
+    color: #8f8;
+}
+
+.radio-button-inactive {
+    width: 4em;
+    height: 2em;
+    color: #fff;
+}

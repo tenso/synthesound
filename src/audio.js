@@ -14,8 +14,7 @@
 
 /*global noteHz*/
 /*global noteName*/
-var type = "sine",
-    generators = [],
+var generators = [],
     mixer,
     mixerOut,
     adsr,
@@ -23,12 +22,7 @@ var type = "sine",
     out,
     scope = [];
 
-function changeType() {
-    if (type === "sine") {
-        type = "square";
-    } else {
-        type = "sine";
-    }
+function setShape(type) {
     generators[0].type = type;
     generators[1].type = type;
     generators[2].type = type;
@@ -76,6 +70,8 @@ function setParam(param, val) {
         delay.setDelay(val);
     } else if (param === "Dg") {
         delay.setGain(val);
+    } else if (param == "shape") {
+        setShape(val);
     }
 }
 function getParam(param) {
@@ -95,6 +91,8 @@ function getParam(param) {
         return delay.delay;
     } else if (param === "Dg") {
         return delay.gain;
+    } else if (param === "shape") {
+        return generators[0].type;
     }
 }
 
@@ -116,9 +114,9 @@ function startAudio(freq) {
         return false;
     }
     mixer = new SMix();
-    generators[0] = new SGen({"freq": 220, "amp": 0.25, "type": type});
-    generators[1] = new SGen({"freq": 220, "amp": 0.25, "type": type});
-    generators[2] = new SGen({"freq": 110, "amp": 0.25, "type": type});
+    generators[0] = new SGen({"freq": 220, "amp": 0.25, "type": "sine"});
+    generators[1] = new SGen({"freq": 220, "amp": 0.25, "type": "sine"});
+    generators[2] = new SGen({"freq": 110, "amp": 0.25, "type": "sine"});
     mixer.addInput(generators[0]);
     mixer.addInput(generators[1]);
     mixer.addInput(generators[2]);
