@@ -132,17 +132,18 @@ function startAudio(freq) {
     mixer.addInput(generators[0]);
     mixer.addInput(generators[1]);
     mixer.addInput(generators[2]);
+    
     mixer.setGain(0, 0.5);
     mixer.setGain(1, 0.5);
     
     adsr = new SAdsr({"a": 0.01, "d": 0.15, "s": 0.5, "r": 0.01});
-
+    
     adsr.addInput(mixer);
     
     delay = new SDelay();
     delay.setDelay(0.03);
     delay.setGain(0.7);
-                
+    
     mixerOut = new SMix();
     mixerOut.addInput(adsr);
     

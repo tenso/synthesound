@@ -24,6 +24,12 @@ SBase.prototype.addInput = function (input) {
     this.inputs.push(input);
 };
 
+SBase.prototype.delInput = function (input) {
+    var index = this.inputs.indexOf(input);
+    this.inputs.splice(index, 1);
+};
+
+
 SBase.prototype.generateInputs = function () {
     var inputIndex;
     for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {

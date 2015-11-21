@@ -67,7 +67,13 @@ function parseInputUp(e) {
 var mouseCapturer = null;
 
 function setMouseCapturer(e) {
+    e.stopPropagation();
     mouseCapturer = e.target;
+    
+    if (mouseCapturer && mouseCapturer.onmousecaptured) {
+        e.mouseCapturer = mouseCapturer;
+        mouseCapturer.onmousecaptured(e);
+    }
 }
 
 window.onload = function () {
@@ -85,16 +91,22 @@ window.onload = function () {
     currentNote.innerText = "--";
     
     document.body.onmouseup = function (e) {
-        if (mouseCapturer && mouseCapturer.onmouseup) {
-            mouseCapturer.onmouseup(e);
+        if (mouseCapturer && mouseCapturer.onmouseupaftercapture) {
+            e.mouseCapturer = mouseCapturer;
+            mouseCapturer.onmouseupaftercapture(e);
         }
         mouseCapturer = null;
     };
     document.body.onmousemove = function (e) {
-        if (mouseCapturer) {
-            if (mouseCapturer.mouseMove) {
-                mouseCapturer.mouseMove(mouseCapturer, e.movementX, e.movementY);
-            }
+        if (mouseCapturer && mouseCapturer.onmousepressandmove) {
+            e.mouseCapturer = mouseCapturer;
+            mouseCapturer.onmousepressandmove(e);
+        }
+    };
+    document.body.onmouseover = function (e) {
+        if (mouseCapturer && mouseCapturer.onmouseoveraftercapture) {
+            e.mouseCapturer = mouseCapturer;
+            mouseCapturer.onmouseoveraftercapture(e);
         }
     };
     
@@ -112,7 +124,7 @@ window.onload = function () {
     adsrSliders.add("R", getParam("r"), 0.001, 1.0, function (value) { setParam("r", value); });
 
     delSliders = new GSliders(document.getElementById("delSliders"), "FB-D");
-    delSliders.add("T", getParam("Dt"), 0.0, 0.1, function (value) { setParam("Dt", value); });
+    delSliders.add("T", getParam("Dt"), 0.0, 0.5, function (value) { setParam("Dt", value); });
     delSliders.add("G", getParam("Dg"), 0.0, 0.9, function (value) { setParam("Dg", value); });
 
     volSliders = new GSliders(document.getElementById("volSliders"), "VOL");
@@ -135,6 +147,7 @@ window.onload = function () {
     oscSelect.setValue(1, true);
     oscSelect.setValue(2, true);
     
+    connectAllPorts();
     
     /*testsuite*/
     runTests();

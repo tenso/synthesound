@@ -39,31 +39,36 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
     knob.callback = callback;
     
     knob.onmousedown = function (e) {
-        e.stopPropagation();
         setMouseCapturer(e);
     };
     
-    knob.mouseMove = function (target, dx, dy) {
-        var maxY = target.parentElement.offsetHeight - target.offsetHeight,
-            newY = parseInt(target.style.top, 10) + dy;
+    knob.onmousepressandmove = function (e) {
+        var maxY = e.mouseCapturer.parentElement.offsetHeight - e.mouseCapturer.offsetHeight,
+            newY = parseInt(e.mouseCapturer.style.top, 10) + e.movementY;
             
         if (newY < 0) {
             newY = 0;
         } else if (newY > maxY) {
             newY = maxY;
         }
-        target.style.top = newY + "px";
-        target.value = min + (max - min) * (1.0 - newY / maxY);
-        target.callback(target.value);
+        e.mouseCapturer.style.top = newY + "px";
+        e.mouseCapturer.value = min + (max - min) * (1.0 - newY / maxY);
+        e.mouseCapturer.callback(e.mouseCapturer.value);
     };
     
     knob.setValue = function (value) {
         var sliderH = getStyleInt(this.parentElement, "height"),
             knobH = getStyleInt(knob, "height"),
             maxY;
-        
+                
         this.value = value;
+        if (this.value > this.max) {
+            this.value = this.max;
+        } else if (this.value < this.min) {
+            this.value = this.min;
+        }
         maxY = sliderH - knobH;
+        
         this.style.top = (maxY - ((this.value - this.min) / (this.max - this.min)) * maxY) + "px";
         this.callback(this.value);
     };
@@ -72,7 +77,7 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
     track.className = "h-slider-track track";
     track.knob = knob;
     track.onmousedown = function (e) {
-        this.knob.setValue(1.0 - (e.offsetY / this.offsetHeight));
+        this.knob.setValue(this.knob.max - (this.knob.max - this.knob.min) * (e.offsetY / this.offsetHeight));
     };
     
     track.appendChild(knob);

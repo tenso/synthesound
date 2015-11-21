@@ -14,12 +14,14 @@ function GVKey(container, keyDown, keyUp) {
     this.keyDown = keyDown;
     this.keyUp = keyUp;
     this.isDown = false;
+    this.lastNote = -1;
     
     this.addKey = function (container, note) {
         var key = document.createElement("div"),
             flat = true,
             keyX = 0;
         
+        key.id = "vkeyb-note-" + note;
         key.keyDown = this.keyDown;
         key.keyUp = this.keyUp;
         key.note = note;
@@ -27,16 +29,20 @@ function GVKey(container, keyDown, keyUp) {
         
         key.onmousedown = function (e) {
             setMouseCapturer(e);
-            key.parent.isDown = true;
-            key.keyDown(key.note);
-        };
+         };
         key.onmouseover = function (e) {
             if (key.parent.isDown) {
+                key.parent.lastNote = key.note;
                 key.keyDown(key.note);
             }
         };
-        key.onmouseup = function (e) {
-            key.keyUp(key.note);
+        key.onmousecaptured = function (e) {
+            key.parent.isDown = true;
+            key.parent.lastNote = key.note;
+            key.keyDown(key.note);
+        }
+        key.onmouseupaftercapture = function (e) {
+            key.keyUp(key.parent.lastNote);
             key.parent.isDown = false;
         };
         
