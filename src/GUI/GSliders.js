@@ -9,12 +9,18 @@ function GSliders(container, title) {
     this.contId = container.id;
     
     this.table = document.createElement("table");
+    this.table.id = "hslider-component-" + this.contId;
     this.table.className = "collection-table component";
 
     this.container.appendChild(this.table);
     
     var titleRow = document.createElement("tr"),
         titleElem = document.createElement("td");
+    
+    titleRow.id = "hslider-title-row-" + this.contId;
+    titleElem.id = "hslider-title-elem-" + this.contId;
+    
+    titleElem.id = "hslider-title-" + this.contId;
     titleElem.innerText = this.title;
     titleElem.className = "label";
     titleElem.colSpan = 10000;
@@ -22,6 +28,7 @@ function GSliders(container, title) {
     this.table.appendChild(titleRow);
     
     this.sliders = document.createElement("tr");
+    this.sliders.id = "hslider-sliders-" + this.contId;
     this.table.appendChild(this.sliders);
 }
 
@@ -29,10 +36,10 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
     var track = document.createElement("div"),
         knob = document.createElement("div");
     
-    knob.className = "button-class knob h-slider-knob";
+    knob.className = "button-class knob hslider-knob";
     knob.style.position = "relative";
         
-    knob.id = "h-slider-knob-" + this.contId + "-" + id;
+    knob.id = "hslider-knob-" + this.contId + "-" + id;
     knob.value = val;
     knob.min = min;
     knob.max = max;
@@ -73,8 +80,8 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
         this.callback(this.value);
     };
     
-    track.id = "h-slider-track-" + this.contId + "-" + id;
-    track.className = "h-slider-track track";
+    track.id = "hslider-track-" + this.contId + "-" + id;
+    track.className = "hslider-track track";
     track.knob = knob;
     track.onmousedown = function (e) {
         this.knob.setValue(this.knob.max - (this.knob.max - this.knob.min) * (e.offsetY / this.offsetHeight));
@@ -93,6 +100,7 @@ GSliders.prototype.add = function (label, val, min, max, callback) {
         knobPos,
         maxY;
             
+    sliderLabel.id = "hslider-label-" + this.contId + "-" + label;
     sliderLabel.innerText = label;
     sliderLabel.className = "component-label";
     cont.appendChild(sliderLabel);
@@ -102,6 +110,6 @@ GSliders.prototype.add = function (label, val, min, max, callback) {
     this.sliders.appendChild(cont);
     
     //FIXME: ugly set initial pos...
-    knob = document.getElementById("h-slider-knob-" + this.contId + "-" + label);
+    knob = document.getElementById("hslider-knob-" + this.contId + "-" + label);
     knob.setValue(knob.value);
 };

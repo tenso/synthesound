@@ -35,35 +35,38 @@
     </head>
     
     <body id="freqSelect">
-        <div id="stop" class="button-class button panicButton">
-            Panic!
+        <div id="workspace" class="workspace">
+            <div id="stop" class="button-class button panicButton">
+                Panic!
+            </div>
+            <hr/>
+            <canvas id="audioScopeL" class="collection audio-scope"></canvas>
+            <hr>
+            <canvas id="audioScopeR" class="collection audio-scope"></canvas>
+            <hr/>
+            <table class="collection collection-table">
+                <tr class="collection-row">
+                    <td id="vkey" class="collection vkey"></td>
+                    <td>
+                        <div id="currentNote" class="label currentNote"></div>
+                    </td>
+                </tr>
+            </table>
+            <div id="io-1"></div>
+            <div id="io-2"></div>
+            <hr/>
+            <table class="collection collection-table" id="controls">
+                <tr class="collection-row" id="slider-controls">
+                    <td id="adsrSliders"></td>
+                    <td id="delSliders"></td>
+                    <td id="volSliders"></td>
+                    <td>
+                        <tr id="shapeSelect"></tr>
+                        <tr id="oscSelect"></tr>
+                    </td>
+                </tr>
+            </table>
         </div>
-        <hr/>
-        <canvas id="audioScopeL" class="collection audio-scope"></canvas>
-        <hr>
-        <canvas id="audioScopeR" class="collection audio-scope"></canvas>
-        <hr/>
-        <table class="collection collection-table">
-            <tr class="collection-row">
-                <td id="vkey" class="collection vkey"></td>
-                <td>
-                    <div id="currentNote" class="label currentNote"></div>
-                </td>
-            </tr>
-        </table>
-        <div id="io-1" class="io-port"></div>
-        <div id="io-2" class="io-port"></div>
-        <hr/>
-        <table class="collection collection-table">
-            <tr class="collection-row">
-                <td id="adsrSliders"></td>
-                <td id="delSliders"></td>
-                <td id="volSliders"></td>
-                <td>
-                    <tr id="shapeSelect"></tr>
-                    <tr id="oscSelect"></tr>
-                </td>
-            </tr>
-        </table>
+        <canvas id="lines" class="lines"></canvas>
     </body>
 </html>

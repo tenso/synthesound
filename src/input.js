@@ -15,6 +15,9 @@
 /*global Float32RB*/
 /*global runTests*/
 
+/*global connectAllGIO*/
+/*global initGIO*/
+
 var keyIsDown = 0;
 
 function mapKeyToNote(e) {
@@ -135,8 +138,8 @@ window.onload = function () {
     vkey = new GVKey(document.getElementById("vkey"), function (note) {keyDown(note); }, function (note) {keyUp(note); });
     
     shapeSelect = new GRadios(document.getElementById("shapeSelect"), "Shape");
-    shapeSelect.add("Sine", function (val) {if (val) {setParam("shape", "sine"); }}, true);
-    shapeSelect.add("Square", function (val) {if (val) {setParam("shape", "square"); }}, true);
+    shapeSelect.add("Sine", function (val) {if (val) {setParam("shape", "sine"); } }, true);
+    shapeSelect.add("Square", function (val) {if (val) {setParam("shape", "square"); } }, true);
     shapeSelect.set(0);
     
     oscSelect = new GRadios(document.getElementById("oscSelect"), "Oscillators");
@@ -147,7 +150,9 @@ window.onload = function () {
     oscSelect.setValue(1, true);
     oscSelect.setValue(2, true);
     
-    connectAllPorts();
+    initGIO(document.getElementById("io-1"), "hello io-1");
+    initGIO(document.getElementById("io-2"), "hello io-2");
+    connectAllGIO(document.getElementById("lines"));
     
     /*testsuite*/
     runTests();

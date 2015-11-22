@@ -11,12 +11,15 @@ function GRadios(container, title) {
     this.contId = container.id;
     
     this.table = document.createElement("table");
+    this.table.id = "radio-button-component-" + this.contId;
     this.table.className = "collection-table component";
 
     this.container.appendChild(this.table);
     
     var titleRow = document.createElement("tr"),
         titleElem = document.createElement("td");
+    
+    titleElem.id = "radio-button-title-" + this.contId;
     titleElem.innerText = this.title;
     titleElem.className = "label";
     titleElem.colSpan = 10000;
@@ -24,6 +27,7 @@ function GRadios(container, title) {
     this.table.appendChild(titleRow);
     
     this.buttonCont = document.createElement("tr");
+    this.buttonCont.id = "radio-button-buttons-" + this.contId;
     this.table.appendChild(this.buttonCont);
 }
 

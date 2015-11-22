@@ -28,8 +28,8 @@ hr {
 }
 
 .audio-scope {
-    width: 800px; 
-    height: 50px;
+    width: 70em; 
+    height: 4em;
     margin: 0em;
     padding: 0em;
 }
@@ -42,4 +42,21 @@ hr {
 
 .panicButton {
     color: #f88;
+}
+
+.workspace {
+    background: #aaa;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+.lines {
+    pointer-events: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
 }
