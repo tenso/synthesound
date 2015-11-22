@@ -34,9 +34,6 @@ SAdsr.prototype.makeAudio = function () {
         dLen = this.d * this.sampleRate,
         rLen = this.r * this.sampleRate;
         
-
-    this.generateInputs();
-    
     for (chan = 0; chan < this.channels; chan += 1) {
         chanData = this.data[chan];
 

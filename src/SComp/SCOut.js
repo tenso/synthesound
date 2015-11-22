@@ -7,10 +7,10 @@
 /*global gMakeSlider*/
 
 function SCOut(container) {
-    gContainerInit(this, container, "Out");
+    gContainerInit(this, container, "Output");
     
-    var mix = /*new SMix()*/ new SDebug(),
-        ioport = makeGIO(mix, false, "mix");
+    var mix = new SMix(), /* new SDebug(),*/
+        ioport = makeGIO(mix, false, "");
 
     this.mix = mix;
     gContainerAddContent(this, ioport);

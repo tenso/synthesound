@@ -2,6 +2,7 @@
 /*global makeGIO*/
 /*global gContainerInit*/
 /*global gContainerAddContent*/
+/*global gContainerAddLabeledContent*/
 /*global gMakeLabel*/
 /*global gMakeSlider*/
 /*global noteName*/
@@ -13,8 +14,8 @@ function SCVKey(container) {
                     
     var gate = new SConst(),
         hz = new SConst(),
-        gateOut = makeGIO(gate, true, "gate"),
-        hzOut = makeGIO(hz, true, "hz"),
+        gateOut,
+        hzOut,
         vkey = document.createElement("td"),
         currentNote = document.createElement("td"),
         noteDown = 0,
@@ -22,6 +23,9 @@ function SCVKey(container) {
         cont,
         label;
         
+    gateOut = makeGIO(gate, true, "");
+    hzOut = makeGIO(hz, true, "");
+    
     currentNote.className = "label currentNote";
     currentNote.innerText = "--";
     gContainerAddContent(this, currentNote);
@@ -30,17 +34,8 @@ function SCVKey(container) {
     this.gate = gate;
     this.hz = hz;
             
-    cont = document.createElement("div");
-    label = gMakeLabel("G");
-    cont.appendChild(label);
-    cont.appendChild(gateOut);
-    gContainerAddContent(this, cont);
-    
-    cont = document.createElement("div");
-    label = gMakeLabel("Hz");
-    cont.appendChild(label);
-    cont.appendChild(hzOut);
-    gContainerAddContent(this, cont);
+    gContainerAddLabeledContent(this, gateOut, "G");
+    gContainerAddLabeledContent(this, hzOut, "Hz");
         
     vkey.className = "collection vkey";
     gContainerAddContent(this, vkey);
@@ -53,13 +48,10 @@ function SCVKey(container) {
                 
         gate.value = isDown ? 1.0 : 0.0;
         hz.value = noteHz(note);
-        
-        console.log("key down:" + gate.value);
     }
     function keyUp(note) {
         isDown = false;
         gate.value = isDown ? 1.0 : 0.0;
-        console.log("key up:" + gate.value);
     }
     
     this.keyboard = new GVKey(vkey, keyDown, keyUp);

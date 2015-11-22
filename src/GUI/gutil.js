@@ -69,6 +69,15 @@ function gContainerAddContent(base, content) {
     base.content.appendChild(cont);
 }
 
+function gContainerAddLabeledContent(base, content, label) {
+    var cont = document.createElement("div"),
+        label = gMakeLabel(label);
+    
+    cont.appendChild(label);
+    cont.appendChild(content);
+    gContainerAddContent(base, cont);
+}
+
 function gMakeSlider(id, val, min, max, callback) {
     var track = document.createElement("div"),
         knob = document.createElement("div");

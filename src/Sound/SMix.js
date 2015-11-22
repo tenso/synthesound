@@ -14,9 +14,7 @@ SMix.prototype.makeAudio = function () {
         chan = 0,
         chanData,
         inputIndex;
-
-    this.generateInputs();
-    
+        
     for (chan = 0; chan < this.channels; chan += 1) {
         chanData = this.data[chan];
         chanData.fill(0);

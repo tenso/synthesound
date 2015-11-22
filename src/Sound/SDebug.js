@@ -15,9 +15,7 @@ SDebug.prototype.makeAudio = function () {
         chanData,
         inputIndex,
         newVal;
-
-    this.generateInputs();
-    
+        
     for (chan = 0; chan < this.channels; chan += 1) {
         chanData = this.data[chan];
         

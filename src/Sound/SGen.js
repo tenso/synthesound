@@ -16,16 +16,22 @@ function SGen(args) {
 extend(SBase, SGen);
 
 SGen.prototype.makeAudio = function () {
+    
+    //FIXME: this only samples first sample of frameSize
+    if (this.haveSpecialInput("freq")) {
+        this.freq = this.getSpecialData("freq")[0][0];
+    }
+            
     var i = 0,
         chan = 0,
         T = (2 * Math.PI * this.freq) / this.sampleRate,
         period = this.sampleRate / (this.freq),
         phaseStep,
         inPeriod;
-    
+            
     for (i = 0; i < this.frameSize; i += 1) {
         if (!this.isOn) {
-            this.genData[i] = 0;    
+            this.genData[i] = 0;
         } else if (this.type === "sine") {
             this.inPhase += T;
             this.genData[i] = this.amp * Math.sin(this.inPhase + this.phase);
@@ -49,3 +55,4 @@ SGen.prototype.setArgs = function (args) {
         this.type = typeof args.type === "string" ? args.type : this.type;
     }
 };
+

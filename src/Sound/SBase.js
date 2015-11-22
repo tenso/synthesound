@@ -1,5 +1,6 @@
 "use strict";
 /*global Float32Array*/
+/*global Map*/
 
 var extend = function (base, obj) {
     obj.prototype = Object.create(base.prototype);
@@ -16,26 +17,56 @@ function SBase() {
     this.runIndex = 0;
     this.genIndex = -1;
     this.inputs = [];
+    this.specialInput = new Map();
     
     this.chanUpdated = null;
 }
 
-SBase.prototype.addInput = function (input) {
-    this.inputs.push(input);
+SBase.prototype.addInput = function (input, type) {
+    if (!type) {
+        this.inputs.push(input);
+    } else {
+        this.setSpecialInput(input, type);
+    }
 };
 
-SBase.prototype.delInput = function (input) {
-    var index = this.inputs.indexOf(input);
-    this.inputs.splice(index, 1);
+SBase.prototype.delInput = function (input, type) {
+    if (!type) {
+        var index = this.inputs.indexOf(input);
+        if (index >= 0) {
+            this.inputs.splice(index, 1);
+        }
+    } else {
+        this.delSpecialInput(input, type);
+    }
 };
 
+SBase.prototype.setSpecialInput = function (input, type) {
+    this.specialInput.set(type, input);
+};
+
+SBase.prototype.delSpecialInput = function (type) {
+    this.specialInput.delete(type);
+};
+
+SBase.prototype.haveSpecialInput = function (type) {
+    return this.specialInput.has(type);
+};
+
+SBase.prototype.getSpecialData = function (type) {
+    return this.specialInput.get(type).data;
+};
 
 SBase.prototype.generateInputs = function () {
-    var inputIndex;
-    for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
-        if (this.inputs.genIndex !== this.runIndex) {
+    
+    for (let inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
+        if (this.inputs[inputIndex].genIndex !== this.runIndex) {
             this.inputs[inputIndex].generate(this.sampleRate, this.frameSize, this.runIndex);
         }
+    }
+    
+    for (let key of this.specialInput.keys()) {
+        this.specialInput.get(key).generate(this.sampleRate, this.frameSize, this.runIndex);
     }
 };
 
@@ -65,6 +96,7 @@ SBase.prototype.generate = function (sampleRate, frameSize, runIndex) {
     }
     this.frameSize = frameSize;
 
+    this.generateInputs();
     this.makeAudio();
     
     if (this.chanUpdated) {

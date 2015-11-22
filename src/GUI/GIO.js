@@ -45,7 +45,7 @@ function connectAllGIO(canvas) {
             var con = {"from": from, "to": to};
             connections.push(con);
             
-            to.ioPort.addInput(from.ioPort);
+            to.ioPort.addInput(from.ioPort, to.ioType);
         }
     }
         
@@ -84,7 +84,7 @@ function connectAllGIO(canvas) {
     }
 }
 
-function initGIO(target, scomp, isOut) {
+function initGIO(target, scomp, isOut, type) {
     target.className = "ioport";
     
     if (isOut) {
@@ -94,10 +94,11 @@ function initGIO(target, scomp, isOut) {
     }
     target.ioPort = scomp;
     target.isOut = isOut;
+    target.ioType = type;
 }
 
-function makeGIO(scomp, isOut, label) {
+function makeGIO(scomp, isOut, type) {
     var ioport = document.createElement("div");
-    initGIO(ioport, scomp, isOut);
+    initGIO(ioport, scomp, isOut, type);
     return ioport;
 }
