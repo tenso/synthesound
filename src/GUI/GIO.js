@@ -42,7 +42,6 @@ function connectAllGIO(canvas) {
             if (!from.isOut || to.isOut) {
                 logError("connection not from out to in");
             }
-            window.console.log("connect from:" + from.id + " to:" + to.id);
             var con = {"from": from, "to": to};
             connections.push(con);
             
@@ -97,7 +96,7 @@ function initGIO(target, scomp, isOut) {
     target.isOut = isOut;
 }
 
-function makeGIO(scomp, isOut) {
+function makeGIO(scomp, isOut, label) {
     var ioport = document.createElement("div");
     initGIO(ioport, scomp, isOut);
     return ioport;

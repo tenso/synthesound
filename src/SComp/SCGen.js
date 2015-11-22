@@ -12,10 +12,9 @@ function SCGen(container) {
     this.typeButtons = [];
     
     var out = new SGen({"freq": 110, "amp": 0.25, "type": "sine"}),
-        ioport = makeGIO(out, true),
+        ioport = makeGIO(out, true, "output"),
         button;
     
-    ioport.id = "SCGen-out";
     gContainerAddContent(this, ioport);
     
     button = gMakeButton("sine", function () {out.type = "sine";}, true, this.typeButtons);

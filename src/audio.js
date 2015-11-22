@@ -12,6 +12,10 @@
 
 /*global GScope*/
 
+/*global SCOut*/
+/*global SCGen*/
+/*global SCVKey*/
+
 /*global noteHz*/
 /*global noteName*/
 var generators = [],
@@ -29,8 +33,7 @@ function setShape(type) {
 }
 
 function keyDown(note) {
-    var freq = noteHz(note),
-        currentNote = document.getElementById("currentNote");
+    var freq = noteHz(note);
     
     if (generators.length === 0) {
         return false;
@@ -41,9 +44,7 @@ function keyDown(note) {
     
     adsr.setActive(false);
     adsr.setActive(true);
-    
-    currentNote.innerText = noteName(note);
-    
+
     return true;
 }
 
@@ -70,14 +71,14 @@ function setParam(param, val) {
         delay.setDelay(val);
     } else if (param === "Dg") {
         delay.setGain(val);
-    } else if (param == "shape") {
+    } else if (param === "shape") {
         setShape(val);
     } else if (param === "osc0") {
-        return generators[0].isOn = val;
+        return generators[0].isOn;
     } else if (param === "osc1") {
-        return generators[1].isOn = val;
+        return generators[1].isOn;
     } else if (param === "osc2") {
-        return generators[2].isOn = val;
+        return generators[2].isOn;
     }
 }
 function getParam(param) {
@@ -123,11 +124,16 @@ var audioRunning = false;
 var scout;
 
 function initSComp() {
+    var gen,
+        key;
+    
     scout = new SCOut(document.getElementById("scout"));
     
-    new SCGen(document.getElementById("scgen0"));
-    new SCGen(document.getElementById("scgen1"));
-    new SCGen(document.getElementById("scgen2"));
+    gen = new SCGen(document.getElementById("scgen0"));
+    gen = new SCGen(document.getElementById("scgen1"));
+    gen = new SCGen(document.getElementById("scgen2"));
+    
+    key = new SCVKey(document.getElementById("scvkey"));
 }
 
 function startAudio(freq) {

@@ -90,9 +90,7 @@ window.onload = function () {
         volSliders,
         delSliders,
         adsrSliders;
-            
-    currentNote.innerText = "--";
-    
+        
     document.body.onmouseup = function (e) {
         if (mouseCapturer && mouseCapturer.onmouseupaftercapture) {
             e.mouseCapturer = mouseCapturer;
@@ -133,10 +131,7 @@ window.onload = function () {
     volSliders = new GSliders(document.getElementById("volSliders"), "VOL");
     volSliders.add("L", getParam("L"), 0.0, 1.0, function (value) { setParam("L", value); });
     volSliders.add("R", getParam("R"), 0.0, 1.0, function (value) { setParam("R", value); });
-    
-    
-    vkey = new GVKey(document.getElementById("vkey"), function (note) {keyDown(note); }, function (note) {keyUp(note); });
-    
+            
     shapeSelect = new GRadios(document.getElementById("shapeSelect"), "Shape");
     shapeSelect.add("Sine", function (val) {if (val) {setParam("shape", "sine"); } }, true);
     shapeSelect.add("Square", function (val) {if (val) {setParam("shape", "square"); } }, true);

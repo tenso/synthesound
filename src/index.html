@@ -18,6 +18,8 @@
     <script src="Sound/SAdsr.js"></script>
     <script src="Sound/SDelay.js"></script>
     <script src="Sound/SNode.js"></script>
+    <script src="Sound/SConst.js"></script>
+    <script src="Sound/SDebug.js"></script>
     
     <script src="GUI/gutil.js"></script>
     <script src="GUI/GScope.js"></script>
@@ -30,6 +32,7 @@
     
     <script src="SComp/SCOut.js"></script>
     <script src="SComp/SCGen.js"></script>
+    <script src="SComp/SCVKey.js"></script>
     
     <head>
         <title>WebSynth</title>
@@ -47,12 +50,10 @@
             <hr/>
             <table class="collection collection-table">
                 <tr class="collection-row">
-                    <td id="vkey" class="collection vkey"></td>
-                    <td>
-                        <div id="currentNote" class="label currentNote"></div>
-                    </td>
+                    <td id="scvkey"></td>
                 </tr>
             </table>
+            <hr/>
             <table>
                 <tr>
                     <td id="scgen0"></td>

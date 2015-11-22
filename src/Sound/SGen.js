@@ -24,7 +24,6 @@ SGen.prototype.makeAudio = function () {
         inPeriod;
     
     for (i = 0; i < this.frameSize; i += 1) {
-
         if (!this.isOn) {
             this.genData[i] = 0;    
         } else if (this.type === "sine") {
