@@ -9,9 +9,10 @@ function GRadios(container, title) {
     this.container = container;
     this.title = title;
     this.contId = container.id;
+    this.classId = "radiobutton";
     
     this.table = document.createElement("table");
-    this.table.id = "radio-button-component-" + this.contId;
+    this.table.id = this.classId + "-component-" + this.contId;
     this.table.className = "collection-table component";
 
     this.container.appendChild(this.table);
@@ -19,7 +20,7 @@ function GRadios(container, title) {
     var titleRow = document.createElement("tr"),
         titleElem = document.createElement("td");
     
-    titleElem.id = "radio-button-title-" + this.contId;
+    titleElem.id = this.classId + "-title-" + this.contId;
     titleElem.innerText = this.title;
     titleElem.className = "label";
     titleElem.colSpan = 10000;
@@ -27,7 +28,7 @@ function GRadios(container, title) {
     this.table.appendChild(titleRow);
     
     this.buttonCont = document.createElement("tr");
-    this.buttonCont.id = "radio-button-buttons-" + this.contId;
+    this.buttonCont.id = this.classId + "-buttons-" + this.contId;
     this.table.appendChild(this.buttonCont);
 }
 
@@ -35,10 +36,11 @@ GRadios.prototype.makeButton = function (id, callback, isRadio) {
     var button = document.createElement("div");
     
     button.siblings = this.buttons;
-    button.className = "button-class radio-button-inactive";
+    button.className = "button-class radiobutton-inactive";
     button.innerText = id;
     button.style.position = "relative";
-    button.id = "radio-button-" + this.contId + "-" + id;
+    button.classId = this.classId;
+    button.id = this.classId + "-" + this.contId + "-" + id;
     button.value = false;
     button.callback = callback;
     button.isRadio = isRadio;
@@ -62,7 +64,7 @@ GRadios.prototype.makeButton = function (id, callback, isRadio) {
     };
     button.setValue = function (value) {
         this.value = value;
-        this.className = "button-class " + (this.value ? "radio-button-active" : "radio-button-inactive");
+        this.className = "button-class " + (this.value ? this.classId + "-active" : this.classId + "-inactive");
         this.callback(this.value);
     };
     

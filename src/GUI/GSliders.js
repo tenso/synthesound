@@ -7,9 +7,9 @@ function GSliders(container, title) {
     this.container = container;
     this.title = title;
     this.contId = container.id;
-    
+    this.classId = "hslider";
     this.table = document.createElement("table");
-    this.table.id = "hslider-component-" + this.contId;
+    this.table.id = this.classId + "-component-" + this.contId;
     this.table.className = "collection-table component";
 
     this.container.appendChild(this.table);
@@ -17,10 +17,10 @@ function GSliders(container, title) {
     var titleRow = document.createElement("tr"),
         titleElem = document.createElement("td");
     
-    titleRow.id = "hslider-title-row-" + this.contId;
-    titleElem.id = "hslider-title-elem-" + this.contId;
+    titleRow.id = this.classId + "-title-row-" + this.contId;
+    titleElem.id = this.classId + "-title-elem-" + this.contId;
     
-    titleElem.id = "hslider-title-" + this.contId;
+    titleElem.id = this.classId + "-title-" + this.contId;
     titleElem.innerText = this.title;
     titleElem.className = "label";
     titleElem.colSpan = 10000;
@@ -28,7 +28,7 @@ function GSliders(container, title) {
     this.table.appendChild(titleRow);
     
     this.sliders = document.createElement("tr");
-    this.sliders.id = "hslider-sliders-" + this.contId;
+    this.sliders.id = this.classId + "-sliders-" + this.contId;
     this.table.appendChild(this.sliders);
 }
 
@@ -39,7 +39,7 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
     knob.className = "button-class knob hslider-knob";
     knob.style.position = "relative";
         
-    knob.id = "hslider-knob-" + this.contId + "-" + id;
+    knob.id = this.classId + "-knob-" + this.contId + "-" + id;
     knob.value = val;
     knob.min = min;
     knob.max = max;
@@ -80,8 +80,8 @@ GSliders.prototype.makeSlider = function (id, val, min, max, callback) {
         this.callback(this.value);
     };
     
-    track.id = "hslider-track-" + this.contId + "-" + id;
-    track.className = "hslider-track track";
+    track.id = this.classId + "-track-" + this.contId + "-" + id;
+    track.className = this.classId + "-track track";
     track.knob = knob;
     track.onmousedown = function (e) {
         this.knob.setValue(this.knob.max - (this.knob.max - this.knob.min) * (e.offsetY / this.offsetHeight));
@@ -100,7 +100,7 @@ GSliders.prototype.add = function (label, val, min, max, callback) {
         knobPos,
         maxY;
             
-    sliderLabel.id = "hslider-label-" + this.contId + "-" + label;
+    sliderLabel.id = this.classId + "-label-" + this.contId + "-" + label;
     sliderLabel.innerText = label;
     sliderLabel.className = "component-label";
     cont.appendChild(sliderLabel);
@@ -110,6 +110,6 @@ GSliders.prototype.add = function (label, val, min, max, callback) {
     this.sliders.appendChild(cont);
     
     //FIXME: ugly set initial pos...
-    knob = document.getElementById("hslider-knob-" + this.contId + "-" + label);
+    knob = document.getElementById(this.classId + "-knob-" + this.contId + "-" + label);
     knob.setValue(knob.value);
 };
