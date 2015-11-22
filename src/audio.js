@@ -121,10 +121,17 @@ verifyFunctionality(Array.prototype.fill, "Array fill");
 var audioCtx = new AudioContext();
 var audioRunning = false;
 
+function initSComp() {
+    var scout = new SCOut(document.getElementById("scout"));
+}
+
 function startAudio(freq) {
     if (audioRunning) {
         return false;
     }
+    
+    initSComp();
+    
     mixer = new SMix();
     generators[0] = new SGen({"freq": 220, "amp": 0.25, "type": "sine"});
     generators[1] = new SGen({"freq": 220, "amp": 0.25, "type": "sine"});

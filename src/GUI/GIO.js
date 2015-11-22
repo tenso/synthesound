@@ -1,9 +1,10 @@
 "use strict";
 /*global logInfo*/
+/*global logError*/
 /*global setMouseCapturer*/
 
 function connectAllGIO(canvas) {
-    var ioports = document.getElementsByClassName("io-port"),
+    var ioports = document.getElementsByClassName("ioport"),
         i,
         linesCanvas = canvas,
         linesCtx = linesCanvas.getContext("2d"),
@@ -26,9 +27,9 @@ function connectAllGIO(canvas) {
         linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
         
         for (i = 0; i < connections.length; i += 1) {
-            drawLine(connections[i].from.offsetLeft + connections[i].from.offsetWidth / 2, 
+            drawLine(connections[i].from.offsetLeft + connections[i].from.offsetWidth / 2,
                      connections[i].from.offsetTop + connections[i].from.offsetHeight / 2,
-                     connections[i].to.offsetLeft + connections[i].to.offsetWidth / 2, 
+                     connections[i].to.offsetLeft + connections[i].to.offsetWidth / 2,
                      connections[i].to.offsetTop + connections[i].to.offsetHeight / 2);
         }
     }
@@ -36,13 +37,14 @@ function connectAllGIO(canvas) {
     function addConnection(from, to) {
         
         if (from.ioPort && to.ioPort) {
-            console.log("connect from:" + from.id + " to:" + to.id);
+            if (!from.isOut || to.isOut) {
+                logError("connection not from out to in");
+            }
             var con = {"from": from, "to": to};
             connections.push(con);
             
-            //to.ioPort.addInput(from.ioPort);
+            to.ioPort.addInput(from.ioPort);
         }
-        drawConnections();
     }
         
     function resizeCanvas() {
@@ -56,16 +58,21 @@ function connectAllGIO(canvas) {
         
     function addMouseEventsToPort(port) {
         port.onmousedown = function (e) {
-            pressX = e.pageX;
-            pressY = e.pageY;
-            setMouseCapturer(e);
+            if (e.target.ioPort && e.target.isOut) {
+                pressX = e.pageX;
+                pressY = e.pageY;
+                setMouseCapturer(e);
+            }
         };
         port.onmousepressandmove = function (e) {
             drawConnections();
             drawLine(pressX, pressY, e.pageX, e.pageY);
         };
         port.onmouseupaftercapture = function (e) {
-            addConnection(e.mouseCapturer, e.target);
+            if (e.target.ioPort && !e.target.isOut) {
+                addConnection(e.mouseCapturer, e.target);
+            }
+            drawConnections();
         };
     }
     
@@ -75,7 +82,14 @@ function connectAllGIO(canvas) {
     }
 }
 
-function initGIO(target, scomp) {
-    target.className = "io-port";
+function initGIO(target, scomp, isOut) {
+    target.className = "ioport";
+    
+    if (isOut) {
+        target.className += " ioport-out";
+    } else {
+        target.className += " ioport-in";
+    }
     target.ioPort = scomp;
+    target.isOut = isOut;
 }

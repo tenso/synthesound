@@ -70,6 +70,6 @@ SBase.prototype.generate = function (sampleRate, frameSize, runIndex) {
     if (this.chanUpdated) {
         for (chan = 0; chan < this.channels; chan += 1) {
             this.chanUpdated(chan, this.data[chan]);
-       }
+        }
     }
 };

@@ -1,7 +1,14 @@
-.io-port {
-    width: 1em;
-    height: 1em;
-    border-radius: 1em;
+.ioport {
+    width: 0.75em;
+    height: 0.75em;
+    border-radius: 0.75em;
     background: #000;
-    border: 1px solid #444; 
+    border: 4px solid #444; 
+}
+
+.ioport-in {
+    border: 4px solid #88f; 
+}
+.ioport-out {
+    border: 4px solid #8f8; 
 }
