@@ -2,6 +2,8 @@
 /*global logInfo*/
 /*global logError*/
 /*global setMouseCapturer*/
+/*global getPos*/
+/*global getSize*/
 
 function connectAllGIO(canvas) {
     var ioports = document.getElementsByClassName("ioport"),
@@ -27,10 +29,10 @@ function connectAllGIO(canvas) {
         linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
         
         for (i = 0; i < connections.length; i += 1) {
-            drawLine(connections[i].from.offsetLeft + connections[i].from.offsetWidth / 2,
-                     connections[i].from.offsetTop + connections[i].from.offsetHeight / 2,
-                     connections[i].to.offsetLeft + connections[i].to.offsetWidth / 2,
-                     connections[i].to.offsetTop + connections[i].to.offsetHeight / 2);
+            drawLine(getPos(connections[i].from).x + getSize(connections[i].from).w / 2,
+                     getPos(connections[i].from).y + getSize(connections[i].from).h / 2,
+                     getPos(connections[i].to).x + getSize(connections[i].to).w / 2,
+                     getPos(connections[i].to).y + getSize(connections[i].to).h / 2);
         }
     }
     
@@ -40,6 +42,7 @@ function connectAllGIO(canvas) {
             if (!from.isOut || to.isOut) {
                 logError("connection not from out to in");
             }
+            window.console.log("connect from:" + from.id + " to:" + to.id);
             var con = {"from": from, "to": to};
             connections.push(con);
             
@@ -76,7 +79,7 @@ function connectAllGIO(canvas) {
         };
     }
     
-    logInfo("connecting " + ioports.length + " ports");
+    logInfo("GIO: connecting " + ioports.length + " ports");
     for (i = 0; i < ioports.length; i += 1) {
         addMouseEventsToPort(ioports[i]);
     }
@@ -92,4 +95,10 @@ function initGIO(target, scomp, isOut) {
     }
     target.ioPort = scomp;
     target.isOut = isOut;
+}
+
+function makeGIO(scomp, isOut) {
+    var ioport = document.createElement("div");
+    initGIO(ioport, scomp, isOut);
+    return ioport;
 }

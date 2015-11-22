@@ -1,20 +1,16 @@
 /*global SMix*/
 /*global initGIO*/
+/*global gContainerInit*/
+/*global gContainerAddContent*/
+/*global gMakeLabel*/
+/*global gMakeSlider*/
 
 function SCOut(container) {
+    gContainerInit(this, container, "Out");
+    
     this.out = new SMix();
-    
-    this.container = container;
-    this.classId = "scout";
-    this.contId = container.id;
-    
-    var comp = document.createElement("div"),
-        ioport = document.createElement("div");
-    
-    comp.id = this.classId + "-cont";
-    comp.className = "component scout";
-    container.appendChild(comp);
-    
-    initGIO(ioport, this.out, false);
-    comp.appendChild(ioport);
+        
+    var ioport = makeGIO(this.out, false);
+    ioport.id = "SCOut-in";
+    gContainerAddContent(this, ioport);
 }

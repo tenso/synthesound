@@ -1,6 +1,26 @@
 "use strict";
 /*global setMouseCapturer*/
 
+function getPos(element) {
+    var x = element.offsetLeft,
+        y = element.offsetTop;
+    
+    while (element.offsetParent) {
+        element = element.offsetParent;
+        x += element.offsetLeft;
+        y += element.offsetTop;
+    }
+    
+    return {"x": x, "y": y};
+}
+
+function getSize(elem) {
+    var w = elem.offsetWidth,
+        h = elem.offsetHeight;
+
+    return {"w": w, "h": h};
+}
+
 function getStyle(element, property) {
     return window.getComputedStyle(element, null).getPropertyValue(property);
 }
@@ -9,11 +29,10 @@ function getStyleInt(element, property) {
     return parseInt(getStyle(element, property), 10);
 }
 
-function gTitleRow(id, title) {
+function gTitleRow(title) {
     var titleRow = document.createElement("tr"),
         titleElem = document.createElement("td");
     
-    titleElem.id = id;
     titleElem.innerText = title;
     titleElem.className = "label";
     titleElem.colSpan = 10000;
@@ -26,16 +45,14 @@ function gAddToContainer(base, comp) {
 }
 
 function gContainerAddTitle(base) {
-    gAddToContainer(base, gTitleRow(base.classId + "-title-" + base.container.id, base.title));
+    gAddToContainer(base, gTitleRow(base.title));
 }
 
-function gContainerInit(base, container, classId, title) {
+function gContainerInit(base, container, title) {
     base.container = container;
     base.title = title;
     base.contId = container.id;
-    base.classId = classId;
     base.table = document.createElement("table");
-    base.table.id = base.classId + "-component-" + base.contId;
     base.table.className = "collection-table component";
 
     base.container.appendChild(base.table);
@@ -43,7 +60,6 @@ function gContainerInit(base, container, classId, title) {
     gContainerAddTitle(base);
     
     base.content = document.createElement("tr");
-    base.content.id = base.classId + "-content-" + base.container.id;
     base.table.appendChild(base.content);
 }
 

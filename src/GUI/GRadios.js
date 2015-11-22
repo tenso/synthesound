@@ -9,7 +9,7 @@
 /*global gMakeButton*/
 
 function GRadios(container, title) {
-    gContainerInit(this, container, "radiobuttons", title);
+    gContainerInit(this, container, title);
     this.radioGroup = [];
 }
 

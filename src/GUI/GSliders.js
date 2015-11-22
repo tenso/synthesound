@@ -2,9 +2,11 @@
 
 /*global gContainerInit*/
 /*global gContainerAddContent*/
+/*global gMakeLabel*/
+/*global gMakeSlider*/
 
 function GSliders(container, title) {
-    gContainerInit(this, container, "hsliders", title);
+    gContainerInit(this, container, title);
 }
 
 GSliders.prototype.add = function (label, val, min, max, callback) {
