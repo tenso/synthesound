@@ -173,7 +173,9 @@ function gMakeButton(id, callback, isRadio, buttonCollection) {
     button.setValue = function (value) {
         this.value = value;
         this.className = "button-class " + (this.value ? this.classId + "-active" : this.classId + "-inactive");
-        this.callback(this.value);
+        if (isRadio && this.value) {
+            this.callback(this.value);
+        }
     };
     
     return button;

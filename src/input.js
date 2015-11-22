@@ -150,7 +150,6 @@ window.onload = function () {
     oscSelect.setValue(1, true);
     oscSelect.setValue(2, true);
     
-    initGIO(document.getElementById("io-test"), "hello io-1", true);
     connectAllGIO(document.getElementById("lines"));
     
     /*testsuite*/

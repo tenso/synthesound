@@ -1,5 +1,5 @@
 /*global SMix*/
-/*global initGIO*/
+/*global makeGIO*/
 /*global gContainerInit*/
 /*global gContainerAddContent*/
 /*global gMakeLabel*/
@@ -8,9 +8,9 @@
 function SCOut(container) {
     gContainerInit(this, container, "Out");
     
-    this.out = new SMix();
-        
-    var ioport = makeGIO(this.out, false);
+    var mix = new SMix(),
+        ioport = makeGIO(mix, false);
+    this.mix = mix;
     ioport.id = "SCOut-in";
     gContainerAddContent(this, ioport);
 }

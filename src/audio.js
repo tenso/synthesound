@@ -120,9 +120,14 @@ verifyFunctionality(Array.prototype.fill, "Array fill");
 
 var audioCtx = new AudioContext();
 var audioRunning = false;
+var scout;
 
 function initSComp() {
-    var scout = new SCOut(document.getElementById("scout"));
+    scout = new SCOut(document.getElementById("scout"));
+    
+    new SCGen(document.getElementById("scgen0"));
+    new SCGen(document.getElementById("scgen1"));
+    new SCGen(document.getElementById("scgen2"));
 }
 
 function startAudio(freq) {
@@ -160,6 +165,8 @@ function startAudio(freq) {
     out = sOutNode(audioCtx, 2, 4096);
     out.setInput(mixerOut);
     out.connect(audioCtx.destination);
+    
+    mixerOut.addInput(scout.mix);
     
     scope[0] = new GScope(document.getElementById("audioScopeL"), 0);
     scope[1] = new GScope(document.getElementById("audioScopeR"), 1);
