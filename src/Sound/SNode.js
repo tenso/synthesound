@@ -1,5 +1,4 @@
 "use strict";
-/*global CustomEvent*/
 
 function sOutNode(audioCtx, channels, frameSize) {
     var node = audioCtx.createScriptProcessor(frameSize, 1, channels);

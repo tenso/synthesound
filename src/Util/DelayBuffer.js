@@ -1,9 +1,8 @@
 "use strict";
 /*global Float32Array*/
-/*global logError*/
+/*global Log*/
 /*global mod*/
-/*global verify*/
-/*global addTest*/
+/*global Test*/
 
 function DelayBuffer(len) {
     this.length = len;
@@ -42,28 +41,28 @@ DelayBuffer.prototype.toString = function () {
 
 function test_DelayBuffer() {
     var rb = new DelayBuffer(4);
-    verify(rb.get(0), 0);
-    verify(rb.get(1), 0);
-    verify(rb.get(2), 0);
-    verify(rb.get(3), 0);
+    Test.verify(rb.get(0), 0);
+    Test.verify(rb.get(1), 0);
+    Test.verify(rb.get(2), 0);
+    Test.verify(rb.get(3), 0);
     rb.set(0);
     rb.set(1);
     rb.set(2);
     rb.set(3);
-    verify(rb.get(0), 3);
-    verify(rb.get(1), 2);
-    verify(rb.get(2), 1);
-    verify(rb.get(3), 0);
+    Test.verify(rb.get(0), 3);
+    Test.verify(rb.get(1), 2);
+    Test.verify(rb.get(2), 1);
+    Test.verify(rb.get(3), 0);
     rb.set(4);
-    verify(rb.get(0), 4);
-    verify(rb.get(1), 3);
-    verify(rb.get(2), 2);
-    verify(rb.get(3), 1);
+    Test.verify(rb.get(0), 4);
+    Test.verify(rb.get(1), 3);
+    Test.verify(rb.get(2), 2);
+    Test.verify(rb.get(3), 1);
     rb.setArray([5, 6]);
-    verify(rb.get(3), 3);
-    verify(rb.get(1), 5);
-    verify(rb.get(2), 4);
-    verify(rb.get(0), 6);
+    Test.verify(rb.get(3), 3);
+    Test.verify(rb.get(1), 5);
+    Test.verify(rb.get(2), 4);
+    Test.verify(rb.get(0), 6);
 }
 
-addTest(test_DelayBuffer, "DelayBuffer");
+Test.addTest(test_DelayBuffer, "DelayBuffer");

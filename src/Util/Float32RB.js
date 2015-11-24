@@ -1,8 +1,7 @@
 "use strict";
 /*global Float32Array*/
-/*global logError*/
-/*global verify*/
-/*global addTest*/
+/*global Log*/
+/*global Test*/
 
 function Float32RB(len) {
     this.length = len + 1;
@@ -53,33 +52,33 @@ Float32RB.prototype.toString = function () {
 
 function test_Float32RB() {
     var rb = new Float32RB(4);
-    verify(rb.count(), 0);
+    Test.verify(rb.count(), 0);
     rb.set(0);
     rb.set(1);
-    verify(rb.count(), 2);
+    Test.verify(rb.count(), 2);
     
     rb.set(2);
     rb.set(3);
-    verify(rb.count(), 4);
+    Test.verify(rb.count(), 4);
     
-    verify(rb.get(), 0);
-    verify(rb.get(), 1);
-    verify(rb.count(), 2);
-    verify(rb.get(), 2);
-    verify(rb.get(), 3);
-    verify(rb.count(), 0);
+    Test.verify(rb.get(), 0);
+    Test.verify(rb.get(), 1);
+    Test.verify(rb.count(), 2);
+    Test.verify(rb.get(), 2);
+    Test.verify(rb.get(), 3);
+    Test.verify(rb.count(), 0);
         
     rb.setArray([4, 5, 6]);
-    verify(rb.get(), 4);
-    verify(rb.count(), 2);
+    Test.verify(rb.get(), 4);
+    Test.verify(rb.count(), 2);
     rb.set(7);
-    verify(rb.count(), 3);
-    verify(rb.get(), 5);
-    verify(rb.count(), 2);
-    verify(rb.get(), 6);
-    verify(rb.count(), 1);
-    verify(rb.get(), 7);
-    verify(rb.count(), 0);
+    Test.verify(rb.count(), 3);
+    Test.verify(rb.get(), 5);
+    Test.verify(rb.count(), 2);
+    Test.verify(rb.get(), 6);
+    Test.verify(rb.count(), 1);
+    Test.verify(rb.get(), 7);
+    Test.verify(rb.count(), 0);
 }
 
-addTest(test_Float32RB, "Float32RB");
+Test.addTest(test_Float32RB, "Float32RB");

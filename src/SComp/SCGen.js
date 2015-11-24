@@ -1,13 +1,9 @@
 /*global SGen*/
 /*global makeGIO*/
-/*global gContainerInit*/
-/*global gContainerAddContent*/
-/*global gMakeLabel*/
-/*global gMakeSlider*/
-/*global gMakeButton*/
+/*global GUI*/
 
 function SCGen(container) {
-    gContainerInit(this, container, "GEN");
+    GUI.containerInit(this, container, "GEN");
     
     this.typeButtons = [];
     
@@ -16,13 +12,13 @@ function SCGen(container) {
         freqport = makeGIO(out, false, "freq"),
         button;
 
-    gContainerAddLabeledContent(this, ioport, "out");
-    gContainerAddLabeledContent(this, freqport, "Hz");
+    GUI.containerAddLabeledContent(this, ioport, "out");
+    GUI.containerAddLabeledContent(this, freqport, "Hz");
     
-    button = gMakeButton("sine", function () {out.type = "sine"; }, true, this.typeButtons);
+    button = GUI.makeButton("sine", function () {out.type = "sine"; }, true, this.typeButtons);
     button.setValue(true);
-    gContainerAddContent(this, button);
+    GUI.containerAddContent(this, button);
     
-    button = gMakeButton("square", function () {out.type = "square"; }, true, this.typeButtons);
-    gContainerAddContent(this, button);
+    button = GUI.makeButton("square", function () {out.type = "square"; }, true, this.typeButtons);
+    GUI.containerAddContent(this, button);
 }

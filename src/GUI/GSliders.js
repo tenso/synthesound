@@ -1,22 +1,19 @@
 "use strict";
 
-/*global gContainerInit*/
-/*global gContainerAddContent*/
-/*global gMakeLabel*/
-/*global gMakeSlider*/
+/*global GUI*/
 
 function GSliders(container, title) {
-    gContainerInit(this, container, title);
+    GUI.containerInit(this, container, title);
 }
 
 GSliders.prototype.add = function (label, val, min, max, callback) {
     var cont = document.createElement("div"),
-        sliderLabel = gMakeLabel(label),
-        slider = gMakeSlider(label, val, min, max, callback);
+        sliderLabel = GUI.makeLabel(label),
+        slider = GUI.makeSlider(label, val, min, max, callback);
     
     cont.appendChild(sliderLabel);
     cont.appendChild(slider);
-    gContainerAddContent(this, cont);
+    GUI.containerAddContent(this, cont);
         
     slider.setValue(val);
 };

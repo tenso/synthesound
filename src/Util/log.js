@@ -1,10 +1,12 @@
 "use strict";
 
-function logError(msg) {
-    window.console.log("ERROR:" + msg);
-    window.alert("ERROR:" + msg);
-}
+var Log = {
+    error: function (msg) {
+        window.console.log("ERROR:" + msg);
+        window.alert("ERROR:" + msg);
+    },
 
-function logInfo(msg) {
-    window.console.log("INFO:" + msg);
-}
+    info: function (msg) {
+        window.console.log("INFO:" + msg);
+    }
+};

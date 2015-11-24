@@ -9,11 +9,9 @@
 /*global GSliders*/
 /*global GRadios*/
 /*global GVKey*/
-/*global noteName*/
-/*global noteHz*/
-/*global noteNumFromName*/
+/*global Note*/
 /*global Float32RB*/
-/*global runTests*/
+/*global Test*/
 
 /*global connectAllGIO*/
 /*global initGIO*/
@@ -49,7 +47,7 @@ function parseInputDown(e) {
     note += octave;
     
     
-    note = noteNumFromName(note);
+    note = Note.numFromName(note);
     if (note === -1) {
         return;
     }
@@ -148,5 +146,5 @@ window.onload = function () {
     connectAllGIO(document.getElementById("lines"));
     
     /*testsuite*/
-    runTests();
+    Test.runTests();
 };

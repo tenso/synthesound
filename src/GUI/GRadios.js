@@ -1,29 +1,24 @@
 "use strict";
 /*global setMouseCapturer*/
-/*global getStyle*/
-/*global getStyleInt*/
-/*global logError*/
-
-/*global gContainerInit*/
-/*global gContainerAddContent*/
-/*global gMakeButton*/
+/*global GUI*/
+/*global Log*/
 
 function GRadios(container, title) {
-    gContainerInit(this, container, title);
+    GUI.containerInit(this, container, title);
     this.radioGroup = [];
 }
 
 /* Returns index of new button */
 GRadios.prototype.add = function (label, callback, isRadio) {
-    var button = gMakeButton(label, callback, isRadio, this.radioGroup);
-    gContainerAddContent(this, button);
+    var button = GUI.makeButton(label, callback, isRadio, this.radioGroup);
+    GUI.containerAddContent(this, button);
     
     return this.radioGroup.length - 1;
 };
 
 GRadios.prototype.set = function (index) {
     if (index < 0 || index >= this.radioGroup.length) {
-        logError("index oob in GRadios");
+        Log.error("index oob in GRadios");
         return;
     }
     this.radioGroup[index].set();
@@ -31,7 +26,7 @@ GRadios.prototype.set = function (index) {
 
 GRadios.prototype.setValue = function (index, value) {
     if (index < 0 || index >= this.radioGroup.length) {
-        logError("index oob in GRadios");
+        Log.error("index oob in GRadios");
         return;
     }
     this.radioGroup[index].setValue(value);

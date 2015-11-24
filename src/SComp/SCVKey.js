@@ -1,16 +1,11 @@
 /*global SConst*/
 /*global makeGIO*/
-/*global gContainerInit*/
-/*global gContainerAddContent*/
-/*global gContainerAddLabeledContent*/
-/*global gMakeLabel*/
-/*global gMakeSlider*/
-/*global noteName*/
-/*global noteHz*/
+/*global GUI*/
+/*global Note*/
 /*global GVKey*/
 
 function SCVKey(container) {
-    gContainerInit(this, container, "V-KEY");
+    GUI.containerInit(this, container, "V-KEY");
                     
     var gate = new SConst(),
         hz = new SConst(),
@@ -28,26 +23,26 @@ function SCVKey(container) {
     
     currentNote.className = "label currentNote";
     currentNote.innerText = "--";
-    gContainerAddContent(this, currentNote);
+    GUI.containerAddContent(this, currentNote);
     
     gate.value = isDown ? 1.0 : 0.0;
     this.gate = gate;
     this.hz = hz;
             
-    gContainerAddLabeledContent(this, gateOut, "G");
-    gContainerAddLabeledContent(this, hzOut, "Hz");
+    GUI.containerAddLabeledContent(this, gateOut, "G");
+    GUI.containerAddLabeledContent(this, hzOut, "Hz");
         
     vkey.className = "collection vkey";
-    gContainerAddContent(this, vkey);
+    GUI.containerAddContent(this, vkey);
     
     function keyDown(note) {
         noteDown = note;
         isDown = true;
         
-        currentNote.innerText = noteName(note);
+        currentNote.innerText = Note.name(note);
                 
         gate.value = isDown ? 1.0 : 0.0;
-        hz.value = noteHz(note);
+        hz.value = Note.hz(note);
     }
     function keyUp(note) {
         isDown = false;

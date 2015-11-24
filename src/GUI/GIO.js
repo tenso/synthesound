@@ -1,9 +1,7 @@
 "use strict";
-/*global logInfo*/
-/*global logError*/
+/*global Log*/
 /*global setMouseCapturer*/
-/*global getPos*/
-/*global getSize*/
+/*global GUI*/
 
 function connectAllGIO(canvas) {
     var ioports = document.getElementsByClassName("ioport"),
@@ -29,10 +27,10 @@ function connectAllGIO(canvas) {
         linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
         
         for (i = 0; i < connections.length; i += 1) {
-            drawLine(getPos(connections[i].from).x + getSize(connections[i].from).w / 2,
-                     getPos(connections[i].from).y + getSize(connections[i].from).h / 2,
-                     getPos(connections[i].to).x + getSize(connections[i].to).w / 2,
-                     getPos(connections[i].to).y + getSize(connections[i].to).h / 2);
+            drawLine(GUI.getPos(connections[i].from).x + GUI.getSize(connections[i].from).w / 2,
+                     GUI.getPos(connections[i].from).y + GUI.getSize(connections[i].from).h / 2,
+                     GUI.getPos(connections[i].to).x + GUI.getSize(connections[i].to).w / 2,
+                     GUI.getPos(connections[i].to).y + GUI.getSize(connections[i].to).h / 2);
         }
     }
     
@@ -40,7 +38,7 @@ function connectAllGIO(canvas) {
         
         if (from.ioPort && to.ioPort) {
             if (!from.isOut || to.isOut) {
-                logError("connection not from out to in");
+                Log.error("connection not from out to in");
             }
             var con = {"from": from, "to": to};
             connections.push(con);
@@ -78,7 +76,7 @@ function connectAllGIO(canvas) {
         };
     }
     
-    logInfo("GIO: connecting " + ioports.length + " ports");
+    Log.info("GIO: connecting " + ioports.length + " ports");
     for (i = 0; i < ioports.length; i += 1) {
         addMouseEventsToPort(ioports[i]);
     }
