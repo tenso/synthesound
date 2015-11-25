@@ -123,6 +123,7 @@ var GUI = {
             maxY = sliderH - knobH;
 
             this.style.top = (maxY - ((this.value - this.min) / (this.max - this.min)) * maxY) + "px";
+            
             this.callback(this.value);
         };
 
@@ -183,8 +184,10 @@ var GUI = {
         button.setValue = function (value) {
             this.value = value;
             this.className = "button-class " + (this.value ? this.classId + "-active" : this.classId + "-inactive");
-            if (isRadio && this.value) {
-                this.callback(this.value);
+            if (this.isRadio) {
+                if (this.value) {
+                    this.callback(this.value);
+                }
             } else {
                 this.callback(this.value);
             }

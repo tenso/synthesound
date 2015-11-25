@@ -3,10 +3,10 @@
 /*global Test*/
 
 /*global sOutNode*/
-/*global SGen*/
-/*global SMix*/
-/*global SAdsr*/
-/*global SDelay*/
+/*global sGen*/
+/*global sMix*/
+/*global sAdsr*/
+/*global sDelay*/
 
 /*global GScope*/
 
@@ -94,9 +94,9 @@ function getParam(param) {
     } else if (param === "R") {
         return mixerOut.gain[1];
     } else if (param === "Dt") {
-        return delay.delay;
+        return delay.getDelay();
     } else if (param === "Dg") {
-        return delay.gain;
+        return delay.getGain();
     } else if (param === "shape") {
         return generators[0].type;
     } else if (param === "osc0") {
@@ -142,10 +142,10 @@ function startAudio(freq) {
     
     initSComp();
     
-    mixer = new SMix();
-    generators[0] = new SGen({"freq": 220, "amp": 0.25, "type": "sine"});
-    generators[1] = new SGen({"freq": 220, "amp": 0.25, "type": "sine"});
-    generators[2] = new SGen({"freq": 110, "amp": 0.25, "type": "sine"});
+    mixer = sMix();
+    generators[0] = sGen({"freq": 220, "amp": 0.25, "type": "sine"});
+    generators[1] = sGen({"freq": 220, "amp": 0.25, "type": "sine"});
+    generators[2] = sGen({"freq": 110, "amp": 0.25, "type": "sine"});
     mixer.addInput(generators[0]);
     mixer.addInput(generators[1]);
     mixer.addInput(generators[2]);
@@ -153,29 +153,29 @@ function startAudio(freq) {
     mixer.setGain(0, 0.5);
     mixer.setGain(1, 0.5);
     
-    adsr = new SAdsr({"a": 0.01, "d": 0.15, "s": 0.5, "r": 0.01});
-    
+    adsr = sAdsr({"a": 0.01, "d": 0.15, "s": 0.5, "r": 0.01});
     adsr.addInput(mixer);
     
-    delay = new SDelay();
+    delay = sDelay();
     delay.setDelay(0.03);
     delay.setGain(0.7);
     
-    mixerOut = new SMix();
+    mixerOut = sMix();
     mixerOut.addInput(adsr);
     
     mixerOut.addInput(delay);
     delay.addInput(mixerOut);
     
+    mixerOut.addInput(scout.mix);
+    
+    //create actual output node:
     out = sOutNode(audioCtx, 2, 4096);
     out.setInput(mixerOut);
     out.connect(audioCtx.destination);
-    
-    mixerOut.addInput(scout.mix);
-    
+        
     scope[0] = new GScope(document.getElementById("audioScopeL"), 0);
     scope[1] = new GScope(document.getElementById("audioScopeR"), 1);
-    mixerOut.chanUpdated = function (chan, data) { drawScopes(chan, data); };
+    mixerOut.setChanUpdatedCallback(function (chan, data) { drawScopes(chan, data); });
     
     audioRunning = true;
     Log.info("start playback, sample rate:" + out.sampleRate + " channels " + out.channels);

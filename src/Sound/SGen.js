@@ -1,58 +1,56 @@
 "use strict";
-/*global SBase*/
-/*global extend*/
+/*global sBase*/
 
-function SGen(args) {
-    SBase.call(this);
+function sGen(args) {
+    var that = sBase(),
+        inPhase = 0;
     
-    this.amp = 0.1;
-    this.phase = 0;
-    this.freq = 220;
-    this.type = "sine";
-    this.inPhase = 0;
-    this.setArgs(args);
-    this.isOn = true;
-}
-extend(SBase, SGen);
-
-SGen.prototype.makeAudio = function () {
+    that.amp = 0.1;
+    that.phase = 0;
+    that.freq = 220;
+    that.type = "sine";
+    that.isOn = true;
     
-    //FIXME: this only samples first sample of frameSize
-    if (this.haveSpecialInput("freq")) {
-        this.freq = this.getSpecialData("freq")[0][0];
-    }
-            
-    var i = 0,
-        chan = 0,
-        T = (2 * Math.PI * this.freq) / this.sampleRate,
-        period = this.sampleRate / (this.freq),
-        phaseStep,
-        inPeriod;
-            
-    for (i = 0; i < this.frameSize; i += 1) {
-        if (!this.isOn) {
-            this.genData[i] = 0;
-        } else if (this.type === "sine") {
-            this.inPhase += T;
-            this.genData[i] = this.amp * Math.sin(this.inPhase + this.phase);
-        } else if (this.type === "square") {
-            this.inPhase += 1;
-            inPeriod = (this.inPhase + this.phase) % period;
-            this.genData[i] = this.amp * (inPeriod < (period / 2.0) ? 1.0 : -1.0);
+    that.makeAudio = function () {
+        //FIXME: this only samples first sample of frameSize
+        if (that.haveSpecialInput("freq")) {
+            that.freq = that.getSpecialChannelData("freq", 0)[0];
         }
-    }
-    
-    for (chan = 0; chan < this.channels; chan += 1) {
-        this.data[chan] = this.genData.slice();
-    }
-};
-    
-SGen.prototype.setArgs = function (args) {
-    if (args) {
-        this.amp = typeof args.amp === "number" ? args.amp : this.amp;
-        this.freq = typeof args.freq === "number" ? args.freq : this.freq;
-        this.phase = typeof args.phase === "number" ? args.phase : this.phase;
-        this.type = typeof args.type === "string" ? args.type : this.type;
-    }
-};
+
+        var i = 0,
+            chan = 0,
+            T = (2 * Math.PI * that.freq) / that.sampleRate(),
+            period = that.sampleRate() / (that.freq),
+            phaseStep,
+            inPeriod;
+
+        for (i = 0; i < that.wantedSamples(); i += 1) {
+            if (!that.isOn) {
+                that.genData[i] = 0;
+            } else if (that.type === "sine") {
+                inPhase += T;
+                that.genData[i] = that.amp * Math.sin(inPhase + that.phase);
+            } else if (that.type === "square") {
+                inPhase += 1;
+                inPeriod = (inPhase + that.phase) % period;
+                that.genData[i] = that.amp * (inPeriod < (period / 2.0) ? 1.0 : -1.0);
+            }
+        }
+
+        for (chan = 0; chan < that.numChannels(); chan += 1) {
+            that.data[chan] = that.genData.slice();
+        }
+    };
+
+    that.setArgs = function (args) {
+        if (args) {
+            that.amp = typeof args.amp === "number" ? args.amp : that.amp;
+            that.freq = typeof args.freq === "number" ? args.freq : that.freq;
+            that.phase = typeof args.phase === "number" ? args.phase : that.phase;
+            that.type = typeof args.type === "string" ? args.type : that.type;
+        }
+    };
+    that.setArgs(args);
+    return that;
+}
 

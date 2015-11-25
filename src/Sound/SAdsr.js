@@ -1,86 +1,89 @@
 "use strict";
-/*global SBase*/
-/*global extend*/
+/*global sBase*/
 
-function SAdsr(args) {
-    SBase.call(this);
+
+function sAdsr(args) {
+    var that = sBase(),
+        active = false,
+        activeIndex = 0,
+        releaseIndex = 0,
+        gainAtRelease = 0.0,
+        tick = 0,
+        lastGain = 0.0;
     
-    this.a = 0.1; /*seconds*/
-    this.d = 0.1; /*seconds*/
-    this.s = 0.3; /*0-1*/
-    this.r = 1.0; /*seconds*/
-    
-    this.active = false;
-    this.activeIndex = 0;
-    this.releaseIndex = 0;
-    this.gainAtRelease = 0.0;
-    this.tick = 0;
-    this.lastGain = 0.0;
+    that.a = 0.1; /*seconds*/
+    that.d = 0.1; /*seconds*/
+    that.s = 0.3; /*0-1*/
+    that.r = 1.0; /*seconds*/
 
-    this.setArgs(args);
-}
-extend(SBase, SAdsr);
+    that.makeAudio = function () {
+        var index = 0,
+            i = 0,
+            chan = 0,
+            chanData,
+            period,
+            inPeriod,
+            inputIndex,
+            inputData,
+            aLen = that.a * that.sampleRate(),
+            dLen = that.d * that.sampleRate(),
+            rLen = that.r * that.sampleRate();
 
-SAdsr.prototype.makeAudio = function () {
-    
-    var index = 0,
-        i = 0,
-        chan = 0,
-        chanData,
-        period,
-        inPeriod,
-        inputIndex,
-        aLen = this.a * this.sampleRate,
-        dLen = this.d * this.sampleRate,
-        rLen = this.r * this.sampleRate;
-        
-    for (chan = 0; chan < this.channels; chan += 1) {
-        chanData = this.data[chan];
+        for (chan = 0; chan < that.numChannels(); chan += 1) {
+            chanData = that.data[chan];
 
-        for (i = 0; i < chanData.length; i += 1) {
-        
-            if (this.active) {
-                index = this.tick - this.activeIndex + i;
-                
-                if (index < aLen) {
-                    this.lastGain = index / aLen;
-                } else if (index < aLen + dLen) {
-                    index -= aLen;
-                    this.lastGain = 1.0 - ((1.0 - this.s) * (index / dLen));
+            for (i = 0; i < chanData.length; i += 1) {
+
+                if (active) {
+                    index = tick - activeIndex + i;
+
+                    if (index < aLen) {
+                        lastGain = index / aLen;
+                    } else if (index < aLen + dLen) {
+                        index -= aLen;
+                        lastGain = 1.0 - ((1.0 - that.s) * (index / dLen));
+                    } else {
+                        lastGain = that.s;
+                    }
                 } else {
-                    this.lastGain = this.s;
+                    index = tick - releaseIndex + i;
+                    if (index <= rLen) {
+                        lastGain = gainAtRelease * (1.0 - (index / rLen));
+                    } else {
+                        lastGain = 0.0;
+                    }
                 }
-            } else {
-                index = this.tick - this.releaseIndex + i;
-                if (index <= rLen) {
-                    this.lastGain = this.gainAtRelease * (1.0 - (index / rLen));
-                } else {
-                    this.lastGain = 0.0;
+
+                for (inputIndex = 0; inputIndex < that.numInputs(); inputIndex += 1) {
+                    inputData = that.getInputChannelData(inputIndex, chan);
+                    chanData[i] = lastGain * inputData[i];
                 }
-            }
-            for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
-                chanData[i] = this.lastGain * this.inputs[inputIndex].data[chan][i];
             }
         }
-    }
-    this.tick += this.frameSize;
-};
-    
-SAdsr.prototype.setArgs = function (args) {
-    if (args) {
-        this.a = typeof args.a === "number" ? args.a : this.a;
-        this.d = typeof args.d === "number" ? args.d : this.d;
-        this.s = typeof args.s === "number" ? args.s : this.s;
-        this.r = typeof args.r === "number" ? args.r : this.r;
-    }
-};
+        tick += that.wantedSamples();
+    };
 
-SAdsr.prototype.setActive = function (active) {
-    if (!this.active && active) {
-        this.activeIndex = this.tick - (this.lastGain * this.a * this.sampleRate);
-    } else if (this.active) {
-        this.gainAtRelease = this.lastGain;
-        this.releaseIndex = this.tick;
-    }
-    this.active = active;
-};
+    that.setActive = function (value) {
+        if (!active && value) {
+            activeIndex = tick - (lastGain * that.a * that.sampleRate());
+        } else if (active && !value) {
+            gainAtRelease = lastGain;
+            releaseIndex = tick;
+        }
+        active = value;
+    };
+    
+    that.setArgs = function (args) {
+        if (args) {
+            that.a = typeof args.a === "number" ? args.a : that.a;
+            that.d = typeof args.d === "number" ? args.d : that.d;
+            that.s = typeof args.s === "number" ? args.s : that.s;
+            that.r = typeof args.r === "number" ? args.r : that.r;
+        }
+    };
+    that.setArgs(args);
+    
+    return that;
+}
+
+

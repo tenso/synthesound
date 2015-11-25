@@ -1,4 +1,6 @@
-/*global SGen*/
+"use strict";
+
+/*global sGen*/
 /*global makeGIO*/
 /*global GUI*/
 
@@ -7,7 +9,7 @@ function SCGen(container) {
     
     this.typeButtons = [];
     
-    var out = new SGen({"freq": 110, "amp": 0.25, "type": "sine"}),
+    var out = sGen({"freq": 110, "amp": 0.25, "type": "sine"}),
         ioport = makeGIO(out, true, ""),
         freqport = makeGIO(out, false, "freq"),
         button;

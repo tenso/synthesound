@@ -1,31 +1,33 @@
 "use strict";
-/*global SBase*/
-/*global extend*/
+/*global sBase*/
 
-function SMix() {
-    SBase.call(this);
-    this.gain = [1.0, 1.0];
-}
-extend(SBase, SMix);
+function sMix() {
+    var that = sBase();
+    
+    that.gain = [1.0, 1.0];
 
+    that.makeAudio = function () {
+        var i = 0,
+            chan = 0,
+            chanData,
+            inputData,
+            inputIndex;
 
-SMix.prototype.makeAudio = function () {
-    var i = 0,
-        chan = 0,
-        chanData,
-        inputIndex;
-        
-    for (chan = 0; chan < this.channels; chan += 1) {
-        chanData = this.data[chan];
-        chanData.fill(0);
-        for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
-            for (i = 0; i < chanData.length; i += 1) {
-                chanData[i] += this.gain[chan] * this.inputs[inputIndex].data[chan][i];
+        for (chan = 0; chan < that.numChannels(); chan += 1) {
+            chanData = that.data[chan];
+            chanData.fill(0);
+            for (inputIndex = 0; inputIndex < that.numInputs(); inputIndex += 1) {
+                inputData = that.getInputChannelData(inputIndex, chan);
+                for (i = 0; i < chanData.length; i += 1) {
+                    chanData[i] += this.gain[chan] * inputData[i];
+                }
             }
         }
-    }
-};
+    };
 
-SMix.prototype.setGain = function (chan, gain) {
-    this.gain[chan] = gain;
-};
+    that.setGain = function (chan, gain) {
+        that.gain[chan] = gain;
+    };
+    
+    return that;
+}

@@ -2,110 +2,133 @@
 /*global Float32Array*/
 /*global Map*/
 
-var extend = function (base, obj) {
-    obj.prototype = Object.create(base.prototype);
-    obj.prototype.constructor = obj;
-};
-
-function SBase() {
-    this.channels = 2;
-    this.frameSize = 0;
-    this.maxFrameSize = 0;
-    this.data = [];
-    this.genData = null;
-    this.sampleRate = 0;
-    this.runIndex = 0;
-    this.genIndex = -1;
-    this.inputs = [];
-    this.specialInput = {};
+function sBase() {
+    var that = {},
+        channels = 2,
+        frameSize = 0,
+        maxFrameSize = 0,
+        sRate = 0,
+        runIndex = 0,
+        genIndex = -1,
+        inputs = [],
+        specialInput = {},
+        chanUpdated = null;
     
-    this.chanUpdated = null;
+    //FIXME: make private?
+    that.data = [];
+    that.genData = null;
+    
+    that.setChanUpdatedCallback = function(cb) {
+        chanUpdated = cb;
+    }
+    
+    that.sampleRate = function () {
+        return sRate;
+    };
+        
+    that.numChannels = function () {
+        return channels;
+    };
+    
+    that.wantedSamples = function () {
+        return frameSize;
+    };
+    
+    that.addInput = function (input, type) {
+        if (!type) {
+            inputs.push(input);
+        } else {
+            that.setSpecialInput(input, type);
+        }
+    };
+
+    that.delInput = function (input, type) {
+        if (!type) {
+            var index = inputs.indexOf(input);
+            if (index >= 0) {
+                inputs.splice(index, 1);
+            }
+        } else {
+            that.delSpecialInput(input, type);
+        }
+    };
+
+    that.setSpecialInput = function (input, type) {
+        specialInput[type] = input;
+    };
+
+    that.delSpecialInput = function (type) {
+        delete specialInput[type];
+    };
+
+    that.haveSpecialInput = function (type) {
+        return specialInput.hasOwnProperty(type);
+    };
+
+    that.getSpecialChannelData = function (type, chan) {
+        return specialInput[type].getChannelData(chan);
+    };
+
+    that.generate = function (sampleRate, fSize, rIndex) {
+        var chan,
+            dataUpdatedEvent;
+
+        if (genIndex === rIndex) {
+            return;
+        }
+        genIndex = rIndex;
+
+        sRate = sampleRate;
+        runIndex = rIndex;
+        if (fSize > maxFrameSize) {
+            maxFrameSize = fSize;
+
+            that.genData = new Float32Array(maxFrameSize);
+
+            for (chan = 0; chan < channels; chan += 1) {
+                that.data[chan] = new Float32Array(maxFrameSize);
+            }
+        }
+        frameSize = fSize;
+
+        that.generateInputs();
+        that.makeAudio();
+
+        if (chanUpdated) {
+            for (chan = 0; chan < channels; chan += 1) {
+                chanUpdated(chan, that.data[chan]);
+            }
+        }
+    };
+    
+    that.generateInputs = function () {
+        var inputIndex,
+            key;
+
+        for (inputIndex = 0; inputIndex < inputs.length; inputIndex += 1) {
+            if (inputs[inputIndex].genIndex !== runIndex) {
+                inputs[inputIndex].generate(sRate, frameSize, runIndex);
+            }
+        }
+
+        for (key in specialInput) {
+            if (specialInput.hasOwnProperty(key)) {
+                specialInput[key].generate(sRate, frameSize, runIndex);
+            }
+        }
+    };
+
+    that.getChannelData = function (chan) {
+        return that.data[chan];
+    };
+
+    that.numInputs = function () {
+        return inputs.length;
+    };
+    
+    that.getInputChannelData = function (index, chan) {
+        return inputs[index].data[chan];
+    };
+    
+    return that;
 }
-
-SBase.prototype.addInput = function (input, type) {
-    if (!type) {
-        this.inputs.push(input);
-    } else {
-        this.setSpecialInput(input, type);
-    }
-};
-
-SBase.prototype.delInput = function (input, type) {
-    if (!type) {
-        var index = this.inputs.indexOf(input);
-        if (index >= 0) {
-            this.inputs.splice(index, 1);
-        }
-    } else {
-        this.delSpecialInput(input, type);
-    }
-};
-
-SBase.prototype.setSpecialInput = function (input, type) {
-    this.specialInput[type] = input;
-};
-
-SBase.prototype.delSpecialInput = function (type) {
-    delete this.specialInput[type];
-};
-
-SBase.prototype.haveSpecialInput = function (type) {
-    return this.specialInput.hasOwnProperty(type);
-};
-
-SBase.prototype.getSpecialData = function (type) {
-    return this.specialInput[type].data;
-};
-
-SBase.prototype.generateInputs = function () {
-    var inputIndex,
-        key;
-    
-    for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
-        if (this.inputs[inputIndex].genIndex !== this.runIndex) {
-            this.inputs[inputIndex].generate(this.sampleRate, this.frameSize, this.runIndex);
-        }
-    }
-    
-    for (key in this.specialInput) {
-        if (this.specialInput.hasOwnProperty(key)) {
-            this.specialInput[key].generate(this.sampleRate, this.frameSize, this.runIndex);
-        }
-    }
-};
-
-SBase.prototype.getChannelData = function (chan) {
-    return this.data[chan];
-};
-    
-SBase.prototype.generate = function (sampleRate, frameSize, runIndex) {
-    var chan,
-        dataUpdatedEvent;
-    
-    if (this.genIndex === runIndex) {
-        return;
-    }
-    this.genIndex = runIndex;
-    
-    this.sampleRate = sampleRate;
-    this.runIndex = runIndex;
-    if (frameSize > this.maxFrameSize) {
-        this.maxFrameSize = frameSize;
-        
-        this.genData = new Float32Array(this.maxFrameSize);
-        
-        for (chan = 0; chan < this.channels; chan += 1) {
-            this.data[chan] = new Float32Array(this.maxFrameSize);
-        }
-    }
-    this.frameSize = frameSize;
-
-    this.generateInputs();
-    this.makeAudio();
-    
-    if (this.chanUpdated) {
-        for (chan = 0; chan < this.channels; chan += 1) {
-            this.chanUpdated(chan, this.data[chan]);
-        }
-    }
-};

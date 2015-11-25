@@ -1,4 +1,6 @@
-/*global SConst*/
+"use strict";
+
+/*global sConst*/
 /*global makeGIO*/
 /*global GUI*/
 /*global Note*/
@@ -7,8 +9,8 @@
 function SCVKey(container) {
     GUI.containerInit(this, container, "V-KEY");
                     
-    var gate = new SConst(),
-        hz = new SConst(),
+    var gate = sConst(),
+        hz = sConst(),
         gateOut,
         hzOut,
         vkey = document.createElement("td"),

@@ -1,20 +1,18 @@
 "use strict";
-/*global SBase*/
-/*global extend*/
+/*global sBase*/
 
-function SConst() {
-    SBase.call(this);
-    this.value = 1.0;
-}
-extend(SBase, SConst);
-
-SConst.prototype.makeAudio = function () {
-    var i = 0,
-        chan = 0,
-        chanData,
-        inputIndex;
+function sConst() {
+    var that = sBase();
         
-    for (chan = 0; chan < this.channels; chan += 1) {
-        this.data[chan].fill(this.value);
-    }
-};
+    that.value = 1.0;
+    
+    that.makeAudio = function () {
+        var chan = 0;
+
+        for (chan = 0; chan < that.numChannels(); chan += 1) {
+            that.data[chan].fill(that.value);
+        }
+    };
+    return that;
+}
+

@@ -5,7 +5,6 @@ function sOutNode(audioCtx, channels, frameSize) {
     node.frameSize = frameSize;
     node.runIndex = 0;
     node.input = null;
-    node.chanUpdated = null;
     node.sampleRate = audioCtx.sampleRate;
     node.channels = channels;
     
@@ -19,15 +18,11 @@ function sOutNode(audioCtx, channels, frameSize) {
         buffer.normalize = false;
         
         for (chan = 0; chan < buffer.numberOfChannels; chan += 1) {
-            node.input.generate(audioCtx.sampleRate, this.frameSize, node.runIndex);
+            node.input.generate(audioCtx.sampleRate, node.frameSize, node.runIndex);
             inData = node.input.getChannelData(chan);
             buffer.copyToChannel(inData, chan);
-            
-            if (node.chanUpdated) {
-                node.chanUpdated(chan, buffer.getChannelData(chan));
-            }
         }
-        node.runIndex += this.frameSize;
+        node.runIndex += node.frameSize;
     };
     
     node.setInput = function (input) {
