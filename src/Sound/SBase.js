@@ -17,7 +17,7 @@ function SBase() {
     this.runIndex = 0;
     this.genIndex = -1;
     this.inputs = [];
-    this.specialInput = new Map();
+    this.specialInput = {};
     
     this.chanUpdated = null;
 }
@@ -42,31 +42,35 @@ SBase.prototype.delInput = function (input, type) {
 };
 
 SBase.prototype.setSpecialInput = function (input, type) {
-    this.specialInput.set(type, input);
+    this.specialInput[type] = input;
 };
 
 SBase.prototype.delSpecialInput = function (type) {
-    this.specialInput.delete(type);
+    delete this.specialInput[type];
 };
 
 SBase.prototype.haveSpecialInput = function (type) {
-    return this.specialInput.has(type);
+    return this.specialInput.hasOwnProperty(type);
 };
 
 SBase.prototype.getSpecialData = function (type) {
-    return this.specialInput.get(type).data;
+    return this.specialInput[type].data;
 };
 
 SBase.prototype.generateInputs = function () {
+    var inputIndex,
+        key;
     
-    for (let inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
+    for (inputIndex = 0; inputIndex < this.inputs.length; inputIndex += 1) {
         if (this.inputs[inputIndex].genIndex !== this.runIndex) {
             this.inputs[inputIndex].generate(this.sampleRate, this.frameSize, this.runIndex);
         }
     }
     
-    for (let key of this.specialInput.keys()) {
-        this.specialInput.get(key).generate(this.sampleRate, this.frameSize, this.runIndex);
+    for (key in this.specialInput) {
+        if (this.specialInput.hasOwnProperty(key)) {
+            this.specialInput[key].generate(this.sampleRate, this.frameSize, this.runIndex);
+        }
     }
 };
 

@@ -88,7 +88,7 @@ window.onload = function () {
         volSliders,
         delSliders,
         adsrSliders;
-        
+
     document.body.onmouseup = function (e) {
         if (mouseCapturer && mouseCapturer.onmouseupaftercapture) {
             e.mouseCapturer = mouseCapturer;
