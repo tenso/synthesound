@@ -1,6 +1,6 @@
 "use strict";
 
-/*global GUI*/
+/*global gui*/
 /*global setMouseCapturer*/
 
 function GVKey(container, keyDown, keyUp) {
@@ -61,9 +61,9 @@ function GVKey(container, keyDown, keyUp) {
         keyX = this.nextX;
         
         if (flat) {
-            this.nextX += GUI.getStyleInt(key, "width");
+            this.nextX += gui.getStyleInt(key, "width");
         } else {
-            keyX -= GUI.getStyleInt(key, "width") / 2;
+            keyX -= gui.getStyleInt(key, "width") / 2;
         }
         
         key.style.left = keyX + "px";

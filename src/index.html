@@ -1,5 +1,7 @@
 <html>
-    <link href="GUI/gstyle.css" rel="stylesheet" type="text/css">
+    <link href="gui/gui.css" rel="stylesheet" type="text/css">
+    <script src="gui/gui.js"></script>
+    
     <link href="style.css" rel="stylesheet" type="text/css">
     
     <script src="Util/log.js"></script>
@@ -20,14 +22,12 @@
     <script src="sound/sConst.js"></script>
     <script src="sound/sDebug.js"></script>
     
-    <script src="GUI/gutil.js"></script>
-    <script src="GUI/GScope.js"></script>
-    <script src="GUI/GSliders.js"></script>
-    <script src="GUI/GRadios.js"></script>
-    <script src="GUI/GIO.js"></script>
-    <link href="GUI/GIO.css" rel="stylesheet" type="text/css">
-    <script src="GUI/GVKey.js"></script>
-    <link href="GUI/GVKey.css" rel="stylesheet" type="text/css">
+    
+    <script src="gui/GScope.js"></script>
+    <script src="gui/gIO.js"></script>
+    <link href="gui/gIO.css" rel="stylesheet" type="text/css">
+    <script src="gui/GVKey.js"></script>
+    <link href="gui/GVKey.css" rel="stylesheet" type="text/css">
     
     <script src="SComp/SCOut.js"></script>
     <script src="SComp/SCGen.js"></script>
@@ -62,17 +62,6 @@
                 </tr>
             </table>
             <hr/>
-            <table class="collection collection-table" id="controls">
-                <tr class="collection-row" id="slider-controls">
-                    <td id="adsrSliders"></td>
-                    <td id="delSliders"></td>
-                    <td id="volSliders"></td>
-                    <td>
-                        <tr id="shapeSelect"></tr>
-                        <tr id="oscSelect"></tr>
-                    </td>
-                </tr>
-            </table>
         </div>
         <canvas id="lines" class="lines"></canvas>
     </body>

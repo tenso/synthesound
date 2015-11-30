@@ -12,8 +12,7 @@
 /*global note*/
 /*global test*/
 
-/*global connectAllGIO*/
-/*global initGIO*/
+/*global gIO*/
 
 var keyIsDown = 0;
 
@@ -110,39 +109,11 @@ window.onload = function () {
     
     freqSelect.addEventListener("keydown", parseInputDown, false);
     freqSelect.addEventListener("keyup", parseInputUp, false);
-    
     stopButton.addEventListener("click", function () { stopAudio(); }, false);
                 
     startAudio();
-    
-    adsrSliders = new GSliders(document.getElementById("adsrSliders"), "Envelope");
-    adsrSliders.add("A", getParam("a"), 0.001, 1.0, function (value) { setParam("a", value); });
-    adsrSliders.add("D", getParam("d"), 0.001, 1.0, function (value) { setParam("d", value); });
-    adsrSliders.add("S", getParam("s"), 0.0, 1.0, function (value) { setParam("s", value); });
-    adsrSliders.add("R", getParam("r"), 0.001, 1.0, function (value) { setParam("r", value); });
-
-    delSliders = new GSliders(document.getElementById("delSliders"), "FB-D");
-    delSliders.add("T", getParam("Dt"), 0.0, 0.5, function (value) { setParam("Dt", value); });
-    delSliders.add("G", getParam("Dg"), 0.0, 0.9, function (value) { setParam("Dg", value); });
-
-    volSliders = new GSliders(document.getElementById("volSliders"), "VOL");
-    volSliders.add("L", getParam("L"), 0.0, 1.0, function (value) { setParam("L", value); });
-    volSliders.add("R", getParam("R"), 0.0, 1.0, function (value) { setParam("R", value); });
-            
-    shapeSelect = new GRadios(document.getElementById("shapeSelect"), "Shape");
-    shapeSelect.add("Sine", function (val) {if (val) {setParam("shape", "sine"); } }, true);
-    shapeSelect.add("Square", function (val) {if (val) {setParam("shape", "square"); } }, true);
-    shapeSelect.set(0);
-    
-    oscSelect = new GRadios(document.getElementById("oscSelect"), "Oscillators");
-    oscSelect.add("Osc 0", function (val) {setParam("osc0", val); }, false);
-    oscSelect.add("Osc 1", function (val) {setParam("osc1", val); }, false);
-    oscSelect.add("Osc 2", function (val) {setParam("osc2", val); }, false);
-    oscSelect.setValue(0, true);
-    oscSelect.setValue(1, true);
-    oscSelect.setValue(2, true);
-    
-    connectAllGIO(document.getElementById("lines"));
+                
+    gIO.connectAll(document.getElementById("lines"));
     
     /*testsuite*/
     test.runTests();

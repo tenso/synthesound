@@ -52,62 +52,6 @@ function keyUp(notePressed) {
     }
 }
 
-function setParam(param, val) {
-    if (param === "a") {
-        adsr.a = val;
-    } else if (param === "d") {
-        adsr.d = val;
-    } else if (param === "s") {
-        adsr.s = val;
-    } else if (param === "r") {
-        adsr.r = val;
-    } else if (param === "L") {
-        return mixerOut.setGain(0, val);
-    } else if (param === "R") {
-        return mixerOut.setGain(1, val);
-    } else if (param === "Dt") {
-        delay.setDelay(val);
-    } else if (param === "Dg") {
-        delay.setGain(val);
-    } else if (param === "shape") {
-        setShape(val);
-    } else if (param === "osc0") {
-        
-        generators[0].isOn = val;
-    } else if (param === "osc1") {
-        generators[1].isOn = val;
-    } else if (param === "osc2") {
-        generators[2].isOn = val;
-    }
-}
-function getParam(param) {
-    if (param === "a") {
-        return adsr.a;
-    } else if (param === "d") {
-        return adsr.d;
-    } else if (param === "s") {
-        return adsr.s;
-    } else if (param === "r") {
-        return adsr.r;
-    } else if (param === "L") {
-        return mixerOut.gain[0];
-    } else if (param === "R") {
-        return mixerOut.gain[1];
-    } else if (param === "Dt") {
-        return delay.getDelay();
-    } else if (param === "Dg") {
-        return delay.getGain();
-    } else if (param === "shape") {
-        return generators[0].type;
-    } else if (param === "osc0") {
-        return generators[0].isOn;
-    } else if (param === "osc1") {
-        return generators[1].isOn;
-    } else if (param === "osc2") {
-        return generators[2].isOn;
-    }
-}
-
 function drawScopes(chan, data) {
     scope[chan].drawGraph(data);
 }
@@ -149,8 +93,8 @@ function startAudio(freq) {
     mixer.addInput(generators[1]);
     mixer.addInput(generators[2]);
     
-    mixer.setGain(0, 0.5);
-    mixer.setGain(1, 0.5);
+    mixer.setChannelGain(0, 0.5);
+    mixer.setChannelGain(1, 0.5);
     
     adsr = sAdsr({"a": 0.01, "d": 0.15, "s": 0.5, "r": 0.01});
     adsr.addInput(mixer);

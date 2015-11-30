@@ -2,15 +2,20 @@
 
 /*global sMix*/
 /*global sDebug*/
-/*global makeGIO*/
-/*global GUI*/
+/*global gIO*/
+/*global gui*/
 
 function SCOut(container) {
-    GUI.containerInit(this, container, "Output");
+    gui.containerInit(this, container, "Output");
     
-    var mix = sMix(), /* sDebug(),*/
-        ioport = makeGIO(mix, false, "");
+    var mix = sMix(),
+        ioport = gIO.make(mix, false, ""),
+        setGain = function (value) {
+            mix.setChannelGain(0, value);
+            mix.setChannelGain(1, value);
+        }
 
     this.mix = mix;
-    GUI.containerAddContent(this, ioport);
+    gui.containerAddContent(this, ioport);
+    gui.containerAddLabeledContent(this, gui.makeSlider(0.5, 0.0, 1.0, setGain), "VOL");
 }

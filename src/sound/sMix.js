@@ -25,7 +25,7 @@ function sMix() {
         }
     };
 
-    that.setGain = function (chan, gain) {
+    that.setChannelGain = function (chan, gain) {
         that.gain[chan] = gain;
     };
     

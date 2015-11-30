@@ -1,13 +1,13 @@
 "use strict";
 
 /*global sConst*/
-/*global makeGIO*/
-/*global GUI*/
+/*global gIO*/
+/*global gui*/
 /*global note*/
 /*global GVKey*/
 
 function SCVKey(container) {
-    GUI.containerInit(this, container, "V-KEY");
+    gui.containerInit(this, container, "V-KEY");
                     
     var gate = sConst(),
         hz = sConst(),
@@ -20,22 +20,22 @@ function SCVKey(container) {
         cont,
         label;
         
-    gateOut = makeGIO(gate, true, "");
-    hzOut = makeGIO(hz, true, "");
+    gateOut = gIO.make(gate, true, "");
+    hzOut = gIO.make(hz, true, "");
     
     currentNote.className = "label currentNote";
     currentNote.innerText = "--";
-    GUI.containerAddContent(this, currentNote);
+    gui.containerAddContent(this, currentNote);
     
     gate.value = isDown ? 1.0 : 0.0;
     this.gate = gate;
     this.hz = hz;
             
-    GUI.containerAddLabeledContent(this, gateOut, "G");
-    GUI.containerAddLabeledContent(this, hzOut, "Hz");
+    gui.containerAddLabeledContent(this, gateOut, "G");
+    gui.containerAddLabeledContent(this, hzOut, "Hz");
         
     vkey.className = "collection vkey";
-    GUI.containerAddContent(this, vkey);
+    gui.containerAddContent(this, vkey);
     
     function keyDown(notePressed) {
         noteDown = notePressed;

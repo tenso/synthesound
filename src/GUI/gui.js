@@ -1,7 +1,7 @@
 "use strict";
 /*global setMouseCapturer*/
 
-var GUI = {
+var gui = {
     getPos: function (element) {
         var x = element.offsetLeft,
             y = element.offsetTop;
@@ -27,7 +27,7 @@ var GUI = {
     },
 
     getStyleInt: function (element, property) {
-        return parseInt(GUI.getStyle(element, property), 10);
+        return parseInt(gui.getStyle(element, property), 10);
     },
 
     titleRow: function (title) {
@@ -46,7 +46,7 @@ var GUI = {
     },
 
     containerAddTitle: function (base) {
-        GUI.addToContainer(base, GUI.titleRow(base.title));
+        gui.addToContainer(base, gui.titleRow(base.title));
     },
 
     containerInit: function (base, container, title) {
@@ -58,7 +58,7 @@ var GUI = {
 
         base.container.appendChild(base.table);
 
-        GUI.containerAddTitle(base);
+        gui.containerAddTitle(base);
 
         base.content = document.createElement("tr");
         base.table.appendChild(base.content);
@@ -72,21 +72,20 @@ var GUI = {
 
     containerAddLabeledContent: function (base, content, label) {
         var cont = document.createElement("div"),
-            contLabel = GUI.makeLabel(label);
+            contLabel = gui.makeLabel(label);
 
         cont.appendChild(contLabel);
         cont.appendChild(content);
-        GUI.containerAddContent(base, cont);
+        gui.containerAddContent(base, cont);
     },
 
-    makeSlider: function (id, val, min, max, callback) {
+    makeSlider: function (val, min, max, callback) {
         var track = document.createElement("div"),
             knob = document.createElement("div");
 
         knob.className = "button-class knob hslider-knob";
         knob.style.position = "relative";
-
-        knob.value = val;
+        knob.style.top = "0px";
         knob.min = min;
         knob.max = max;
         knob.callback = callback;
@@ -97,8 +96,8 @@ var GUI = {
 
         knob.onmousepressandmove = function (e) {
             var maxY = e.mouseCapturer.parentElement.offsetHeight - e.mouseCapturer.offsetHeight,
-                newY = parseInt(e.mouseCapturer.style.top, 10) + e.movementY;
-
+                newY = gui.getStyleInt(e.mouseCapturer, "top") + e.movementY;
+                    
             if (newY < 0) {
                 newY = 0;
             } else if (newY > maxY) {
@@ -110,8 +109,8 @@ var GUI = {
         };
 
         knob.setValue = function (value) {
-            var sliderH = GUI.getStyleInt(this.parentElement, "height"),
-                knobH = GUI.getStyleInt(knob, "height"),
+            var sliderH = gui.getStyleInt(this.parentElement, "height"),
+                knobH = gui.getStyleInt(knob, "height"),
                 maxY;
 
             this.value = value;
@@ -126,7 +125,7 @@ var GUI = {
             
             this.callback(this.value);
         };
-
+        
         track.className = "hslider-track track";
         track.knob = knob;
         track.onmousedown = function (e) {
@@ -140,7 +139,9 @@ var GUI = {
             return this.knob.value;
         };
         track.appendChild(knob);
-
+        
+        knob.setValue(val);
+        
         return track;
     },
 
@@ -151,14 +152,14 @@ var GUI = {
         return gLabel;
     },
 
-    makeButton: function (id, callback, isRadio, buttonCollection) {
+    makeButton: function (name, callback, isRadio, buttonCollection) {
         var button = document.createElement("div");
         button.siblings = buttonCollection;
         button.siblings.push(button);
         button.isRadio = isRadio;
 
         button.className = "button-class radiobutton-inactive";
-        button.innerText = id;
+        button.innerText = name;
         button.style.position = "relative";
         button.classId = "radiobutton";
         button.value = false;

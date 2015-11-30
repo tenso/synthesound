@@ -1,26 +1,26 @@
 "use strict";
 
 /*global sGen*/
-/*global makeGIO*/
-/*global GUI*/
+/*global gIO*/
+/*global gui*/
 
 function SCGen(container) {
-    GUI.containerInit(this, container, "GEN");
+    gui.containerInit(this, container, "GEN");
     
     this.typeButtons = [];
     
     var out = sGen({"freq": 110, "amp": 0.25, "type": "sine"}),
-        ioport = makeGIO(out, true, ""),
-        freqport = makeGIO(out, false, "freq"),
+        ioport = gIO.make(out, true, ""),
+        freqport = gIO.make(out, false, "freq"),
         button;
 
-    GUI.containerAddLabeledContent(this, ioport, "out");
-    GUI.containerAddLabeledContent(this, freqport, "Hz");
+    gui.containerAddLabeledContent(this, ioport, "out");
+    gui.containerAddLabeledContent(this, freqport, "Hz");
     
-    button = GUI.makeButton("sine", function () {out.type = "sine"; }, true, this.typeButtons);
+    button = gui.makeButton("sine", function () {out.type = "sine"; }, true, this.typeButtons);
     button.setValue(true);
-    GUI.containerAddContent(this, button);
+    gui.containerAddContent(this, button);
     
-    button = GUI.makeButton("square", function () {out.type = "square"; }, true, this.typeButtons);
-    GUI.containerAddContent(this, button);
+    button = gui.makeButton("square", function () {out.type = "square"; }, true, this.typeButtons);
+    gui.containerAddContent(this, button);
 }
