@@ -1,6 +1,6 @@
 "use strict";
-/*global Log*/
-/*global Test*/
+/*global log*/
+/*global test*/
 
 /*global sOutNode*/
 /*global sGen*/
@@ -14,7 +14,7 @@
 /*global SCGen*/
 /*global SCVKey*/
 
-/*global Note*/
+/*global note*/
 
 var generators = [],
     mixer,
@@ -30,8 +30,8 @@ function setShape(type) {
     generators[2].type = type;
 }
 
-function keyDown(note) {
-    var freq = Note.hz(note);
+function keyDown(notePressed) {
+    var freq = note.hz(notePressed);
     
     if (generators.length === 0) {
         return false;
@@ -46,7 +46,7 @@ function keyDown(note) {
     return true;
 }
 
-function keyUp(note) {
+function keyUp(notePressed) {
     if (adsr) {
         adsr.setActive(false);
     }
@@ -109,14 +109,13 @@ function getParam(param) {
 }
 
 function drawScopes(chan, data) {
-    //console.log(chan + " : " + data[0]);
     scope[chan].drawGraph(data);
 }
 
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 
-Test.verifyFunctionality(AudioContext, "AudioContext");
-Test.verifyFunctionality(Array.prototype.fill, "Array fill");
+test.verifyFunctionality(AudioContext, "AudioContext");
+test.verifyFunctionality(Array.prototype.fill, "Array fill");
 
 var audioCtx = new AudioContext();
 var audioRunning = false;
@@ -178,7 +177,7 @@ function startAudio(freq) {
     mixerOut.setChanUpdatedCallback(function (chan, data) { drawScopes(chan, data); });
     
     audioRunning = true;
-    Log.info("start playback, sample rate:" + out.sampleRate + " channels " + out.channels);
+    log.info("start playback, sample rate:" + out.sampleRate + " channels " + out.channels);
     return true;
 }
 

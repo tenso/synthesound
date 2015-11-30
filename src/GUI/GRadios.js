@@ -1,7 +1,7 @@
 "use strict";
 /*global setMouseCapturer*/
 /*global GUI*/
-/*global Log*/
+/*global log*/
 
 function GRadios(container, title) {
     GUI.containerInit(this, container, title);
@@ -18,7 +18,7 @@ GRadios.prototype.add = function (label, callback, isRadio) {
 
 GRadios.prototype.set = function (index) {
     if (index < 0 || index >= this.radioGroup.length) {
-        Log.error("index oob in GRadios");
+        log.error("index oob in GRadios");
         return;
     }
     this.radioGroup[index].set();
@@ -26,7 +26,7 @@ GRadios.prototype.set = function (index) {
 
 GRadios.prototype.setValue = function (index, value) {
     if (index < 0 || index >= this.radioGroup.length) {
-        Log.error("index oob in GRadios");
+        log.error("index oob in GRadios");
         return;
     }
     this.radioGroup[index].setValue(value);

@@ -1,14 +1,14 @@
 "use strict";
 
 function sOutNode(audioCtx, channels, frameSize) {
-    var node = audioCtx.createScriptProcessor(frameSize, 1, channels);
-    node.frameSize = frameSize;
-    node.runIndex = 0;
-    node.input = null;
-    node.sampleRate = audioCtx.sampleRate;
-    node.channels = channels;
+    var that = audioCtx.createScriptProcessor(frameSize, 1, channels);
+    that.frameSize = frameSize;
+    that.runIndex = 0;
+    that.input = null;
+    that.sampleRate = audioCtx.sampleRate;
+    that.channels = channels;
     
-    node.onaudioprocess = function (audioEvent) {
+    that.onaudioprocess = function (audioEvent) {
         var index = 0,
             chan = 0,
             inData,
@@ -18,16 +18,16 @@ function sOutNode(audioCtx, channels, frameSize) {
         buffer.normalize = false;
         
         for (chan = 0; chan < buffer.numberOfChannels; chan += 1) {
-            node.input.generate(audioCtx.sampleRate, node.frameSize, node.runIndex);
-            inData = node.input.getChannelData(chan);
+            that.input.generate(audioCtx.sampleRate, that.frameSize, that.runIndex);
+            inData = that.input.getChannelData(chan);
             buffer.copyToChannel(inData, chan);
         }
-        node.runIndex += node.frameSize;
+        that.runIndex += that.frameSize;
     };
     
-    node.setInput = function (input) {
-        node.input = input;
+    that.setInput = function (input) {
+        that.input = input;
     };
         
-    return node;
+    return that;
 }

@@ -1,5 +1,5 @@
 "use strict";
-/*global Log*/
+/*global log*/
 /*global setMouseCapturer*/
 /*global GUI*/
 
@@ -38,7 +38,7 @@ function connectAllGIO(canvas) {
         
         if (from.ioPort && to.ioPort) {
             if (!from.isOut || to.isOut) {
-                Log.error("connection not from out to in");
+                log.error("connection not from out to in");
             }
             var con = {"from": from, "to": to};
             connections.push(con);
@@ -76,7 +76,7 @@ function connectAllGIO(canvas) {
         };
     }
     
-    Log.info("GIO: connecting " + ioports.length + " ports");
+    log.info("GIO: connecting " + ioports.length + " ports");
     for (i = 0; i < ioports.length; i += 1) {
         addMouseEventsToPort(ioports[i]);
     }

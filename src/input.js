@@ -9,9 +9,8 @@
 /*global GSliders*/
 /*global GRadios*/
 /*global GVKey*/
-/*global Note*/
-/*global Float32RB*/
-/*global Test*/
+/*global note*/
+/*global test*/
 
 /*global connectAllGIO*/
 /*global initGIO*/
@@ -27,7 +26,7 @@ function parseInputDown(e) {
                    "e": "D#", "d": "E", "f": "F",
                    "t": "F#", "g": "G", "y": "G#",
                    "h" : "A", "u": "A#", "j": "B"},
-        note,
+        cNote,
         octave,
         key = String.fromCharCode(e.keyCode);
     
@@ -43,15 +42,15 @@ function parseInputDown(e) {
         octave = 2;
     }
         
-    note = noteMap[key] || 1;
-    note += octave;
+    cNote = noteMap[key] || 1;
+    cNote += octave;
     
     
-    note = Note.numFromName(note);
-    if (note === -1) {
+    cNote = note.numFromName(cNote);
+    if (cNote === -1) {
         return;
     }
-    keyDown(note);
+    keyDown(cNote);
 }
 
 function parseInputUp(e) {
@@ -146,5 +145,5 @@ window.onload = function () {
     connectAllGIO(document.getElementById("lines"));
     
     /*testsuite*/
-    Test.runTests();
+    test.runTests();
 };

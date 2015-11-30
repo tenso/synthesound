@@ -1,10 +1,11 @@
 "use strict";
-/*global Log*/
 
-var Test = {
+/*global log*/
+
+var test = {
     verifyFunctionality: function (func, message) {
         if (!func) {
-            Log.error("no " + message + ", please use modern browser");
+            log.error("no " + message + ", please use modern browser");
         }
     },
 
@@ -35,7 +36,7 @@ var Test = {
     tests: [],
         
     addTest: function (func, desc) {
-        Test.tests.push([desc, func]);
+        test.tests.push([desc, func]);
     },
     
     addTests: function (obj, desc) {
@@ -43,18 +44,18 @@ var Test = {
         if (obj.hasOwnProperty("tests")) {
             for (name in obj.tests) {
                 if (obj.tests.hasOwnProperty(name)) {
-                    Test.addTest(obj.tests[name], desc + ":" + name);
+                    test.addTest(obj.tests[name], desc + ":" + name);
                 }
             }
         }
     },
 
     runTests: function () {
-        Log.info("running tests...");
+        log.info("running tests...");
         var i;
-        for (i = 0; i < Test.tests.length; i += 1) {
-            Log.info(" test:" + Test.tests[i][0]);
-            Test.tests[i][1]();
+        for (i = 0; i < test.tests.length; i += 1) {
+            log.info(" test:" + test.tests[i][0]);
+            test.tests[i][1]();
         }
     }
 };

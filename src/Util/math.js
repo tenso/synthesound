@@ -1,30 +1,32 @@
 "use strict";
 
-/*global Test*/
+/*global test*/
 
-function mod(arg, base) {
-    if (base < 0) {
-        base = -base;
-    }
-    if (arg < 0) {
-        return base - ((-arg) % base);
-    }
-    return arg % base;
-}
+var mUtil = {
+    mod: function (arg, base) {
+        if (base < 0) {
+            base = -base;
+        }
+        if (arg < 0) {
+            return base - ((-arg) % base);
+        }
+        return arg % base;
+    },
 
-function test_mod() {
-    Test.verify(mod(-1, 4), 3);
-    Test.verify(mod(-4, 12), 8);
-    Test.verify(mod(4, 12), 4);
-    Test.verify(mod(3, 2), 1);
-    Test.verify(mod(-1, 1), 1);
-    Test.verify(mod(-3, 3), 3);
-    Test.verify(mod(3, 3), 0);
-    Test.verify(mod(3, -3), 0);
-    Test.verify(mod(-1, -3), 2);
-    Test.verify(mod(-4, -3), 2);
-    Test.verify(mod(-4, 3), 2);
-    Test.verify(mod(4, -3), 1);
-    Test.verify(mod(-48000, 480000), 432000);
-}
-Test.addTest(test_mod, "mod()");
+    test_mod: function () {
+        test.verify(mUtil.mod(-1, 4), 3);
+        test.verify(mUtil.mod(-4, 12), 8);
+        test.verify(mUtil.mod(4, 12), 4);
+        test.verify(mUtil.mod(3, 2), 1);
+        test.verify(mUtil.mod(-1, 1), 1);
+        test.verify(mUtil.mod(-3, 3), 3);
+        test.verify(mUtil.mod(3, 3), 0);
+        test.verify(mUtil.mod(3, -3), 0);
+        test.verify(mUtil.mod(-1, -3), 2);
+        test.verify(mUtil.mod(-4, -3), 2);
+        test.verify(mUtil.mod(-4, 3), 2);
+        test.verify(mUtil.mod(4, -3), 1);
+        test.verify(mUtil.mod(-48000, 480000), 432000);
+    }
+};
+test.addTest(mUtil.test_mod, "mUtil.mod()");

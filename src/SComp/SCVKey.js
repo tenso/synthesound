@@ -3,7 +3,7 @@
 /*global sConst*/
 /*global makeGIO*/
 /*global GUI*/
-/*global Note*/
+/*global note*/
 /*global GVKey*/
 
 function SCVKey(container) {
@@ -37,16 +37,16 @@ function SCVKey(container) {
     vkey.className = "collection vkey";
     GUI.containerAddContent(this, vkey);
     
-    function keyDown(note) {
-        noteDown = note;
+    function keyDown(notePressed) {
+        noteDown = notePressed;
         isDown = true;
         
-        currentNote.innerText = Note.name(note);
+        currentNote.innerText = note.name(notePressed);
                 
         gate.value = isDown ? 1.0 : 0.0;
-        hz.value = Note.hz(note);
+        hz.value = note.hz(notePressed);
     }
-    function keyUp(note) {
+    function keyUp(notePressed) {
         isDown = false;
         gate.value = isDown ? 1.0 : 0.0;
     }

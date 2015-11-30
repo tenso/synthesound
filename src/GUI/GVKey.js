@@ -29,7 +29,7 @@ function GVKey(container, keyDown, keyUp) {
         
         key.onmousedown = function (e) {
             setMouseCapturer(e);
-         };
+        };
         key.onmouseover = function (e) {
             if (key.parent.isDown) {
                 key.parent.lastNote = key.note;
@@ -40,7 +40,7 @@ function GVKey(container, keyDown, keyUp) {
             key.parent.isDown = true;
             key.parent.lastNote = key.note;
             key.keyDown(key.note);
-        }
+        };
         key.onmouseupaftercapture = function (e) {
             key.keyUp(key.parent.lastNote);
             key.parent.isDown = false;
@@ -67,7 +67,7 @@ function GVKey(container, keyDown, keyUp) {
         }
         
         key.style.left = keyX + "px";
-        key.style.top = 0 + "px";
+        key.style.top = "0px";
         return key;
     };
     

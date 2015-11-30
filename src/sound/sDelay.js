@@ -1,16 +1,17 @@
 "use strict";
 /*global sBase*/
-/*global DelayBuffer*/
+/*global delayBuffer*/
 
 function sDelay() {
     var that = sBase(),
         maxDelay = 480000, //10s at 48khz
-        delayBuffer = [],
+        buffer = [],
         gain = 0.5,
         delay = 0.5;
+    
 
-    delayBuffer[0] = new DelayBuffer(maxDelay);
-    delayBuffer[1] = new DelayBuffer(maxDelay);
+    buffer[0] = delayBuffer(maxDelay);
+    buffer[1] = delayBuffer(maxDelay);
     
     that.makeAudio = function () {
         var i = 0,
@@ -26,8 +27,9 @@ function sDelay() {
                 inputData = that.getInputChannelData(inputIndex, chan);
                 
                 for (i = 0; i < chanData.length; i += 1) {
-                    delayBuffer[chan].set(inputData[i]);
-                    chanData[i] = gain * delayBuffer[chan].get(parseInt(delay * that.sampleRate(), 10));
+                    buffer[chan].set(inputData[i]);
+                    //FIXME: cant get value like this, need  similar solution to continous-phase for generators.
+                    chanData[i] = gain * buffer[chan].get(parseInt(delay * that.sampleRate(), 10));
                 }
             }
         }

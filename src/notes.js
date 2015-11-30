@@ -1,7 +1,7 @@
 "use strict";
-/*global Test*/
+/*global test*/
 
-var Note = {
+var note = {
     //noteNr 1 = A0 13 = A1 25= A2 etc...
     hz: function (noteNr) {
         return 440 * Math.pow(Math.pow(2, 1 / 12.0), noteNr - 49);
@@ -50,29 +50,29 @@ var Note = {
 
     tests: {
         test_hz: function () {
-            Test.verifyFloat(Note.hz(1), 27.500, 3);
-            Test.verifyFloat(Note.hz(2), 29.135, 3);
-            Test.verifyFloat(Note.hz(27), 123.471, 3);
-            Test.verifyFloat(Note.hz(43), 311.127, 3);
-            Test.verifyFloat(Note.hz(69), 1396.91, 2);
+            test.verifyFloat(note.hz(1), 27.500, 3);
+            test.verifyFloat(note.hz(2), 29.135, 3);
+            test.verifyFloat(note.hz(27), 123.471, 3);
+            test.verifyFloat(note.hz(43), 311.127, 3);
+            test.verifyFloat(note.hz(69), 1396.91, 2);
         },
         
         test_name: function () {
-            Test.verify(Note.name(1), "A0");
-            Test.verify(Note.name(2), "A#0");
-            Test.verify(Note.name(27), "B2");
-            Test.verify(Note.name(43), "D#4");
-            Test.verify(Note.name(69), "F6");
+            test.verify(note.name(1), "A0");
+            test.verify(note.name(2), "A#0");
+            test.verify(note.name(27), "B2");
+            test.verify(note.name(43), "D#4");
+            test.verify(note.name(69), "F6");
         },
 
         test_numFromName: function () {
-            Test.verify(Note.numFromName("A0"), 1);
-            Test.verify(Note.numFromName("A#0"), 2);
-            Test.verify(Note.numFromName("B2"), 27);
-            Test.verify(Note.numFromName("D#4"), 43);
-            Test.verify(Note.numFromName("F6"), 69);
+            test.verify(note.numFromName("A0"), 1);
+            test.verify(note.numFromName("A#0"), 2);
+            test.verify(note.numFromName("B2"), 27);
+            test.verify(note.numFromName("D#4"), 43);
+            test.verify(note.numFromName("F6"), 69);
         }
     }
 };
 
-Test.addTests(Note, "Note");
+test.addTests(note, "note");

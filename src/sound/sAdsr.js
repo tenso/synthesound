@@ -82,7 +82,6 @@ function sAdsr(args) {
         }
     };
     that.setArgs(args);
-    
     return that;
 }
 
