@@ -7,8 +7,8 @@
 }
 
 .ioport-in {
-    border: 4px solid #88f; 
+    border: 4px solid #f44; 
 }
 .ioport-out {
-    border: 4px solid #8f8; 
+    border: 4px solid #fc0; 
 }

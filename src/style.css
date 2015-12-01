@@ -7,6 +7,7 @@ body {
     user-select: none;
     margin: 1em;
     background: #888;
+    font-family: sans-serif;
 }
 
 hr {
@@ -41,7 +42,11 @@ hr {
 }
 
 .panicButton {
-    color: #f88;
+    color: #fff;
+}
+
+.panicButton:active {
+    color: #888;
 }
 
 .workspace {

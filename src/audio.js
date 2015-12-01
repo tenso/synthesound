@@ -81,9 +81,8 @@ var audio = {
         audio.mixer.addInput(audio.generators[1]);
         audio.mixer.addInput(audio.generators[2]);
 
-        audio.mixer.setChannelGain(0, 0.5);
-        audio.mixer.setChannelGain(1, 0.5);
-
+        audio.mixer.setArgs({"gainL": 0.5, "gainR": 0.5});
+        
         audio.adsr = sAdsr({"a": 0.01, "d": 0.15, "s": 0.25, "r": 0.01});
         audio.adsr.addInput(audio.mixer);
 

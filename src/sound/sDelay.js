@@ -35,22 +35,10 @@ function sDelay(args) {
         }
     };
 
-    that.setGain = function (value) {
-        gain = value;
+    that.getArgs = function () {
+        return {"gain": gain, "delay": delay};
     };
     
-    that.getGain = function () {
-        return gain;
-    };
-
-    that.setDelay = function (value) {
-        delay = value;
-    };
-    
-    that.getDelay = function () {
-        return delay;
-    };
-
     that.setArgs = function (args) {
         if (args) {
             gain = typeof args.gain === "number" ? args.gain : gain;

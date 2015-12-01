@@ -23,11 +23,7 @@ function sMix(args) {
             }
         }
     };
-
-    that.setChannelGain = function (chan, chanGain) {
-        gain[chan] = chanGain;
-    };
-    
+ 
     that.setArgs = function (args) {
         if (args) {
             gain[0] = typeof args.gainL === "number" ? args.gainL : gain[0];

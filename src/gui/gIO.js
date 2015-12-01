@@ -15,7 +15,7 @@ var gIO = {
 
         function drawLine(fromX, fromY, toX, toY) {
             linesCtx.beginPath();
-            linesCtx.strokeStyle = "#0ff";
+            linesCtx.strokeStyle = "#000";
             linesCtx.lineWidth = 2;
             linesCtx.moveTo(fromX, fromY);
             linesCtx.lineTo(toX, toY);

@@ -7,14 +7,12 @@
 .button {
     padding: 0.25em;
     color: #fff;
-    border: 2px solid #fff;
     font-size: 2em;
     display: inline-block;
 }
 
 .button-class:active {
-    border-color: #8f8;
-    color: #8f8;
+    color: #fff;
 }
 
 .component {
@@ -24,7 +22,8 @@
 }
 
 .component-label {
-    font-size: 1.25em;
+    font-size: 1.0em;
+    margin-left: -0.10em;
     text-align: center;
 }
 
@@ -65,14 +64,14 @@
     width: 4em;
     height: 2em;
     line-height: 2em;
-    color: #8f8;
+    color: #fff;
 }
 
 .radiobutton-inactive {
     width: 4em;
     height: 2em;
     line-height: 2em;
-    color: #fff;
+    color: #888;
 }
 
 .hslider-track {

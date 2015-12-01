@@ -13,7 +13,7 @@ function gScope(canvasElement, channel) {
         halfH = canvas.height / 2.0,
         gotData = 0;
     
-    ctx.strokeStyle = "#8f8";
+    ctx.strokeStyle = "#0f0";
     ctx.lineWidth = 2;
 
     that.drawGraph = function (data) {
