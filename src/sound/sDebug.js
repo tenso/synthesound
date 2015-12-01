@@ -35,6 +35,10 @@ function sDebug(args) {
         }
     };
     
+    that.getArgs = function () {
+        return {};
+    };
+    
     that.setArgs = function (args) {
     };
     that.setArgs(args);

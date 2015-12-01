@@ -13,12 +13,8 @@ function sConst(args) {
         }
     };
     
-    that.setValue = function(val) {
-        value = val;
-    };
-    
-    that.getValue = function() {
-        return value;
+    that.getArgs = function () {
+        return {"value": value};
     };
     
     that.setArgs = function (args) {

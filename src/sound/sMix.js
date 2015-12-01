@@ -24,6 +24,10 @@ function sMix(args) {
         }
     };
  
+    that.getArgs = function () {
+        return {"gainL": gain[0], "gainR": gain[1]};
+    };
+    
     that.setArgs = function (args) {
         if (args) {
             gain[0] = typeof args.gainL === "number" ? args.gainL : gain[0];

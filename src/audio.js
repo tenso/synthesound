@@ -34,15 +34,15 @@ var audio = {
         audio.generators[1].setArgs({"freq": freq * 2});
         audio.generators[2].setArgs({"freq": freq * 4});
         
-        audio.adsr.setActive(false);
-        audio.adsr.setActive(true);
+        audio.adsr.setArgs({"active": false});
+        audio.adsr.setArgs({"active": true});
 
         return true;
     },
 
     keyUp: function (notePressed) {
         if (audio.adsr) {
-            audio.adsr.setActive(false);
+            audio.adsr.setArgs({"active": false});
         }
     },
 
@@ -77,6 +77,7 @@ var audio = {
         audio.generators[0] = sGen({"freq": 220, "amp": 0.25, "type": "sine"});
         audio.generators[1] = sGen({"freq": 220, "amp": 0.25, "type": "sine"});
         audio.generators[2] = sGen({"freq": 110, "amp": 0.25, "type": "sine"});
+        
         audio.mixer.addInput(audio.generators[0]);
         audio.mixer.addInput(audio.generators[1]);
         audio.mixer.addInput(audio.generators[2]);

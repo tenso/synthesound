@@ -41,6 +41,10 @@ function sGen(args) {
         }
     };
 
+    that.getArgs = function () {
+        return {"amp": amp, "freq": freq, "phase": phase, "type": type, "isOn": isOn};
+    };
+    
     that.setArgs = function (args) {
         if (args) {
             amp = typeof args.amp === "number" ? args.amp : amp;

@@ -61,7 +61,7 @@ function sAdsr(args) {
         tick += that.wantedSamples();
     };
 
-    that.setActive = function (value) {
+    function setActive(value) {
         if (!active && value) {
             activeIndex = tick - (lastGain * a * that.sampleRate());
         } else if (active && !value) {
@@ -69,6 +69,10 @@ function sAdsr(args) {
             releaseIndex = tick;
         }
         active = value;
+    }
+    
+    that.getArgs = function () {
+        return {"a": a, "d": d, "s": s, "r": r, "active": active};
     };
     
     that.setArgs = function (args) {
@@ -77,6 +81,10 @@ function sAdsr(args) {
             d = typeof args.d === "number" ? args.d : d;
             s = typeof args.s === "number" ? args.s : s;
             r = typeof args.r === "number" ? args.r : r;
+            
+            if (typeof args.active === "boolean") {
+                setActive(args.active);
+            }
         }
     };
     that.setArgs(args);
