@@ -1,119 +1,81 @@
 "use strict";
-
-/*global keyUp*/
-/*global keyDown*/
-/*global setParam*/
-/*global getParam*/
-/*global startAudio*/
-/*global stopAudio*/
-/*global GSliders*/
-/*global GRadios*/
+/*global audio*/
 /*global note*/
 /*global test*/
-
 /*global gIO*/
 
-var keyIsDown = 0;
+var input = {
+    keyIsDown: 0,
+    mouseCapturer: 0,
+    
+    parseInputDown: function (e) {
+        var noteMap = {"a": "C", "w": "C#", "s": "D",
+                       "e": "D#", "d": "E", "f": "F",
+                       "t": "F#", "g": "G", "y": "G#",
+                       "h" : "A", "u": "A#", "j": "B"},
+            cNote,
+            octave,
+            key = String.fromCharCode(e.keyCode);
 
-function mapKeyToNote(e) {
-    
-}
+        key = key.toLowerCase();
 
-function parseInputDown(e) {
-    var noteMap = {"a": "C", "w": "C#", "s": "D",
-                   "e": "D#", "d": "E", "f": "F",
-                   "t": "F#", "g": "G", "y": "G#",
-                   "h" : "A", "u": "A#", "j": "B"},
-        cNote,
-        octave,
-        key = String.fromCharCode(e.keyCode);
-    
-    key = key.toLowerCase();
-    
-    if (keyIsDown === key) {
-        return;
-    }
-    keyIsDown = key;
-    
-    octave = 3;
-    if (e.shiftKey) {
-        octave = 2;
-    }
-        
-    cNote = noteMap[key] || 1;
-    cNote += octave;
-    
-    
-    cNote = note.numFromName(cNote);
-    if (cNote === -1) {
-        return;
-    }
-    keyDown(cNote);
-}
-
-function parseInputUp(e) {
-    var key = String.fromCharCode(e.keyCode);
-    key = key.toLowerCase();
-    
-    if (keyIsDown !== key) {
-        return;
-    }
-    keyIsDown = 0;
-    keyUp(0);
-}
-
-var mouseCapturer = null;
-
-function setMouseCapturer(e) {
-    e.stopPropagation();
-    mouseCapturer = e.target;
-    
-    if (mouseCapturer && mouseCapturer.onmousecaptured) {
-        e.mouseCapturer = mouseCapturer;
-        mouseCapturer.onmousecaptured(e);
-    }
-}
-
-window.onload = function () {
-    var freqSelect = document.getElementById("freqSelect"),
-        playButton = document.getElementById("play"),
-        stopButton = document.getElementById("stop"),
-        currentNote = document.getElementById("currentNote"),
-        shapeSelect = document.getElementById("shapeSelect"),
-        oscSelect = document.getElementById("oscSelect"),
-        vkey,
-        volSliders,
-        delSliders,
-        adsrSliders;
-
-    document.body.onmouseup = function (e) {
-        if (mouseCapturer && mouseCapturer.onmouseupaftercapture) {
-            e.mouseCapturer = mouseCapturer;
-            mouseCapturer.onmouseupaftercapture(e);
+        if (input.keyIsDown === key) {
+            return;
         }
-        mouseCapturer = null;
-    };
-    document.body.onmousemove = function (e) {
-        if (mouseCapturer && mouseCapturer.onmousepressandmove) {
-            e.mouseCapturer = mouseCapturer;
-            mouseCapturer.onmousepressandmove(e);
+        input.keyIsDown = key;
+
+        octave = 3;
+        if (e.shiftKey) {
+            octave = 2;
         }
-    };
-    document.body.onmouseover = function (e) {
-        if (mouseCapturer && mouseCapturer.onmouseoveraftercapture) {
-            e.mouseCapturer = mouseCapturer;
-            mouseCapturer.onmouseoveraftercapture(e);
+
+        cNote = noteMap[key] || 1;
+        cNote += octave;
+
+
+        cNote = note.numFromName(cNote);
+        if (cNote === -1) {
+            return;
         }
-    };
+        audio.keyDown(cNote);
+    },
+
+    parseInputUp: function (e) {
+        var key = String.fromCharCode(e.keyCode);
+        key = key.toLowerCase();
+
+        if (input.keyIsDown !== key) {
+            return;
+        }
+        input.keyIsDown = 0;
+        audio.keyUp(0);
+    },
     
-    freqSelect.addEventListener("keydown", parseInputDown, false);
-    freqSelect.addEventListener("keyup", parseInputUp, false);
-    stopButton.addEventListener("click", function () { stopAudio(); }, false);
-                
-    startAudio();
-                
-    gIO.connectAll(document.getElementById("lines"));
+    runCallbackIfExist: function (name, e) {
+        if (input.mouseCapturer && input.mouseCapturer.hasOwnProperty(name)) {
+            e.mouseCapturer = input.mouseCapturer;
+            input.mouseCapturer[name](e);
+        }
+    },
     
-    /*testsuite*/
-    test.runTests();
+    setMouseCapturer: function (e) {
+        e.stopPropagation();
+        input.mouseCapturer = e.target;
+        input.runCallbackIfExist("onmousecaptured", e);
+    },
+
+    init: function () {
+        document.body.onmouseup = function (e) {
+            input.runCallbackIfExist("onmouseupaftercapture", e);
+            input.mouseCapturer = undefined;
+        };
+
+        document.body.onmousemove = function (e) {
+            input.runCallbackIfExist("onmousepressandmove", e);
+        };
+
+        document.body.onmouseover = function (e) {
+            input.runCallbackIfExist("onmouseoveraftercapture", e);
+        };
+    }
 };

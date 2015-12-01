@@ -12,11 +12,11 @@ function sBase() {
         genIndex = -1,
         inputs = [],
         specialInput = {},
-        chanUpdated = null;
+        chanUpdated = undefined;
     
     //FIXME: make private?
     that.data = [];
-    that.genData = null;
+    that.genData = undefined;
     
     that.setChanUpdatedCallback = function(cb) {
         chanUpdated = cb;

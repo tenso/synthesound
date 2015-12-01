@@ -1,6 +1,6 @@
 "use strict";
 /*global log*/
-/*global setMouseCapturer*/
+/*global input*/
 /*global gui*/
 
 var gIO = {
@@ -62,7 +62,7 @@ var gIO = {
                 if (e.target.ioPort && e.target.isOut) {
                     pressX = e.pageX;
                     pressY = e.pageY;
-                    setMouseCapturer(e);
+                    input.setMouseCapturer(e);
                 }
             };
             port.onmousepressandmove = function (e) {

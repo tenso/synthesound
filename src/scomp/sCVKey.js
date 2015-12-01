@@ -1,5 +1,4 @@
 "use strict";
-
 /*global sConst*/
 /*global gIO*/
 /*global gui*/
@@ -29,7 +28,7 @@ function sCVKey(container) {
     currentNote.innerText = "--";
     gui.containerAddContent(that, currentNote);
     
-    gate.value = isDown ? 1.0 : 0.0;
+    gate.setValue(isDown ? 1.0 : 0.0);
             
     gui.containerAddLabeledContent(that, gateOut, "G");
     gui.containerAddLabeledContent(that, hzOut, "Hz");
@@ -43,13 +42,13 @@ function sCVKey(container) {
         
         currentNote.innerText = note.name(notePressed);
                 
-        gate.value = isDown ? 1.0 : 0.0;
-        hz.value = note.hz(notePressed);
+        gate.setValue(isDown ? 1.0 : 0.0);
+        hz.setValue(note.hz(notePressed));
     }
     
     function keyUp(notePressed) {
         isDown = false;
-        gate.value = isDown ? 1.0 : 0.0;
+        gate.setValue(isDown ? 1.0 : 0.0);
     }
     
     keyboard = gVKey(vkey, keyDown, keyUp);

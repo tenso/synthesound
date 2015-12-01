@@ -1,7 +1,7 @@
 "use strict";
 /*global sBase*/
 
-function sDebug() {
+function sDebug(args) {
     var that = sBase(),
         lastValues = {};
     
@@ -34,6 +34,11 @@ function sDebug() {
             }
         }
     };
+    
+    that.setArgs = function (args) {
+    };
+    that.setArgs(args);
+    
     
     return that;
 }

@@ -1,10 +1,9 @@
 "use strict";
 /*global sBase*/
 
-function sMix() {
-    var that = sBase();
-    
-    that.gain = [1.0, 1.0];
+function sMix(args) {
+    var that = sBase(),
+        gain = [1.0, 1.0];
 
     that.makeAudio = function () {
         var i = 0,
@@ -19,15 +18,23 @@ function sMix() {
             for (inputIndex = 0; inputIndex < that.numInputs(); inputIndex += 1) {
                 inputData = that.getInputChannelData(inputIndex, chan);
                 for (i = 0; i < chanData.length; i += 1) {
-                    chanData[i] += this.gain[chan] * inputData[i];
+                    chanData[i] += gain[chan] * inputData[i];
                 }
             }
         }
     };
 
-    that.setChannelGain = function (chan, gain) {
-        that.gain[chan] = gain;
+    that.setChannelGain = function (chan, chanGain) {
+        gain[chan] = chanGain;
     };
+    
+    that.setArgs = function (args) {
+        if (args) {
+            gain[0] = typeof args.gainL === "number" ? args.gainL : gain[0];
+            gain[1] = typeof args.gainR === "number" ? args.gainR : gain[1];
+        }
+    };
+    that.setArgs(args);
     
     return that;
 }

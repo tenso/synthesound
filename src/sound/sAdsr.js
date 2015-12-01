@@ -1,7 +1,6 @@
 "use strict";
 /*global sBase*/
 
-
 function sAdsr(args) {
     var that = sBase(),
         active = false,
@@ -9,12 +8,11 @@ function sAdsr(args) {
         releaseIndex = 0,
         gainAtRelease = 0.0,
         tick = 0,
-        lastGain = 0.0;
-    
-    that.a = 0.1; /*seconds*/
-    that.d = 0.1; /*seconds*/
-    that.s = 0.3; /*0-1*/
-    that.r = 1.0; /*seconds*/
+        lastGain = 0.0,
+        a = 0.1, /*seconds*/
+        d = 0.1, /*seconds*/
+        s = 0.3, /*0-1*/
+        r = 1.0; /*seconds*/
 
     that.makeAudio = function () {
         var index = 0,
@@ -25,9 +23,9 @@ function sAdsr(args) {
             inPeriod,
             inputIndex,
             inputData,
-            aLen = that.a * that.sampleRate(),
-            dLen = that.d * that.sampleRate(),
-            rLen = that.r * that.sampleRate();
+            aLen = a * that.sampleRate(),
+            dLen = d * that.sampleRate(),
+            rLen = r * that.sampleRate();
 
         for (chan = 0; chan < that.numChannels(); chan += 1) {
             chanData = that.data[chan];
@@ -41,9 +39,9 @@ function sAdsr(args) {
                         lastGain = index / aLen;
                     } else if (index < aLen + dLen) {
                         index -= aLen;
-                        lastGain = 1.0 - ((1.0 - that.s) * (index / dLen));
+                        lastGain = 1.0 - ((1.0 - s) * (index / dLen));
                     } else {
-                        lastGain = that.s;
+                        lastGain = s;
                     }
                 } else {
                     index = tick - releaseIndex + i;
@@ -65,7 +63,7 @@ function sAdsr(args) {
 
     that.setActive = function (value) {
         if (!active && value) {
-            activeIndex = tick - (lastGain * that.a * that.sampleRate());
+            activeIndex = tick - (lastGain * a * that.sampleRate());
         } else if (active && !value) {
             gainAtRelease = lastGain;
             releaseIndex = tick;
@@ -75,10 +73,10 @@ function sAdsr(args) {
     
     that.setArgs = function (args) {
         if (args) {
-            that.a = typeof args.a === "number" ? args.a : that.a;
-            that.d = typeof args.d === "number" ? args.d : that.d;
-            that.s = typeof args.s === "number" ? args.s : that.s;
-            that.r = typeof args.r === "number" ? args.r : that.r;
+            a = typeof args.a === "number" ? args.a : a;
+            d = typeof args.d === "number" ? args.d : d;
+            s = typeof args.s === "number" ? args.s : s;
+            r = typeof args.r === "number" ? args.r : r;
         }
     };
     that.setArgs(args);

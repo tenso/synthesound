@@ -1,5 +1,4 @@
 "use strict";
-
 /*global sGen*/
 /*global gIO*/
 /*global gui*/
@@ -16,11 +15,11 @@ function sCGen(container) {
     gui.containerAddLabeledContent(that, ioport, "out");
     gui.containerAddLabeledContent(that, freqport, "Hz");
     
-    button = gui.makeButton("sine", function () {out.type = "sine"; }, true, typeButtons);
+    button = gui.makeButton("sine", function () {out.setArgs({"type": "sine"}); }, true, typeButtons);
     button.setValue(true);
     gui.containerAddContent(that, button);
     
-    button = gui.makeButton("square", function () {out.type = "square"; }, true, typeButtons);
+    button = gui.makeButton("square", function () {out.setArgs({"type": "square"}); }, true, typeButtons);
     gui.containerAddContent(that, button);
     
     return that;

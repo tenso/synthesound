@@ -2,7 +2,7 @@
 /*global sBase*/
 /*global delayBuffer*/
 
-function sDelay() {
+function sDelay(args) {
     var that = sBase(),
         maxDelay = 480000, //10s at 48khz
         buffer = [],
@@ -50,6 +50,14 @@ function sDelay() {
     that.getDelay = function () {
         return delay;
     };
+
+    that.setArgs = function (args) {
+        if (args) {
+            gain = typeof args.gain === "number" ? args.gain : gain;
+            delay = typeof args.delay === "number" ? args.delay : delay;
+        }
+    };
+    that.setArgs(args);
     
     return that;
 }

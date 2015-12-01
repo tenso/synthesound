@@ -1,5 +1,5 @@
 "use strict";
-/*global setMouseCapturer*/
+/*global input*/
 /*global log*/
 
 var gui = {
@@ -24,7 +24,7 @@ var gui = {
     },
 
     getStyle: function (element, property) {
-        return window.getComputedStyle(element, null).getPropertyValue(property);
+        return window.getComputedStyle(element, undefined).getPropertyValue(property);
     },
 
     getStyleInt: function (element, property) {
@@ -97,7 +97,7 @@ var gui = {
         knob.callback = callback;
 
         knob.onmousedown = function (e) {
-            setMouseCapturer(e);
+            input.setMouseCapturer(e);
         };
 
         knob.onmousepressandmove = function (e) {

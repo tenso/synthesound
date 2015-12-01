@@ -1,136 +1,123 @@
 "use strict";
 /*global log*/
 /*global test*/
-
 /*global sOutNode*/
 /*global sGen*/
 /*global sMix*/
 /*global sAdsr*/
 /*global sDelay*/
-
 /*global gScope*/
-
 /*global sCOut*/
 /*global sCGen*/
 /*global sCVKey*/
-
 /*global note*/
 
-var generators = [],
-    mixer,
-    mixerOut,
-    adsr,
-    delay,
-    out,
-    scope = [];
+var audio = {
+    generators: [],
+    mixer: undefined,
+    mixerOut: undefined,
+    adsr: undefined,
+    delay: undefined,
+    out: undefined,
+    scope: [],
+    AudioContext: window.AudioContext || window.webkitAudioContext,
+    audioRunning: false,
+    scout: undefined,
 
-function setShape(type) {
-    generators[0].type = type;
-    generators[1].type = type;
-    generators[2].type = type;
-}
+    keyDown: function (notePressed) {
+        var freq = note.hz(notePressed);
 
-function keyDown(notePressed) {
-    var freq = note.hz(notePressed);
-    
-    if (generators.length === 0) {
-        return false;
-    }
-    generators[0].freq = freq;
-    generators[1].freq = freq * 2;
-    generators[2].freq = freq * 4;
-    
-    adsr.setActive(false);
-    adsr.setActive(true);
-
-    return true;
-}
-
-function keyUp(notePressed) {
-    if (adsr) {
-        adsr.setActive(false);
-    }
-}
-
-function drawScopes(chan, data) {
-    scope[chan].drawGraph(data);
-}
-
-var AudioContext = window.AudioContext || window.webkitAudioContext;
-
-test.verifyFunctionality(AudioContext, "AudioContext");
-test.verifyFunctionality(Array.prototype.fill, "Array fill");
-
-var audioCtx = new AudioContext();
-var audioRunning = false;
-var scout;
-
-function initSComp() {
-    var gen,
-        key;
-    
-    scout = sCOut(document.getElementById("scout"));
-    
-    gen = sCGen(document.getElementById("scgen0"));
-    gen = sCGen(document.getElementById("scgen1"));
-    gen = sCGen(document.getElementById("scgen2"));
-    
-    key = sCVKey(document.getElementById("scvkey"));
-}
-
-function startAudio(freq) {
-    if (audioRunning) {
-        return false;
-    }
-    
-    initSComp();
-    
-    mixer = sMix();
-    generators[0] = sGen({"freq": 220, "amp": 0.25, "type": "sine"});
-    generators[1] = sGen({"freq": 220, "amp": 0.25, "type": "sine"});
-    generators[2] = sGen({"freq": 110, "amp": 0.25, "type": "sine"});
-    mixer.addInput(generators[0]);
-    mixer.addInput(generators[1]);
-    mixer.addInput(generators[2]);
-    
-    mixer.setChannelGain(0, 0.5);
-    mixer.setChannelGain(1, 0.5);
-    
-    adsr = sAdsr({"a": 0.01, "d": 0.15, "s": 0.5, "r": 0.01});
-    adsr.addInput(mixer);
-    
-    delay = sDelay();
-    delay.setDelay(0.03);
-    delay.setGain(0.7);
-    
-    mixerOut = sMix();
-    mixerOut.addInput(adsr);
-    
-    mixerOut.addInput(delay);
-    delay.addInput(mixerOut);
-    
-    mixerOut.addInput(scout.getOutput());
-    
-    //create actual output node:
-    out = sOutNode(audioCtx, 2, 4096);
-    out.setInput(mixerOut);
-    out.connect(audioCtx.destination);
+        if (audio.generators.length === 0) {
+            return false;
+        }
+        audio.generators[0].setArgs({"freq": freq});
+        audio.generators[1].setArgs({"freq": freq * 2});
+        audio.generators[2].setArgs({"freq": freq * 4});
         
-    scope[0] = gScope(document.getElementById("audioScopeL"), 0);
-    scope[1] = gScope(document.getElementById("audioScopeR"), 1);
-    mixerOut.setChanUpdatedCallback(function (chan, data) { drawScopes(chan, data); });
-    
-    audioRunning = true;
-    log.info("start playback, sample rate:" + out.sampleRate + " channels " + out.channels);
-    return true;
-}
+        audio.adsr.setActive(false);
+        audio.adsr.setActive(true);
 
-function stopAudio(freq) {
-    if (!audioRunning) {
-        return false;
+        return true;
+    },
+
+    keyUp: function (notePressed) {
+        if (audio.adsr) {
+            audio.adsr.setActive(false);
+        }
+    },
+
+    drawScopes: function (chan, data) {
+        audio.scope[chan].drawGraph(data);
+    },
+
+    initSComp: function () {
+        var gen,
+            key;
+
+        audio.scout = sCOut(document.getElementById("scout"));
+
+        gen = sCGen(document.getElementById("scgen0"));
+        gen = sCGen(document.getElementById("scgen1"));
+        gen = sCGen(document.getElementById("scgen2"));
+        key = sCVKey(document.getElementById("scvkey"));
+    },
+
+    startAudio: function (freq) {
+        if (audio.audioRunning) {
+            return false;
+        }
+        
+        test.verifyFunctionality(audio.AudioContext, "audio.AudioContext");
+        test.verifyFunctionality(Array.prototype.fill, "Array fill");
+        audio.audioCtx = new audio.AudioContext();
+            
+        audio.initSComp();
+
+        audio.mixer = sMix();
+        audio.generators[0] = sGen({"freq": 220, "amp": 0.25, "type": "sine"});
+        audio.generators[1] = sGen({"freq": 220, "amp": 0.25, "type": "sine"});
+        audio.generators[2] = sGen({"freq": 110, "amp": 0.25, "type": "sine"});
+        audio.mixer.addInput(audio.generators[0]);
+        audio.mixer.addInput(audio.generators[1]);
+        audio.mixer.addInput(audio.generators[2]);
+
+        audio.mixer.setChannelGain(0, 0.5);
+        audio.mixer.setChannelGain(1, 0.5);
+
+        audio.adsr = sAdsr({"a": 0.01, "d": 0.15, "s": 0.25, "r": 0.01});
+        audio.adsr.addInput(audio.mixer);
+
+        audio.delay = sDelay({"delay": 0.03, "gain": 0.7});
+        
+        audio.mixerOut = sMix();
+        audio.mixerOut.addInput(audio.adsr);
+
+        audio.mixerOut.addInput(audio.delay);
+        audio.delay.addInput(audio.mixerOut);
+
+        audio.mixerOut.addInput(audio.scout.getOutput());
+
+        //create actual output node:
+        audio.out = sOutNode(audio.audioCtx, 2, 4096);
+        audio.out.setInput(audio.mixerOut);
+        audio.out.connect(audio.audioCtx.destination);
+
+        audio.scope[0] = gScope(document.getElementById("audioScopeL"), 0);
+        audio.scope[1] = gScope(document.getElementById("audioScopeR"), 1);
+        audio.mixerOut.setChanUpdatedCallback(function (chan, data) { audio.drawScopes(chan, data); });
+
+        audio.audioRunning = true;
+        log.info("start playback, sample rate:" + audio.out.sampleRate + " channels " + audio.out.channels);
+        return true;
+    },
+
+    stopAudio: function (freq) {
+        if (!audio.audioRunning) {
+            return false;
+        }
+        audio.audioRunning = false;
+
+        audio.out.disconnect(audio.audioCtx.destination);
+        return true;
     }
-    audioRunning = false;
-
-    out.disconnect(audioCtx.destination);
-    return true;
-}
+};

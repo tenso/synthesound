@@ -1,7 +1,6 @@
 "use strict";
-
 /*global gui*/
-/*global setMouseCapturer*/
+/*global input*/
 
 function gVKey(container, keyDown, keyUp) {
     var that = {},
@@ -24,7 +23,7 @@ function gVKey(container, keyDown, keyUp) {
         key.note = note;
                 
         key.onmousedown = function (e) {
-            setMouseCapturer(e);
+            input.setMouseCapturer(e);
         };
         key.onmouseover = function (e) {
             if (isDown) {
