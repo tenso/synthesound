@@ -4,12 +4,11 @@
 /*global gIO*/
 /*global gui*/
 /*global note*/
-/*global GVKey*/
+/*global gVKey*/
 
-function SCVKey(container) {
-    gui.containerInit(this, container, "V-KEY");
-                    
-    var gate = sConst(),
+function sCVKey(container) {
+    var that = {},
+        gate = sConst(),
         hz = sConst(),
         gateOut,
         hzOut,
@@ -18,24 +17,25 @@ function SCVKey(container) {
         noteDown = 0,
         isDown = false,
         cont,
+        keyboard,
         label;
         
-    gateOut = gIO.make(gate, true, "");
-    hzOut = gIO.make(hz, true, "");
+    gui.containerInit(that, container, "V-KEY");
+    
+    gateOut = gIO.makeOut(gate);
+    hzOut = gIO.makeOut(hz);
     
     currentNote.className = "label currentNote";
     currentNote.innerText = "--";
-    gui.containerAddContent(this, currentNote);
+    gui.containerAddContent(that, currentNote);
     
     gate.value = isDown ? 1.0 : 0.0;
-    this.gate = gate;
-    this.hz = hz;
             
-    gui.containerAddLabeledContent(this, gateOut, "G");
-    gui.containerAddLabeledContent(this, hzOut, "Hz");
+    gui.containerAddLabeledContent(that, gateOut, "G");
+    gui.containerAddLabeledContent(that, hzOut, "Hz");
         
     vkey.className = "collection vkey";
-    gui.containerAddContent(this, vkey);
+    gui.containerAddContent(that, vkey);
     
     function keyDown(notePressed) {
         noteDown = notePressed;
@@ -46,10 +46,13 @@ function SCVKey(container) {
         gate.value = isDown ? 1.0 : 0.0;
         hz.value = note.hz(notePressed);
     }
+    
     function keyUp(notePressed) {
         isDown = false;
         gate.value = isDown ? 1.0 : 0.0;
     }
     
-    this.keyboard = new GVKey(vkey, keyDown, keyUp);
+    keyboard = gVKey(vkey, keyDown, keyUp);
+    
+    return that;
 }

@@ -8,7 +8,6 @@
 /*global stopAudio*/
 /*global GSliders*/
 /*global GRadios*/
-/*global GVKey*/
 /*global note*/
 /*global test*/
 

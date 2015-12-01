@@ -8,11 +8,11 @@
 /*global sAdsr*/
 /*global sDelay*/
 
-/*global GScope*/
+/*global gScope*/
 
-/*global SCOut*/
-/*global SCGen*/
-/*global SCVKey*/
+/*global sCOut*/
+/*global sCGen*/
+/*global sCVKey*/
 
 /*global note*/
 
@@ -69,13 +69,13 @@ function initSComp() {
     var gen,
         key;
     
-    scout = new SCOut(document.getElementById("scout"));
+    scout = sCOut(document.getElementById("scout"));
     
-    gen = new SCGen(document.getElementById("scgen0"));
-    gen = new SCGen(document.getElementById("scgen1"));
-    gen = new SCGen(document.getElementById("scgen2"));
+    gen = sCGen(document.getElementById("scgen0"));
+    gen = sCGen(document.getElementById("scgen1"));
+    gen = sCGen(document.getElementById("scgen2"));
     
-    key = new SCVKey(document.getElementById("scvkey"));
+    key = sCVKey(document.getElementById("scvkey"));
 }
 
 function startAudio(freq) {
@@ -109,15 +109,15 @@ function startAudio(freq) {
     mixerOut.addInput(delay);
     delay.addInput(mixerOut);
     
-    mixerOut.addInput(scout.mix);
+    mixerOut.addInput(scout.getOutput());
     
     //create actual output node:
     out = sOutNode(audioCtx, 2, 4096);
     out.setInput(mixerOut);
     out.connect(audioCtx.destination);
         
-    scope[0] = new GScope(document.getElementById("audioScopeL"), 0);
-    scope[1] = new GScope(document.getElementById("audioScopeR"), 1);
+    scope[0] = gScope(document.getElementById("audioScopeL"), 0);
+    scope[1] = gScope(document.getElementById("audioScopeR"), 1);
     mixerOut.setChanUpdatedCallback(function (chan, data) { drawScopes(chan, data); });
     
     audioRunning = true;

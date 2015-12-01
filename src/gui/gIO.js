@@ -93,12 +93,20 @@ var gIO = {
         }
         target.ioPort = scomp;
         target.isOut = isOut;
-        target.ioType = type;
+        target.ioType = type || "";
     },
 
     make: function (scomp, isOut, type) {
         var ioport = document.createElement("div");
         gIO.init(ioport, scomp, isOut, type);
         return ioport;
+    },
+    
+    makeIn: function (scomp, type) {
+        return gIO.make(scomp, false, type);
+    },
+    
+    makeOut: function (scomp, type) {
+        return gIO.make(scomp, true, type);
     }
 };

@@ -3,47 +3,43 @@
 /*global gui*/
 /*global setMouseCapturer*/
 
-function GVKey(container, keyDown, keyUp) {
-    var i = 0,
-        box;
+function gVKey(container, keyDown, keyUp) {
+    var that = {},
+        i = 0,
+        box,
+        keys = 48,
+        startKey = 16,
+        nextX = 0,
+        isDown = false,
+        lastNote = -1;
     
-    this.keys = 48;
-    this.startKey = 16;
-    this.container = container;
-    this.nextX = 0;
-    this.keyDown = keyDown;
-    this.keyUp = keyUp;
-    this.isDown = false;
-    this.lastNote = -1;
-    
-    this.addKey = function (container, note) {
+    function addKey(container, note) {
         var key = document.createElement("div"),
             flat = true,
             keyX = 0;
         
         key.id = "vkeyb-note-" + note;
-        key.keyDown = this.keyDown;
-        key.keyUp = this.keyUp;
+        key.keyDown = keyDown;
+        key.keyUp = keyUp;
         key.note = note;
-        key.parent = this;
-        
+                
         key.onmousedown = function (e) {
             setMouseCapturer(e);
         };
         key.onmouseover = function (e) {
-            if (key.parent.isDown) {
-                key.parent.lastNote = key.note;
+            if (isDown) {
+                lastNote = key.note;
                 key.keyDown(key.note);
             }
         };
         key.onmousecaptured = function (e) {
-            key.parent.isDown = true;
-            key.parent.lastNote = key.note;
+            isDown = true;
+            lastNote = key.note;
             key.keyDown(key.note);
         };
         key.onmouseupaftercapture = function (e) {
-            key.keyUp(key.parent.lastNote);
-            key.parent.isDown = false;
+            key.keyUp(lastNote);
+            isDown = false;
         };
         
         container.appendChild(key);
@@ -58,25 +54,26 @@ function GVKey(container, keyDown, keyUp) {
         } else {
             key.className = "vkey-key-sharp";
         }
-        keyX = this.nextX;
+        keyX = nextX;
         
         if (flat) {
-            this.nextX += gui.getStyleInt(key, "width");
+            nextX += gui.getStyleInt(key, "width");
         } else {
             keyX -= gui.getStyleInt(key, "width") / 2;
         }
         
         key.style.left = keyX + "px";
         key.style.top = "0px";
+        
         return key;
-    };
+    }
     
     box = document.createElement("div");
     box.className = "vkey-container";
-    this.container.appendChild(box);
+    container.appendChild(box);
     
-    for (i = 0; i < this.keys; i += 1) {
-        this.addKey(box, this.startKey + i);
+    for (i = 0; i < keys; i += 1) {
+        addKey(box, startKey + i);
     }
-    
+    return that;
 }

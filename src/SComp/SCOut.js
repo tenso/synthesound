@@ -5,17 +5,23 @@
 /*global gIO*/
 /*global gui*/
 
-function SCOut(container) {
-    gui.containerInit(this, container, "Output");
-    
-    var mix = sMix(),
-        ioport = gIO.make(mix, false, ""),
-        setGain = function (value) {
-            mix.setChannelGain(0, value);
-            mix.setChannelGain(1, value);
-        }
+function sCOut(container) {
+    var that = {},
+        mix = sMix(),
+        ioport = gIO.makeIn(mix);
+        
+    function setGain(value) {
+        mix.setChannelGain(0, value);
+        mix.setChannelGain(1, value);
+    }
 
-    this.mix = mix;
-    gui.containerAddContent(this, ioport);
-    gui.containerAddLabeledContent(this, gui.makeSlider(0.5, 0.0, 1.0, setGain), "VOL");
+    gui.containerInit(that, container, "Output");
+    gui.containerAddContent(that, ioport);
+    gui.containerAddLabeledContent(that, gui.makeSlider(0.5, 0.0, 1.0, setGain), "VOL");
+    
+    that.getOutput = function() {
+        return mix;
+    }
+    
+    return that;
 }

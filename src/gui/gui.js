@@ -1,5 +1,6 @@
 "use strict";
 /*global setMouseCapturer*/
+/*global log*/
 
 var gui = {
     getPos: function (element) {
@@ -50,6 +51,11 @@ var gui = {
     },
 
     containerInit: function (base, container, title) {
+        if (!base) {
+            log.error("gui.containerInit: base is undefined");
+        } else if (!container) {
+            log.error("gui.containerInit: container is undefined");
+        }
         base.container = container;
         base.title = title;
         base.contId = container.id;
