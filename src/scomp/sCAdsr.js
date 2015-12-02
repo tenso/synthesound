@@ -12,8 +12,8 @@ function sCAdsr(container) {
 
     gui.containerInit(that, container, "ADSR");
     gui.containerAddLabeledContent(that, inPort, "in");
-    gui.containerAddLabeledContent(that, outPort, "out");
     gui.containerAddLabeledContent(that, gatePort, "gate");
+    gui.containerAddLabeledContent(that, outPort, "out");
     
     gui.containerAddLabeledContent(that, gui.makeSlider(adsr.getArgs().a, 0.01, 1.0, function (value) {adsr.setArgs({"a": value}); }), "A");
     gui.containerAddLabeledContent(that, gui.makeSlider(adsr.getArgs().d, 0.01, 1.0, function (value) {adsr.setArgs({"d": value}); }), "D");

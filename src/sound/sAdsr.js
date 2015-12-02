@@ -37,6 +37,8 @@ function sAdsr(args) {
             dLen = d * that.sampleRate(),
             rLen = r * that.sampleRate();
 
+        that.setChannelDataZero();
+        
         if (that.haveSpecialInput("gate")) {
             setActive(that.getSpecialChannelData("gate", 0)[0]);
         }
@@ -68,7 +70,7 @@ function sAdsr(args) {
 
                 for (inputIndex = 0; inputIndex < that.numInputs(); inputIndex += 1) {
                     inputData = that.getInputChannelData(inputIndex, chan);
-                    chanData[i] = lastGain * inputData[i];
+                    chanData[i] += lastGain * inputData[i];
                 }
             }
         }

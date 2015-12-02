@@ -12,15 +12,15 @@ function sBase() {
         genIndex = -1,
         inputs = [],
         specialInput = {},
-        chanUpdated = undefined;
+        chanUpdated;
     
     //FIXME: make private?
     that.data = [];
     that.genData = undefined;
     
-    that.setChanUpdatedCallback = function(cb) {
+    that.setChanUpdatedCallback = function (cb) {
         chanUpdated = cb;
-    }
+    };
     
     that.sampleRate = function () {
         return sRate;
@@ -118,6 +118,14 @@ function sBase() {
         }
     };
 
+    that.setChannelDataZero = function () {
+        var chan;
+        
+        for (chan = 0; chan < that.numChannels(); chan += 1) {
+            that.data[chan].fill(0);
+        }
+    };
+    
     that.getChannelData = function (chan) {
         return that.data[chan];
     };
