@@ -36,7 +36,7 @@ function sCVKey(container) {
     vkey.className = "collection vkey";
     gui.containerAddContent(that, vkey);
     
-    function keyDown(notePressed) {
+    that.keyDown = function (notePressed) {
         noteDown = notePressed;
         isDown = true;
         
@@ -44,14 +44,14 @@ function sCVKey(container) {
         
         gate.setArgs({"value": isDown ? 1.0 : 0.0});
         hz.setArgs({"value": note.hz(notePressed)});
-    }
+    };
     
-    function keyUp(notePressed) {
+    that.keyUp = function (notePressed) {
         isDown = false;
         gate.setArgs({"value": isDown ? 1.0 : 0.0});
-    }
+    };
     
-    keyboard = gVKey(vkey, keyDown, keyUp);
+    keyboard = gVKey(vkey, that.keyDown, that.keyUp);
     
     return that;
 }

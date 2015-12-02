@@ -2,10 +2,7 @@
 /*global log*/
 /*global test*/
 /*global sOutNode*/
-/*global sGen*/
 /*global sMix*/
-/*global sAdsr*/
-/*global sDelay*/
 /*global gScope*/
 /*global sCOut*/
 /*global sCGen*/
@@ -13,7 +10,6 @@
 /*global sCAdsr*/
 /*global sCDelay*/
 /*global sCMix*/
-/*global note*/
 
 var audio = {
     generators: [],
@@ -22,31 +18,18 @@ var audio = {
     adsr: undefined,
     delay: undefined,
     out: undefined,
+    key: undefined,
     scope: [],
     AudioContext: window.AudioContext || window.webkitAudioContext,
     audioRunning: false,
     scout: undefined,
 
     keyDown: function (notePressed) {
-        var freq = note.hz(notePressed);
-
-        if (audio.generators.length === 0) {
-            return false;
-        }
-        audio.generators[0].setArgs({"freq": freq});
-        audio.generators[1].setArgs({"freq": freq * 2});
-        audio.generators[2].setArgs({"freq": freq * 4});
-        
-        audio.adsr.setArgs({"active": false});
-        audio.adsr.setArgs({"active": true});
-
-        return true;
+        audio.key.keyDown(notePressed);
     },
 
     keyUp: function (notePressed) {
-        if (audio.adsr) {
-            audio.adsr.setArgs({"active": false});
-        }
+        audio.key.keyUp(notePressed);
     },
 
     drawScopes: function (chan, data) {
@@ -57,8 +40,7 @@ var audio = {
         var gen,
             adsr,
             delay,
-            mix,
-            key;
+            mix;
 
         audio.scout = sCOut(document.getElementById("scout"));
 
@@ -68,7 +50,7 @@ var audio = {
         adsr = sCAdsr(document.getElementById("scadsr"));
         delay = sCDelay(document.getElementById("scadsr"));
         mix = sCMix(document.getElementById("scmix"));
-        key = sCVKey(document.getElementById("scvkey"));
+        audio.key = sCVKey(document.getElementById("scvkey"));
     },
 
     startAudio: function (freq) {
