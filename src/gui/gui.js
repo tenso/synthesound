@@ -24,6 +24,9 @@ var gui = {
     },
 
     getStyle: function (element, property) {
+        if (element.style[property]) {
+            return element.style[property];
+        }
         return window.getComputedStyle(element, undefined).getPropertyValue(property);
     },
 
@@ -92,6 +95,7 @@ var gui = {
         knob.className = "button-class knob hslider-knob";
         knob.style.position = "relative";
         knob.style.top = "0px";
+        knob.style.height = "25px";
         knob.min = min;
         knob.max = max;
         knob.callback = callback;
@@ -103,7 +107,7 @@ var gui = {
         knob.onmousepressandmove = function (e) {
             var maxY = e.mouseCapturer.parentElement.offsetHeight - e.mouseCapturer.offsetHeight,
                 newY = gui.getStyleInt(e.mouseCapturer, "top") + e.movementY;
-                    
+            
             if (newY < 0) {
                 newY = 0;
             } else if (newY > maxY) {
@@ -118,7 +122,7 @@ var gui = {
             var sliderH = gui.getStyleInt(this.parentElement, "height"),
                 knobH = gui.getStyleInt(knob, "height"),
                 maxY;
-
+            
             this.value = value;
             if (this.value > this.max) {
                 this.value = this.max;
@@ -133,11 +137,12 @@ var gui = {
         };
         
         track.className = "hslider-track track";
+        track.style.height = "100px";
         track.knob = knob;
         track.onmousedown = function (e) {
             this.knob.setValue(this.knob.max - (this.knob.max - this.knob.min) * (e.offsetY / this.offsetHeight));
         };
-
+        
         track.setValue = function (value) {
             this.knob.setValue(value);
         };

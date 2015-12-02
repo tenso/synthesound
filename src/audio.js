@@ -10,6 +10,9 @@
 /*global sCOut*/
 /*global sCGen*/
 /*global sCVKey*/
+/*global sCAdsr*/
+/*global sCDelay*/
+/*global sCMix*/
 /*global note*/
 
 var audio = {
@@ -52,6 +55,9 @@ var audio = {
 
     initSComp: function () {
         var gen,
+            adsr,
+            delay,
+            mix,
             key;
 
         audio.scout = sCOut(document.getElementById("scout"));
@@ -59,6 +65,9 @@ var audio = {
         gen = sCGen(document.getElementById("scgen0"));
         gen = sCGen(document.getElementById("scgen1"));
         gen = sCGen(document.getElementById("scgen2"));
+        adsr = sCAdsr(document.getElementById("scadsr"));
+        delay = sCDelay(document.getElementById("scadsr"));
+        mix = sCMix(document.getElementById("scmix"));
         key = sCVKey(document.getElementById("scvkey"));
     },
 
@@ -72,29 +81,8 @@ var audio = {
         audio.audioCtx = new audio.AudioContext();
             
         audio.initSComp();
-
-        audio.mixer = sMix();
-        audio.generators[0] = sGen({"freq": 220, "amp": 0.25, "type": "sine"});
-        audio.generators[1] = sGen({"freq": 220, "amp": 0.25, "type": "sine"});
-        audio.generators[2] = sGen({"freq": 110, "amp": 0.25, "type": "sine"});
-        
-        audio.mixer.addInput(audio.generators[0]);
-        audio.mixer.addInput(audio.generators[1]);
-        audio.mixer.addInput(audio.generators[2]);
-
-        audio.mixer.setArgs({"gainL": 0.5, "gainR": 0.5});
-        
-        audio.adsr = sAdsr({"a": 0.01, "d": 0.15, "s": 0.25, "r": 0.01});
-        audio.adsr.addInput(audio.mixer);
-
-        audio.delay = sDelay({"delay": 0.03, "gain": 0.7});
-        
+            
         audio.mixerOut = sMix();
-        audio.mixerOut.addInput(audio.adsr);
-
-        audio.mixerOut.addInput(audio.delay);
-        audio.delay.addInput(audio.mixerOut);
-
         audio.mixerOut.addInput(audio.scout.getOutput());
 
         //create actual output node:

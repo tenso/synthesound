@@ -7,13 +7,13 @@ function sCGen(container) {
     var that = {},
         typeButtons = [],
         out = sGen({"freq": 110, "amp": 0.25, "type": "sine"}),
-        ioport = gIO.makeOut(out),
-        freqport = gIO.makeIn(out, "freq"),
+        outPort = gIO.makeOut(out),
+        freqPort = gIO.makeIn(out, "freq"),
         button;
 
     gui.containerInit(that, container, "GEN");
-    gui.containerAddLabeledContent(that, ioport, "out");
-    gui.containerAddLabeledContent(that, freqport, "Hz");
+    gui.containerAddLabeledContent(that, outPort, "out");
+    gui.containerAddLabeledContent(that, freqPort, "hz");
     
     button = gui.makeButton("sine", function () {out.setArgs({"type": "sine"}); }, true, typeButtons);
     button.setValue(true);

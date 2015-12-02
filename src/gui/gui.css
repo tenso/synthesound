@@ -23,7 +23,6 @@
 
 .component-label {
     font-size: 1.0em;
-    margin-left: -0.10em;
     text-align: center;
 }
 
@@ -76,13 +75,15 @@
 
 .hslider-track {
     width: 0.75em;
-    height: 10em;
+    /*FIXME: cant have height here, cant set initial value on sliders, set in js
+    height: 10em;*/
     margin-left: 0.5em;
     margin-right: 0.5em;
 }
 
 .hslider-knob {
     width: 1.25em;
-    height: 2.5em;
+    /*FIXME: cant have height here, cant set initial value on sliders, set in js
+    height: 2.5em;*/
     margin-left: -0.35em;
 }

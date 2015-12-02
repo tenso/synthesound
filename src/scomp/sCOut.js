@@ -13,7 +13,7 @@ function sCOut(container) {
         mix.setArgs({"gainL": value, "gainR": value});
     }
 
-    gui.containerInit(that, container, "Output");
+    gui.containerInit(that, container, "OUT");
     gui.containerAddContent(that, ioport);
     gui.containerAddLabeledContent(that, gui.makeSlider(0.5, 0.0, 1.0, setGain), "VOL");
     
