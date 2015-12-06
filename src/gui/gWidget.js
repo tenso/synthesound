@@ -3,10 +3,14 @@
 /*global input*/
 /*global gui*/
 /*global gLabel*/
+/*global gIO*/
+
+/*FIXME: so ugly:*/
+var global_gWidget_nextZ = 1;
 
 function gWidget(container, title) {
     var that = document.createElement("div");
-
+    
     that.nextRow = function () {
         that.content = document.createElement("tr");
         that.table.appendChild(that.content);
@@ -32,6 +36,8 @@ function gWidget(container, title) {
         }
         that.container = container;
         that.style.position = "absolute";
+        that.style.zIndex = global_gWidget_nextZ;
+        global_gWidget_nextZ += 1;
         that.title = title;
         that.contId = container.id;
         that.table = document.createElement("table");
@@ -39,10 +45,13 @@ function gWidget(container, title) {
 
         that.onmousedown = function (e) {
             input.setMouseCapturer(e, that);
+            that.style.zIndex = global_gWidget_nextZ;
+            global_gWidget_nextZ += 1;
         };
 
         that.onmousepressandmove = function (e, mouse) {
             that.move(mouse.relativeX, mouse.relativeY);
+            //FIXME: this is uncessesary coupling
             gIO.drawConnections();
         };
 
