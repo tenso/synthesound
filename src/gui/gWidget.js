@@ -41,8 +41,9 @@ function gWidget(container, title) {
             input.setMouseCapturer(e, that);
         };
 
-        that.onmousepressandmove = function (e, relPos) {
-            that.move(relPos.x, relPos.y);
+        that.onmousepressandmove = function (e, mouse) {
+            that.move(mouse.relativeX, mouse.relativeY);
+            gIO.drawConnections();
         };
 
         that.table.appendChild(titleRow(that.title));

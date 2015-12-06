@@ -104,19 +104,15 @@ var gIO = {
     },
 
     addMouseEventsToPort: function (port) {
-        var pressX,
-            pressY;
-        
+
         port.onmousedown = function (e) {
             if (e.target.ioPort && e.target.isOut) {
-                pressX = e.pageX;
-                pressY = e.pageY;
                 input.setMouseCapturer(e);
             }
         };
-        port.onmousepressandmove = function (e) {
+        port.onmousepressandmove = function (e, mouse) {
             gIO.drawConnections();
-            gIO.drawLine(pressX, pressY, e.pageX, e.pageY);
+            gIO.drawLine(mouse.captureX, mouse.captureY, e.pageX, e.pageY);
         };
         port.onmouseupaftercapture = function (e) {
             if (e.target.ioPort && !e.target.isOut) {

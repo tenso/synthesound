@@ -9,7 +9,7 @@
 var input = {
     keyIsDown: 0,
     mouseCapturer: 0,
-    captureOffsetInElement: {},
+    mouse: {},
     
     parseInputDown: function (e) {
         var noteMap = {"a": "C", "w": "C#", "s": "D",
@@ -59,9 +59,7 @@ var input = {
         
         if (input.mouseCapturer && input.mouseCapturer.hasOwnProperty(name)) {
             e.mouseCapturer = input.mouseCapturer;
-            relativePos.x = e.clientX - input.captureOffsetInElement.x;
-            relativePos.y = e.clientY - input.captureOffsetInElement.y;
-            input.mouseCapturer[name](e, relativePos);
+            input.mouseCapturer[name](e, input.mouse);
         }
     },
     runCBIfExist: function (name, e) {
@@ -71,13 +69,22 @@ var input = {
     },
     
     setMouseCapturer: function (e, wantedObject) {
+    
         e.stopPropagation();
         if (!wantedObject) {
             input.mouseCapturer = e.target;
         } else {
             input.mouseCapturer = wantedObject;
         }
-        input.captureOffsetInElement = gui.getEventOffsetInElement(input.mouseCapturer, e);
+                    
+        input.mouse.captureOffsetInElement = gui.getEventOffsetInElement(input.mouseCapturer, e);
+        input.mouse.relativeX = 0;
+        input.mouse.relativeY = 0;
+        input.mouse.captureX = e.pageX;
+        input.mouse.captureY = e.pageY;
+        input.mouse.x = e.pageX;
+        input.mouse.y = e.pageY;
+        
         input.runCaptureCBIfExist("onmousecaptured", e);
     },
 
@@ -91,6 +98,10 @@ var input = {
 
         document.addEventListener("mousemove", function (e) {
             if (input.mouseCapturer) {
+                input.mouse.x = e.pageX;
+                input.mouse.y = e.pageY;
+                input.mouse.relativeX = e.pageX - input.mouse.captureOffsetInElement.x;
+                input.mouse.relativeY = e.pageY - input.mouse.captureOffsetInElement.y;
                 input.runCaptureCBIfExist("onmousepressandmove", e);
             }
         });

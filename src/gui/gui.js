@@ -18,7 +18,7 @@ var gui = {
     
     getEventOffsetInElement: function (element, event) {
         var pos = gui.getPos(element);
-        return {"x": event.clientX - pos.x, "y": event.clientY - pos.y};
+        return {"x": event.pageX - pos.x, "y": event.pageY - pos.y};
     },
     
     getSize: function (elem) {
