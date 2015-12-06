@@ -1,18 +1,39 @@
 "use strict";
 /*global sBase*/
 
-function sConst() {
-    var that = sBase();
-        
-    that.value = 1.0;
+//FIXME: calc array once
+
+function sConst(args) {
+    var that = sBase(),
+        valueChanged = true,
+        value = 1.0;
     
     that.makeAudio = function () {
         var chan = 0;
 
-        for (chan = 0; chan < that.numChannels(); chan += 1) {
-            that.data[chan].fill(that.value);
+        if (valueChanged) {
+            for (chan = 0; chan < that.numChannels(); chan += 1) {
+                that.data[chan].fill(value);
+            }
+            valueChanged = false;
         }
     };
+    
+    that.getArgs = function () {
+        return {"value": value};
+    };
+    
+    that.setArgs = function (args) {
+        var newValue;
+        if (args) {
+            newValue = typeof args.value === "number" ? args.value : value;
+            if (newValue !== value) {
+                valueChanged = true;
+                value = newValue;
+            }
+        }
+    };
+    that.setArgs(args);
+    
     return that;
 }
-

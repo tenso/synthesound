@@ -1,27 +1,27 @@
 "use strict";
-
 /*global sGen*/
 /*global gIO*/
 /*global gui*/
+/*global gWidget*/
+/*global gButton*/
 
 function sCGen(container) {
-    var that = {},
+    var that = gWidget(container, "GEN"),
         typeButtons = [],
         out = sGen({"freq": 110, "amp": 0.25, "type": "sine"}),
-        ioport = gIO.makeOut(out),
-        freqport = gIO.makeIn(out, "freq"),
+        outPort = gIO.makeOut(out),
+        freqPort = gIO.makeIn(out, "freq"),
         button;
 
-    gui.containerInit(that, container, "GEN");
-    gui.containerAddLabeledContent(that, ioport, "out");
-    gui.containerAddLabeledContent(that, freqport, "Hz");
+    that.addLabeledContent(outPort, "out");
+    that.addLabeledContent(freqPort, "hz");
     
-    button = gui.makeButton("sine", function () {out.type = "sine"; }, true, typeButtons);
+    button = gButton("sine", function () {out.setArgs({"type": "sine"}); }, true, typeButtons);
     button.setValue(true);
-    gui.containerAddContent(that, button);
+    that.addContent(button);
     
-    button = gui.makeButton("square", function () {out.type = "square"; }, true, typeButtons);
-    gui.containerAddContent(that, button);
+    button = gButton("square", function () {out.setArgs({"type": "square"}); }, true, typeButtons);
+    that.addContent(button);
     
     return that;
 }

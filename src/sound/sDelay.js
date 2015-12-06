@@ -2,17 +2,13 @@
 /*global sBase*/
 /*global delayBuffer*/
 
-function sDelay() {
+function sDelay(args) {
     var that = sBase(),
         maxDelay = 480000, //10s at 48khz
         buffer = [],
         gain = 0.5,
         delay = 0.5;
-    
-
-    buffer[0] = delayBuffer(maxDelay);
-    buffer[1] = delayBuffer(maxDelay);
-    
+            
     that.makeAudio = function () {
         var i = 0,
             chan = 0,
@@ -20,36 +16,43 @@ function sDelay() {
             inputData,
             inputIndex;
 
+        //FIXME? cant clear data if feedback to same componment is used
+        //need to copy, also cant overwrite chanData as we go as this is the shared input
+        that.setChannelDataZero();
+        
         for (chan = 0; chan < that.numChannels(); chan += 1) {
             chanData = that.getChannelData(chan);
 
             for (inputIndex = 0; inputIndex < that.numInputs(); inputIndex += 1) {
                 inputData = that.getInputChannelData(inputIndex, chan);
                 
+                if (!buffer[chan]) {
+                    buffer[chan] = [];
+                }
+                if (!buffer[chan][inputIndex]) {
+                    buffer[chan][inputIndex] = delayBuffer(maxDelay);
+                }
+                
                 for (i = 0; i < chanData.length; i += 1) {
-                    buffer[chan].set(inputData[i]);
+                    buffer[chan][inputIndex].set(inputData[i]);
                     //FIXME: cant get value like this, need  similar solution to continous-phase for generators.
-                    chanData[i] = gain * buffer[chan].get(parseInt(delay * that.sampleRate(), 10));
+                    chanData[i] += gain * buffer[chan][inputIndex].get(parseInt(delay * that.sampleRate(), 10));
                 }
             }
         }
     };
 
-    that.setGain = function (value) {
-        gain = value;
+    that.getArgs = function () {
+        return {"gain": gain, "delay": delay};
     };
     
-    that.getGain = function () {
-        return gain;
+    that.setArgs = function (args) {
+        if (args) {
+            gain = typeof args.gain === "number" ? args.gain : gain;
+            delay = typeof args.delay === "number" ? args.delay : delay;
+        }
     };
-
-    that.setDelay = function (value) {
-        delay = value;
-    };
-    
-    that.getDelay = function () {
-        return delay;
-    };
+    that.setArgs(args);
     
     return that;
 }
