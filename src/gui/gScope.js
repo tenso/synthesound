@@ -2,8 +2,8 @@
 /*global delayBuffer*/
 /*global gui*/
 
-function gScope(container, channel) {
-    var that = gWidget(container, "SCOPE"),
+function gScope(channel) {
+    var that = document.createElement("div"),
         length = 1024,
         graphData = delayBuffer(length),
         canvas = document.createElement("canvas"),
@@ -16,7 +16,7 @@ function gScope(container, channel) {
 
     canvas.className = "gScope";
     
-    that.addContent(canvas);
+    that.appendChild(canvas);
     ctx.strokeStyle = "#0f0";
     ctx.lineWidth = 2;
 

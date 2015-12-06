@@ -2,10 +2,17 @@
 /*global log*/
 /*global input*/
 /*global gui*/
+/*global gLabel*/
 
 function gWidget(container, title) {
     var that = document.createElement("div");
 
+    that.nextRow = function () {
+        that.content = document.createElement("tr");
+        that.table.appendChild(that.content);
+        return that;
+    };
+    
     function titleRow(title) {
         var row = document.createElement("tr"),
             titleElem = document.createElement("td");
@@ -43,8 +50,7 @@ function gWidget(container, title) {
         that.appendChild(that.table);
         container.appendChild(that);
 
-        that.content = document.createElement("tr");
-        that.table.appendChild(that.content);
+        that.nextRow();
     }
 
     containerInit(container, title);
@@ -66,10 +72,10 @@ function gWidget(container, title) {
         that.content.appendChild(cont);
         return that;
     };
-
+    
     that.addLabeledContent = function (content, label) {
         var cont = document.createElement("div"),
-            contLabel = gui.makeLabel(label);
+            contLabel = gLabel(label);
 
         cont.appendChild(contLabel);
         cont.appendChild(content);

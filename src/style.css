@@ -36,10 +36,12 @@ hr {
 
 .panicButton {
     color: #fff;
+    background: #f00;
+    float: right;
 }
 
 .panicButton:active {
-    color: #888;
+    background: #a00;
 }
 
 .workspace {

@@ -4,6 +4,7 @@
 /*global gIO*/
 /*global gui*/
 /*global gWidget*/
+/*global gSlider*/
 
 function sCOut(container) {
     var that = gWidget(container, "OUT"),
@@ -15,7 +16,8 @@ function sCOut(container) {
     }
 
     that.addContent(ioport);
-    that.addLabeledContent(gui.makeSlider(0.5, 0.0, 1.0, setGain), "VOL");
+    that.nextRow();
+    that.addLabeledContent(gSlider(0.5, 0.0, 1.0, setGain), "VOL");
     
     that.getOutput = function () {
         return mix;

@@ -3,6 +3,7 @@
 /*global gIO*/
 /*global gui*/
 /*global gWidget*/
+/*global gSlider*/
 
 function sCDelay(container) {
     var that = gWidget(container, "DELAY"),
@@ -12,9 +13,9 @@ function sCDelay(container) {
 
     that.addLabeledContent(inPort, "in");
     that.addLabeledContent(outPort, "out");
-    
-    that.addLabeledContent(gui.makeSlider(delay.getArgs().gain, 0.0, 0.99, function (value) {delay.setArgs({"gain": value}); }), "G");
-    that.addLabeledContent(gui.makeSlider(delay.getArgs().delay, 0.0, 1.0, function (value) {delay.setArgs({"delay": value}); }), "D");
+    that.nextRow();
+    that.addLabeledContent(gSlider(delay.getArgs().gain, 0.0, 0.99, function (value) {delay.setArgs({"gain": value}); }), "G");
+    that.addLabeledContent(gSlider(delay.getArgs().delay, 0.0, 1.0, function (value) {delay.setArgs({"delay": value}); }), "D");
         
     return that;
 }

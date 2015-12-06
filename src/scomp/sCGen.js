@@ -3,6 +3,7 @@
 /*global gIO*/
 /*global gui*/
 /*global gWidget*/
+/*global gButton*/
 
 function sCGen(container) {
     var that = gWidget(container, "GEN"),
@@ -15,11 +16,11 @@ function sCGen(container) {
     that.addLabeledContent(outPort, "out");
     that.addLabeledContent(freqPort, "hz");
     
-    button = gui.makeButton("sine", function () {out.setArgs({"type": "sine"}); }, true, typeButtons);
+    button = gButton("sine", function () {out.setArgs({"type": "sine"}); }, true, typeButtons);
     button.setValue(true);
     that.addContent(button);
     
-    button = gui.makeButton("square", function () {out.setArgs({"type": "square"}); }, true, typeButtons);
+    button = gButton("square", function () {out.setArgs({"type": "square"}); }, true, typeButtons);
     that.addContent(button);
     
     return that;
