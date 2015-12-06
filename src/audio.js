@@ -10,6 +10,7 @@
 /*global sCAdsr*/
 /*global sCDelay*/
 /*global sCMix*/
+/*global gui*/
 
 var audio = {
     generators: [],
@@ -40,20 +41,22 @@ var audio = {
         var gen,
             adsr,
             delay,
+            workspace = document.getElementById("workspace"),
             mix;
 
-        audio.scout = sCOut(document.getElementById("scout"));
-
-        gen = sCGen(document.getElementById("scgen0"));
-        gen = sCGen(document.getElementById("scgen1"));
-        gen = sCGen(document.getElementById("scgen2"));
-        adsr = sCAdsr(document.getElementById("scadsr"));
-        delay = sCDelay(document.getElementById("scadsr"));
-        mix = sCMix(document.getElementById("scmix"));
-        audio.key = sCVKey(document.getElementById("scvkey"));
+        audio.scout = sCOut(workspace).move(400, 150);
+        gen = sCGen(workspace).move(10, 50);
+        gen = sCGen(workspace).move(250, 50);
+        gen = sCGen(workspace).move(500, 50);
+        adsr = sCAdsr(workspace).move(10, 150);
+        delay = sCDelay(workspace).move(250, 150);
+        mix = sCMix(workspace).move(500, 150);
+        audio.key = sCVKey(workspace).move(10, 350);
     },
 
     startAudio: function (freq) {
+        var workspace = document.getElementById("workspace");
+        
         if (audio.audioRunning) {
             return false;
         }
@@ -72,8 +75,8 @@ var audio = {
         audio.out.setInput(audio.mixerOut);
         audio.out.connect(audio.audioCtx.destination);
 
-        audio.scope[0] = gScope(document.getElementById("audioScopeL"), 0);
-        audio.scope[1] = gScope(document.getElementById("audioScopeR"), 1);
+        audio.scope[0] = gScope(workspace, 0).move(1000,0);
+        audio.scope[1] = gScope(workspace, 1).move(1000,200);
         audio.mixerOut.setChanUpdatedCallback(function (chan, data) { audio.drawScopes(chan, data); });
 
         audio.audioRunning = true;

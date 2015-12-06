@@ -4,10 +4,12 @@
 /*global test*/
 /*global gIO*/
 /*global log*/
+/*global gui*/
 
 var input = {
     keyIsDown: 0,
     mouseCapturer: 0,
+    captureOffsetInElement: {},
     
     parseInputDown: function (e) {
         var noteMap = {"a": "C", "w": "C#", "s": "D",
@@ -53,9 +55,13 @@ var input = {
     },
     
     runCaptureCBIfExist: function (name, e) {
+        var relativePos = {};
+        
         if (input.mouseCapturer && input.mouseCapturer.hasOwnProperty(name)) {
             e.mouseCapturer = input.mouseCapturer;
-            input.mouseCapturer[name](e);
+            relativePos.x = e.clientX - input.captureOffsetInElement.x;
+            relativePos.y = e.clientY - input.captureOffsetInElement.y;
+            input.mouseCapturer[name](e, relativePos);
         }
     },
     runCBIfExist: function (name, e) {
@@ -64,24 +70,35 @@ var input = {
         }
     },
     
-    setMouseCapturer: function (e) {
+    setMouseCapturer: function (e, wantedObject) {
         e.stopPropagation();
-        input.mouseCapturer = e.target;
+        if (!wantedObject) {
+            input.mouseCapturer = e.target;
+        } else {
+            input.mouseCapturer = wantedObject;
+        }
+        input.captureOffsetInElement = gui.getEventOffsetInElement(input.mouseCapturer, e);
         input.runCaptureCBIfExist("onmousecaptured", e);
     },
 
     init: function () {
         document.addEventListener("mouseup", function (e) {
-            input.runCaptureCBIfExist("onmouseupaftercapture", e);
-            input.mouseCapturer = undefined;
+            if (input.mouseCapturer) {
+                input.runCaptureCBIfExist("onmouseupaftercapture", e);
+                input.mouseCapturer = undefined;
+            }
         });
 
         document.addEventListener("mousemove", function (e) {
-            input.runCaptureCBIfExist("onmousepressandmove", e);
+            if (input.mouseCapturer) {
+                input.runCaptureCBIfExist("onmousepressandmove", e);
+            }
         });
 
         document.addEventListener("mouseover", function (e) {
-            input.runCaptureCBIfExist("onmouseoveraftercapture", e);
+            if (input.mouseCapturer) {
+                input.runCaptureCBIfExist("onmouseoveraftercapture", e);
+            }
         });
         
         document.addEventListener("contextmenu", function (e) {

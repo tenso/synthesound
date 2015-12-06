@@ -5,9 +5,10 @@
 /*global gui*/
 /*global note*/
 /*global gVKey*/
+/*global gWidget*/
 
 function sCVKey(container) {
-    var that = {},
+    var that = gWidget(container, "V-KEY"),
         gate = sStep(),
         hz = sConst(),
         gateOut,
@@ -19,23 +20,21 @@ function sCVKey(container) {
         cont,
         keyboard,
         label;
-        
-    gui.containerInit(that, container, "V-KEY");
-    
+
     gateOut = gIO.makeOut(gate);
     hzOut = gIO.makeOut(hz);
     
     currentNote.className = "label currentNote";
     currentNote.innerText = "--";
-    gui.containerAddContent(that, currentNote);
+    that.addContent(currentNote);
     
     gate.setArgs({"value": isDown ? 1.0 : 0.0});
             
-    gui.containerAddLabeledContent(that, gateOut, "G");
-    gui.containerAddLabeledContent(that, hzOut, "Hz");
+    that.addLabeledContent(gateOut, "G");
+    that.addLabeledContent(hzOut, "Hz");
         
     vkey.className = "collection vkey";
-    gui.containerAddContent(that, vkey);
+    that.addContent(vkey);
     
     that.keyDown = function (notePressed) {
         noteDown = notePressed;

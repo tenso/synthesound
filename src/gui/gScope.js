@@ -1,18 +1,22 @@
 "use strict";
 /*global delayBuffer*/
+/*global gui*/
 
-function gScope(canvasElement, channel) {
-    var that = {},
+function gScope(container, channel) {
+    var that = gWidget(container, "SCOPE"),
         length = 1024,
         graphData = delayBuffer(length),
-        canvas = canvasElement,
+        canvas = document.createElement("canvas"),
         ctx = canvas.getContext("2d"),
         chan = channel,
         step = 8,
         xStep = canvas.width / graphData.length(),
         halfH = canvas.height / 2.0,
         gotData = 0;
+
+    canvas.className = "gScope";
     
+    that.addContent(canvas);
     ctx.strokeStyle = "#0f0";
     ctx.lineWidth = 2;
 
@@ -40,5 +44,6 @@ function gScope(canvasElement, channel) {
         }
         ctx.stroke();
     };
+    
     return that;
 }

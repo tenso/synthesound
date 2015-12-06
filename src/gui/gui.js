@@ -15,7 +15,12 @@ var gui = {
 
         return {"x": x, "y": y};
     },
-
+    
+    getEventOffsetInElement: function (element, event) {
+        var pos = gui.getPos(element);
+        return {"x": event.clientX - pos.x, "y": event.clientY - pos.y};
+    },
+    
     getSize: function (elem) {
         var w = elem.offsetWidth,
             h = elem.offsetHeight;
@@ -33,60 +38,8 @@ var gui = {
     getStyleInt: function (element, property) {
         return parseInt(gui.getStyle(element, property), 10);
     },
+    
 
-    titleRow: function (title) {
-        var titleRow = document.createElement("tr"),
-            titleElem = document.createElement("td");
-
-        titleElem.innerText = title;
-        titleElem.className = "label";
-        titleElem.colSpan = 10000;
-        titleRow.appendChild(titleElem);
-        return titleRow;
-    },
-
-    addToContainer: function (base, comp) {
-        base.table.appendChild(comp);
-    },
-
-    containerAddTitle: function (base) {
-        gui.addToContainer(base, gui.titleRow(base.title));
-    },
-
-    containerInit: function (base, container, title) {
-        if (!base) {
-            log.error("gui.containerInit: base is undefined");
-        } else if (!container) {
-            log.error("gui.containerInit: container is undefined");
-        }
-        base.container = container;
-        base.title = title;
-        base.contId = container.id;
-        base.table = document.createElement("table");
-        base.table.className = "collection-table component";
-
-        base.container.appendChild(base.table);
-
-        gui.containerAddTitle(base);
-
-        base.content = document.createElement("tr");
-        base.table.appendChild(base.content);
-    },
-
-    containerAddContent: function (base, content) {
-        var cont = document.createElement("td");
-        cont.appendChild(content);
-        base.content.appendChild(cont);
-    },
-
-    containerAddLabeledContent: function (base, content, label) {
-        var cont = document.createElement("div"),
-            contLabel = gui.makeLabel(label);
-
-        cont.appendChild(contLabel);
-        cont.appendChild(content);
-        gui.containerAddContent(base, cont);
-    },
 
     makeSlider: function (val, min, max, callback) {
         var track = document.createElement("div"),
