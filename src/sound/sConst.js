@@ -26,4 +26,3 @@ function sConst(args) {
     
     return that;
 }
-

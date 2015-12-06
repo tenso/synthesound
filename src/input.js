@@ -3,6 +3,7 @@
 /*global note*/
 /*global test*/
 /*global gIO*/
+/*global log*/
 
 var input = {
     keyIsDown: 0,
@@ -51,31 +52,41 @@ var input = {
         audio.keyUp(0);
     },
     
-    runCallbackIfExist: function (name, e) {
+    runCaptureCBIfExist: function (name, e) {
         if (input.mouseCapturer && input.mouseCapturer.hasOwnProperty(name)) {
             e.mouseCapturer = input.mouseCapturer;
             input.mouseCapturer[name](e);
+        }
+    },
+    runCBIfExist: function (name, e) {
+        if (e.target.hasOwnProperty(name)) {
+            e.target[name](e);
         }
     },
     
     setMouseCapturer: function (e) {
         e.stopPropagation();
         input.mouseCapturer = e.target;
-        input.runCallbackIfExist("onmousecaptured", e);
+        input.runCaptureCBIfExist("onmousecaptured", e);
     },
 
     init: function () {
-        document.body.onmouseup = function (e) {
-            input.runCallbackIfExist("onmouseupaftercapture", e);
+        document.addEventListener("mouseup", function (e) {
+            input.runCaptureCBIfExist("onmouseupaftercapture", e);
             input.mouseCapturer = undefined;
-        };
+        });
 
-        document.body.onmousemove = function (e) {
-            input.runCallbackIfExist("onmousepressandmove", e);
-        };
+        document.addEventListener("mousemove", function (e) {
+            input.runCaptureCBIfExist("onmousepressandmove", e);
+        });
 
-        document.body.onmouseover = function (e) {
-            input.runCallbackIfExist("onmouseoveraftercapture", e);
-        };
+        document.addEventListener("mouseover", function (e) {
+            input.runCaptureCBIfExist("onmouseoveraftercapture", e);
+        });
+        
+        document.addEventListener("contextmenu", function (e) {
+            input.runCBIfExist("onopencontextmenu", e);
+            e.preventDefault();
+        });
     }
 };
