@@ -33,21 +33,25 @@ function sAdsr(args) {
             inPeriod,
             inputIndex,
             inputData,
+            nextActive = false,
             aLen = a * that.sampleRate(),
             dLen = d * that.sampleRate(),
             rLen = r * that.sampleRate();
 
         that.setChannelDataZero();
         
-        if (that.haveSpecialInput("gate")) {
-            setActive(that.getSpecialChannelData("gate", 0)[0]);
-        }
-        
         for (chan = 0; chan < that.numChannels(); chan += 1) {
             chanData = that.data[chan];
 
-            for (i = 0; i < chanData.length; i += 1) {
+            for (i = 0; i < that.wantedSamples(); i += 1) {
 
+                if (that.haveSpecialInput("gate") && chan === 0) {
+                    nextActive = that.getSpecialChannelData("gate", chan)[i];
+                    if (nextActive !== active) {
+                        setActive(nextActive);
+                    }
+                }
+                
                 if (active) {
                     index = tick - activeIndex + i;
 

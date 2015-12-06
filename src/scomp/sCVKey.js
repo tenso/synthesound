@@ -1,5 +1,6 @@
 "use strict";
 /*global sConst*/
+/*global sStep*/
 /*global gIO*/
 /*global gui*/
 /*global note*/
@@ -7,7 +8,7 @@
 
 function sCVKey(container) {
     var that = {},
-        gate = sConst(),
+        gate = sStep(),
         hz = sConst(),
         gateOut,
         hzOut,
@@ -42,13 +43,13 @@ function sCVKey(container) {
         
         currentNote.innerText = note.name(notePressed);
         
-        gate.setArgs({"value": isDown ? 1.0 : 0.0});
+        gate.setArgs({"active": isDown});
         hz.setArgs({"value": note.hz(notePressed)});
     };
     
     that.keyUp = function (notePressed) {
         isDown = false;
-        gate.setArgs({"value": isDown ? 1.0 : 0.0});
+        gate.setArgs({"active": isDown});
     };
     
     keyboard = gVKey(vkey, that.keyDown, that.keyUp);

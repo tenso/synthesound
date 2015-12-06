@@ -11,19 +11,29 @@ function sGen(args) {
         isOn = true;
     
     that.makeAudio = function () {
-        //FIXME: this only samples first sample of frameSize
-        if (that.haveSpecialInput("freq")) {
-            freq = that.getSpecialChannelData("freq", 0)[0];
-        }
-
         var i = 0,
             chan = 0,
-            T = (2 * Math.PI * freq) / that.sampleRate(),
-            period = that.sampleRate() / (freq),
+            T,
+            period,
             phaseStep,
+            newFreq = freq,
             inPeriod;
-
+        
+        T = (2 * Math.PI * freq) / that.sampleRate();
+        period = that.sampleRate() / (freq);
+        
         for (i = 0; i < that.wantedSamples(); i += 1) {
+            
+            if (that.haveSpecialInput("freq")) {
+                newFreq = that.getSpecialChannelData("freq", 0)[i];
+            }
+            
+            if (newFreq !== freq) {
+                freq = newFreq;
+                T = (2 * Math.PI * freq) / that.sampleRate();
+                period = that.sampleRate() / (freq);
+            }
+            
             if (!isOn) {
                 that.genData[i] = 0;
             } else if (type === "sine") {
