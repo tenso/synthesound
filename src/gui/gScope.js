@@ -43,6 +43,7 @@ function gScope(channel) {
             ctx.lineTo(x, y);
         }
         ctx.stroke();
+        return that;
     };
     
     return that;

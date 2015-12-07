@@ -7,6 +7,8 @@ function sStep(args) {
         stepDone = true,
         needRefill = true;
     
+    that.title = "step";
+    
     that.makeAudio = function () {
         var chan = 0;
 

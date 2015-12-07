@@ -9,6 +9,8 @@ function sDelay(args) {
         gain = 0.5,
         delay = 0.5;
             
+    that.title = "delay";
+    
     that.makeAudio = function () {
         var i = 0,
             chan = 0,

@@ -13,6 +13,8 @@ function sAdsr(args) {
         d = 0.1, /*seconds*/
         s = 0.3, /*0-1*/
         r = 1.0; /*seconds*/
+    
+    that.title = "adsr";
 
     function setActive(value) {
         if (!active && value) {

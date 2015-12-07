@@ -13,8 +13,8 @@ function sCGen(container) {
         freqPort = gIO.makeIn(out, "freq"),
         button;
 
-    that.addLabeledContent(outPort, "out");
     that.addLabeledContent(freqPort, "hz");
+    that.addLabeledContent(outPort, "out");
     
     button = gButton("sine", function () {out.setArgs({"type": "sine"}); }, true, typeButtons);
     button.setValue(true);

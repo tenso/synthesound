@@ -3,6 +3,14 @@
 /*global log*/
 
 var gui = {
+    nextZValue: 1,
+    
+    nextZ: function () {
+        var ret = gui.nextZValue;
+        gui.nextZValue += 1;
+        return ret;
+    },
+
     getPos: function (element) {
         var x = element.offsetLeft,
             y = element.offsetTop;
@@ -37,5 +45,5 @@ var gui = {
 
     getStyleInt: function (element, property) {
         return parseInt(gui.getStyle(element, property), 10);
-    },
+    }
 };

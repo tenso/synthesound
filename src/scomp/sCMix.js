@@ -10,8 +10,8 @@ function sCMix(container) {
         outPort = gIO.makeOut(mix),
         inPort = gIO.makeIn(mix);
 
-    that.addLabeledContent(outPort, "out");
     that.addLabeledContent(inPort, "in");
+    that.addLabeledContent(outPort, "out");
                 
     return that;
 }

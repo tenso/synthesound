@@ -59,6 +59,7 @@ function gSlider(val, min, max, callback) {
 
     track.setValue = function (value) {
         this.knob.setValue(value);
+        return this;
     };
     track.getValue = function () {
         return this.knob.value;

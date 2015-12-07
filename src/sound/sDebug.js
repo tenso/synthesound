@@ -13,6 +13,8 @@ function sDebug(args) {
             inputIndex,
             newVal;
 
+        that.title = "debug";
+        
         for (chan = 0; chan < that.numChannels(); chan += 1) {
             chanData = that.data[chan];
 

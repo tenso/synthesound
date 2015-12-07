@@ -5,6 +5,8 @@ function sMix(args) {
     var that = sBase(),
         gain = [1.0, 1.0];
 
+    that.title = "mix";
+    
     that.makeAudio = function () {
         var i = 0,
             chan = 0,

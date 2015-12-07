@@ -2,6 +2,7 @@
 /*global log*/
 /*global input*/
 /*global gui*/
+/*global gMenu*/
 
 var gIO = {
     linesCanvas: undefined,
@@ -102,6 +103,28 @@ var gIO = {
             return true;
         }
     },
+    delConnection: function (p1, p2) {
+        var from,
+            to,
+            i;
+        
+        if (p1.isOut) {
+            from = p1;
+            to = p2;
+        } else {
+            from = p2;
+            to = p1;
+        }
+        to.ioPort.delInput(from.ioPort, to.ioType);
+        
+        for (i = 0; i < gIO.connections.length; i += 1) {
+            if (gIO.connections[i].from === from && gIO.connections[i].to === to) {
+                gIO.connections.splice(i, 1);
+                gIO.drawConnections();
+                break;
+            }
+        }
+    },
 
     addMouseEventsToPort: function (port) {
 
@@ -121,7 +144,16 @@ var gIO = {
             gIO.drawConnections();
         };
         port.onopencontextmenu = function (e) {
-            var connections;
+            var connections,
+                menu,
+                i;
+            
+            function makeDelCb(menu, port1, port2) {
+                return function () {
+                    gIO.delConnection(port1, port2);
+                    menu.remove();
+                };
+            }
             
             if (!e.target.ioPort) {
                 log.error("no ioPort found");
@@ -129,15 +161,22 @@ var gIO = {
             }
             
             if (e.target.isOut) {
-                log.info("target is OUT, list targets");
                 connections = gIO.getConnectionsFrom(e.target);
-                log.obj(connections);
             } else {
-                log.info("target is IN, list sources:");
                 connections = gIO.getConnectionsTo(e.target);
-                log.obj(connections);
             }
             
+            if (connections.length) {
+                menu = gMenu(document.body);
+
+                for (i = 0; i < connections.length; i += 1) {
+                    menu.add(e.target.ioPort.title + " > "
+                             + connections[i].ioPort.title + " "
+                             + connections[i].ioType + " "
+                             + (connections[i].isOut ? "out" : "in"), makeDelCb(menu, e.target, connections[i]));
+                }
+                menu.move(e.pageX - 20, e.pageY - 20);
+            }
         };
     },
     

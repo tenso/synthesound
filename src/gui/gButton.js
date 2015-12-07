@@ -30,6 +30,7 @@ function gButton(name, callback, isRadio, buttonCollection) {
         } else {
             this.setValue(!this.value);
         }
+        return this;
     };
     button.setValue = function (value) {
         this.value = value;
@@ -41,6 +42,7 @@ function gButton(name, callback, isRadio, buttonCollection) {
         } else {
             this.callback(this.value);
         }
+        return this;
     };
 
     return button;

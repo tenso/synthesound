@@ -20,6 +20,7 @@ function sBase() {
     
     that.setChanUpdatedCallback = function (cb) {
         chanUpdated = cb;
+        return that;
     };
     
     that.sampleRate = function () {
@@ -40,6 +41,7 @@ function sBase() {
         } else {
             that.setSpecialInput(input, type);
         }
+        return that;
     };
 
     that.delInput = function (input, type) {
@@ -49,16 +51,19 @@ function sBase() {
                 inputs.splice(index, 1);
             }
         } else {
-            that.delSpecialInput(input, type);
+            that.delSpecialInput(type);
         }
+        return that;
     };
 
     that.setSpecialInput = function (input, type) {
         specialInput[type] = input;
+        return that;
     };
 
     that.delSpecialInput = function (type) {
         delete specialInput[type];
+        return that;
     };
 
     that.haveSpecialInput = function (type) {
@@ -74,7 +79,7 @@ function sBase() {
             dataUpdatedEvent;
 
         if (genIndex === rIndex) {
-            return;
+            return that;
         }
         genIndex = rIndex;
 
@@ -99,6 +104,7 @@ function sBase() {
                 chanUpdated(chan, that.data[chan]);
             }
         }
+        return that;
     };
     
     that.generateInputs = function () {
@@ -116,6 +122,7 @@ function sBase() {
                 specialInput[key].generate(sRate, frameSize, runIndex);
             }
         }
+        return that;
     };
 
     that.setChannelDataZero = function () {
@@ -124,6 +131,7 @@ function sBase() {
         for (chan = 0; chan < that.numChannels(); chan += 1) {
             that.data[chan].fill(0);
         }
+        return that;
     };
     
     that.getChannelData = function (chan) {

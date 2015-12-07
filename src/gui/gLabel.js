@@ -5,5 +5,10 @@ function gLabel(label) {
     guiLabel.innerText = label;
     guiLabel.className = "component-label";
     
+    guiLabel.alignLeft = function () {
+        guiLabel.style.textAlign = "left";
+        return guiLabel;
+    };
+    
     return guiLabel;
 }

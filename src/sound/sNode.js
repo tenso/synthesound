@@ -8,6 +8,8 @@ function sOutNode(audioCtx, channels, frameSize) {
     that.sampleRate = audioCtx.sampleRate;
     that.channels = channels;
     
+    that.title = "sNode";
+    
     that.onaudioprocess = function (audioEvent) {
         var index = 0,
             chan = 0,

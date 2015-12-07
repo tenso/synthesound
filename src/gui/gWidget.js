@@ -5,9 +5,6 @@
 /*global gLabel*/
 /*global gIO*/
 
-/*FIXME: so ugly:*/
-var global_gWidget_nextZ = 1;
-
 function gWidget(container, title) {
     var that = document.createElement("div");
     
@@ -15,6 +12,14 @@ function gWidget(container, title) {
         that.content = document.createElement("tr");
         that.table.appendChild(that.content);
         return that;
+    };
+    
+    that.contentCount = function () {
+        return that.content.childNodes.length;
+    };
+    
+    that.remove = function () {
+        that.container.removeChild(that);
     };
     
     function titleRow(title) {
@@ -36,17 +41,15 @@ function gWidget(container, title) {
         }
         that.container = container;
         that.style.position = "absolute";
-        that.style.zIndex = global_gWidget_nextZ;
-        global_gWidget_nextZ += 1;
-        that.title = title;
+        that.style.zIndex = gui.nextZ();
+
         that.contId = container.id;
         that.table = document.createElement("table");
         that.table.className = "collection-table component";
 
         that.onmousedown = function (e) {
             input.setMouseCapturer(e, that);
-            that.style.zIndex = global_gWidget_nextZ;
-            global_gWidget_nextZ += 1;
+            that.style.zIndex = gui.nextZ();
         };
 
         that.onmousepressandmove = function (e, mouse) {
@@ -55,8 +58,11 @@ function gWidget(container, title) {
             gIO.drawConnections();
         };
 
-        that.table.appendChild(titleRow(that.title));
-
+        if (typeof title === "string") {
+            that.title = title;
+            that.table.appendChild(titleRow(that.title));
+        }
+        
         that.appendChild(that.table);
         container.appendChild(that);
 

@@ -10,6 +10,8 @@ function sGen(args) {
         type = "sine",
         isOn = true;
     
+    that.title = "gen";
+    
     that.makeAudio = function () {
         var i = 0,
             chan = 0,
