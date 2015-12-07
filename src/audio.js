@@ -11,6 +11,7 @@
 /*global sCDelay*/
 /*global sCMix*/
 /*global gui*/
+/*global gMenu*/
 
 var audio = {
     generators: [],
@@ -34,22 +35,32 @@ var audio = {
     },
 
     initSComp: function () {
-        var gen,
-            adsr,
-            delay,
-            workspace = document.getElementById("workspace"),
-            mix;
+        var workspace = document.getElementById("workspace");
 
-        audio.scout = sCOut(workspace).move(270, 100);
-        gen = sCGen(workspace).move(0, 0);
-        gen = sCGen(workspace).move(220, 0);
-        gen = sCGen(workspace).move(440, 0);
-        adsr = sCAdsr(workspace).move(0, 100);
-        delay = sCDelay(workspace).move(170, 100);
-        mix = sCMix(workspace).move(350, 100);
-        audio.key = sCVKey(workspace).move(10, 350);
+        audio.scout = sCOut(workspace).move(0, 0);
+        audio.key = sCVKey(workspace).move(70, 0);
+        audio.scope = sCScope(workspace).move(1250, 0);
         
-        audio.scope = sCScope(workspace).move(440, 100);
+        workspace.onopencontextmenu = function (e) {
+            var menu = gMenu(workspace).move(e.pageX - 20, e.pageY - 20);
+            
+            menu.add("gen", function () {
+                sCGen(workspace).move(e.pageX, e.pageY);
+                menu.remove();
+            });
+            menu.add("adsr", function () {
+                sCAdsr(workspace).move(e.pageX, e.pageY);
+                menu.remove();
+            });
+            menu.add("delay", function () {
+                sCDelay(workspace).move(e.pageX, e.pageY);
+                menu.remove();
+            });
+            menu.add("mix", function () {
+                sCMix(workspace).move(e.pageX, e.pageY);
+                menu.remove();
+            });
+        };
     },
 
     startAudio: function (freq) {
