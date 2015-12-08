@@ -2,11 +2,15 @@
 /*global log*/
 /*global input*/
 /*global gui*/
+/*global gBase*/
 /*global gLabel*/
+/*global gButton*/
 /*global gIO*/
 
+/*FIXME: should be called gContainer maybe?*/
+
 function gWidget(container, title) {
-    var that = document.createElement("div");
+    var that = gBase();
     
     that.nextRow = function () {
         that.content = document.createElement("tr");
@@ -71,17 +75,6 @@ function gWidget(container, title) {
 
     containerInit(container, title);
 
-    that.move = function (x, y) {
-        that.style.left = x + "px";
-        that.style.top = y + "px";
-        return that;
-    };
-
-    that.setClass = function (className) {
-        that.className = className;
-        return that;
-    };
-
     that.addContent = function (content) {
         var cont = document.createElement("td");
         cont.appendChild(content);
@@ -96,6 +89,16 @@ function gWidget(container, title) {
         cont.appendChild(contLabel);
         cont.appendChild(content);
         that.addContent(cont);
+        return that;
+    };
+    
+    that.addRemove = function (callback) {
+        var button = gButton("x", function () {
+            callback();
+            that.remove();
+        }).size(20, 20).pos("absolute").right(-5).top(-5);
+        
+        that.appendChild(button);
         return that;
     };
 

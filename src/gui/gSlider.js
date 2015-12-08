@@ -1,9 +1,10 @@
 "use strict";
 /*global input*/
 /*global gui*/
+/*global gBase*/
 
 function gSlider(val, min, max, callback) {
-    var track = document.createElement("div"),
+    var track = gBase(),
         knob = document.createElement("div");
 
     knob.className = "button-class knob hslider-knob";

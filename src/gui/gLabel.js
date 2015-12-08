@@ -1,7 +1,8 @@
 "use strict";
+/*global gBase*/
 
 function gLabel(label) {
-    var guiLabel = document.createElement("div");
+    var guiLabel = gBase();
     guiLabel.innerText = label;
     guiLabel.className = "component-label";
     

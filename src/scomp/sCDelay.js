@@ -11,6 +11,11 @@ function sCDelay(container) {
         outPort = gIO.makeOut(delay),
         inPort = gIO.makeIn(delay);
 
+    //FIXME: this should be common stuff to all scComp!
+    that.addRemove(function () {
+        gIO.delAllConnectionsToAndFromSComp(delay);
+    });
+    
     that.addLabeledContent(inPort, "in");
     that.addLabeledContent(outPort, "out");
     that.nextRow();

@@ -10,6 +10,11 @@ function sCMix(container) {
         outPort = gIO.makeOut(mix),
         inPort = gIO.makeIn(mix);
 
+    //FIXME: this should be common stuff to all scComp!
+    that.addRemove(function () {
+        gIO.delAllConnectionsToAndFromSComp(mix);
+    });
+    
     that.addLabeledContent(inPort, "in");
     that.addLabeledContent(outPort, "out");
                 

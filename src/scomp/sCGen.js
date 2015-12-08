@@ -13,6 +13,11 @@ function sCGen(container) {
         freqPort = gIO.makeIn(out, "freq"),
         button;
 
+    //FIXME: this should be common stuff to all scComp!
+    that.addRemove(function () {
+        gIO.delAllConnectionsToAndFromSComp(out);
+    });
+    
     that.addLabeledContent(freqPort, "hz");
     that.addLabeledContent(outPort, "out");
     

@@ -1,19 +1,28 @@
 "use strict";
 /*global gui*/
+/*global log*/
+/*global gBase*/
 
 function gButton(name, callback, isRadio, buttonCollection) {
-    var button = document.createElement("div");
-    button.siblings = buttonCollection;
-    button.siblings.push(button);
+    var button = gBase();
     button.isRadio = isRadio;
-
-    button.className = "button-class radiobutton-inactive";
+    button.className = "button-class";
     button.innerText = name;
     button.style.position = "relative";
     button.classId = "radiobutton";
     button.value = false;
     button.callback = callback;
 
+    if (button.isRadio) {
+        if (buttonCollection) {
+            button.siblings = buttonCollection;
+            button.siblings.push(button);
+        } else {
+            log.error("gRadio: radiobuttons need collection");
+        }
+        button.className += " radiobutton-inactive";
+    }
+    
     button.onmousedown = function (e) {
         e.stopPropagation();
         this.set();

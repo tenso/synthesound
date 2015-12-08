@@ -1,9 +1,10 @@
 "use strict";
 /*global delayBuffer*/
 /*global gui*/
+/*global gBase*/
 
 function gScope(channel) {
-    var that = document.createElement("div"),
+    var that = gBase(),
         length = 1024,
         graphData = delayBuffer(length),
         canvas = document.createElement("canvas"),

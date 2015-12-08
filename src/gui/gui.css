@@ -2,16 +2,17 @@
     background: #444;
     border-radius: 0.25em;
     text-align: center;
+    color: #fff;
+}
+
+.button-class:active {
+    color: #fff;
 }
 
 .button {
     padding: 0.25em;
-    color: #fff;
     font-size: 2em;
     display: inline-block;
-}
-
-.button-class:active {
     color: #fff;
 }
 

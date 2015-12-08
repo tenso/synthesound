@@ -83,12 +83,12 @@ var gIO = {
         
     addConnection: function (from, to) {
 
-        if (from.ioPort && to.ioPort) {
+        if (from.sComp && to.sComp) {
             if (!from.isOut || to.isOut) {
                 log.error("connection is not from out to in");
                 return false;
             }
-            if (from.ioPort === to.ioPort) {
+            if (from.sComp === to.sComp) {
                 log.warn("inter component feedback not allowed");
                 return false;
             }
@@ -99,10 +99,11 @@ var gIO = {
             var con = {"from": from, "to": to};
             gIO.connections.push(con);
 
-            to.ioPort.addInput(from.ioPort, to.ioType);
+            to.sComp.addInput(from.sComp, to.ioType);
             return true;
         }
     },
+    
     delConnection: function (p1, p2) {
         var from,
             to,
@@ -115,7 +116,7 @@ var gIO = {
             from = p2;
             to = p1;
         }
-        to.ioPort.delInput(from.ioPort, to.ioType);
+        to.sComp.delInput(from.sComp, to.ioType);
         
         for (i = 0; i < gIO.connections.length; i += 1) {
             if (gIO.connections[i].from === from && gIO.connections[i].to === to) {
@@ -125,11 +126,23 @@ var gIO = {
             }
         }
     },
-
+    
+    delAllConnectionsToAndFromSComp: function (port) {
+        var i;
+        for (i = 0; i < gIO.connections.length; i += 0) {
+            if (gIO.connections[i].from.sComp === port || gIO.connections[i].to.sComp === port) {
+                gIO.delConnection(gIO.connections[i].from, gIO.connections[i].to);
+            } else {
+                i += 1;
+            }
+        }
+        gIO.drawConnections();
+    },
+    
     addMouseEventsToPort: function (port) {
 
         port.onmousedown = function (e) {
-            if (e.target.ioPort && e.target.isOut) {
+            if (e.target.sComp && e.target.isOut) {
                 input.setMouseCapturer(e);
             }
         };
@@ -138,7 +151,7 @@ var gIO = {
             gIO.drawLine(mouse.captureX, mouse.captureY, e.pageX, e.pageY);
         };
         port.onmouseupaftercapture = function (e) {
-            if (e.target.ioPort && !e.target.isOut) {
+            if (e.target.sComp && !e.target.isOut) {
                 gIO.addConnection(e.mouseCapturer, e.target);
             }
             gIO.drawConnections();
@@ -155,8 +168,8 @@ var gIO = {
                 };
             }
             
-            if (!e.target.ioPort) {
-                log.error("no ioPort found");
+            if (!e.target.sComp) {
+                log.error("no sComp found");
                 return;
             }
             
@@ -170,8 +183,8 @@ var gIO = {
                 menu = gMenu(document.body);
 
                 for (i = 0; i < connections.length; i += 1) {
-                    menu.add(e.target.ioPort.title + " > "
-                             + connections[i].ioPort.title + " "
+                    menu.add(e.target.sComp.title + " > "
+                             + connections[i].sComp.title + " "
                              + connections[i].ioType + " "
                              + (connections[i].isOut ? "out" : "in"), makeDelCb(menu, e.target, connections[i]));
                 }
@@ -180,7 +193,7 @@ var gIO = {
         };
     },
     
-    init: function (target, scomp, isOut, type) {
+    init: function (target, sComp, isOut, type) {
         target.className = "ioport";
 
         if (isOut) {
@@ -188,24 +201,24 @@ var gIO = {
         } else {
             target.className += " ioport-in";
         }
-        target.ioPort = scomp;
+        target.sComp = sComp;
         target.isOut = isOut;
         target.ioType = type || "";
         
         gIO.addMouseEventsToPort(target);
     },
 
-    make: function (scomp, isOut, type) {
+    make: function (sComp, isOut, type) {
         var ioport = document.createElement("div");
-        gIO.init(ioport, scomp, isOut, type);
+        gIO.init(ioport, sComp, isOut, type);
         return ioport;
     },
     
-    makeIn: function (scomp, type) {
-        return gIO.make(scomp, false, type);
+    makeIn: function (sComp, type) {
+        return gIO.make(sComp, false, type);
     },
     
-    makeOut: function (scomp, type) {
-        return gIO.make(scomp, true, type);
+    makeOut: function (sComp, type) {
+        return gIO.make(sComp, true, type);
     }
 };

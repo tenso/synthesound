@@ -11,7 +11,12 @@ function sCAdsr(container) {
         outPort = gIO.makeOut(adsr),
         inPort = gIO.makeIn(adsr),
         gatePort = gIO.makeIn(adsr, "gate");
-
+    
+    //FIXME: this should be common stuff to all scComp!
+    that.addRemove(function () {
+        gIO.delAllConnectionsToAndFromSComp(adsr);
+    });
+    
     that.addLabeledContent(inPort, "in");
     that.addLabeledContent(gatePort, "gate");
     that.addLabeledContent(outPort, "out");
