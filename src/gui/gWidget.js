@@ -96,7 +96,7 @@ function gWidget(container, title) {
         var button = gButton("x", function () {
             callback();
             that.remove();
-        }).size(20, 20).pos("absolute").right(-5).top(-5);
+        }).size(20, 20).abs().right(-5).top(-5);
         
         that.appendChild(button);
         return that;

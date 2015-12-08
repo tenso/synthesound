@@ -10,6 +10,10 @@ function gBase() {
         return that;
     };
     
+    that.abs = function () {
+        return that.pos("absolute");
+    };
+    
     that.pos = function (pos) {
         that.style.position = pos;
         return that;
@@ -37,6 +41,22 @@ function gBase() {
     
     that.setClass = function (className) {
         that.className = className;
+        return that;
+    };
+    that.bg = function (value) {
+        that.style.background = value;
+        return that;
+    };
+    that.border = function (value) {
+        that.style.border = value;
+        return that;
+    };
+    that.radius = function (value) {
+        that.style.borderRadius = value + "px";
+        return that;
+    };
+    that.color = function (value) {
+        that.style.color = value;
         return that;
     };
     

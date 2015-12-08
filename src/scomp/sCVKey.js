@@ -6,7 +6,7 @@
 /*global note*/
 /*global gVKey*/
 /*global gWidget*/
-
+/*global gLabel*/
 function sCVKey(container) {
     var that = gWidget(container, "V-KEY"),
         gate = sStep(),
@@ -14,7 +14,7 @@ function sCVKey(container) {
         gateOut,
         hzOut,
         vkey = document.createElement("td"),
-        currentNote = document.createElement("td"),
+        currentNote = gLabel("--").abs().move(12, 50).size(40, 20).bg("#888").color("#fff").radius(4),
         noteDown = 0,
         isDown = false,
         cont,
@@ -23,9 +23,7 @@ function sCVKey(container) {
 
     gateOut = gIO.makeOut(gate);
     hzOut = gIO.makeOut(hz);
-    
-    currentNote.className = "label currentNote";
-    currentNote.innerText = "--";
+
     that.addContent(currentNote);
     
     gate.setArgs({"value": isDown ? 1.0 : 0.0});
@@ -40,7 +38,7 @@ function sCVKey(container) {
         noteDown = notePressed;
         isDown = true;
         
-        currentNote.innerText = note.name(notePressed);
+        currentNote.set(note.name(notePressed));
         
         gate.setArgs({"active": isDown});
         hz.setArgs({"value": note.hz(notePressed)});

@@ -2,14 +2,18 @@
 /*global gBase*/
 
 function gLabel(label) {
-    var guiLabel = gBase();
-    guiLabel.innerText = label;
-    guiLabel.className = "component-label";
+    var that = gBase();
+    that.innerText = label;
+    that.className = "component-label";
     
-    guiLabel.alignLeft = function () {
-        guiLabel.style.textAlign = "left";
-        return guiLabel;
+    that.alignLeft = function () {
+        that.style.textAlign = "left";
+        return that;
+    };
+    that.set = function (str) {
+        that.innerText = str;
+        return that;
     };
     
-    return guiLabel;
+    return that;
 }
