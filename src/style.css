@@ -8,6 +8,7 @@ body {
     margin: 0px;
     background: #888;
     font-family: sans-serif;
+    cursor: default;
 }
 
 hr {
@@ -37,6 +38,10 @@ hr {
 .panicButton {
     color: #fff;
     background: #f00;
+    float: right;
+}
+
+.saveButton {
     float: right;
 }
 

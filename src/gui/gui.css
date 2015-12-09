@@ -8,14 +8,15 @@
 }
 
 .button-class:active {
-    color: #fff;
+    color: #888;
 }
 
 .button {
-    padding: 4px;
-    font-size: 32px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     display: inline-block;
-    color: #fff;
 }
 
 .component {
@@ -44,7 +45,7 @@
 
 .label {
     color: #fff;
-    font-size: 20px;
+    font-size: 16px;
     text-align: center;
     background: #888;
     border-radius: 4px;

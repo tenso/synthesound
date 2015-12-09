@@ -44,24 +44,14 @@ function gWidget(container, title) {
             log.error("gui.containerInit: container is undefined");
         }
         that.container = container;
+        that.className = "component";
         that.style.position = "absolute";
         that.style.zIndex = gui.nextZ();
 
         that.contId = container.id;
         that.table = document.createElement("table");
-        that.table.className = "collection-table component";
-
-        that.onmousedown = function (e) {
-            input.setMouseCapturer(e, that);
-            that.style.zIndex = gui.nextZ();
-        };
-
-        that.onmousepressandmove = function (e, mouse) {
-            that.move(mouse.relativeX, mouse.relativeY);
-            //FIXME: this is uncessesary coupling
-            gIO.drawConnections();
-        };
-
+        that.table.className = "collection-table";
+        
         if (typeof title === "string") {
             that.title = title;
             that.table.appendChild(titleRow(that.title));
@@ -102,6 +92,30 @@ function gWidget(container, title) {
         return that;
     };
 
-    that.move(0, 0);
+    that.canMove = function (value) {
+        if (value) {
+            that.onmousedown = function (e) {
+                input.setMouseCapturer(e, that);
+                that.style.zIndex = gui.nextZ();
+            };
+
+            that.onmousepressandmove = function (e, mouse) {
+                that.move(mouse.relativeX, mouse.relativeY);
+                //FIXME: this is uncessesary coupling
+                gIO.drawConnections();
+            };
+        } else {
+            that.onmousedown = undefined;
+            that.onmousepressandmove = undefined;
+        }
+        return that;
+    };
+    
+    that.padding = function (value) {
+        that.table.style.padding = value;
+        return that;
+    };
+    
+    that.canMove(true).move(0, 0);
     return that;
 }

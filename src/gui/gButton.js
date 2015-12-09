@@ -21,6 +21,8 @@ function gButton(name, callback, isRadio, buttonCollection) {
             log.error("gRadio: radiobuttons need collection");
         }
         button.className += " radiobutton-inactive";
+    } else {
+        button.className += " button";
     }
     
     button.onmousedown = function (e) {
@@ -41,10 +43,11 @@ function gButton(name, callback, isRadio, buttonCollection) {
         }
         return this;
     };
+    
     button.setValue = function (value) {
         this.value = value;
-        this.className = "button-class " + (this.value ? this.classId + "-active" : this.classId + "-inactive");
         if (this.isRadio) {
+            this.className = "button-class " + (this.value ? this.classId + "-active" : this.classId + "-inactive");
             if (this.value) {
                 this.callback(this.value);
             }

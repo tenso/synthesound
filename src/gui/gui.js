@@ -45,5 +45,14 @@ var gui = {
 
     getStyleInt: function (element, property) {
         return parseInt(gui.getStyle(element, property), 10);
+    },
+    
+    stylePxIfInt: function (obj, param, value) {
+        if (typeof value === "integer") {
+            obj.style[param] = value + "px";
+        } else {
+            obj.style[param] = value;
+        }
+        return obj;
     }
 };
