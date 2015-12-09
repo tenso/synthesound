@@ -1,7 +1,7 @@
 .ioport {
-    width: 0.75em;
-    height: 0.75em;
-    border-radius: 0.75em;
+    width: 14px;
+    height: 14px;
+    border-radius: 14px;
     background: #000;
     border: 4px solid #444; 
 }

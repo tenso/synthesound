@@ -2,7 +2,7 @@
 
 .button-class {
     background: #444;
-    border-radius: 0.25em;
+    border-radius: 4px;
     text-align: center;
     color: #fff;
 }
@@ -12,8 +12,8 @@
 }
 
 .button {
-    padding: 0.25em;
-    font-size: 2em;
+    padding: 4px;
+    font-size: 32px;
     display: inline-block;
     color: #fff;
 }
@@ -21,11 +21,11 @@
 .component {
     background: #fff;
     border: 2px solid #000;
-    border-radius: 0.25em;
+    border-radius: 4px;
 }
 
 .component-label {
-    font-size: 1.0em;
+    font-size: 16px;
     text-align: center;
 }
 
@@ -35,7 +35,7 @@
 
 .collection-table {
     display: inline-block;
-    padding: 0.5em;
+    padding: 8px;
 }
 
 .collection-row {
@@ -44,12 +44,12 @@
 
 .label {
     color: #fff;
-    font-size: 1.25em;
+    font-size: 20px;
     text-align: center;
     background: #888;
-    border-radius: 0.25em;
-    margin-top: 0.25em;
-    margin-bottom: 0.25em;
+    border-radius: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 .knob {
@@ -63,30 +63,36 @@
 }
 
 .radiobutton-active {
-    width: 4em;
-    height: 2em;
-    line-height: 2em;
+    width: 62px;
+    height: 32px;
+    line-height: 32px;
     color: #fff;
+    border-top: 2px solid #888;
+    border-right: 2px solid #888;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
 }
 
 .radiobutton-inactive {
-    width: 4em;
-    height: 2em;
-    line-height: 2em;
+    width: 64px;
+    height: 32px;
+    line-height: 32px;
     color: #888;
+    border-top: 2px solid #444;
+    border-right: 2px solid #444;
+    border-left: 2px solid #888;
+    border-bottom: 2px solid #888;
 }
 
 .hslider-track {
-    width: 0.75em;
-    /*FIXME: cant have height here, cant set initial value on sliders, set in js
-    height: 10em;*/
-    margin-left: 0.5em;
-    margin-right: 0.5em;
+    width: 12px;
+    /*FIXME: cant have height here, cant set initial value on sliders, set in js*/
+    margin-left: 8px;
+    margin-right: 8px;
 }
 
 .hslider-knob {
-    width: 1.25em;
-    /*FIXME: cant have height here, cant set initial value on sliders, set in js
-    height: 2.5em;*/
-    margin-left: -0.35em;
+    width: 20px;
+    /*FIXME: cant have height here, cant set initial value on sliders, set in js*/
+    margin-left: -6px;
 }

@@ -1,15 +1,15 @@
 .vkey-container {
-    width: 64em;
-    height: 10em;
+    width: 1024px;
+    height: 160px;
     position: relative;
 }
 .vkey-key-flat {
     position: absolute;
-    width: 2em;
-    height: 10em;
+    width: 32px;
+    height: 160px;
     background: #fff;
     border: 1px solid #000;
-    border-radius: 0.25em;
+    border-radius: 4px;
     z-index: 0;
 }
 
@@ -19,11 +19,11 @@
 
 .vkey-key-sharp {
     position: absolute;
-    width: 1.5em;
-    height: 6em;
+    width: 24px;
+    height: 96px;
     background: #000;
     border: 1px solid #fff;
-    border-radius: 0.25em;
+    border-radius: 4px;
     z-index: 1;
 }
 
