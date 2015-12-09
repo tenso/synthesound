@@ -5,8 +5,10 @@
 var test = {
     verifyFunctionality: function (func, message) {
         if (!func) {
-            log.error("no " + message + ", please use modern browser");
+            log.error("no functionality: " + message);
+            return false;
         }
+        return true;
     },
 
     verify: function (arg1, arg2) {

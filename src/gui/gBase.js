@@ -4,7 +4,19 @@
 function gBase() {
     var that = document.createElement("div"),
         originalColor,
-        hoverColor;
+        hoverColor,
+        oldDisplay;
+    
+    that.show = function (value) {
+        if (!value && that.style.display !== "none") {
+            oldDisplay = that.style.display;
+            that.style.display = "none";
+        } else if (value && that.style.display === "none") {
+            that.style.display = oldDisplay;
+        }
+        
+        return that;
+    };
     
     that.move = function (x, y) {
         that.style.left = x + "px";

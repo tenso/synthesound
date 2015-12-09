@@ -12,7 +12,6 @@
 /*global sCMix*/
 /*global gui*/
 /*global gMenu*/
-/*global sCMenuBar*/
 
 var audio = {
     generators: [],
@@ -26,7 +25,6 @@ var audio = {
     AudioContext: window.AudioContext || window.webkitAudioContext,
     audioRunning: false,
     scout: undefined,
-    menuBar: undefined,
 
     keyDown: function (notePressed) {
         audio.key.keyDown(notePressed);
@@ -39,7 +37,6 @@ var audio = {
     initSComp: function () {
         var workspace = document.getElementById("workspace");
 
-        audio.menuBar = sCMenuBar(workspace).move(0, 0);
         audio.scout = sCOut(workspace).move(0, 50);
         audio.key = sCVKey(workspace).move(70, 50);
         audio.scope = sCScope(workspace).move(1250, 50);
@@ -73,7 +70,6 @@ var audio = {
             return false;
         }
         
-        test.verifyFunctionality(audio.AudioContext, "audio.AudioContext");
         audio.audioCtx = new audio.AudioContext();
             
         audio.initSComp();
