@@ -19,8 +19,8 @@ function gBase() {
     };
     
     that.move = function (x, y) {
-        that.style.left = x + "px";
-        that.style.top = y + "px";
+        gui.stylePxIfInt(that, "left", x);
+        gui.stylePxIfInt(that, "top", y);
         return that;
     };
     

@@ -84,7 +84,9 @@ function gWidget(container, title) {
     
     that.addRemove = function (callback) {
         var button = gButton("x", function () {
-            callback();
+            if (callback) {
+                callback();
+            }
             that.remove();
         }).size(20, 20).abs().right(-5).top(-5);
         

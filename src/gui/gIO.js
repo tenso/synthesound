@@ -19,6 +19,10 @@ var gIO = {
     drawConnections: function () {
         var i;
 
+        if (!gIO.linesCtx) {
+            return;
+        }
+        
         gIO.linesCtx.clearRect(0, 0, gIO.linesCanvas.width, gIO.linesCanvas.height);
 
         for (i = 0; i < gIO.connections.length; i += 1) {

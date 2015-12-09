@@ -7,14 +7,17 @@ function gMenuButton(name, group) {
             
     that = gButton(name, function () {
         that.closeAll();
-        that.fileMenu.move(0, that.getH());
-        that.fileMenu.show(true);
+        that.menu.move(0, that.getH());
+        that.menu.show(true);
+        /*if (that.menu.getW() < that.getW()) {
+            that.menu.width(that.getW());
+        }*/
     }).hoverEffect(true);
     
-    that.fileMenu = gMenu(that).removeOnLeave(false).show(false);
+    that.menu = gMenu(that).removeOnLeave(false).show(false);
     
     that.add = function (name, callback) {
-        that.fileMenu.add(name, callback);
+        that.menu.add(name, callback);
     };
             
     group.push(that);
@@ -22,7 +25,7 @@ function gMenuButton(name, group) {
     that.closeAll = function () {
         var i;
         for (i = 0; i < group.length; i += 1) {
-            group[i].fileMenu.show(false);
+            group[i].menu.show(false);
         }
     };
     
