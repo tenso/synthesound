@@ -29,6 +29,11 @@ function gBase() {
         return that;
     };
     
+    that.overflow = function (value) {
+        that.style.overflow = value;
+        return that;
+    };
+    
     that.abs = function () {
         return that.pos("absolute");
     };
@@ -37,12 +42,16 @@ function gBase() {
         that.style.position = pos;
         return that;
     };
-    
+        
     that.left = function (x) {
         that.style.left = x + "px";
         return that;
     };
-        
+    
+    that.x = function (val) {
+        return that.left(val);
+    };
+    
     that.right = function (x) {
         that.style.right = x + "px";
         return that;
@@ -51,6 +60,10 @@ function gBase() {
     that.top = function (y) {
         that.style.top = y + "px";
         return that;
+    };
+    
+    that.y = function (val) {
+        return that.top(val);
     };
     
     that.bottom = function (y) {
@@ -129,6 +142,17 @@ function gBase() {
             that.removeEventListener("mouseleave", mouseLeaveCallback);
         }
         
+        return that;
+    };
+    
+    that.addAt = function (element, x, y) {
+        element.abs().move(x, y);
+        that.appendChild(element);
+        return that;
+    };
+    
+    that.alignLeft = function () {
+        that.style.textAlign = "left";
         return that;
     };
     

@@ -6,6 +6,7 @@
 /*global gLabel*/
 /*global gButton*/
 /*global gIO*/
+/*global app*/
 
 /*FIXME: should be called gContainer maybe?*/
 
@@ -103,6 +104,12 @@ function gWidget(container, title) {
 
             that.onmousepressandmove = function (e, mouse) {
                 that.move(mouse.relativeX, mouse.relativeY);
+                if (that.getX() < app.screen.minX) {
+                    that.x(app.screen.minX);
+                }
+                if (that.getY() < app.screen.minY) {
+                    that.y(app.screen.minY);
+                }
                 //FIXME: this is uncessesary coupling
                 gIO.drawConnections();
             };

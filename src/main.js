@@ -4,8 +4,17 @@
 /*global test*/
 /*global gIO*/
 /*global sCMenuBar*/
-
 /*global URL*/
+
+var app = {
+    ver: "1.0",
+    screen: {
+        minX: 0,
+        minY: 32, /*dont allow stuff behind topmenu*/
+        maxX: undefined,
+        maxY: undefined
+    }
+};
 
 window.onload = function () {
     var freqSelect = document.getElementById("freqSelect"),
@@ -14,7 +23,7 @@ window.onload = function () {
             
     input.init();
     
-    menuBar = sCMenuBar(workspace).move(0, 0);
+    menuBar = sCMenuBar(freqSelect, workspace).move(0, 0);
     
     if (!test.verifyFunctionality(URL.createObjectURL, "URL.createObjectURL")
             || !test.verifyFunctionality(URL.revokeObjectURL, "URL.revokeObjectURL")) {

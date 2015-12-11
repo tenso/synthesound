@@ -6,10 +6,6 @@ function gLabel(label) {
     that.innerText = label;
     that.className = "component-label";
     
-    that.alignLeft = function () {
-        that.style.textAlign = "left";
-        return that;
-    };
     that.set = function (str) {
         that.innerText = str;
         return that;
