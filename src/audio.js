@@ -12,6 +12,7 @@
 /*global sCMix*/
 /*global gui*/
 /*global gMenu*/
+/*global app*/
 
 var audio = {
     generators: [],
@@ -37,9 +38,9 @@ var audio = {
     initSComp: function () {
         var workspace = document.getElementById("workspace");
 
-        audio.scout = sCOut(workspace).move(0, 50);
-        audio.key = sCVKey(workspace).move(70, 50);
-        audio.scope = sCScope(workspace).move(1250, 50);
+        audio.key = sCVKey(workspace).move(0, app.screen.minY);
+        audio.scope = sCScope(workspace).move(0, audio.key.getY() + audio.key.getH());
+        audio.scout = sCOut(workspace).move(audio.scope.getX() + audio.scope.getW(), audio.scope.getY());
         
         workspace.onopencontextmenu = function (e) {
             var menu = gMenu(workspace).move(e.pageX - 20, e.pageY - 20);

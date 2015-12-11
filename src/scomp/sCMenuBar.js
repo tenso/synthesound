@@ -7,6 +7,7 @@
 /*global audio*/
 /*global gNote*/
 /*global app*/
+/*global Files*/
 
 function sCMenuBar(container, contentContainer) {
     var that = gWidget(container).canMove(false).z(10000).border("0").radius(0).width("100%").padding(2),
@@ -23,7 +24,7 @@ function sCMenuBar(container, contentContainer) {
     
     file = gMenuButton("file", menus);
     file.add("load", function () {gNote(contentContainer, "load").padding(40); });
-    file.add("save", function () {gNote(contentContainer, "save").padding(40); });
+    file.add("save", function () {Files.saveData("file.json", {"test": "top", "testVar2": [1, 2, 3]}); });
     that.addContent(file);
     
     about = gMenuButton("?", menus);
@@ -45,6 +46,6 @@ function sCMenuBar(container, contentContainer) {
         });
         gNote(contentContainer, error).padding(40).bg("#f00").color("#000");
     };
-    
+
     return that;
 }

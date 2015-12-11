@@ -1,0 +1,29 @@
+.button {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    display: inline-block;
+}
+
+.radiobutton-active {
+    width: 62px;
+    height: 32px;
+    line-height: 32px;
+    color: #fff;
+    border-top: 2px solid #888;
+    border-right: 2px solid #888;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+}
+
+.radiobutton-inactive {
+    width: 64px;
+    height: 32px;
+    line-height: 32px;
+    color: #888;
+    border-top: 2px solid #444;
+    border-right: 2px solid #444;
+    border-left: 2px solid #888;
+    border-bottom: 2px solid #888;
+}

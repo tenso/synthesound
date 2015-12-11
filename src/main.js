@@ -20,7 +20,10 @@ window.onload = function () {
     var freqSelect = document.getElementById("freqSelect"),
         workspace = document.getElementById("workspace"),
         menuBar;
-            
+    
+    /*testsuite*/
+    test.runTests();
+    
     input.init();
     
     menuBar = sCMenuBar(freqSelect, workspace).move(0, 0);
@@ -40,7 +43,4 @@ window.onload = function () {
     } else {
         menuBar.logError("need AudioContext and Array.fill");
     }
-    
-    /*testsuite*/
-    test.runTests();
 };
