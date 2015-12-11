@@ -23,8 +23,17 @@ function sCMenuBar(container, contentContainer) {
     }).bg("#f00"));
     
     file = gMenuButton("file", menus);
-    file.add("load", function () {gNote(contentContainer, "load").padding(40); });
-    file.add("save", function () {Files.saveData("file.json", {"test": "top", "testVar2": [1, 2, 3]}); });
+    file.add("load", function () {
+        Files.loadData(function (data) {
+            gNote(contentContainer, JSON.stringify(data));
+        });
+    });
+    file.add("save", function () {
+        Files.saveData("file.json", {
+            "test": "top",
+            "testVar2": [1, 2, 3]
+        });
+    });
     that.addContent(file);
     
     about = gMenuButton("?", menus);
@@ -46,6 +55,6 @@ function sCMenuBar(container, contentContainer) {
         });
         gNote(contentContainer, error).padding(40).bg("#f00").color("#000");
     };
-
+    
     return that;
 }

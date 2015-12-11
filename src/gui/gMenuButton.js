@@ -9,17 +9,10 @@ function gMenuButton(name, group) {
         that.closeAll();
         that.menu.move(0, that.getH());
         that.menu.show(true);
-        /*if (that.menu.getW() < that.getW()) {
-            that.menu.width(that.getW());
-        }*/
     }).hoverEffect(true);
     
     that.menu = gMenu(that).removeOnLeave(false).show(false);
     
-    that.add = function (name, callback) {
-        that.menu.add(name, callback);
-    };
-            
     group.push(that);
     
     that.closeAll = function () {
@@ -27,6 +20,15 @@ function gMenuButton(name, group) {
         for (i = 0; i < group.length; i += 1) {
             group[i].menu.show(false);
         }
+    };
+
+    that.add = function (name, callback) {
+        var cb = function () {
+            callback();
+            //FIXME: does not work:
+            //that.menu.show(false);
+        };
+        that.menu.add(name, cb);
     };
     
     return that;

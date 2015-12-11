@@ -19,5 +19,21 @@ var Files = {
         a.download = fileName;
         a.textContent = "download file: " + fileName;
         a.click();
+    },
+    
+    loadData: function (dataCallback) {
+        var load = document.createElement("input");
+        
+        load.type = "file";
+        load.onchange = function () {
+            var file = load.files[0],
+                fileReader = new FileReader();
+            
+            fileReader.readAsText(file);
+            fileReader.onload = function () {
+                dataCallback(JSON.parse(fileReader.result));
+            };
+        };
+        load.click();
     }
 };
