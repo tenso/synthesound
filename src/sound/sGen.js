@@ -2,15 +2,13 @@
 /*global sBase*/
 
 function sGen(args) {
-    var that = sBase(),
+    var that = sBase("gen"),
         inPhase = 0,
         amp = 0.1,
         phase = 0,
         freq = 220,
         type = "sine",
         isOn = true;
-    
-    that.title = "gen";
     
     that.makeAudio = function () {
         var i = 0,

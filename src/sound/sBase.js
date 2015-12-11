@@ -2,7 +2,7 @@
 /*global Float32Array*/
 /*global Map*/
 
-function sBase() {
+function sBase(sId) {
     var that = {},
         channels = 2,
         frameSize = 0,
@@ -13,6 +13,10 @@ function sBase() {
         inputs = [],
         specialInput = {},
         chanUpdated;
+    
+    that.title = function () {
+        return sId;
+    };
     
     //FIXME: make private?
     that.data = [];

@@ -2,12 +2,10 @@
 /*global sBase*/
 
 function sStep(args) {
-    var that = sBase(),
+    var that = sBase("step"),
         wantStep = false,
         stepDone = true,
         needRefill = true;
-    
-    that.title = "step";
     
     that.makeAudio = function () {
         var chan = 0;

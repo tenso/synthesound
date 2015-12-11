@@ -3,14 +3,12 @@
 /*global delayBuffer*/
 
 function sDelay(args) {
-    var that = sBase(),
+    var that = sBase("delay"),
         maxDelay = 480000, //10s at 48khz
         buffer = [],
         gain = 0.5,
         delay = 0.5;
-            
-    that.title = "delay";
-    
+
     that.makeAudio = function () {
         var i = 0,
             chan = 0,

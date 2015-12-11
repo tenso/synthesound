@@ -2,7 +2,7 @@
 /*global sBase*/
 
 function sDebug(args) {
-    var that = sBase(),
+    var that = sBase("debug"),
         lastValues = {};
     
     that.makeAudio = function () {
@@ -12,9 +12,7 @@ function sDebug(args) {
             inputData,
             inputIndex,
             newVal;
-
-        that.title = "debug";
-        
+    
         for (chan = 0; chan < that.numChannels(); chan += 1) {
             chanData = that.data[chan];
 

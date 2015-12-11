@@ -4,12 +4,10 @@
 //FIXME: calc array once
 
 function sConst(args) {
-    var that = sBase(),
+    var that = sBase("const"),
         valueChanged = true,
         value = 1.0;
-    
-    that.title = "const";
-    
+        
     that.makeAudio = function () {
         var chan = 0;
 

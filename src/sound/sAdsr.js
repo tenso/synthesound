@@ -2,7 +2,7 @@
 /*global sBase*/
 
 function sAdsr(args) {
-    var that = sBase(),
+    var that = sBase("adsr"),
         active = false,
         activeIndex = 0,
         releaseIndex = 0,
@@ -14,8 +14,6 @@ function sAdsr(args) {
         s = 0.3, /*0-1*/
         r = 1.0; /*seconds*/
     
-    that.title = "adsr";
-
     function setActive(value) {
         if (!active && value) {
             activeIndex = tick - (lastGain * a * that.sampleRate());
