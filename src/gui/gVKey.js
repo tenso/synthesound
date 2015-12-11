@@ -6,7 +6,7 @@ function gVKey(container, keyDown, keyUp) {
     var that = {},
         i = 0,
         box,
-        keys = 48,
+        keys = 60,
         startKey = 16,
         nextX = 0,
         isDown = false,
@@ -44,7 +44,7 @@ function gVKey(container, keyDown, keyUp) {
         container.appendChild(key);
         
         if (note % 12 === 2 || note % 12 === 5 || note % 12 === 7
-                || note % 12 === 10 || note % 12 === 12) {
+                || note % 12 === 10 || note % 12 === 0) {
             flat = false;
         }
         
