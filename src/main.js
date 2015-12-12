@@ -10,6 +10,7 @@
 
 var app = {
     ver: "1.0",
+    
     screen: {
         minX: 0,
         minY: 32, /*dont allow stuff behind topmenu*/

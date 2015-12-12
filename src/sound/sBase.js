@@ -1,6 +1,18 @@
 "use strict";
 /*global Float32Array*/
 /*global Map*/
+/*global app*/
+
+    
+var sCompGlobals = {
+    UIDcount: 0,
+    
+    getUID: function () {
+        var uid = sCompGlobals.UIDcount;
+        sCompGlobals.UIDcount += 1;
+        return uid;
+    }
+};
 
 function sBase(sId) {
     var that = {},
@@ -12,7 +24,8 @@ function sBase(sId) {
         genIndex = -1,
         inputs = [],
         specialInput = {},
-        chanUpdated;
+        chanUpdated,
+        myUID = sCompGlobals.getUID();
     
     that.title = function () {
         return sId;
@@ -21,6 +34,10 @@ function sBase(sId) {
     that.setTitle = function (value) {
         sId = value;
         return that;
+    };
+    
+    that.uid = function () {
+        return myUID;
     };
     
     //FIXME: make private?
@@ -42,6 +59,28 @@ function sBase(sId) {
     
     that.wantedSamples = function () {
         return frameSize;
+    };
+    
+    that.getInputsUID = function () {
+        var ret = [],
+            i,
+            key;
+        
+        for (i = 0; i < inputs.length; i += 1) {
+            ret.push({
+                uid: inputs[i].uid(),
+                type: ""
+            });
+        }
+        for (key in specialInput) {
+            if (specialInput.hasOwnProperty(key)) {
+                ret.push({
+                    uid: specialInput[key].uid(),
+                    type: key
+                });
+            }
+        }
+        return ret;
     };
     
     that.addInput = function (input, type) {

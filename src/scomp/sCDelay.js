@@ -11,7 +11,7 @@ function sCDelay(container, args) {
         outPort = gIO.makeOut(delay),
         inPort = gIO.makeIn(delay);
 
-    that = sCBase(container, delay, args, [inPort], [outPort]);
+    that = sCBase(container, delay, args);
         
     that.addLabeledContent(inPort, "in");
     that.addLabeledContent(outPort, "out");

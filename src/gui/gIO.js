@@ -4,6 +4,9 @@
 /*global gui*/
 /*global gMenu*/
 
+//FIXME: application specific move from gui.
+//FIXME: break class into two
+
 var gIO = {
     linesCanvas: undefined,
     linesCtx: undefined,

@@ -2,7 +2,7 @@
 /*global gWidget*/
 /*global gIO*/
 
-function sCBase(context, sComp, sCompArgs, inPorts, outPorts, permanent) {
+function sCBase(context, sComp, sCompArgs, permanent) {
     var that = gWidget(context, sComp.title());
         
     sComp.setArgs(sCompArgs);
@@ -14,13 +14,16 @@ function sCBase(context, sComp, sCompArgs, inPorts, outPorts, permanent) {
     }
     
     that.sCData = function () {
-        return {
-            "sId": sComp.title(),
-            "sArgs": sComp.getArgs(),
-            "x": that.getX(),
-            "y": that.getY(),
-            "inputs": [] /*{id, type}*/
-        };
+        var data = {
+                "sId": sComp.title(),
+                "uid": sComp.uid(),
+                "sArgs": sComp.getArgs(),
+                "x": that.getX(),
+                "y": that.getY(),
+                "inputs": sComp.getInputsUID()
+            };
+            
+        return data;
     };
     return that;
 }

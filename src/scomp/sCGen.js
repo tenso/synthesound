@@ -13,7 +13,7 @@ function sCGen(container, args) {
         freqPort = gIO.makeIn(out, "freq"),
         button;
     
-    that = sCBase(container, out, args, [], [outPort]);
+    that = sCBase(container, out, args);
     
     that.addLabeledContent(freqPort, "hz");
     that.addLabeledContent(outPort, "out");
