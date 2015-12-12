@@ -2,21 +2,18 @@
 /*global sAdsr*/
 /*global gIO*/
 /*global gui*/
-/*global gWidget*/
+/*global sCBase*/
 /*global gSlider*/
 
-function sCAdsr(container) {
-    var that = gWidget(container, "ADSR"),
+function sCAdsr(container, args) {
+    var that,
         adsr = sAdsr({"a": 0.01, "d": 0.15, "s": 0.5, "r": 0.01}),
         outPort = gIO.makeOut(adsr),
         inPort = gIO.makeIn(adsr),
         gatePort = gIO.makeIn(adsr, "gate");
-    
-    //FIXME: this should be common stuff to all scComp!
-    that.addRemove(function () {
-        gIO.delAllConnectionsToAndFromSComp(adsr);
-    });
-    
+
+    that = sCBase(container, adsr, args, [inPort, gatePort], [outPort]);
+        
     that.addLabeledContent(inPort, "in");
     that.addLabeledContent(gatePort, "gate");
     that.addLabeledContent(outPort, "out");

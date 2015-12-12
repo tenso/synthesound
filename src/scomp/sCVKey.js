@@ -7,8 +7,9 @@
 /*global gVKey*/
 /*global gWidget*/
 /*global gLabel*/
+
 function sCVKey(container) {
-    var that = gWidget(container, "V-KEY"),
+    var that = gWidget(container, "keyboard (fixme)"),
         gate = sStep(),
         hz = sConst(),
         gateOut,

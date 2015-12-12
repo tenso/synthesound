@@ -9,7 +9,7 @@
 /*global app*/
 /*global Files*/
 
-function sCMenuBar(container, contentContainer) {
+function menuBar(container, contentContainer) {
     var that = gWidget(container).canMove(false).z(10000).border("0").radius(0).width("100%").padding(2),
         file,
         about,

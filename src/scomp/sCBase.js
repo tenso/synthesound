@@ -2,8 +2,8 @@
 /*global gWidget*/
 /*global gIO*/
 
-function sCBase(context, name, sComp, sCompArgs, inPorts, outPorts, permanent) {
-    var that = gWidget(context, name);
+function sCBase(context, sComp, sCompArgs, inPorts, outPorts, permanent) {
+    var that = gWidget(context, sComp.title());
         
     sComp.setArgs(sCompArgs);
         

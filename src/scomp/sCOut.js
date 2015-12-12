@@ -5,12 +5,15 @@
 /*global gui*/
 /*global gWidget*/
 /*global gSlider*/
+/*global sCBase*/
 
-function sCOut(container) {
-    var that = gWidget(container, "OUT"),
+function sCOut(container, args) {
+    var that,
         mix = sMix(),
         ioport = gIO.makeIn(mix);
         
+    that = sCBase(container, mix, args, [ioport], [], true);
+    
     function setGain(value) {
         mix.setArgs({"gainL": value, "gainR": value});
     }

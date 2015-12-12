@@ -3,7 +3,7 @@
 /*global audio*/
 /*global test*/
 /*global gIO*/
-/*global sCMenuBar*/
+/*global menuBar*/
 /*global URL*/
 
 var app = {
@@ -19,18 +19,18 @@ var app = {
 window.onload = function () {
     var freqSelect = document.getElementById("freqSelect"),
         workspace = document.getElementById("workspace"),
-        menuBar;
+        topMenu;
     
     /*testsuite*/
     test.runTests();
     
     input.init();
     
-    menuBar = sCMenuBar(freqSelect, workspace).move(0, 0);
+    topMenu = menuBar(freqSelect, workspace).move(0, 0);
     
     if (!test.verifyFunctionality(URL.createObjectURL, "URL.createObjectURL")
             || !test.verifyFunctionality(URL.revokeObjectURL, "URL.revokeObjectURL")) {
-        menuBar.logError("need URL");
+        topMenu.logError("need URL");
     }
     
     freqSelect.addEventListener("keydown", input.parseInputDown, false);
@@ -41,6 +41,6 @@ window.onload = function () {
         audio.startAudio();
         gIO.connectAll(document.getElementById("lines"));
     } else {
-        menuBar.logError("need AudioContext and Array.fill");
+        topMenu.logError("need AudioContext and Array.fill");
     }
 };

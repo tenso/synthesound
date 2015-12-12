@@ -2,20 +2,17 @@
 /*global sDelay*/
 /*global gIO*/
 /*global gui*/
-/*global gWidget*/
+/*global sCBase*/
 /*global gSlider*/
 
-function sCDelay(container) {
-    var that = gWidget(container, "DELAY"),
+function sCDelay(container, args) {
+    var that,
         delay = sDelay({"gain": 0.1, "delay": 0.15}),
         outPort = gIO.makeOut(delay),
         inPort = gIO.makeIn(delay);
 
-    //FIXME: this should be common stuff to all scComp!
-    that.addRemove(function () {
-        gIO.delAllConnectionsToAndFromSComp(delay);
-    });
-    
+    that = sCBase(container, delay, args, [inPort], [outPort]);
+        
     that.addLabeledContent(inPort, "in");
     that.addLabeledContent(outPort, "out");
     that.nextRow();

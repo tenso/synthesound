@@ -2,18 +2,16 @@
 /*global sAdsr*/
 /*global gIO*/
 /*global gui*/
-/*global gWidget*/
+/*global sMix*/
+/*global sCBase*/
 
-function sCMix(container) {
-    var that = gWidget(container, "MIX"),
+function sCMix(container, args) {
+    var that,
         mix = sMix(),
         outPort = gIO.makeOut(mix),
         inPort = gIO.makeIn(mix);
-
-    //FIXME: this should be common stuff to all scComp!
-    that.addRemove(function () {
-        gIO.delAllConnectionsToAndFromSComp(mix);
-    });
+    
+    that = sCBase(container, mix, args, [inPort], [outPort]);
     
     that.addLabeledContent(inPort, "in");
     that.addLabeledContent(outPort, "out");

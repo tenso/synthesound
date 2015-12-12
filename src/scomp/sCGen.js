@@ -2,21 +2,18 @@
 /*global sGen*/
 /*global gIO*/
 /*global gui*/
-/*global gWidget*/
+/*global sCBase*/
 /*global gButton*/
 
-function sCGen(container) {
-    var that = gWidget(container, "GEN"),
+function sCGen(container, args) {
+    var that,
         typeButtons = [],
         out = sGen({"freq": 110, "amp": 0.25, "type": "sine"}),
         outPort = gIO.makeOut(out),
         freqPort = gIO.makeIn(out, "freq"),
         button;
-
-    //FIXME: this should be common stuff to all scComp!
-    that.addRemove(function () {
-        gIO.delAllConnectionsToAndFromSComp(out);
-    });
+    
+    that = sCBase(container, out, args, [], [outPort]);
     
     that.addLabeledContent(freqPort, "hz");
     that.addLabeledContent(outPort, "out");
