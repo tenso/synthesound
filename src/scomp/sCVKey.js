@@ -1,7 +1,8 @@
 "use strict";
 /*global sConst*/
 /*global sStep*/
-/*global gIO*/
+/*global inPort*/
+/*global outPort*/
 /*global gui*/
 /*global note*/
 /*global gVKey*/
@@ -22,8 +23,8 @@ function sCVKey(container) {
         keyboard,
         label;
 
-    gateOut = gIO.makeOut(gate);
-    hzOut = gIO.makeOut(hz);
+    gateOut = outPort(gate);
+    hzOut = outPort(hz);
 
     that.addContent(currentNote);
     

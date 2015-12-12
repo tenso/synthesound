@@ -4,9 +4,6 @@
 /*global gui*/
 /*global gMenu*/
 
-//FIXME: application specific move from gui.
-//FIXME: break class into two
-
 var gIO = {
     linesCanvas: undefined,
     linesCtx: undefined,
@@ -36,7 +33,7 @@ var gIO = {
         }
     },
     
-    connectAll: function (canvas) {
+    init: function (canvas) {
         var i;
             
         gIO.linesCanvas = canvas;
@@ -88,13 +85,25 @@ var gIO = {
         return connections;
     },
     
-    connectPorts: function (from, to) {
-
-        if (from.sComp && to.sComp) {
-            if (!from.isOut || to.isOut) {
+    connectPorts: function (p1, p2) {
+        var from,
+            to,
+            con;
+        
+        if (p1.sComp && p2.sComp) {
+            if (p1.isOut === p2.isOut) {
                 log.error("connection is not from out to in");
                 return false;
             }
+            
+            if (p1.isOut) {
+                from = p1;
+                to = p2;
+            } else {
+                from = p2;
+                to = p1;
+            }
+               
             if (from.sComp === to.sComp) {
                 log.warn("inter component feedback not allowed");
                 return false;
@@ -103,12 +112,15 @@ var gIO = {
                 log.warn("already have connection");
                 return false;
             }
-            var con = {"from": from, "to": to};
+            
+            con = {from: from, to: to};
             gIO.connections.push(con);
 
             to.sComp.addInput(from.sComp, to.ioType);
             gIO.drawConnections();
             return true;
+        } else {
+            log.error("cant connect to non port(s)");
         }
     },
     
@@ -154,10 +166,12 @@ var gIO = {
                 input.setMouseCapturer(e);
             }
         };
+        
         port.onmousepressandmove = function (e, mouse) {
             gIO.drawConnections();
             gIO.drawLine(mouse.captureX, mouse.captureY, e.pageX, e.pageY);
         };
+        
         port.onmouseupaftercapture = function (e) {
             if (e.target.sComp && !e.target.isOut) {
                 gIO.connectPorts(e.mouseCapturer, e.target);
@@ -165,6 +179,7 @@ var gIO = {
                 gIO.drawConnections();
             }
         };
+        
         port.onopencontextmenu = function (e) {
             var connections,
                 menu,
@@ -200,34 +215,5 @@ var gIO = {
                 menu.move(e.pageX - 20, e.pageY - 20);
             }
         };
-    },
-    
-    init: function (target, sComp, isOut, type) {
-        target.className = "ioport";
-
-        if (isOut) {
-            target.className += " ioport-out";
-        } else {
-            target.className += " ioport-in";
-        }
-        target.sComp = sComp;
-        target.isOut = isOut;
-        target.ioType = type || "";
-        
-        gIO.addMouseEventsToPort(target);
-    },
-
-    make: function (sComp, isOut, type) {
-        var ioport = document.createElement("div");
-        gIO.init(ioport, sComp, isOut, type);
-        return ioport;
-    },
-    
-    makeIn: function (sComp, type) {
-        return gIO.make(sComp, false, type);
-    },
-    
-    makeOut: function (sComp) {
-        return gIO.make(sComp, true, "");
     }
 };

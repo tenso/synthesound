@@ -1,22 +1,13 @@
 "use strict";
 /*global sAdsr*/
-/*global gIO*/
-/*global gui*/
 /*global sCBase*/
 /*global gSlider*/
 
 function sCAdsr(container, args) {
     var that,
-        adsr = sAdsr({"a": 0.01, "d": 0.15, "s": 0.5, "r": 0.01}),
-        outPort = gIO.makeOut(adsr),
-        inPort = gIO.makeIn(adsr),
-        gatePort = gIO.makeIn(adsr, "gate");
+        adsr = sAdsr({"a": 0.01, "d": 0.15, "s": 0.5, "r": 0.01});
 
-    that = sCBase(container, adsr, args, [inPort, gatePort, outPort]);
-        
-    that.addLabeledContent(inPort, "in");
-    that.addLabeledContent(gatePort, "gate");
-    that.addLabeledContent(outPort, "out");
+    that = sCBase(container, adsr, args).addIn().addIn("gate").addOut();
     that.nextRow();
     that.addLabeledContent(gSlider(adsr.getArgs().a, 0.01, 1.0, function (value) {adsr.setArgs({"a": value}); }), "A");
     that.addLabeledContent(gSlider(adsr.getArgs().d, 0.01, 1.0, function (value) {adsr.setArgs({"d": value}); }), "D");

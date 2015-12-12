@@ -46,7 +46,7 @@ window.onload = function () {
     if (test.verifyFunctionality(audio.AudioContext, "audio.AudioContext")
             && test.verifyFunctionality(Array.prototype.fill, "Array.fill")) {
         audio.startAudio();
-        gIO.connectAll(document.getElementById("lines"));
+        gIO.init(document.getElementById("lines"));
     } else {
         topMenu.logError("need AudioContext and Array.fill");
     }

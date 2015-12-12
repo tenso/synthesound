@@ -1,12 +1,15 @@
 "use strict";
 /*global gWidget*/
+/*global inPort*/
+/*global outPort*/
 /*global gIO*/
 /*global log*/
 
 //FIXME: rename all sC to sG
 
-function sCBase(context, soundComp, sCompArgs, ports, permanent) {
-    var that = gWidget(context, soundComp.title());
+function sCBase(context, soundComp, sCompArgs, permanent) {
+    var that = gWidget(context, soundComp.title()),
+        ports = [];
         
     soundComp.setArgs(sCompArgs);
         
@@ -15,6 +18,20 @@ function sCBase(context, soundComp, sCompArgs, ports, permanent) {
             gIO.delAllConnectionsToAndFromSComp(soundComp);
         });
     }
+    
+    that.addIn = function (type) {
+        var port = inPort(soundComp, type);
+        that.addLabeledContent(port, "in");
+        ports.push(port);
+        return that;
+    };
+    
+    that.addOut = function () {
+        var port = outPort(soundComp);
+        that.addLabeledContent(port, "out");
+        ports.push(port);
+        return that;
+    };
     
     that.sCData = function () {
         var data = {

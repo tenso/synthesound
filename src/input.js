@@ -12,10 +12,10 @@ var input = {
     mouse: {},
     
     parseInputDown: function (e) {
-        var noteMap = {"a": "C", "w": "C#", "s": "D",
-                       "e": "D#", "d": "E", "f": "F",
-                       "t": "F#", "g": "G", "y": "G#",
-                       "h" : "A", "u": "A#", "j": "B"},
+        var noteMap = {a: "C",  w: "C#", s: "D",
+                       e: "D#", d: "E",  f: "F",
+                       t: "F#", g: "G",  y: "G#",
+                       h: "A",  u: "A#", j: "B"},
             cNote,
             octave,
             key = String.fromCharCode(e.keyCode);
