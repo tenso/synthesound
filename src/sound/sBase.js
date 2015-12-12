@@ -18,6 +18,11 @@ function sBase(sId) {
         return sId;
     };
     
+    that.setTitle = function (value) {
+        sId = value;
+        return that;
+    };
+    
     //FIXME: make private?
     that.data = [];
     that.genData = undefined;

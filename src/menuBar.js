@@ -25,14 +25,12 @@ function menuBar(container, contentContainer) {
     file = gMenuButton("file", menus);
     file.add("load", function () {
         Files.loadData(function (data) {
-            gNote(contentContainer, JSON.stringify(data));
+            audio.loadWorkspace(data);
         });
     });
     file.add("save", function () {
-        Files.saveData("file.json", {
-            "test": "top",
-            "testVar2": [1, 2, 3]
-        });
+        var data = audio.workspaceData();
+        Files.saveData("synthdata.json", data);
     });
     that.addContent(file);
     

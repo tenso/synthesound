@@ -19,10 +19,11 @@ function sCGen(container, args) {
     that.addLabeledContent(outPort, "out");
     
     button = gButton("sine", function () {out.setArgs({"type": "sine"}); }, true, typeButtons);
-    button.setValue(true);
+    button.setValue(out.getArgs().type === "sine");
     that.addContent(button);
     
     button = gButton("square", function () {out.setArgs({"type": "square"}); }, true, typeButtons);
+    button.setValue(out.getArgs().type === "square");
     that.addContent(button);
     
     return that;

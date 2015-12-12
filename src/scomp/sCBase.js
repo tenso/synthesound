@@ -13,12 +13,13 @@ function sCBase(context, sComp, sCompArgs, inPorts, outPorts, permanent) {
         });
     }
     
-    that.data = function () {
+    that.sCData = function () {
         return {
             "sId": sComp.title(),
             "sArgs": sComp.getArgs(),
             "x": that.getX(),
-            "y": that.getY()
+            "y": that.getY(),
+            "inputs": [] /*{id, type}*/
         };
     };
     return that;

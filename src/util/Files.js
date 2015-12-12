@@ -1,11 +1,12 @@
 "use strict";
 /*global URL*/
 /*global Blob*/
+/*global FileReader*/
 
 var Files = {
 
     saveData: function (fileName, data) {
-        var stringData = JSON.stringify(data),
+        var stringData = JSON.stringify(data, undefined, 2),
             a = document.createElement("a"),
             blob = new Blob([stringData], {type: "application/json"});
         

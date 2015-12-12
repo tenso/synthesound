@@ -6,10 +6,11 @@
 /*global gWidget*/
 /*global gSlider*/
 /*global sCBase*/
+/*global audio*/
 
 function sCOut(container, args) {
     var that,
-        mix = sMix(),
+        mix = sMix().setTitle("mainOut"),
         ioport = gIO.makeIn(mix);
         
     that = sCBase(container, mix, args, [ioport], [], true);
@@ -20,11 +21,14 @@ function sCOut(container, args) {
 
     that.addContent(ioport);
     that.nextRow();
-    that.addLabeledContent(gSlider(0.5, 0.0, 1.0, setGain), "VOL");
+    that.addLabeledContent(gSlider(mix.getArgs().gainL, 0.0, 1.0, setGain), "VOL");
     
     that.getOutput = function () {
         return mix;
     };
+    
+    //FIXME: global coupling!
+    audio.mixerOut.addInput(mix);
     
     return that;
 }

@@ -1,10 +1,12 @@
 "use strict";
 /*global input*/
 /*global audio*/
+/*global log*/
 /*global test*/
 /*global gIO*/
 /*global menuBar*/
 /*global URL*/
+/*global FileReader*/
 
 var app = {
     ver: "1.0",
@@ -33,6 +35,10 @@ window.onload = function () {
         topMenu.logError("need URL");
     }
     
+    if (!test.verifyFunctionality(FileReader, "FileReader")) {
+        topMenu.logError("need FileReader");
+    }
+    
     freqSelect.addEventListener("keydown", input.parseInputDown, false);
     freqSelect.addEventListener("keyup", input.parseInputUp, false);
 
@@ -43,4 +49,12 @@ window.onload = function () {
     } else {
         topMenu.logError("need AudioContext and Array.fill");
     }
+    
+    function confirmExit(e) {
+        /*var returnValue = "confirm exit!";
+        e.returnValue = returnValue;
+        return returnValue;*/
+    }
+    
+    window.addEventListener("beforeunload", confirmExit);
 };
