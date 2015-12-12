@@ -12,7 +12,7 @@ function sCAdsr(container, args) {
         inPort = gIO.makeIn(adsr),
         gatePort = gIO.makeIn(adsr, "gate");
 
-    that = sCBase(container, adsr, args);
+    that = sCBase(container, adsr, args, [inPort, gatePort, outPort]);
         
     that.addLabeledContent(inPort, "in");
     that.addLabeledContent(gatePort, "gate");

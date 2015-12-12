@@ -87,8 +87,8 @@ var gIO = {
         }
         return connections;
     },
-        
-    addConnection: function (from, to) {
+    
+    connectPorts: function (from, to) {
 
         if (from.sComp && to.sComp) {
             if (!from.isOut || to.isOut) {
@@ -107,6 +107,7 @@ var gIO = {
             gIO.connections.push(con);
 
             to.sComp.addInput(from.sComp, to.ioType);
+            gIO.drawConnections();
             return true;
         }
     },
@@ -159,9 +160,10 @@ var gIO = {
         };
         port.onmouseupaftercapture = function (e) {
             if (e.target.sComp && !e.target.isOut) {
-                gIO.addConnection(e.mouseCapturer, e.target);
+                gIO.connectPorts(e.mouseCapturer, e.target);
+            } else {
+                gIO.drawConnections();
             }
-            gIO.drawConnections();
         };
         port.onopencontextmenu = function (e) {
             var connections,
@@ -225,7 +227,7 @@ var gIO = {
         return gIO.make(sComp, false, type);
     },
     
-    makeOut: function (sComp, type) {
-        return gIO.make(sComp, true, type);
+    makeOut: function (sComp) {
+        return gIO.make(sComp, true, "");
     }
 };

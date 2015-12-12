@@ -11,7 +11,7 @@ function sCMix(container, args) {
         outPort = gIO.makeOut(mix),
         inPort = gIO.makeIn(mix);
     
-    that = sCBase(container, mix, args);
+    that = sCBase(container, mix, args, [inPort, outPort]);
     
     that.addLabeledContent(inPort, "in");
     that.addLabeledContent(outPort, "out");

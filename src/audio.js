@@ -13,18 +13,16 @@
 /*global gui*/
 /*global gMenu*/
 /*global app*/
+/*global gIO*/
 
 var audio = {
-    generators: [],
-    mixer: undefined,
     mixerOut: undefined,
-    adsr: undefined,
-    delay: undefined,
     out: undefined,
     key: undefined,
     scope: undefined,
     AudioContext: window.AudioContext || window.webkitAudioContext,
     audioRunning: false,
+    workspace: undefined,
 
     keyDown: function (notePressed) {
         audio.key.keyDown(notePressed);
@@ -43,23 +41,20 @@ var audio = {
     },
     
     createSComp: function (data) {
-        var workspace = document.getElementById("workspace");
-        
         if (audio.constructorMap.hasOwnProperty(data.sId)) {
-            audio.constructorMap[data.sId](workspace, data.sArgs).move(data.x, data.y);
+            return audio.constructorMap[data.sId](audio.workspace, data.sArgs).move(data.x, data.y);
         } else {
             log.error("dont know sId:" + data.sId);
         }
+        return undefined;
     },
     
     initSComp: function () {
-        var workspace = document.getElementById("workspace");
-
-        audio.key = sCVKey(workspace).move(0, app.screen.minY);
-        audio.scope = sCScope(workspace).move(0, audio.key.getY() + audio.key.getH());
+        audio.key = sCVKey(audio.workspace).move(0, app.screen.minY);
+        audio.scope = sCScope(audio.workspace).move(0, audio.key.getY() + audio.key.getH());
         
-        workspace.onopencontextmenu = function (e) {
-            var menu = gMenu(workspace).move(e.pageX - 20, e.pageY - 20),
+        audio.workspace.onopencontextmenu = function (e) {
+            var menu = gMenu(audio.workspace).move(e.pageX - 20, e.pageY - 20),
                 sConstructor;
             
             function menuEntry(id, xPos, yPos) {
@@ -78,8 +73,7 @@ var audio = {
     },
     
     workspaceData: function () {
-        var workspace = document.getElementById("workspace"),
-            nodes =  workspace.childNodes,
+        var nodes =  audio.workspace.childNodes,
             i,
             data = {
                 app: app,
@@ -95,19 +89,58 @@ var audio = {
     },
     
     loadWorkspace: function (data) {
-        var i;
+        var i,
+            j,
+            inSComp,
+            outSComp;
+        
         log.info("loading from version: " + data.app.ver);
+        
+        log.info("create components");
         for (i = 0; i < data.workspace.length; i += 1) {
-            audio.createSComp(data.workspace[i]);
+            inSComp = audio.createSComp(data.workspace[i]);
+            inSComp.setSCompUID(data.workspace[i].uid);
+        }
+        
+        log.info("create connections");
+        for (i = 0; i < data.workspace.length; i += 1) {
+            inSComp = audio.findSCComp(data.workspace[i].uid);
+            if (inSComp) {
+                for (j = 0; j < data.workspace[i].inputs.length; j += 1) {
+                    outSComp = audio.findSCComp(data.workspace[i].inputs[j].uid);
+                    
+                    if (outSComp) {
+                        gIO.connectPorts(outSComp.getPort(true, ""), inSComp.getPort(false, data.workspace[i].inputs[j].type));
+                    } else {
+                        log.error("could not find (output) uid:" + data.workspace[i].inputs[j].uid);
+                    }
+                }
+            } else {
+                log.error("could not find (input) uid:" + data.workspace[i].uid);
+            }
         }
     },
     
-    startAudio: function (freq) {
-        var workspace = document.getElementById("workspace");
+    findSCComp: function (uid) {
+        var nodes =  audio.workspace.childNodes,
+            i;
         
+        for (i = 0; i < nodes.length; i += 1) {
+            if (nodes[i].sComp) {
+                if (nodes[i].uid() === uid) {
+                    return nodes[i];
+                }
+            }
+        }
+        return undefined;
+    },
+    
+    startAudio: function (freq) {
         if (audio.audioRunning) {
             return false;
         }
+        
+        audio.workspace = document.getElementById("workspace");
         
         audio.audioCtx = new audio.AudioContext();
             

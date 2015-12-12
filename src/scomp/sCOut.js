@@ -13,7 +13,7 @@ function sCOut(container, args) {
         mix = sMix().setTitle("mainOut"),
         ioport = gIO.makeIn(mix);
         
-    that = sCBase(container, mix, args, true);
+    that = sCBase(container, mix, args, [ioport], true);
     
     function setGain(value) {
         mix.setArgs({"gainL": value, "gainR": value});

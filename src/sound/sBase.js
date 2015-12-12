@@ -40,6 +40,11 @@ function sBase(sId) {
         return myUID;
     };
     
+    that.setUid = function (uid) {
+        myUID = uid;
+        return that;
+    };
+    
     //FIXME: make private?
     that.data = [];
     that.genData = undefined;
