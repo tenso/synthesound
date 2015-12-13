@@ -38,6 +38,17 @@ var gIO = {
         }
     },
     
+    resizeCanvas: function () {
+        var workspaceWidth = document.getElementById("workspace").scrollWidth,
+            workspaceHeight = document.getElementById("workspace").scrollHeight;
+        
+        gIO.linesCanvas.width = workspaceWidth;
+        gIO.linesCanvas.height = workspaceHeight;
+        gIO.linesCanvas.style.width = workspaceWidth;
+        gIO.linesCanvas.style.height = workspaceHeight;
+        gIO.drawConnections();
+    },
+    
     init: function (canvas) {
         var i;
             
@@ -45,15 +56,8 @@ var gIO = {
         gIO.linesCtx = gIO.linesCanvas.getContext("2d");
         gIO.linesCtx.strokeStyle = "#000";
         gIO.linesCtx.lineWidth = 2;
-        
-        function resizeCanvas() {
-            gIO.linesCanvas.width = window.innerWidth;
-            gIO.linesCanvas.height = window.innerHeight;
-            gIO.drawConnections();
-        }
-
-        resizeCanvas();
-        window.addEventListener("resize", resizeCanvas);
+              
+        gIO.resizeCanvas();
     },
     
     haveConnection: function (from, to) {

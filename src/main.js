@@ -27,7 +27,7 @@ window.onload = function () {
     /*testsuite*/
     test.runTests();
     
-    input.init();
+    input.init(workspace, gIO.resizeCanvas); //update size of canvas on workspace grow
     
     topMenu = menuBar(freqSelect, workspace).move(0, 0);
     
@@ -46,11 +46,13 @@ window.onload = function () {
     if (test.verifyFunctionality(audio.AudioContext, "audio.AudioContext")
             && test.verifyFunctionality(Array.prototype.fill, "Array.fill")) {
         audio.startAudio();
+        audio.onworkspacechanged = gIO.resizeCanvas; //update size of canvas on load
         gIO.init(document.getElementById("lines"));
+        window.addEventListener("resize", gIO.resizeCanvas); //update size of canvas on window-resize
     } else {
         topMenu.logError("need AudioContext and Array.fill");
     }
-    
+        
     function confirmExit(e) {
         /*var returnValue = "confirm exit!";
         e.returnValue = returnValue;

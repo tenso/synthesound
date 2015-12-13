@@ -87,8 +87,25 @@ var input = {
         
         input.runCaptureCBIfExist("onmousecaptured", e);
     },
-
-    init: function () {
+    
+    sizeOfContainerChanged: undefined,
+    oldSize: {w: 0, h: 0},
+    
+    checkSize: function (container) {
+        var newSize = {w: container.scrollWidth, h: container.scrollHeight};
+        
+        if (newSize.w !== input.oldSize.w
+                || newSize.h !== input.oldSize.h) {
+            input.oldSize = newSize;
+            if (input.sizeOfContainerChanged) {
+                input.sizeOfContainerChanged(newSize);
+            }
+        }
+    },
+    
+    init: function (container, sizeOfContainerChanged) {
+        input.sizeOfContainerChanged = sizeOfContainerChanged;
+    
         document.addEventListener("mouseup", function (e) {
             if (input.mouseCapturer) {
                 input.runCaptureCBIfExist("onmouseupaftercapture", e);
@@ -103,6 +120,8 @@ var input = {
                 input.mouse.relativeX = e.pageX - input.mouse.captureOffsetInElement.x;
                 input.mouse.relativeY = e.pageY - input.mouse.captureOffsetInElement.y;
                 input.runCaptureCBIfExist("onmousepressandmove", e);
+                
+                input.checkSize(container);
             }
         });
 

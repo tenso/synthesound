@@ -84,8 +84,9 @@ var audio = {
                 workspace: []
             };
         
+        //assumptions is that if it has a data property it should be saved.
         for (i = 0; i < nodes.length; i += 1) {
-            if (nodes[i].data) {
+            if (typeof nodes[i].data === "function") {
                 data.workspace.push(nodes[i].data());
             }
         }
@@ -125,6 +126,10 @@ var audio = {
         log.info("create connections");
         for (i = 0; i < data.connections.length; i += 1) {
             audio.addConnection(data.connections[i]);
+        }
+        
+        if (audio.onworkspacechanged) {
+            audio.onworkspacechanged();
         }
     },
     
