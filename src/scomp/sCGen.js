@@ -9,7 +9,7 @@ function sCGen(container, args) {
         out = sGen({freq: 110, amp: 0.25, type: "sine"}),
         button;
     
-    that = sCBase(container, out, args).addIn("freq").addOut();
+    that = sCBase(container, "sCGen", {gen: out}, args).addIn("gen", "freq").addOut("gen");
         
     button = gButton("sine", function () {out.setArgs({type: "sine"}); }, true, typeButtons);
     button.setValue(out.getArgs().type === "sine");

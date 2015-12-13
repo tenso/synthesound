@@ -2,17 +2,9 @@
 /*global Float32Array*/
 /*global Map*/
 /*global app*/
-
+/*global uidGen*/
     
-var sCompGlobals = {
-    UIDcount: 0,
-    
-    getUID: function () {
-        var uid = sCompGlobals.UIDcount;
-        sCompGlobals.UIDcount += 1;
-        return uid;
-    }
-};
+var sBaseUID = uidGen();
 
 function sBase(sId) {
     var that = {},
@@ -25,7 +17,7 @@ function sBase(sId) {
         inputs = [],
         specialInput = {},
         chanUpdated,
-        myUID = sCompGlobals.getUID();
+        myUID = sBaseUID.getUID();
     
     that.title = function () {
         return sId;
@@ -66,7 +58,7 @@ function sBase(sId) {
         return frameSize;
     };
     
-    that.getInputsUID = function () {
+    that.getInputs = function () {
         var ret = [],
             i,
             key;

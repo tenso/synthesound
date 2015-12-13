@@ -1,16 +1,15 @@
 "use strict";
 /*global sConst*/
 /*global sStep*/
-/*global inPort*/
-/*global outPort*/
 /*global gui*/
 /*global note*/
 /*global gVKey*/
-/*global gWidget*/
+/*global sCBase*/
 /*global gLabel*/
+/*global audio*/
 
-function sCVKey(container) {
-    var that = gWidget(container, "keyboard (FIXME)"),
+function sCVKey(container, args) {
+    var that,
         gate = sStep(),
         hz = sConst(),
         gateOut,
@@ -23,16 +22,12 @@ function sCVKey(container) {
         keyboard,
         label;
 
-    gateOut = outPort(gate);
-    hzOut = outPort(hz);
-
+    that = sCBase(container, "sCVKey", {gate: gate, freq: hz}, args).addOut("gate").addOut("freq");
+    
     that.addContent(currentNote);
     
     gate.setArgs({value: isDown ? 1.0 : 0.0});
             
-    that.addLabeledContent(gateOut, "G");
-    that.addLabeledContent(hzOut, "Hz");
-        
     vkey.className = "collection vkey";
     that.addContent(vkey);
     
@@ -52,6 +47,9 @@ function sCVKey(container) {
     };
     
     keyboard = gVKey(vkey, that.keyDown, that.keyUp);
+    
+    //FIXME: global coupling
+    audio.key = that;
     
     return that;
 }

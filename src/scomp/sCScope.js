@@ -4,7 +4,7 @@
 /*global gScope*/
 
 function sCScope(container) {
-    var that = gWidget(container, "scope (fixme)"),
+    var that = gWidget(container, "scope (FIXME)"),
         scopes = [];
     
     scopes[0] = gScope(0);

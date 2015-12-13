@@ -7,7 +7,9 @@ function sCAdsr(container, args) {
     var that,
         adsr = sAdsr({a: 0.01, d: 0.15, s: 0.5, r: 0.01});
 
-    that = sCBase(container, adsr, args).addIn().addIn("gate").addOut();
+    that = sCBase(container, "sCAdsr", {adsr: adsr}, args);
+    that.addIn("adsr").addIn("adsr", "gate").addOut("adsr");
+    
     that.nextRow();
     that.addLabeledContent(gSlider(adsr.getArgs().a, 0.01, 1.0, function (value) {adsr.setArgs({a: value}); }), "A");
     that.addLabeledContent(gSlider(adsr.getArgs().d, 0.01, 1.0, function (value) {adsr.setArgs({d: value}); }), "D");

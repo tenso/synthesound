@@ -3,6 +3,7 @@
 /*global input*/
 /*global gui*/
 /*global gMenu*/
+/*global ioCon*/
 
 var gIO = {
     linesCanvas: undefined,
@@ -17,7 +18,9 @@ var gIO = {
     },
 
     drawConnections: function () {
-        var i;
+        var i,
+            to,
+            from;
 
         if (!gIO.linesCtx) {
             return;
@@ -26,10 +29,12 @@ var gIO = {
         gIO.linesCtx.clearRect(0, 0, gIO.linesCanvas.width, gIO.linesCanvas.height);
 
         for (i = 0; i < gIO.connections.length; i += 1) {
-            gIO.drawLine(gui.getPos(gIO.connections[i].from).x + gui.getSize(gIO.connections[i].from).w / 2,
-                         gui.getPos(gIO.connections[i].from).y + gui.getSize(gIO.connections[i].from).h / 2,
-                         gui.getPos(gIO.connections[i].to).x + gui.getSize(gIO.connections[i].to).w / 2,
-                         gui.getPos(gIO.connections[i].to).y + gui.getSize(gIO.connections[i].to).h / 2);
+            to = gIO.connections[i].to();
+            from = gIO.connections[i].from();
+            gIO.drawLine(gui.getPos(from).x + gui.getSize(from).w / 2,
+                         gui.getPos(from).y + gui.getSize(from).h / 2,
+                         gui.getPos(to).x + gui.getSize(to).w / 2,
+                         gui.getPos(to).y + gui.getSize(to).h / 2);
         }
     },
     
@@ -54,11 +59,20 @@ var gIO = {
     haveConnection: function (from, to) {
         var i;
         for (i = 0; i < gIO.connections.length; i += 1) {
-            if (gIO.connections[i].from === from && gIO.connections[i].to === to) {
+            if (gIO.connections[i].from() === from && gIO.connections[i].to() === to) {
                 return true;
             }
         }
         return false;
+    },
+    
+    data: function () {
+        var ret = [],
+            i;
+        for (i = 0; i < gIO.connections.length; i += 1) {
+            ret.push(gIO.connections[i].data());
+        }
+        return ret;
     },
     
     getConnectionsFrom: function (ioPort) {
@@ -66,8 +80,8 @@ var gIO = {
             connections = [];
         
         for (i = 0; i < gIO.connections.length; i += 1) {
-            if (gIO.connections[i].from === ioPort) {
-                connections.push(gIO.connections[i].to);
+            if (gIO.connections[i].from() === ioPort) {
+                connections.push(gIO.connections[i].to());
             }
         }
         return connections;
@@ -78,8 +92,8 @@ var gIO = {
             connections = [];
         
         for (i = 0; i < gIO.connections.length; i += 1) {
-            if (gIO.connections[i].to === ioPort) {
-                connections.push(gIO.connections[i].from);
+            if (gIO.connections[i].to() === ioPort) {
+                connections.push(gIO.connections[i].from());
             }
         }
         return connections;
@@ -113,10 +127,10 @@ var gIO = {
                 return false;
             }
             
-            con = {from: from, to: to};
+            con = ioCon(to, from);
             gIO.connections.push(con);
 
-            to.sComp.addInput(from.sComp, to.ioType);
+            to.sComp.addInput(from.sComp, to.portType);
             gIO.drawConnections();
             return true;
         } else {
@@ -136,10 +150,11 @@ var gIO = {
             from = p2;
             to = p1;
         }
-        to.sComp.delInput(from.sComp, to.ioType);
+        
+        to.sComp.delInput(from.sComp, to.portType);
         
         for (i = 0; i < gIO.connections.length; i += 1) {
-            if (gIO.connections[i].from === from && gIO.connections[i].to === to) {
+            if (gIO.connections[i].from() === from && gIO.connections[i].to() === to) {
                 gIO.connections.splice(i, 1);
                 gIO.drawConnections();
                 break;
@@ -147,11 +162,11 @@ var gIO = {
         }
     },
     
-    delAllConnectionsToAndFromSComp: function (port) {
+    delAllConnectionsToAndFromUID: function (uid) {
         var i;
         for (i = 0; i < gIO.connections.length; i += 0) {
-            if (gIO.connections[i].from.sComp === port || gIO.connections[i].to.sComp === port) {
-                gIO.delConnection(gIO.connections[i].from, gIO.connections[i].to);
+            if (gIO.connections[i].from().sCUid === uid || gIO.connections[i].to().sCUid === uid) {
+                gIO.delConnection(gIO.connections[i].from(), gIO.connections[i].to());
             } else {
                 i += 1;
             }
@@ -209,7 +224,7 @@ var gIO = {
                 for (i = 0; i < connections.length; i += 1) {
                     menu.add(e.target.sComp.title() + " > "
                              + connections[i].sComp.title() + " "
-                             + connections[i].ioType + " "
+                             + connections[i].portType + " "
                              + (connections[i].isOut ? "out" : "in"), makeDelCb(menu, e.target, connections[i]));
                 }
                 menu.move(e.pageX - 20, e.pageY - 20);

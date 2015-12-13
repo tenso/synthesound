@@ -16,42 +16,46 @@
 /*global gIO*/
 
 var audio = {
-    mixerOut: undefined,
+    mixerOut: undefined, /*FIXME: globally coupled to sCOut*/
     out: undefined,
-    key: undefined,
+    key: undefined, /*FIXME: globally coupled to sCVKey*/
     scope: undefined,
     AudioContext: window.AudioContext || window.webkitAudioContext,
     audioRunning: false,
     workspace: undefined,
 
     keyDown: function (notePressed) {
-        audio.key.keyDown(notePressed);
+        if (audio.key) {
+            audio.key.keyDown(notePressed);
+        }
     },
 
     keyUp: function (notePressed) {
-        audio.key.keyUp(notePressed);
+        if (audio.key) {
+            audio.key.keyUp(notePressed);
+        }
     },
 
     constructorMap: {
-        gen: sCGen,
-        mix: sCMix,
-        delay: sCDelay,
-        adsr: sCAdsr,
-        mainOut: sCOut
+        sCGen: sCGen,
+        sCMix: sCMix,
+        sCDelay: sCDelay,
+        sCAdsr: sCAdsr,
+        sCOut: sCOut,
+        sCVKey: sCVKey
     },
     
     createSComp: function (data) {
-        if (audio.constructorMap.hasOwnProperty(data.sId)) {
-            return audio.constructorMap[data.sId](audio.workspace, data.sArgs).move(data.x, data.y);
+        if (audio.constructorMap.hasOwnProperty(data.type)) {
+            return audio.constructorMap[data.type](audio.workspace, data.sArgs).move(data.x, data.y);
         } else {
-            log.error("dont know sId:" + data.sId);
+            log.error("workspace: dont know sId:" + data.type);
         }
         return undefined;
     },
     
     initSComp: function () {
-        audio.key = sCVKey(audio.workspace).move(0, app.screen.minY);
-        audio.scope = sCScope(audio.workspace).move(0, audio.key.getY() + audio.key.getH());
+        audio.scope = sCScope(audio.workspace).move(0, app.screen.minY);
         
         audio.workspace.onopencontextmenu = function (e) {
             var menu = gMenu(audio.workspace).move(e.pageX - 20, e.pageY - 20),
@@ -59,7 +63,7 @@ var audio = {
             
             function menuEntry(id, xPos, yPos) {
                 return function () {
-                    audio.createSComp({sId: id, x: xPos, y: yPos});
+                    audio.createSComp({type: id, x: xPos, y: yPos});
                     menu.remove();
                 };
             }
@@ -72,7 +76,7 @@ var audio = {
         };
     },
     
-    workspaceData: function () {
+    data: function () {
         var nodes =  audio.workspace.childNodes,
             i,
             data = {
@@ -81,43 +85,46 @@ var audio = {
             };
         
         for (i = 0; i < nodes.length; i += 1) {
-            if (nodes[i].sCData) {
-                data.workspace.push(nodes[i].sCData());
+            if (nodes[i].data) {
+                data.workspace.push(nodes[i].data());
             }
         }
+        
+        data.connections = gIO.data();
+        
         return data;
+    },
+    
+    addConnection: function (con) {
+        var toSCComp,
+            toPort,
+            fromSCComp,
+            fromPort;
+        
+        toSCComp = audio.findSCComp(con.to.sCUid);
+        fromSCComp = audio.findSCComp(con.from.sCUid);
+                
+        toPort = toSCComp.getPort(con.to.portName, con.to.isOut, con.to.portType);
+        fromPort = fromSCComp.getPort(con.from.portName, con.from.isOut, con.from.portType);
+        gIO.connectPorts(fromPort, toPort);
     },
     
     loadWorkspace: function (data) {
         var i,
             j,
-            inSComp,
-            outSComp;
+            inSComp;
         
         log.info("loading from version: " + data.app.ver);
         
         log.info("create components");
         for (i = 0; i < data.workspace.length; i += 1) {
             inSComp = audio.createSComp(data.workspace[i]);
-            inSComp.setSCompUID(data.workspace[i].uid);
+            inSComp.setUid(data.workspace[i].uid);
         }
         
         log.info("create connections");
-        for (i = 0; i < data.workspace.length; i += 1) {
-            inSComp = audio.findSCComp(data.workspace[i].uid);
-            if (inSComp) {
-                for (j = 0; j < data.workspace[i].inputs.length; j += 1) {
-                    outSComp = audio.findSCComp(data.workspace[i].inputs[j].uid);
-                    
-                    if (outSComp) {
-                        gIO.connectPorts(outSComp.getPort(true, ""), inSComp.getPort(false, data.workspace[i].inputs[j].type));
-                    } else {
-                        log.error("could not find (output) uid:" + data.workspace[i].inputs[j].uid);
-                    }
-                }
-            } else {
-                log.error("could not find (input) uid:" + data.workspace[i].uid);
-            }
+        for (i = 0; i < data.connections.length; i += 1) {
+            audio.addConnection(data.connections[i]);
         }
     },
     
@@ -126,7 +133,7 @@ var audio = {
             i;
         
         for (i = 0; i < nodes.length; i += 1) {
-            if (nodes[i].sComp) {
+            if (nodes[i].uid) {
                 if (nodes[i].uid() === uid) {
                     return nodes[i];
                 }

@@ -6,13 +6,13 @@
 
 function sCOut(container, args) {
     var that,
-        mix = sMix().setTitle("mainOut");
+        mix = sMix();
         
     function setGain(value) {
         mix.setArgs({gainL: value, gainR: value});
     }
         
-    that = sCBase(container, mix, args, true).addIn();
+    that = sCBase(container, "sCOut", {mix: mix}, args, true).addIn("mix");
     that.nextRow();
     that.addLabeledContent(gSlider(mix.getArgs().gainL, 0.0, 1.0, setGain), "VOL");
 

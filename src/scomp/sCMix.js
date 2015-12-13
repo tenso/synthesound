@@ -7,7 +7,7 @@ function sCMix(container, args) {
     var that,
         mix = sMix();
     
-    that = sCBase(container, mix, args).addIn().addOut();
+    that = sCBase(container, "sCMix", {mix: mix}, args).addIn("mix").addOut("mix");
                     
     return that;
 }

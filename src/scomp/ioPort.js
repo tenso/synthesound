@@ -1,7 +1,7 @@
 "use strict";
 /*global gIO*/
 
-function ioPort(sComp, isOut, special) {
+function ioPort(sCUid, sComp, isOut, portName, portType) {
     var that = document.createElement("div");
     
     that.className = "ioport";
@@ -11,18 +11,30 @@ function ioPort(sComp, isOut, special) {
     } else {
         that.className += " ioport-in";
     }
+    that.sCUid = sCUid;
     that.sComp = sComp;
     that.isOut = isOut;
-    that.ioType = special || "";
+    that.portName = portName;
+    that.portType = portType || "";
+    that.isIOPort = true;
 
+    that.data = function () {
+        return {
+            sCUid: that.sCUid,
+            isOut: that.isOut,
+            portName: that.portName,
+            portType: that.portType
+        };
+    };
+    
     gIO.addMouseEventsToPort(that);
     return that;
 }
 
-function inPort(sComp, special) {
-    return ioPort(sComp, false, special);
+function inPort(sCUid, sComp, portName, portType) {
+    return ioPort(sCUid, sComp, false, portName, portType);
 }
 
-function outPort(sComp, special) {
-    return ioPort(sComp, true, special);
+function outPort(sCUid, sComp, portName, portType) {
+    return ioPort(sCUid, sComp, true, portName, portType);
 }

@@ -4,69 +4,117 @@
 /*global outPort*/
 /*global gIO*/
 /*global log*/
+/*global uidGen*/
 
 //FIXME: rename all sC to sG
+//FIXME: rename all sId to portName?
 
-function sCBase(context, soundComp, sCompArgs, permanent) {
-    var that = gWidget(context, soundComp.title()),
-        ports = [];
-        
-    soundComp.setArgs(sCompArgs);
-        
-    if (!permanent) {
-        that.addRemove(function () {
-            gIO.delAllConnectionsToAndFromSComp(soundComp);
-        });
+var scBaseUID = uidGen();
+
+function sCBase(context, type, sComps, sArgs, permanent) {
+    var that = gWidget(context, type),
+        ports = {},
+        sId,
+        myUID = scBaseUID.getUID();
+    
+    //FIXME: mixin uid functions?
+    that.uid = function () {
+        return myUID;
+    };
+    
+    that.setUid = function (uid) {
+        myUID = uid;
+        return that;
+    };
+    
+    function makeRemoveAllConnections() {
+        return function () {
+            gIO.delAllConnectionsToAndFromUID(that.uid());
+        };
     }
     
-    that.addIn = function (type) {
-        var port = inPort(soundComp, type);
+    if (!permanent) {
+        that.addRemove(makeRemoveAllConnections());
+    }
+    
+    for (sId in sComps) {
+        if (sComps.hasOwnProperty(sId)) {
+            ports[sId] = [];
+            if (sArgs && sArgs.hasOwnProperty(sId)) {
+                sComps[sId].setArgs(sArgs[sId]);
+            }
+        }
+    }
+    
+    that.addIn = function (sId, type) {
+        if (!sComps.hasOwnProperty(sId)) {
+            log.error("sCBase.addIn: dont have:" + sId);
+            return;
+        }
+        
+        var port = inPort(that.uid(), sComps[sId], sId, type);
         that.addLabeledContent(port, type || "in");
-        ports.push(port);
+        ports[sId].push(port);
         return that;
     };
     
-    that.addOut = function () {
-        var port = outPort(soundComp);
-        that.addLabeledContent(port, "out");
-        ports.push(port);
+    that.addOut = function (sId, type) {
+        if (!sComps.hasOwnProperty(sId)) {
+            log.error("sCBase.addOut dont have:" + sId);
+            return;
+        }
+        
+        var port = outPort(that.uid(), sComps[sId], sId, type);
+        that.addLabeledContent(port, type || sId || "out");
+        ports[sId].push(port);
         return that;
     };
     
-    that.sCData = function () {
-        var data = {
-                sId: soundComp.title(),
-                uid: soundComp.uid(),
-                sArgs: soundComp.getArgs(),
+    that.data = function () {
+        var sId,
+            i,
+            data = {
+                type: type,
+                uid: that.uid(),
                 x: that.getX(),
                 y: that.getY(),
-                inputs: soundComp.getInputsUID()
+                sComps: [],
+                sArgs: {}
             };
-            
+
+        for (sId in sComps) {
+            if (sComps.hasOwnProperty(sId)) {
+                data.sComps.push({
+                    type: sComps[sId].title(),
+                    sId: sId
+                });
+            }
+        }
+        
+        for (sId in sComps) {
+            if (sComps.hasOwnProperty(sId)) {
+                data.sArgs[sId] = sComps[sId].getArgs();
+            }
+        }
+        
         return data;
     };
     
-    that.setSCompUID = function (uid) {
-        soundComp.setUid(uid);
-        return that;
-    };
-    
-    that.uid = function () {
-        return soundComp.uid();
-    };
-    
-    that.sComp = function () {
-        return soundComp;
-    };
-    
-    that.getPort = function (isOut, type) {
+    that.getPort = function (sId, isOut, type) {
         var i;
-        for (i = 0; i < ports.length; i += 1) {
-            if (ports[i].isOut === isOut && ports[i].ioType === type) {
-                return ports[i];
+        
+        if (!sComps.hasOwnProperty(sId)) {
+            log.error(that.uid() + ".getPort: dont have:" + sId);
+            console.log(sComps);
+            return;
+        }
+        
+        for (i = 0; i < ports[sId].length; i += 1) {
+            if (ports[sId][i].isOut === isOut && ports[sId][i].portType === type) {
+                return ports[sId][i];
             }
         }
-        log.error("could not find port " + soundComp.title() + " " + soundComp.uid() + " " + type + " out:" + isOut);
+        log.error("could not find port");
         return undefined;
     };
     

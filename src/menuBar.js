@@ -29,7 +29,7 @@ function menuBar(container, contentContainer) {
         });
     });
     file.add("save", function () {
-        var data = audio.workspaceData();
+        var data = audio.data();
         Files.saveData("synthdata.json", data);
     });
     that.addContent(file);
