@@ -82,7 +82,7 @@ function sAdsr(args) {
     };
 
     that.getArgs = function () {
-        return {"a": a, "d": d, "s": s, "r": r, "active": active};
+        return {a: a, d: d, s: s, r: r, active: active};
     };
     
     that.setArgs = function (args) {

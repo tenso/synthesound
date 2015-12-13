@@ -28,7 +28,7 @@ function sCVKey(container) {
 
     that.addContent(currentNote);
     
-    gate.setArgs({"value": isDown ? 1.0 : 0.0});
+    gate.setArgs({value: isDown ? 1.0 : 0.0});
             
     that.addLabeledContent(gateOut, "G");
     that.addLabeledContent(hzOut, "Hz");
@@ -42,13 +42,13 @@ function sCVKey(container) {
         
         currentNote.set(note.name(notePressed));
         
-        gate.setArgs({"active": isDown});
-        hz.setArgs({"value": note.hz(notePressed)});
+        gate.setArgs({active: isDown});
+        hz.setArgs({value: note.hz(notePressed)});
     };
     
     that.keyUp = function (notePressed) {
         isDown = false;
-        gate.setArgs({"active": isDown});
+        gate.setArgs({active: isDown});
     };
     
     keyboard = gVKey(vkey, that.keyDown, that.keyUp);

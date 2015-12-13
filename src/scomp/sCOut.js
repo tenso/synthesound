@@ -9,7 +9,7 @@ function sCOut(container, args) {
         mix = sMix().setTitle("mainOut");
         
     function setGain(value) {
-        mix.setArgs({"gainL": value, "gainR": value});
+        mix.setArgs({gainL: value, gainR: value});
     }
         
     that = sCBase(container, mix, args, true).addIn();

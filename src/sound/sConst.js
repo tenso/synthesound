@@ -20,7 +20,7 @@ function sConst(args) {
     };
     
     that.getArgs = function () {
-        return {"value": value};
+        return {value: value};
     };
     
     that.setArgs = function (args) {

@@ -27,7 +27,7 @@ function sStep(args) {
     };
     
     that.getArgs = function () {
-        return {"active": wantStep};
+        return {active: wantStep};
     };
     
     that.setArgs = function (args) {

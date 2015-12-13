@@ -33,7 +33,7 @@ function gWidget(container, title) {
 
         titleElem.innerText = title;
         titleElem.className = "label";
-        titleElem.colSpan = 10000;
+        titleElem.colSpan = 1000;
         row.appendChild(titleElem);
         return row;
     }

@@ -21,7 +21,7 @@ function sCBase(context, soundComp, sCompArgs, permanent) {
     
     that.addIn = function (type) {
         var port = inPort(soundComp, type);
-        that.addLabeledContent(port, "in");
+        that.addLabeledContent(port, type || "in");
         ports.push(port);
         return that;
     };
@@ -35,12 +35,12 @@ function sCBase(context, soundComp, sCompArgs, permanent) {
     
     that.sCData = function () {
         var data = {
-                "sId": soundComp.title(),
-                "uid": soundComp.uid(),
-                "sArgs": soundComp.getArgs(),
-                "x": that.getX(),
-                "y": that.getY(),
-                "inputs": soundComp.getInputsUID()
+                sId: soundComp.title(),
+                uid: soundComp.uid(),
+                sArgs: soundComp.getArgs(),
+                x: that.getX(),
+                y: that.getY(),
+                inputs: soundComp.getInputsUID()
             };
             
         return data;

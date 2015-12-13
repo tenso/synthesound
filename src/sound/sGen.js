@@ -52,7 +52,7 @@ function sGen(args) {
     };
 
     that.getArgs = function () {
-        return {"amp": amp, "freq": freq, "phase": phase, "type": type, "isOn": isOn};
+        return {amp: amp, freq: freq, phase: phase, type: type, isOn: isOn};
     };
     
     that.setArgs = function (args) {

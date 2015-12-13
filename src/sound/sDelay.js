@@ -43,7 +43,7 @@ function sDelay(args) {
     };
 
     that.getArgs = function () {
-        return {"gain": gain, "delay": delay};
+        return {gain: gain, delay: delay};
     };
     
     that.setArgs = function (args) {

@@ -25,7 +25,7 @@ function sMix(args) {
     };
  
     that.getArgs = function () {
-        return {"gainL": gain[0], "gainR": gain[1]};
+        return {gainL: gain[0], gainR: gain[1]};
     };
     
     that.setArgs = function (args) {

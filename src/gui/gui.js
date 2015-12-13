@@ -21,19 +21,22 @@ var gui = {
             y += element.offsetTop;
         }
 
-        return {"x": x, "y": y};
+        return {x: x, y: y};
     },
     
     getEventOffsetInElement: function (element, event) {
         var pos = gui.getPos(element);
-        return {"x": event.pageX - pos.x, "y": event.pageY - pos.y};
+        return {
+            x: event.pageX - pos.x,
+            y: event.pageY - pos.y
+        };
     },
     
     getSize: function (elem) {
         var w = elem.offsetWidth,
             h = elem.offsetHeight;
 
-        return {"w": w, "h": h};
+        return {w: w, h: h};
     },
 
     getStyle: function (element, property) {
