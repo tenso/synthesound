@@ -1,8 +1,8 @@
 "use strict";
 /*global gui*/
 
-function gBase() {
-    var that = document.createElement("div"),
+function gBase(type) {
+    var that = document.createElement(type || "div"),
         originalColor,
         hoverColor,
         oldDisplay;
@@ -15,6 +15,18 @@ function gBase() {
             that.style.display = oldDisplay;
         }
         
+        return that;
+    };
+    
+    that.display = function (value) {
+        that.style.display = value;
+        oldDisplay = that.style.display;
+        
+        return that;
+    };
+    
+    that.margin = function (value) {
+        that.style.margin = value;
         return that;
     };
     
@@ -77,6 +89,14 @@ function gBase() {
     
     that.height = function (value) {
         return gui.stylePxIfInt(that, "height", value);
+    };
+    
+    that.minWidth = function (value) {
+        return gui.stylePxIfInt(that, "minWidth", value);
+    };
+    
+    that.minHeight = function (value) {
+        return gui.stylePxIfInt(that, "minHeight", value);
     };
     
     that.setClass = function (className) {

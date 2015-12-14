@@ -26,12 +26,14 @@ function gScope(channel) {
             x = 0,
             y = 0;
 
-        gotData += data.length;
-        if (gotData < length) {
-            return;
+        if (data) {
+            gotData += data.length;
+            if (gotData < length) {
+                return;
+            }
+            gotData = 0;
+            graphData.setArray(data);
         }
-        gotData = 0;
-        graphData.setArray(data);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 

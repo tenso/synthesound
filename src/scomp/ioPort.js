@@ -1,8 +1,9 @@
 "use strict";
 /*global gIO*/
+/*global gBase*/
 
 function ioPort(sCUid, sComp, isOut, portName, portType) {
-    var that = document.createElement("div");
+    var that = gBase();
     
     that.className = "ioport";
 

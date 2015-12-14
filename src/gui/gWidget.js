@@ -27,15 +27,11 @@ function gWidget(container, title) {
         that.container.removeChild(that);
     };
     
-    function titleRow(title) {
-        var row = document.createElement("tr"),
-            titleElem = document.createElement("td");
+    function makeTitle(title) {
+        var titleElem = gBase();
 
         titleElem.innerText = title;
-        titleElem.className = "label";
-        titleElem.colSpan = 1000;
-        row.appendChild(titleElem);
-        return row;
+        return titleElem;
     }
 
     function containerInit(container, title) {
@@ -48,14 +44,18 @@ function gWidget(container, title) {
         that.className = "component";
         that.style.position = "absolute";
         that.style.zIndex = gui.nextZ();
-
+        
+        that.titleRow = gBase();
+        that.titleRow.setClass("titlerow");
+        that.appendChild(that.titleRow);
+        
         that.contId = container.id;
         that.table = document.createElement("table");
         that.table.className = "collection-table";
-        
+                
         if (typeof title === "string") {
             that.title = title;
-            that.table.appendChild(titleRow(that.title));
+            that.titleRow.appendChild(makeTitle(that.title));
         }
         
         that.appendChild(that.table);
@@ -66,17 +66,23 @@ function gWidget(container, title) {
 
     containerInit(container, title);
 
-    that.addContent = function (content) {
-        var cont = document.createElement("td");
+    that.addContent = function (content, wholeRow) {
+        var cont = gBase("td");
         cont.appendChild(content);
         that.content.appendChild(cont);
+        if (wholeRow) {
+            cont.colSpan = 1000;
+        }
         return that;
     };
     
     that.addLabeledContent = function (content, label) {
-        var cont = document.createElement("div"),
+        var cont = gBase().display("inline-block"),
             contLabel = gLabel(label);
-
+        
+        //if we know its gBase: content.margin("0 auto");
+        content.style.margin = "0 auto";
+        
         cont.appendChild(contLabel);
         cont.appendChild(content);
         that.addContent(cont);
@@ -89,9 +95,10 @@ function gWidget(container, title) {
                 callback();
             }
             that.remove();
-        }).size(20, 20).abs().right(-5).top(-5);
+        }).abs().setClass("button close-button");
         
-        that.appendChild(button);
+        
+        that.titleRow.appendChild(button);
         return that;
     };
 

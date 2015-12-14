@@ -42,7 +42,8 @@ var audio = {
         sCDelay: sCDelay,
         sCAdsr: sCAdsr,
         sCOut: sCOut,
-        sCVKey: sCVKey
+        sCVKey: sCVKey,
+        sCScope: sCScope
     },
     
     createSComp: function (data) {
@@ -55,8 +56,7 @@ var audio = {
     },
     
     initSComp: function () {
-        audio.scope = sCScope(audio.workspace).move(0, app.screen.minY);
-        
+    
         audio.workspace.onopencontextmenu = function (e) {
             var menu = gMenu(audio.workspace).move(e.pageX - 20, e.pageY - 20),
                 sConstructor;
@@ -159,7 +159,6 @@ var audio = {
         audio.initSComp();
             
         audio.mixerOut = sMix();
-        audio.mixerOut.setChanUpdatedCallback(function (chan, data) { audio.scope.drawScope(chan, data); });
 
         //create actual output node:
         audio.out = sOutNode(audio.audioCtx, 2, 4096);

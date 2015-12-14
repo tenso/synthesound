@@ -3,12 +3,12 @@
     height: 14px;
     border-radius: 14px;
     background: #000;
-    border: 4px solid #444; 
+    border: 4px solid #444;
 }
 
 .ioport-in {
-    border: 4px solid #f44; 
+    border: 4px solid #f44;
 }
 .ioport-out {
-    border: 4px solid #fc0; 
+    border: 4px solid #fc0;
 }

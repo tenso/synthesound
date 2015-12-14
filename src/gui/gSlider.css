@@ -18,5 +18,5 @@
 .hslider-knob {
     width: 20px;
     /*FIXME: cant have height here, cant set initial value on sliders, set in js*/
-    margin-left: -6px;
+    margin-left: -5px;
 }
