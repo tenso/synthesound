@@ -1,6 +1,7 @@
 .button-class {
     background: #444;
-    border-radius: 4px;
+    border-radius: 2px;
+    border-color: "#000";
     text-align: center;
     color: #fff;
 }
@@ -41,4 +42,29 @@
     border-radius: 4px;
     margin-top: 4px;
     margin-bottom: 4px;
+}
+
+.titlerow {
+    color: #fff;
+    background: #888;
+    margin: 0px;
+    column-span: all;
+    padding-left: 8px;
+    line-height: 24px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+.close-button {
+    position: absolute;
+    height: 20px;
+    background: rgba(0,0,0,0.0);
+    right: 0px;
+    border-top-right-radius: 2px;
+    top: 0px;
+}
+
+.close-button:hover {
+    background: rgba(255,255,255,1);
+    color: #888;
 }
