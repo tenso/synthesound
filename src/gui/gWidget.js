@@ -14,7 +14,7 @@ function gWidget(container, title) {
     var that = gBase();
     
     that.nextRow = function () {
-        that.content = document.createElement("tr");
+        that.content = gBase("tr");
         that.table.appendChild(that.content);
         return that;
     };
@@ -28,8 +28,8 @@ function gWidget(container, title) {
     };
     
     function makeTitle(title) {
-        var titleElem = gBase();
-
+        var titleElem = gBase().marginRight(20);//that is close buttons width
+        
         titleElem.innerText = title;
         return titleElem;
     }
@@ -50,9 +50,10 @@ function gWidget(container, title) {
         that.appendChild(that.titleRow);
         
         that.contId = container.id;
+        //that.table = gBase("table"); //FIXME: gives borders!!
         that.table = document.createElement("table");
         that.table.className = "collection-table";
-                
+                        
         if (typeof title === "string") {
             that.title = title;
             that.titleRow.appendChild(makeTitle(that.title));

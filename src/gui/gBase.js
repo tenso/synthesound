@@ -30,6 +30,14 @@ function gBase(type) {
         return that;
     };
     
+    that.marginLeft = function (value) {
+        return gui.stylePxIfInt(that, "marginLeft", value);
+    };
+    
+    that.marginRight = function (value) {
+        return gui.stylePxIfInt(that, "marginRight", value);
+    };
+    
     that.move = function (x, y) {
         gui.stylePxIfInt(that, "left", x);
         gui.stylePxIfInt(that, "top", y);
