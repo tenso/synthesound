@@ -19,6 +19,7 @@
 .component-label {
     font-size: 14px;
     text-align: center;
+    color: #444;
 }
 
 .collection {
@@ -28,10 +29,13 @@
 .collection-table {
     display: inline-block;
     padding: 4px;
+    table-layout: fixed; /*FIXME: does not work, want even spaced columns*/
 }
 
 .collection-row {
-    vertical-align: top;
+}
+
+.collection-cell {
 }
 
 .label {
@@ -45,7 +49,8 @@
 }
 
 .titlerow {
-    color: #000;
+    color: #fff;
+    background: #aaa;
     font-size: 16px;
     margin: 0px;
     column-span: all;

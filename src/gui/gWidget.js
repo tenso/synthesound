@@ -14,7 +14,7 @@ function gWidget(container, title) {
     var that = gBase();
     
     that.nextRow = function () {
-        that.content = gBase("tr");
+        that.content = gBase("tr").setClass("collection-row");
         that.table.appendChild(that.content);
         return that;
     };
@@ -68,7 +68,7 @@ function gWidget(container, title) {
     containerInit(container, title);
 
     that.addContent = function (content, wholeRow) {
-        var cont = gBase("td");
+        var cont = gBase("td").setClass("collection-cell");
         cont.appendChild(content);
         that.content.appendChild(cont);
         if (wholeRow) {

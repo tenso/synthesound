@@ -3,20 +3,20 @@
 }
 
 .track {
-    background: #888;
+    background: #aaa;
     border: 2px solid #000;
-    border-radius: 8px;
+    border-radius: 6px;
 }
 
 .hslider-track {
-    width: 12px;
+    width: 8px;
     /*FIXME: cant have height here, cant set initial value on sliders, set in js*/
     margin-left: 8px;
     margin-right: 8px;
 }
 
 .hslider-knob {
-    width: 20px;
+    width: 12px;
     /*FIXME: cant have height here, cant set initial value on sliders, set in js*/
-    margin-left: -5px;
+    margin-left: -3px;
 }
