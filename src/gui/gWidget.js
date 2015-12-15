@@ -82,7 +82,7 @@ function gWidget(container, title) {
             contLabel = gLabel(label);
         
         //if we know its gBase: content.margin("0 auto");
-        content.style.margin = "0 auto";
+        content.style.margin = "auto";
         
         cont.appendChild(contLabel);
         cont.appendChild(content);

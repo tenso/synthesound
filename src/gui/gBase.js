@@ -25,11 +25,16 @@ function gBase(type) {
         return that;
     };
     
+    that.padding = function (value) {
+        that.style.padding = value;
+        return that;
+    };
+    
     that.margin = function (value) {
         that.style.margin = value;
         return that;
     };
-    
+        
     that.marginLeft = function (value) {
         return gui.stylePxIfInt(that, "marginLeft", value);
     };
