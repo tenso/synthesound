@@ -30,6 +30,16 @@ function gBase(type) {
         return that;
     };
     
+    that.paddingLeft = function (value) {
+        that.style.paddingLeft = value;
+        return that;
+    };
+    
+    that.paddingRight = function (value) {
+        that.style.paddingRight = value;
+        return that;
+    };
+    
     that.margin = function (value) {
         that.style.margin = value;
         return that;
@@ -136,7 +146,6 @@ function gBase(type) {
     that.size = function (w, h) {
         that.style.width = w + "px";
         that.style.height = h + "px";
-        that.style.lineHeight = h + "px";
         return that;
     };
     
@@ -175,6 +184,11 @@ function gBase(type) {
             that.removeEventListener("mouseleave", mouseLeaveCallback);
         }
         
+        return that;
+    };
+    
+    that.float = function (value) {
+        that.style.float = value;
         return that;
     };
     
