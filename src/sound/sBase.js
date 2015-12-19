@@ -2,9 +2,7 @@
 /*global Float32Array*/
 /*global Map*/
 /*global app*/
-/*global uidGen*/
-    
-var sBaseUID = uidGen();
+
 
 function sBase(sId) {
     var that = {},
@@ -16,8 +14,7 @@ function sBase(sId) {
         genIndex = -1,
         inputs = [],
         specialInput = {},
-        chanUpdated,
-        myUID = sBaseUID.getUID();
+        chanUpdated;
     
     that.title = function () {
         return sId;
@@ -27,16 +24,7 @@ function sBase(sId) {
         sId = value;
         return that;
     };
-    
-    that.uid = function () {
-        return myUID;
-    };
-    
-    that.setUid = function (uid) {
-        myUID = uid;
-        return that;
-    };
-    
+            
     //FIXME: make private?
     that.data = [];
     that.genData = undefined;
@@ -65,14 +53,12 @@ function sBase(sId) {
         
         for (i = 0; i < inputs.length; i += 1) {
             ret.push({
-                uid: inputs[i].uid(),
                 type: ""
             });
         }
         for (key in specialInput) {
             if (specialInput.hasOwnProperty(key)) {
                 ret.push({
-                    uid: specialInput[key].uid(),
                     type: key
                 });
             }

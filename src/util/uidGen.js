@@ -9,5 +9,10 @@ function uidGen() {
         UIDcount += 1;
         return uid;
     };
+    
+    that.peekUID = function () {
+        return UIDcount;
+    };
+            
     return that;
 }

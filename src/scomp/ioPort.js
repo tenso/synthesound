@@ -2,7 +2,7 @@
 /*global gIO*/
 /*global gBase*/
 
-function ioPort(sCUid, sComp, isOut, portName, portType) {
+function ioPort(uid, sComp, isOut, portName, portType) {
     var that = gBase();
     
     that.className = "ioport";
@@ -12,7 +12,7 @@ function ioPort(sCUid, sComp, isOut, portName, portType) {
     } else {
         that.className += " ioport-in";
     }
-    that.sCUid = sCUid;
+    that.uid = uid;
     that.sComp = sComp;
     that.isOut = isOut;
     that.portName = portName;
@@ -21,7 +21,7 @@ function ioPort(sCUid, sComp, isOut, portName, portType) {
 
     that.data = function () {
         return {
-            sCUid: that.sCUid,
+            uid: that.uid,
             isOut: that.isOut,
             portName: that.portName,
             portType: that.portType
@@ -32,10 +32,10 @@ function ioPort(sCUid, sComp, isOut, portName, portType) {
     return that;
 }
 
-function inPort(sCUid, sComp, portName, portType) {
-    return ioPort(sCUid, sComp, false, portName, portType);
+function inPort(uid, sComp, portName, portType) {
+    return ioPort(uid, sComp, false, portName, portType);
 }
 
-function outPort(sCUid, sComp, portName, portType) {
-    return ioPort(sCUid, sComp, true, portName, portType);
+function outPort(uid, sComp, portName, portType) {
+    return ioPort(uid, sComp, true, portName, portType);
 }

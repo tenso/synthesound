@@ -169,7 +169,7 @@ var gIO = {
     delAllConnectionsToAndFromUID: function (uid) {
         var i;
         for (i = 0; i < gIO.connections.length; i += 0) {
-            if (gIO.connections[i].from().sCUid === uid || gIO.connections[i].to().sCUid === uid) {
+            if (gIO.connections[i].from().uid === uid || gIO.connections[i].to().uid === uid) {
                 gIO.delConnection(gIO.connections[i].from(), gIO.connections[i].to());
             } else {
                 i += 1;

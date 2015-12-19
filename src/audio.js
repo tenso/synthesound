@@ -102,8 +102,8 @@ var audio = {
             fromSCComp,
             fromPort;
         
-        toSCComp = audio.findSCComp(con.to.sCUid);
-        fromSCComp = audio.findSCComp(con.from.sCUid);
+        toSCComp = audio.findSCComp(con.to.uid);
+        fromSCComp = audio.findSCComp(con.from.uid);
                 
         toPort = toSCComp.getPort(con.to.portName, con.to.isOut, con.to.portType);
         fromPort = fromSCComp.getPort(con.from.portName, con.from.isOut, con.from.portType);
@@ -113,11 +113,14 @@ var audio = {
     loadWorkspace: function (data) {
         var i,
             j,
-            inSComp;
+            inSComp,
+            uidOffset = 0;
         
         log.info("loading from version: " + data.app.ver);
         
         log.info("create components");
+        uidOffset = scBaseUID.peekUID();
+        log.info("workspace uid: " + uidOffset);
         for (i = 0; i < data.workspace.length; i += 1) {
             inSComp = audio.createSComp(data.workspace[i]);
             inSComp.setUid(data.workspace[i].uid);
