@@ -10,7 +10,7 @@
 
 /*FIXME: should be called gContainer maybe?*/
 
-function gWidget(container, title) {
+function gWidget(container, titleLabel) {
     var that = gBase();
     
     that.nextRow = function () {
@@ -27,14 +27,18 @@ function gWidget(container, title) {
         that.container.removeChild(that);
     };
     
-    function makeTitle(title) {
+    that.title = function () {
+        return titleLabel;
+    };
+    
+    function makeTitle(titleLabel) {
         var titleElem = gBase().marginRight(20);//that is close buttons width
         
-        titleElem.innerText = title;
+        titleElem.innerText = titleLabel;
         return titleElem;
     }
 
-    function containerInit(container, title) {
+    function containerInit(container, titleLabel) {
         if (!that) {
             log.error("gui.containerInit: that is undefined");
         } else if (!container) {
@@ -54,9 +58,9 @@ function gWidget(container, title) {
         that.table = document.createElement("table");
         that.table.className = "gWidgetTable";
                         
-        if (typeof title === "string") {
-            that.title = title;
-            that.titleRow.appendChild(makeTitle(that.title));
+        if (typeof titleLabel === "string") {
+            that.titleLabel = titleLabel;
+            that.titleRow.appendChild(makeTitle(that.titleLabel));
         }
         
         that.appendChild(that.table);
@@ -65,7 +69,7 @@ function gWidget(container, title) {
         that.nextRow();
     }
 
-    containerInit(container, title);
+    containerInit(container, titleLabel);
 
     that.addContent = function (content, wholeRow) {
         var cont = gBase("td").setClass("gWidgetCell");

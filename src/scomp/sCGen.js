@@ -16,10 +16,11 @@ function sCGen(container, args) {
         button.setValue(out.getArgs().type === shape);
         that.addContent(button);
     }
-    
+    that.nextRow();
     addShape("sine");
     addShape("square");
     addShape("saw");
+    that.nextRow();
     addShape("triangle");
     addShape("noise");
 

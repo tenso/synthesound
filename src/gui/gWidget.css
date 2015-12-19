@@ -35,6 +35,7 @@
     height: 20px;
     background: rgba(0,0,0,0.0);
     right: 0px;
+    margin-right: 6px;
     border-top-right-radius: 2px;
     top: 0px;
 }

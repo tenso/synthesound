@@ -1,22 +1,16 @@
-.button {
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 2px;
-    padding-bottom: 2px;
+.gButton {
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
     line-height: 100%;
     display: inline-block;
 }
 
-.radiobutton-active {
-    width: 64px;
-    height: 32px;
-    line-height: 32px;
+.gButtonRadioActive {
     color: #fff;
 }
 
-.radiobutton-inactive {
-    width: 64px;
-    height: 32px;
-    line-height: 32px;
+.gButtonRadioInactive {
     color: #888;
 }
