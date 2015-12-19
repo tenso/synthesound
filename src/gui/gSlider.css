@@ -1,21 +1,15 @@
-.knob {
-    border: 2px solid #000;
-}
-
-.track {
+.gSliderTrack {
     background: #aaa;
     border: 2px solid #000;
     border-radius: 6px;
-}
-
-.hslider-track {
     width: 8px;
     /*FIXME: cant have height here, cant set initial value on sliders, set in js*/
     margin-left: 8px;
     margin-right: 8px;
 }
 
-.hslider-knob {
+.gSliderKnob {
+    border: 2px solid #000;
     width: 12px;
     /*FIXME: cant have height here, cant set initial value on sliders, set in js*/
     margin-left: -3px;

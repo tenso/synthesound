@@ -7,7 +7,7 @@ function gSlider(val, min, max, callback) {
     var track = gBase(),
         knob = document.createElement("div");
 
-    knob.className = "button-class knob hslider-knob";
+    knob.className = "button-class gSliderKnob";
     knob.style.position = "relative";
     knob.style.top = "0px";
     knob.style.height = "25px";
@@ -51,7 +51,7 @@ function gSlider(val, min, max, callback) {
         this.callback(this.value);
     };
 
-    track.className = "hslider-track track";
+    track.className = "gSliderTrack";
     track.style.height = "100px";
     track.knob = knob;
     track.onmousedown = function (e) {

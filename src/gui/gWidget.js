@@ -14,7 +14,7 @@ function gWidget(container, title) {
     var that = gBase();
     
     that.nextRow = function () {
-        that.content = gBase("tr").setClass("collection-row");
+        that.content = gBase("tr").setClass("gWidgetRow");
         that.table.appendChild(that.content);
         return that;
     };
@@ -41,18 +41,18 @@ function gWidget(container, title) {
             log.error("gui.containerInit: container is undefined");
         }
         that.container = container;
-        that.className = "component";
+        that.className = "gWidget";
         that.style.position = "absolute";
         that.style.zIndex = gui.nextZ();
         
         that.titleRow = gBase();
-        that.titleRow.setClass("titlerow");
+        that.titleRow.setClass("gWidgetTitle");
         that.appendChild(that.titleRow);
         
         that.contId = container.id;
         //that.table = gBase("table"); //FIXME: gives borders!!
         that.table = document.createElement("table");
-        that.table.className = "collection-table";
+        that.table.className = "gWidgetTable";
                         
         if (typeof title === "string") {
             that.title = title;
@@ -68,7 +68,7 @@ function gWidget(container, title) {
     containerInit(container, title);
 
     that.addContent = function (content, wholeRow) {
-        var cont = gBase("td").setClass("collection-cell");
+        var cont = gBase("td").setClass("gWidgetCell");
         cont.appendChild(content);
         that.content.appendChild(cont);
         if (wholeRow) {
@@ -96,7 +96,7 @@ function gWidget(container, title) {
                 callback();
             }
             that.remove();
-        }).abs().setClass("button close-button");
+        }).abs().setClass("button gWidgetCloseButton");
         
         
         that.titleRow.appendChild(button);

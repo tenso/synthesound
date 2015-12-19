@@ -1,0 +1,44 @@
+.gWidget {
+    background: #fff;
+    border: 2px solid #000;
+    border-radius: 4px;
+}
+
+.gWidgetTable {
+    display: inline-block;
+    padding: 4px;
+    table-layout: fixed; /*FIXME: does not work, want even spaced columns*/
+}
+
+.gWidgetRow {
+}
+
+.gWidgetCell {
+    width: 25px;
+}
+
+.gWidgetTitle {
+    color: #fff;
+    background: #aaa;
+    font-size: 16px;
+    margin: 0px;
+    column-span: all;
+    padding-left: 8px;
+    line-height: 24px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+
+.gWidgetCloseButton {
+    position: absolute;
+    color: #888;
+    height: 20px;
+    background: rgba(0,0,0,0.0);
+    right: 0px;
+    border-top-right-radius: 2px;
+    top: 0px;
+}
+
+.gWidgetCloseButton:hover {
+    color: #444;
+}

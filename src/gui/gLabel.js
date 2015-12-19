@@ -4,7 +4,7 @@
 function gLabel(label) {
     var that = gBase();
     that.innerText = label;
-    that.className = "component-label";
+    that.className = "gLabel";
     
     that.set = function (str) {
         that.innerText = str;
