@@ -11,13 +11,18 @@ function sCGen(container, args) {
     
     that = sCBase(container, "sCGen", {gen: out}, args).addIn("gen", "freq").addOut("gen");
         
-    button = gButton("sine", function () {out.setArgs({type: "sine"}); }, true, typeButtons);
-    button.setValue(out.getArgs().type === "sine");
-    that.addContent(button);
+    function addShape(shape) {
+        button = gButton(shape, function () {out.setArgs({type: shape}); }, true, typeButtons);
+        button.setValue(out.getArgs().type === shape);
+        that.addContent(button);
+    }
     
-    button = gButton("square", function () {out.setArgs({type: "square"}); }, true, typeButtons);
-    button.setValue(out.getArgs().type === "square");
-    that.addContent(button);
+    addShape("sine");
+    addShape("square");
+    addShape("saw");
+    addShape("triangle");
+    addShape("noise");
+
     
     return that;
 }

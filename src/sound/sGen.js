@@ -15,12 +15,15 @@ function sGen(args) {
             chan = 0,
             T,
             period,
+            hPeriod,
             phaseStep,
             newFreq = freq,
             inPeriod;
         
+        //FIXME: dubble code #1
         T = (2 * Math.PI * freq) / that.sampleRate();
         period = that.sampleRate() / (freq);
+        hPeriod = period / 2.0;
         
         for (i = 0; i < that.wantedSamples(); i += 1) {
             
@@ -30,20 +33,37 @@ function sGen(args) {
             
             if (newFreq !== freq) {
                 freq = newFreq;
+                //FIXME: dubble code #1
                 T = (2 * Math.PI * freq) / that.sampleRate();
                 period = that.sampleRate() / (freq);
+                hPeriod = period / 2.0;
             }
+            inPeriod = (inPhase + phase) % period;
             
             if (!isOn) {
                 that.genData[i] = 0;
             } else if (type === "sine") {
                 inPhase += T;
-                that.genData[i] = amp * Math.sin(inPhase + phase);
+                that.genData[i] = Math.sin(inPhase + phase);
             } else if (type === "square") {
                 inPhase += 1;
-                inPeriod = (inPhase + phase) % period;
-                that.genData[i] = amp * (inPeriod < (period / 2.0) ? 1.0 : -1.0);
+                that.genData[i] = inPeriod < hPeriod ? 1.0 : -1.0;
+            } else if (type === "triangle") {
+                inPhase += 1;
+                if (inPeriod <  hPeriod) {
+                    that.genData[i] = -1.0 + (2.0 * (inPeriod  / hPeriod));
+                } else {
+                    that.genData[i] = 1.0 - (2.0 * (inPeriod - hPeriod)  / hPeriod);
+                }
+            } else if (type === "saw") {
+                inPhase += 1;
+                that.genData[i] = -1.0 + (2.0 * (inPeriod  / (period)));
+            } else if (type === "noise") {
+                inPhase += 1;
+                that.genData[i] = -1.0 + 2.0 * Math.random();
             }
+            
+            that.genData[i] *= amp;
         }
 
         for (chan = 0; chan < that.numChannels(); chan += 1) {
