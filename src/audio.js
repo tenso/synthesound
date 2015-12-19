@@ -14,6 +14,9 @@
 /*global gMenu*/
 /*global app*/
 /*global gIO*/
+/*global util*/
+
+/*global scBaseUID*/
 
 var audio = {
     mixerOut: undefined, /*FIXME: globally coupled to sCOut*/
@@ -107,7 +110,25 @@ var audio = {
                 
         toPort = toSCComp.getPort(con.to.portName, con.to.isOut, con.to.portType);
         fromPort = fromSCComp.getPort(con.from.portName, con.from.isOut, con.from.portType);
-        gIO.connectPorts(fromPort, toPort);
+        
+        if (toPort && fromPort) {
+            gIO.connectPorts(fromPort, toPort);
+        } else {
+            log.error("did not find ports");
+        }
+    },
+    
+    offsetDataUid: function (data, offset) {
+        var param;
+        for (param in data) {
+            if (data.hasOwnProperty(param)) {
+                if (util.isCollection(data[param])) {
+                    audio.offsetDataUid(data[param], offset);
+                } else if (param === "uid") {
+                    data[param] += offset;
+                }
+            }
+        }
     },
     
     loadWorkspace: function (data) {
@@ -117,10 +138,11 @@ var audio = {
             uidOffset = 0;
         
         log.info("loading from version: " + data.app.ver);
-        
-        log.info("create components");
+
         uidOffset = scBaseUID.peekUID();
-        log.info("workspace uid: " + uidOffset);
+        log.info("workspace uid: " + uidOffset + ", offset loaddata");
+        audio.offsetDataUid(data, uidOffset);
+        log.info("create components");
         for (i = 0; i < data.workspace.length; i += 1) {
             inSComp = audio.createSComp(data.workspace[i]);
             inSComp.setUid(data.workspace[i].uid);
