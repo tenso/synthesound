@@ -8,7 +8,7 @@
 /*global gLabel*/
 /*global audio*/
 
-function sCVKey(container, args) {
+function sCVKey(container, args, uid) {
     var that,
         gate = sStep(),
         hz = sConst(),
@@ -22,7 +22,7 @@ function sCVKey(container, args) {
         keyboard,
         label;
 
-    that = sCBase(container, "sCVKey", {gate: gate, freq: hz}, args).addOut("gate").addOut("freq");
+    that = sCBase(container, "sCVKey", {gate: gate, freq: hz}, args, uid).addOut("gate").addOut("freq");
     
     that.addContent(currentNote);
     

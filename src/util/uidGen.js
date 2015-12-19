@@ -10,8 +10,13 @@ function uidGen() {
         return uid;
     };
     
-    that.peekUID = function () {
+    that.peek = function () {
         return UIDcount;
+    };
+    
+    that.bumpTo = function (offset) {
+        UIDcount = offset;
+        return that;
     };
             
     return that;

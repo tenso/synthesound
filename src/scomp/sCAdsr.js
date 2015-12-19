@@ -3,11 +3,11 @@
 /*global sCBase*/
 /*global gSlider*/
 
-function sCAdsr(container, args) {
+function sCAdsr(container, args, uid) {
     var that,
         adsr = sAdsr({a: 0.01, d: 0.15, s: 0.5, r: 0.01});
 
-    that = sCBase(container, "sCAdsr", {adsr: adsr}, args);
+    that = sCBase(container, "sCAdsr", {adsr: adsr}, args, uid);
     that.addIn("adsr").addIn("adsr", "gate").addOut("adsr");
     
     that.nextRow();

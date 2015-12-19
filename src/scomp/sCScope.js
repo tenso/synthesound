@@ -4,12 +4,12 @@
 /*global gScope*/
 /*global sMix*/
 
-function sCScope(container, args) {
+function sCScope(container, args, uid) {
     var that,
         mix = sMix(),
         scopes = [];
     
-    that = sCBase(container, "sCScope", {mix: mix}, args);
+    that = sCBase(container, "sCScope", {mix: mix}, args, uid);
     that.addIn("mix").addOut("mix");
     mix.setChanUpdatedCallback(function (chan, data) {scopes[chan].drawGraph(data); });
     scopes[0] = gScope(0).drawGraph();

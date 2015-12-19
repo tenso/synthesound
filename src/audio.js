@@ -51,9 +51,12 @@ var audio = {
         sCConst: sCConst
     },
     
-    createSComp: function (data) {
+    createSComp: function (data, uid) {
+        if (uid > scBaseUID.peek()) {
+            scBaseUID.bumpTo(uid + 1);
+        }
         if (audio.constructorMap.hasOwnProperty(data.type)) {
-            return audio.constructorMap[data.type](audio.workspace, data.sArgs).move(data.x, data.y);
+            return audio.constructorMap[data.type](audio.workspace, data.sArgs, uid).move(data.x, data.y);
         } else {
             log.error("workspace: dont know sId:" + data.type);
         }
@@ -141,13 +144,12 @@ var audio = {
         
         log.info("loading from version: " + data.app.ver);
 
-        uidOffset = scBaseUID.peekUID();
+        uidOffset = scBaseUID.peek();
         log.info("workspace uid: " + uidOffset + ", offset loaddata");
         audio.offsetDataUid(data, uidOffset);
         log.info("create components");
         for (i = 0; i < data.workspace.length; i += 1) {
-            inSComp = audio.createSComp(data.workspace[i]);
-            inSComp.setUid(data.workspace[i].uid);
+            inSComp = audio.createSComp(data.workspace[i], data.workspace[i].uid);
         }
         
         log.info("create connections");

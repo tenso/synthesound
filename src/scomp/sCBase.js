@@ -11,11 +11,11 @@
 
 var scBaseUID = uidGen();
 
-function sCBase(context, type, sComps, sArgs) {
+function sCBase(context, type, sComps, sArgs, uid) {
     var that = gWidget(context, type),
         ports = {},
         sId,
-        myUID = scBaseUID.getUID();
+        myUID = uid || scBaseUID.getUID();
     
     //FIXME: mixin uid functions?
     that.uid = function () {
