@@ -18,6 +18,11 @@ function gBase(type) {
         return that;
     };
     
+    that.text = function (label) {
+        that.innerText = label;
+        return that;
+    };
+    
     that.display = function (value) {
         that.style.display = value;
         oldDisplay = that.style.display;
@@ -106,11 +111,11 @@ function gBase(type) {
         return that;
     };
           
-    that.width = function (value) {
+    that.w = function (value) {
         return gui.stylePxIfInt(that, "width", value);
     };
     
-    that.height = function (value) {
+    that.h = function (value) {
         return gui.stylePxIfInt(that, "height", value);
     };
     
@@ -143,7 +148,7 @@ function gBase(type) {
         return that;
     };
     
-    that.size = function (w, h) {
+    that.setSize = function (w, h) {
         that.style.width = w + "px";
         that.style.height = h + "px";
         return that;

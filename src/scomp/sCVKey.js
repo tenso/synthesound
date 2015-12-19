@@ -15,7 +15,7 @@ function sCVKey(container, args) {
         gateOut,
         hzOut,
         vkey = document.createElement("td"),
-        currentNote = gLabel("--").abs().move(12, 50).size(40, 20).bg("#888").color("#fff").radius(4),
+        currentNote = gLabel("--").abs().move(12, 50).setSize(40, 20).bg("#888").color("#fff").radius(4),
         noteDown = 0,
         isDown = false,
         cont,

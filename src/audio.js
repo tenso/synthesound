@@ -15,6 +15,7 @@
 /*global app*/
 /*global gIO*/
 /*global util*/
+/*global sCConst*/
 
 /*global scBaseUID*/
 
@@ -46,7 +47,8 @@ var audio = {
         sCAdsr: sCAdsr,
         sCOut: sCOut,
         sCVKey: sCVKey,
-        sCScope: sCScope
+        sCScope: sCScope,
+        sCConst: sCConst
     },
     
     createSComp: function (data) {

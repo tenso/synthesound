@@ -4,9 +4,9 @@
 /*global gLabel*/
 
 function gNote(container, note) {
-    var that = gWidget(container).width(400).height(200);
+    var that = gWidget(container).w(400).h(200);
     
-    that.addAt(gLabel(note).width(350).height(150).overflow("auto"), 25, 25);
+    that.addAt(gLabel(note).w(350).h(150).overflow("auto"), 25, 25);
     that.addRemove();
     that.move(100, 100);
     
