@@ -15,8 +15,14 @@ function sCBase(context, type, sComps, sArgs, uid) {
     var that = gWidget(context, type),
         ports = {},
         sId,
-        myUID = uid || scBaseUID.getUID();
+        myUID;
     
+    if (typeof uid === "number") {
+         myUID = uid;
+    } else {
+        myUID = scBaseUID.getUID();
+    }
+        
     //FIXME: mixin uid functions?
     that.uid = function () {
         return myUID;

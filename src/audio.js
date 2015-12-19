@@ -55,7 +55,7 @@ var audio = {
     },
     
     createSComp: function (data, uid) {
-        if (uid > scBaseUID.peek()) {
+        if (uid >= scBaseUID.peek()) {
             scBaseUID.bumpTo(uid + 1);
         }
         if (audio.constructorMap.hasOwnProperty(data.type)) {
@@ -115,14 +115,19 @@ var audio = {
         
         toSCComp = audio.findSCComp(con.to.uid);
         fromSCComp = audio.findSCComp(con.from.uid);
-                
-        toPort = toSCComp.getPort(con.to.portName, con.to.isOut, con.to.portType);
-        fromPort = fromSCComp.getPort(con.from.portName, con.from.isOut, con.from.portType);
         
-        if (toPort && fromPort) {
-            gIO.connectPorts(fromPort, toPort);
+        if (toSCComp && fromSCComp) {
+            toPort = toSCComp.getPort(con.to.portName, con.to.isOut, con.to.portType);
+            fromPort = fromSCComp.getPort(con.from.portName, con.from.isOut, con.from.portType);
+
+            if (toPort && fromPort) {
+                gIO.connectPorts(fromPort, toPort);
+            } else {
+                log.error("did not find ports");
+            }
         } else {
-            log.error("did not find ports");
+            log.error("did not find comps");
+            log.obj(con);
         }
     },
     
