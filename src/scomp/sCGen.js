@@ -6,13 +6,12 @@
 function sCGen(container, args, uid) {
     var that,
         typeButtons = [],
-        out = sGen({freq: 110, amp: 0.25, type: "sine"}),
-        button;
+        out = sGen({freq: 110, amp: 0.25, type: "sine"});
     
     that = sCBase(container, "sCGen", {gen: out}, args, uid).addIn("gen", "freq").addOut("gen");
         
     function addShape(shape) {
-        button = gButton(shape, function () {out.setArgs({type: shape}); }, true, typeButtons);
+        var button = gButton(shape, function () {out.setArgs({type: shape}); }, true, typeButtons);
         button.setValue(out.getArgs().type === shape);
         that.addContent(button);
     }

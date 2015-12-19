@@ -10,12 +10,14 @@
 /*global sCAdsr*/
 /*global sCDelay*/
 /*global sCMix*/
+/*global sCConst*/
+/*global sCOp*/
 /*global gui*/
 /*global wMenu*/
 /*global app*/
 /*global gIO*/
 /*global util*/
-/*global sCConst*/
+
 
 /*global scBaseUID*/
 
@@ -48,7 +50,8 @@ var audio = {
         sCOut: sCOut,
         sCVKey: sCVKey,
         sCScope: sCScope,
-        sCConst: sCConst
+        sCConst: sCConst,
+        sCOp: sCOp
     },
     
     createSComp: function (data, uid) {
