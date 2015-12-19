@@ -2,7 +2,7 @@
 /*global gWidget*/
 /*global gLabel*/
 
-function gMenu(container) {
+function wMenu(container) {
     var that = gWidget(container);
     
     that.add = function (string, callback) {

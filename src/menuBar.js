@@ -1,11 +1,11 @@
 "use strict";
 /*global gWidget*/
 /*global gButton*/
-/*global gMenuButton*/
-/*global gMenu*/
+/*global wMenuButton*/
+/*global wMenu*/
 /*global gLabel*/
 /*global audio*/
-/*global gNote*/
+/*global wNote*/
 /*global app*/
 /*global Files*/
 
@@ -22,7 +22,7 @@ function menuBar(container, contentContainer) {
         audio.stopAudio();
     }).bg("#f00"));
     
-    file = gMenuButton("file", menus);
+    file = wMenuButton("file", menus);
     file.add("load", function () {
         Files.loadData(function (data) {
             audio.loadWorkspace(data);
@@ -34,12 +34,12 @@ function menuBar(container, contentContainer) {
     });
     that.addContent(file);
     
-    about = gMenuButton("?", menus);
-    about.add("help", function () {gNote(contentContainer, helpString).padding(40); });
-    about.add("about", function () {gNote(contentContainer, aboutString).padding(40); });
+    about = wMenuButton("?", menus);
+    about.add("help", function () {wNote(contentContainer, helpString).padding(40); });
+    about.add("about", function () {wNote(contentContainer, aboutString).padding(40); });
     that.addContent(about);
     
-    log = gMenuButton("detected errors", menus).show(false);
+    log = wMenuButton("detected errors", menus).show(false);
     that.addContent(log);
     
     that.addEventListener("mouseleave", function () {
@@ -49,9 +49,9 @@ function menuBar(container, contentContainer) {
     that.logError = function (error) {
         log.bg("#f00").show(true);
         log.add("error #" + log.menu.contentCount(), function () {
-            gNote(contentContainer, error).padding(40).bg("#f00").color("#000");
+            wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
         });
-        gNote(contentContainer, error).padding(40).bg("#f00").color("#000");
+        wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
     };
     
     return that;

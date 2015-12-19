@@ -2,7 +2,7 @@
 /*global log*/
 /*global input*/
 /*global gui*/
-/*global gMenu*/
+/*global wMenu*/
 /*global ioCon*/
 
 var gIO = {
@@ -223,7 +223,7 @@ var gIO = {
             }
             
             if (connections.length) {
-                menu = gMenu(document.body);
+                menu = wMenu(document.body);
 
                 for (i = 0; i < connections.length; i += 1) {
                     menu.add(e.target.sComp.title() + " > "

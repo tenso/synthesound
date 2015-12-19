@@ -3,7 +3,7 @@
 /*global sStep*/
 /*global gui*/
 /*global note*/
-/*global gVKey*/
+/*global wVKey*/
 /*global sCBase*/
 /*global gLabel*/
 /*global audio*/
@@ -46,7 +46,7 @@ function sCVKey(container, args) {
         gate.setArgs({active: isDown});
     };
     
-    keyboard = gVKey(vkey, that.keyDown, that.keyUp);
+    keyboard = wVKey(vkey, that.keyDown, that.keyUp);
     
     //FIXME: global coupling
     audio.key = that;

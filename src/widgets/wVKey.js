@@ -2,7 +2,7 @@
 /*global gui*/
 /*global input*/
 
-function gVKey(container, keyDown, keyUp) {
+function wVKey(container, keyDown, keyUp) {
     var that = {},
         i = 0,
         box,

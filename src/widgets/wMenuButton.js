@@ -1,8 +1,8 @@
 "use strict";
 /*global gButton*/
-/*global gMenu*/
+/*global wMenu*/
 
-function gMenuButton(name, group) {
+function wMenuButton(name, group) {
     var that;
             
     that = gButton(name, function () {
@@ -11,7 +11,7 @@ function gMenuButton(name, group) {
         that.menu.show(true);
     }).hoverEffect(true);
     
-    that.menu = gMenu(that).removeOnLeave(false).show(false);
+    that.menu = wMenu(that).removeOnLeave(false).show(false);
     
     group.push(that);
     

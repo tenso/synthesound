@@ -11,7 +11,7 @@
 /*global sCDelay*/
 /*global sCMix*/
 /*global gui*/
-/*global gMenu*/
+/*global wMenu*/
 /*global app*/
 /*global gIO*/
 /*global util*/
@@ -63,7 +63,7 @@ var audio = {
     initSComp: function () {
     
         audio.workspace.onopencontextmenu = function (e) {
-            var menu = gMenu(audio.workspace).move(e.pageX - 20, e.pageY - 20),
+            var menu = wMenu(audio.workspace).move(e.pageX - 20, e.pageY - 20),
                 sConstructor;
             
             function menuEntry(id, xPos, yPos) {
