@@ -11,7 +11,7 @@
 
 var scBaseUID = uidGen();
 
-function sCBase(context, type, sComps, sArgs, permanent) {
+function sCBase(context, type, sComps, sArgs) {
     var that = gWidget(context, type),
         ports = {},
         sId,
@@ -23,7 +23,13 @@ function sCBase(context, type, sComps, sArgs, permanent) {
     };
     
     that.setUid = function (uid) {
+        var i;
         myUID = uid;
+        
+        for (i = 0; i < ports[sId].length; i += 1) {
+            ports[sId][i].uid = that.uid();
+        }
+        
         return that;
     };
     
@@ -32,10 +38,8 @@ function sCBase(context, type, sComps, sArgs, permanent) {
             gIO.delAllConnectionsToAndFromUID(that.uid());
         };
     }
-    
-    if (!permanent) {
-        that.addRemove(makeRemoveAllConnections());
-    }
+
+    that.addRemove(makeRemoveAllConnections());
     
     for (sId in sComps) {
         if (sComps.hasOwnProperty(sId)) {
@@ -105,7 +109,7 @@ function sCBase(context, type, sComps, sArgs, permanent) {
         
         if (!sComps.hasOwnProperty(sId)) {
             log.error(that.uid() + ".getPort: dont have:" + sId);
-            console.log(sComps);
+            log.obj(sComps);
             return;
         }
         
