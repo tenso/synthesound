@@ -1,12 +1,18 @@
 "use strict";
 /*global test*/
+/*global mUtil*/
 
 var note = {
+    noteBase: Math.pow(2, 1 / 12.0),
     //noteNr 1 = A0 13 = A1 25= A2 etc...
     hz: function (noteNr) {
-        return 440 * Math.pow(Math.pow(2, 1 / 12.0), noteNr - 49);
+        return 440 * Math.pow(note.noteBase, noteNr - 49);
     },
 
+    note: function (hz) {
+        return parseInt(49 + mUtil.log(hz / 440.0, note.noteBase), 10);
+    },
+    
     name: function (noteNr) {
         var octave = parseInt((noteNr + 9) / 13, 10),
             names = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
@@ -14,7 +20,7 @@ var note = {
         return names[(noteNr - 1) % 12] + octave;
     },
 
-    numFromName: function (str) {
+    noteFromName: function (str) {
         var names = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"],
             name = str,
             pos = 0,
@@ -54,6 +60,7 @@ var note = {
             test.verifyFloat(note.hz(2), 29.135, 3);
             test.verifyFloat(note.hz(27), 123.471, 3);
             test.verifyFloat(note.hz(43), 311.127, 3);
+            test.verifyFloat(note.hz(49), 440.0, 3);
             test.verifyFloat(note.hz(69), 1396.91, 2);
         },
         
@@ -65,12 +72,18 @@ var note = {
             test.verify(note.name(69), "F6");
         },
 
-        test_numFromName: function () {
-            test.verify(note.numFromName("A0"), 1);
-            test.verify(note.numFromName("A#0"), 2);
-            test.verify(note.numFromName("B2"), 27);
-            test.verify(note.numFromName("D#4"), 43);
-            test.verify(note.numFromName("F6"), 69);
+        test_noteFromName: function () {
+            test.verify(note.noteFromName("A0"), 1);
+            test.verify(note.noteFromName("A#0"), 2);
+            test.verify(note.noteFromName("B2"), 27);
+            test.verify(note.noteFromName("D#4"), 43);
+            test.verify(note.noteFromName("F6"), 69);
+        },
+        
+        test_note: function () {
+            test.verify(note.note(27.5), 1);
+            test.verify(note.note(440), 49);
+            test.verify(note.note(123.471), 27);
         }
     }
 };

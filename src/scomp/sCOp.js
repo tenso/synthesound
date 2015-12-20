@@ -18,7 +18,6 @@ function sCOp(container, args, uid) {
     }
     that.nextRow();
     addOp("*");
-    addOp("/");
     addOp("+");
     that.nextRow();
     addOp("-");

@@ -36,7 +36,7 @@ var input = {
         cNote += octave;
 
 
-        cNote = note.numFromName(cNote);
+        cNote = note.noteFromName(cNote);
         if (cNote === -1) {
             return;
         }

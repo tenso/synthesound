@@ -24,8 +24,6 @@ function sOp(args) {
                         chanData[i] += inputData[i];
                     } else if (op === "*") {
                         chanData[i] *= inputData[i];
-                    } else if (op === "/") {
-                        chanData[i] /= inputData[i];
                     } else if (op === "-") {
                         chanData[i] -= inputData[i];
                     } else if (op === "%") {
