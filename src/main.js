@@ -1,12 +1,12 @@
 "use strict";
 /*global input*/
-/*global audio*/
 /*global log*/
 /*global test*/
 /*global gIO*/
 /*global menuBar*/
 /*global URL*/
 /*global FileReader*/
+/*global workspace*/
 
 var app = {
     ver: "1.0",
@@ -19,17 +19,22 @@ var app = {
     }
 };
 
+/*FIXME: should not be global!!*/
+/*two things depend on it global: sCOut + sCVKey*/
+var audioWork;
+
 window.onload = function () {
     var freqSelect = document.getElementById("freqSelect"),
-        workspace = document.getElementById("workspace"),
         topMenu;
+    
+    audioWork = workspace(freqSelect);
     
     /*testsuite*/
     test.runTests();
     
-    input.init(workspace, gIO.resizeCanvas); //update size of canvas on workspace grow
+    input.init(audioWork, gIO.resizeCanvas); //update size of canvas on workspace grow
     
-    topMenu = menuBar(freqSelect, workspace).move(0, 0);
+    topMenu = menuBar(freqSelect, audioWork).move(0, 0);
     
     if (!test.verifyFunctionality(URL.createObjectURL, "URL.createObjectURL")
             || !test.verifyFunctionality(URL.revokeObjectURL, "URL.revokeObjectURL")) {
@@ -43,11 +48,9 @@ window.onload = function () {
     freqSelect.addEventListener("keydown", input.parseInputDown, false);
     freqSelect.addEventListener("keyup", input.parseInputUp, false);
 
-    if (test.verifyFunctionality(audio.AudioContext, "audio.AudioContext")
-            && test.verifyFunctionality(Array.prototype.fill, "Array.fill")) {
-        audio.startAudio();
-        audio.onworkspacechanged = gIO.resizeCanvas; //update size of canvas on load
-        gIO.init(workspace);
+    if (audioWork.startAudio()) {
+        audioWork.onworkspacechanged = gIO.resizeCanvas; //update size of canvas on load
+        gIO.init(audioWork);
         window.addEventListener("resize", gIO.resizeCanvas); //update size of canvas on window-resize
     } else {
         topMenu.logError("need AudioContext and Array.fill");

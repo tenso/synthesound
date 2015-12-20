@@ -40,8 +40,8 @@ var gIO = {
     },
     
     resizeCanvas: function () {
-        var workspaceWidth = document.getElementById("workspace").scrollWidth,
-            workspaceHeight = document.getElementById("workspace").scrollHeight;
+        var workspaceWidth = gIO.container.scrollWidth,
+            workspaceHeight = gIO.container.scrollHeight;
         
         gIO.linesCanvas.width = workspaceWidth;
         gIO.linesCanvas.height = workspaceHeight;

@@ -1,5 +1,4 @@
 "use strict";
-/*global audio*/
 /*global note*/
 /*global test*/
 /*global gIO*/
@@ -41,7 +40,8 @@ var input = {
         if (cNote === -1) {
             return;
         }
-        audio.keyDown(cNote);
+        
+        input.container.keyDown(cNote);
     },
 
     parseInputUp: function (e) {
@@ -52,7 +52,7 @@ var input = {
             return;
         }
         input.keyIsDown = 0;
-        audio.keyUp(0);
+        input.container.keyUp(0);
     },
     
     runCaptureCBIfExist: function (name, e) {

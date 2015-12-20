@@ -2,7 +2,7 @@
 /*global sMix*/
 /*global gSlider*/
 /*global sCBase*/
-/*global audio*/
+/*global audioWork*/
 
 function sCOut(container, args, uid) {
     var that,
@@ -17,7 +17,7 @@ function sCOut(container, args, uid) {
     that.addLabeledContent(gSlider(mix.getArgs().gainL, 0.0, 1.0, setGain), "VOL");
 
     //FIXME: global coupling!
-    audio.mixerOut.addInput(mix);
+    audioWork.mixerOut.addInput(mix);
     
     return that;
 }

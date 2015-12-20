@@ -4,7 +4,6 @@
 /*global wMenuButton*/
 /*global wMenu*/
 /*global gLabel*/
-/*global audio*/
 /*global wNote*/
 /*global app*/
 /*global Files*/
@@ -19,17 +18,17 @@ function menuBar(container, contentContainer) {
         aboutString = "SyntheSound v." + app.ver + "\n(C) 2015 Anton Olofsson, GPL 3";
     
     that.addContent(gButton("panic", function () {
-        audio.stopAudio();
+        contentContainer.stopAudio();
     }).bg("#f00"));
     
     file = wMenuButton("file", menus);
     file.add("load", function () {
         Files.loadData(function (data) {
-            audio.loadWorkspace(data);
+            contentContainer.loadWorkspace(data);
         });
     });
     file.add("save", function () {
-        var data = audio.data();
+        var data = contentContainer.data();
         Files.saveData("synthdata.json", data);
     });
     that.addContent(file);

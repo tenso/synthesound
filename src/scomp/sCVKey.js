@@ -6,7 +6,7 @@
 /*global wVKey*/
 /*global sCBase*/
 /*global gLabel*/
-/*global audio*/
+/*global audioWork*/
 
 function sCVKey(container, args, uid) {
     var that,
@@ -49,7 +49,7 @@ function sCVKey(container, args, uid) {
     keyboard = wVKey(vkey, that.keyDown, that.keyUp);
     
     //FIXME: global coupling
-    audio.key = that;
+    audioWork.key = that;
     
     return that;
 }
