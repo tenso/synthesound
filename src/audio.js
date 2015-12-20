@@ -70,8 +70,8 @@ var audio = {
     
     initSComp: function () {
     
-        audio.workspace.onopencontextmenu = function (e) {
-            var menu = wMenu(audio.workspace).move(e.pageX - 20, e.pageY - 20),
+        audio.workspace.iOpenContextMenu = function (e, mouse) {
+            var menu = wMenu(audio.workspace).move(mouse.x - 20, mouse.y - 20),
                 sConstructor;
             
             function menuEntry(id, xPos, yPos) {
@@ -83,7 +83,7 @@ var audio = {
             
             for (sConstructor in audio.constructorMap) {
                 if (audio.constructorMap.hasOwnProperty(sConstructor)) {
-                    menu.add(sConstructor, menuEntry(sConstructor, e.pageX, e.pageY));
+                    menu.add(sConstructor, menuEntry(sConstructor, mouse.x, mouse.y));
                 }
             }
         };

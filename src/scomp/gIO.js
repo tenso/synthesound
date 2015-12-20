@@ -186,12 +186,12 @@ var gIO = {
             }
         };
         
-        port.onmousepressandmove = function (e, mouse) {
+        port.iMousePressAndMove = function (e, mouse) {
             gIO.drawConnections();
-            gIO.drawLine(mouse.captureX, mouse.captureY, e.pageX, e.pageY);
+            gIO.drawLine(mouse.captureX, mouse.captureY, mouse.x, mouse.y);
         };
         
-        port.onmouseupaftercapture = function (e) {
+        port.iMouseUpAfterCapture = function (e) {
             if (e.target.sComp && !e.target.isOut) {
                 gIO.connectPorts(e.mouseCapturer, e.target);
             } else {
@@ -199,7 +199,7 @@ var gIO = {
             }
         };
         
-        port.onopencontextmenu = function (e) {
+        port.iOpenContextMenu = function (e, mouse) {
             var connections,
                 menu,
                 i;
@@ -231,7 +231,7 @@ var gIO = {
                              + connections[i].portType + " "
                              + (connections[i].isOut ? "out" : "in"), makeDelCb(menu, e.target, connections[i]));
                 }
-                menu.move(e.pageX - 20, e.pageY - 20);
+                menu.move(mouse.x - 20, mouse.y - 20);
             }
         };
     }

@@ -18,8 +18,7 @@ function gSlider(val, min, max, callback) {
     knob.onmousedown = function (e) {
         input.setMouseCapturer(e);
     };
-
-    knob.onmousepressandmove = function (e) {
+    knob.iMousePressAndMove = function (e) {
         var maxY = e.mouseCapturer.parentElement.offsetHeight - e.mouseCapturer.offsetHeight,
             newY = gui.getStyleInt(e.mouseCapturer, "top") + e.movementY;
 

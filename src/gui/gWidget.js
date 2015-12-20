@@ -107,10 +107,13 @@ function gWidget(container, titleLabel) {
         if (value) {
             that.onmousedown = function (e) {
                 input.setMouseCapturer(e, that);
-                that.style.zIndex = gui.nextZ();
             };
-
-            that.onmousepressandmove = function (e, mouse) {
+            
+            that.iMouseCaptured = function () {
+                that.style.zIndex = gui.nextZ();  
+            };
+            
+            that.iMousePressAndMove = function (e, mouse) {
                 that.move(mouse.relativeX, mouse.relativeY);
                 if (that.getX() < app.screen.minX) {
                     that.x(app.screen.minX);
@@ -123,7 +126,7 @@ function gWidget(container, titleLabel) {
             };
         } else {
             that.onmousedown = undefined;
-            that.onmousepressandmove = undefined;
+            that.iMousePressAndMove = undefined;
         }
         return that;
     };

@@ -31,12 +31,12 @@ function wVKey(container, keyDown, keyUp) {
                 key.keyDown(key.note);
             }
         };
-        key.onmousecaptured = function (e) {
+        key.iMouseCaptured = function (e) {
             isDown = true;
             lastNote = key.note;
             key.keyDown(key.note);
         };
-        key.onmouseupaftercapture = function (e) {
+        key.iMouseUpAfterCapture = function (e) {
             key.keyUp(lastNote);
             isDown = false;
         };

@@ -10,6 +10,7 @@ var input = {
     keyIsDown: 0,
     mouseCapturer: 0,
     mouse: {},
+    container: undefined,
     
     parseInputDown: function (e) {
         var noteMap = {a: "C",  w: "C#", s: "D",
@@ -55,17 +56,26 @@ var input = {
     },
     
     runCaptureCBIfExist: function (name, e) {
-        var relativePos = {};
-        
+        input.setMouseFromEvent(e);
+
         if (input.mouseCapturer && input.mouseCapturer.hasOwnProperty(name)) {
             e.mouseCapturer = input.mouseCapturer;
             input.mouseCapturer[name](e, input.mouse);
         }
     },
     runCBIfExist: function (name, e) {
+        input.setMouseFromEvent(e);
+        
         if (e.target.hasOwnProperty(name)) {
-            e.target[name](e);
+            e.target[name](e, input.mouse);
         }
+    },
+    
+    setMouseFromEvent: function (e) {
+        input.mouse.x = e.pageX + input.container.scrollLeft;
+        input.mouse.y = e.pageY + input.container.scrollTop;
+        input.mouse.relativeX = input.mouse.x - input.mouse.captureOffsetInElement.x;
+        input.mouse.relativeY = input.mouse.y - input.mouse.captureOffsetInElement.y;
     },
     
     setMouseCapturer: function (e, wantedObject) {
@@ -78,14 +88,12 @@ var input = {
         }
                     
         input.mouse.captureOffsetInElement = gui.getEventOffsetInElement(input.mouseCapturer, e);
-        input.mouse.relativeX = 0;
-        input.mouse.relativeY = 0;
-        input.mouse.captureX = e.pageX;
-        input.mouse.captureY = e.pageY;
-        input.mouse.x = e.pageX;
-        input.mouse.y = e.pageY;
+        input.mouse.captureOffsetInElement.x += input.container.scrollLeft;
+        input.mouse.captureOffsetInElement.y += input.container.scrollTop;
+        input.mouse.captureX = e.pageX + input.container.scrollLeft;
+        input.mouse.captureY = e.pageY + input.container.scrollTop;
         
-        input.runCaptureCBIfExist("onmousecaptured", e);
+        input.runCaptureCBIfExist("iMouseCaptured", e);
     },
     
     sizeOfContainerChanged: undefined,
@@ -104,22 +112,24 @@ var input = {
     },
     
     init: function (container, sizeOfContainerChanged) {
+        input.container = container;
         input.sizeOfContainerChanged = sizeOfContainerChanged;
     
+        document.addEventListener("mousedown", function (e) {
+            input.setMouseCapturer(e);
+        });
+        
         document.addEventListener("mouseup", function (e) {
             if (input.mouseCapturer) {
-                input.runCaptureCBIfExist("onmouseupaftercapture", e);
+                input.runCaptureCBIfExist("iMouseUpAfterCapture", e);
                 input.mouseCapturer = undefined;
             }
         });
 
         document.addEventListener("mousemove", function (e) {
             if (input.mouseCapturer) {
-                input.mouse.x = e.pageX;
-                input.mouse.y = e.pageY;
-                input.mouse.relativeX = e.pageX - input.mouse.captureOffsetInElement.x;
-                input.mouse.relativeY = e.pageY - input.mouse.captureOffsetInElement.y;
-                input.runCaptureCBIfExist("onmousepressandmove", e);
+
+                input.runCaptureCBIfExist("iMousePressAndMove", e);
                 
                 input.checkSize(container);
             }
@@ -127,12 +137,12 @@ var input = {
 
         document.addEventListener("mouseover", function (e) {
             if (input.mouseCapturer) {
-                input.runCaptureCBIfExist("onmouseoveraftercapture", e);
+                input.runCaptureCBIfExist("iMouseOverAfterCapture", e);
             }
         });
         
         document.addEventListener("contextmenu", function (e) {
-            input.runCBIfExist("onopencontextmenu", e);
+            input.runCBIfExist("iOpenContextMenu", e);
             e.preventDefault();
         });
     }
