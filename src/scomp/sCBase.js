@@ -95,7 +95,7 @@ function sCBase(context, type, sComps, sArgs, uid) {
         for (sId in sComps) {
             if (sComps.hasOwnProperty(sId)) {
                 data.sComps.push({
-                    type: sComps[sId].title(),
+                    type: sComps[sId].typeId(),
                     sId: sId
                 });
             }

@@ -27,10 +27,6 @@ function gWidget(container, titleLabel) {
         that.container.removeChild(that);
     };
     
-    that.title = function () {
-        return titleLabel;
-    };
-    
     function makeTitle(titleLabel) {
         var titleElem = gBase().marginRight(20);//that is close buttons width
         

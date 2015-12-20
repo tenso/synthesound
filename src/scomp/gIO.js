@@ -226,8 +226,8 @@ var gIO = {
                 menu = wMenu(document.body);
 
                 for (i = 0; i < connections.length; i += 1) {
-                    menu.add(e.target.sComp.title() + " > "
-                             + connections[i].sComp.title() + " "
+                    menu.add(e.target.sComp.typeId() + " > "
+                             + connections[i].sComp.typeId() + " "
                              + connections[i].portType + " "
                              + (connections[i].isOut ? "out" : "in"), makeDelCb(menu, e.target, connections[i]));
                 }
