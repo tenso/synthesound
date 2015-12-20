@@ -12,6 +12,7 @@
 /*global sCMix*/
 /*global sCConst*/
 /*global sCOp*/
+/*global sCNotePitch*/
 /*global gui*/
 /*global wMenu*/
 /*global app*/
@@ -51,7 +52,8 @@ var audio = {
         sCVKey: sCVKey,
         sCScope: sCScope,
         sCConst: sCConst,
-        sCOp: sCOp
+        sCOp: sCOp,
+        sCNotePitch: sCNotePitch
     },
     
     createSComp: function (data, uid) {

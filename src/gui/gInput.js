@@ -5,7 +5,7 @@
 
 function gInput(value, callback, label) {
     var that = gBase(),
-        input = gBase("input").w(100).setClass("gInput");
+        input = gBase("input").w(60).setClass("gInput").textAlign("right");
     
     input.value = value;
     input.onchange = function () {

@@ -12,7 +12,7 @@ function wMenu(container) {
         if (that.contentCount() > 0) {
             that.nextRow();
         }
-        entry = gLabel(string).alignLeft();
+        entry = gLabel(string).textAlign("left");
         entry.onmousedown = callback;
         
         entry.onmouseover = function () {

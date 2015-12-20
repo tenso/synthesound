@@ -169,7 +169,11 @@ function gBase(type) {
     that.getH = function () {
         return that.offsetHeight;
     };
-        
+    
+    that.fontSize = function (value) {
+        return gui.stylePxIfInt(that, "fontSize", value);
+    };
+    
     function mouseEnterCallback() {
         originalColor = that.style.color;
         that.style.color = hoverColor || "#888";
@@ -203,8 +207,8 @@ function gBase(type) {
         return that;
     };
     
-    that.alignLeft = function () {
-        that.style.textAlign = "left";
+    that.textAlign = function (value) {
+        that.style.textAlign = value;
         return that;
     };
     

@@ -10,7 +10,7 @@ var note = {
     },
 
     note: function (hz) {
-        return parseInt(49 + mUtil.log(hz / 440.0, note.noteBase), 10);
+        return Math.round(49 + mUtil.log(hz / 440.0, note.noteBase));
     },
     
     name: function (noteNr) {
@@ -67,6 +67,7 @@ var note = {
         test_name: function () {
             test.verify(note.name(1), "A0");
             test.verify(note.name(2), "A#0");
+            test.verify(note.name(16), "C1");
             test.verify(note.name(27), "B2");
             test.verify(note.name(43), "D#4");
             test.verify(note.name(69), "F6");
@@ -76,6 +77,9 @@ var note = {
             test.verify(note.noteFromName("A0"), 1);
             test.verify(note.noteFromName("A#0"), 2);
             test.verify(note.noteFromName("B2"), 27);
+            test.verify(note.noteFromName("C3"), 28);
+            test.verify(note.noteFromName("C#3"), 29);
+            test.verify(note.noteFromName("D3"), 30);
             test.verify(note.noteFromName("D#4"), 43);
             test.verify(note.noteFromName("F6"), 69);
         },
@@ -84,6 +88,10 @@ var note = {
             test.verify(note.note(27.5), 1);
             test.verify(note.note(440), 49);
             test.verify(note.note(123.471), 27);
+            test.verify(note.note(130.813), 28);
+            test.verify(note.note(138.591), 29);
+            test.verify(note.note(146.832), 30);
+            
         }
     }
 };
