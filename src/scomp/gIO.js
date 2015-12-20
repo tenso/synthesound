@@ -9,6 +9,7 @@ var gIO = {
     linesCanvas: undefined,
     linesCtx: undefined,
     connections: [],
+    container: undefined,
 
     drawLine: function (fromX, fromY, toX, toY) {
         gIO.linesCtx.beginPath();
@@ -49,10 +50,13 @@ var gIO = {
         gIO.drawConnections();
     },
     
-    init: function (canvas) {
+    init: function (container) {
         var i;
             
-        gIO.linesCanvas = canvas;
+        gIO.container = container;
+        gIO.linesCanvas = document.createElement("canvas");
+        gIO.container.appendChild(gIO.linesCanvas);
+        gIO.linesCanvas.className = "gIOCanvas";
         gIO.linesCtx = gIO.linesCanvas.getContext("2d");
         gIO.linesCtx.strokeStyle = "#000";
         gIO.linesCtx.lineWidth = 2;
@@ -124,10 +128,12 @@ var gIO = {
                
             if (from.sComp === to.sComp) {
                 log.warn("inter component feedback not allowed");
+                gIO.drawConnections();
                 return false;
             }
             if (gIO.haveConnection(from, to)) {
                 log.warn("already have connection");
+                gIO.drawConnections();
                 return false;
             }
             
@@ -181,8 +187,10 @@ var gIO = {
     addMouseEventsToPort: function (port) {
 
         port.onmousedown = function (e) {
-            if (e.target.sComp && e.target.isOut) {
-                input.setMouseCapturer(e);
+            if (e.button === 0) {
+                if (e.target.sComp && e.target.isOut) {
+                    input.setMouseCapturer(e);
+                }
             }
         };
         
@@ -223,7 +231,7 @@ var gIO = {
             }
             
             if (connections.length) {
-                menu = wMenu(document.body);
+                menu = wMenu(gIO.container).move(mouse.x - 20, mouse.y - 20);
 
                 for (i = 0; i < connections.length; i += 1) {
                     menu.add(e.target.sComp.typeId() + " > "
@@ -231,7 +239,6 @@ var gIO = {
                              + connections[i].portType + " "
                              + (connections[i].isOut ? "out" : "in"), makeDelCb(menu, e.target, connections[i]));
                 }
-                menu.move(mouse.x - 20, mouse.y - 20);
             }
         };
     }

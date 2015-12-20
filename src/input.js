@@ -78,6 +78,14 @@ var input = {
         input.mouse.relativeY = input.mouse.y - input.mouse.captureOffsetInElement.y;
     },
     
+    setMouseCaptureFromEvent: function (e, target) {
+        input.mouse.captureOffsetInElement = gui.getEventOffsetInElement(target, e);
+        input.mouse.captureOffsetInElement.x += input.container.scrollLeft;
+        input.mouse.captureOffsetInElement.y += input.container.scrollTop;
+        input.mouse.captureX = e.pageX + input.container.scrollLeft;
+        input.mouse.captureY = e.pageY + input.container.scrollTop;
+    },
+    
     setMouseCapturer: function (e, wantedObject) {
     
         e.stopPropagation();
@@ -86,13 +94,7 @@ var input = {
         } else {
             input.mouseCapturer = wantedObject;
         }
-                    
-        input.mouse.captureOffsetInElement = gui.getEventOffsetInElement(input.mouseCapturer, e);
-        input.mouse.captureOffsetInElement.x += input.container.scrollLeft;
-        input.mouse.captureOffsetInElement.y += input.container.scrollTop;
-        input.mouse.captureX = e.pageX + input.container.scrollLeft;
-        input.mouse.captureY = e.pageY + input.container.scrollTop;
-        
+        input.setMouseCaptureFromEvent(e, input.mouseCapturer);
         input.runCaptureCBIfExist("iMouseCaptured", e);
     },
     
@@ -115,9 +117,9 @@ var input = {
         input.container = container;
         input.sizeOfContainerChanged = sizeOfContainerChanged;
     
-        document.addEventListener("mousedown", function (e) {
+        /*document.addEventListener("mousedown", function (e) {
             input.setMouseCapturer(e);
-        });
+        });*/
         
         document.addEventListener("mouseup", function (e) {
             if (input.mouseCapturer) {
@@ -142,8 +144,11 @@ var input = {
         });
         
         document.addEventListener("contextmenu", function (e) {
-            input.runCBIfExist("iOpenContextMenu", e);
             e.preventDefault();
+            //NOTE: dont set  captured here: will send all sorts of events...
+            input.setMouseCaptureFromEvent(e, e.target);
+            input.runCBIfExist("iOpenContextMenu", e);
+            
         });
     }
 };
