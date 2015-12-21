@@ -1,6 +1,7 @@
 "use strict";
 /*global input*/
 /*global log*/
+/*global MouseEvent*/
 
 var gui = {
     nextZValue: 1,
@@ -57,5 +58,14 @@ var gui = {
             obj.style[param] = value;
         }
         return obj;
+    },
+    
+    clickObj: function (obj) {
+        var clickEvent = new MouseEvent("click", {
+            view: window,
+            bubbles: true,
+            cancelable: false
+        });
+        obj.dispatchEvent(clickEvent);
     }
 };

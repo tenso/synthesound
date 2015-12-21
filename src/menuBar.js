@@ -15,18 +15,20 @@ function menuBar(container, contentContainer) {
         log,
         menus = [],
         helpString = "Help me!",
-        aboutString = "SyntheSound v." + app.ver + "\n(C) 2015 Anton Olofsson, GPL 3";
+        aboutString = "SyntheSound v." + app.ver + "\n(C) 2015 Anton Olofsson, GPL 3",
+        loadInput;
     
     that.addContent(gButton("panic", function () {
         contentContainer.stopAudio();
     }).bg("#f00"));
     
-    file = wMenuButton("file", menus);
-    file.add("load", function () {
-        Files.loadData(function (data) {
-            contentContainer.loadWorkspace(data);
-        });
+    loadInput = Files.createLoadDataInput(function (data) {
+        contentContainer.loadWorkspace(data);
     });
+    
+    file = wMenuButton("file", menus);
+    file.addOverlayed("load", loadInput);
+    
     file.add("save", function () {
         var data = contentContainer.data();
         Files.saveData("synthdata.json", data);

@@ -5,7 +5,7 @@
 function wMenu(container) {
     var that = gWidget(container);
     
-    that.add = function (string, callback) {
+    function buildButton(string, callback) {
         var entry,
             originalBg;
                 
@@ -13,7 +13,9 @@ function wMenu(container) {
             that.nextRow();
         }
         entry = gLabel(string).textAlign("left");
-        entry.onmousedown = callback;
+        if (callback) {
+            entry.onmousedown = callback;
+        }
         
         entry.onmouseover = function () {
             originalBg = entry.style.background;
@@ -23,7 +25,17 @@ function wMenu(container) {
         entry.onmouseout = function () {
             entry.style.background = originalBg;
         };
-        
+        return entry;
+    }
+    
+    that.add = function (string, callback) {
+        that.addContent(buildButton(string, callback));
+        return that;
+    };
+    
+    that.addOverlayed = function (string, element) {
+        var entry = buildButton(string);
+        entry.appendChild(element);
         that.addContent(entry);
         return that;
     };

@@ -149,8 +149,8 @@ function gBase(type) {
     };
     
     that.setSize = function (w, h) {
-        that.style.width = w + "px";
-        that.style.height = h + "px";
+        gui.stylePxIfInt(that, "width", w);
+        gui.stylePxIfInt(that, "height", h);
         return that;
     };
     
@@ -172,6 +172,11 @@ function gBase(type) {
     
     that.fontSize = function (value) {
         return gui.stylePxIfInt(that, "fontSize", value);
+    };
+    
+    that.opacity = function (value) {
+        that.style.opacity = value;
+        return that;
     };
     
     function mouseEnterCallback() {
