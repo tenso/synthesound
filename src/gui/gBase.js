@@ -19,7 +19,7 @@ function gBase(type) {
     };
     
     that.text = function (label) {
-        that.innerText = label;
+        that.textContent = label;
         return that;
     };
     

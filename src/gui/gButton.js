@@ -7,7 +7,7 @@ function gButton(name, callback, isRadio, buttonCollection) {
     var that = gBase();
     that.isRadio = isRadio;
     that.className = "button-class gButton";
-    that.innerText = name;
+    that.textContent = name;
     that.style.position = "relative";
     that.value = false;
     that.callback = callback;

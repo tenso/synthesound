@@ -3,11 +3,11 @@
 
 function gLabel(label) {
     var that = gBase();
-    that.innerText = label;
+    that.textContent = label;
     that.className = "gLabel";
     
     that.set = function (str) {
-        that.innerText = str;
+        that.textContent = str;
         return that;
     };
     

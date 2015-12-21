@@ -78,7 +78,6 @@ function workspace(container) {
     
     function initSComp() {
         that.iOpenContextMenu = function (e, mouse) {
-            console.log("open!");
             var menu = wMenu(that).move(mouse.x - 20, mouse.y - 20),
                 sConstructor;
             

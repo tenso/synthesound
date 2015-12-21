@@ -30,7 +30,7 @@ function gWidget(container, titleLabel) {
     function makeTitle(titleLabel) {
         var titleElem = gBase().marginRight(20);//that is close buttons width
         
-        titleElem.innerText = titleLabel;
+        titleElem.textContent = titleLabel;
         return titleElem;
     }
 
