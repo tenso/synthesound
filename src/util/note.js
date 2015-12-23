@@ -10,10 +10,16 @@ var note = {
     },
 
     note: function (hz) {
+        if (hz <= 0) {
+            return -1;
+        }
         return Math.round(49 + mUtil.log(hz / 440.0, note.noteBase));
     },
     
     name: function (noteNr) {
+        if (noteNr < 1) {
+            return "-";
+        }
         var octave = parseInt((noteNr + 9) / 13, 10),
             names = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"];
 
@@ -56,6 +62,8 @@ var note = {
 
     tests: {
         test_hz: function () {
+            test.verifyFloat(note.hz(-1), 24.5, 3);
+            test.verifyFloat(note.hz(0), 25.957, 3);
             test.verifyFloat(note.hz(1), 27.500, 3);
             test.verifyFloat(note.hz(2), 29.135, 3);
             test.verifyFloat(note.hz(27), 123.471, 3);
@@ -65,6 +73,8 @@ var note = {
         },
         
         test_name: function () {
+            test.verify(note.name(-1), "-");
+            test.verify(note.name(0), "-");
             test.verify(note.name(1), "A0");
             test.verify(note.name(2), "A#0");
             test.verify(note.name(16), "C1");
@@ -74,6 +84,7 @@ var note = {
         },
 
         test_noteFromName: function () {
+            test.verify(note.noteFromName("notFound"), -1);
             test.verify(note.noteFromName("A0"), 1);
             test.verify(note.noteFromName("A#0"), 2);
             test.verify(note.noteFromName("B2"), 27);
@@ -85,6 +96,8 @@ var note = {
         },
         
         test_note: function () {
+            test.verify(note.note(-1), -1);
+            test.verify(note.note(0), -1);
             test.verify(note.note(27.5), 1);
             test.verify(note.note(440), 49);
             test.verify(note.note(123.471), 27);
