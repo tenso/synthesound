@@ -3,28 +3,26 @@
 
 function sGen(args) {
     var that = sBase("gen"),
-        inPhase = 0,
+        phaseRun = 0,
         amp = 0.1,
         phase = 0,
         freq = 220,
         type = "sine",
-        isOn = true;
+        isOn = true,
+        TwoPi = 2 * Math.PI;
     
     that.makeAudio = function () {
         var i = 0,
             chan = 0,
-            T,
-            period,
-            hPeriod,
+            sRate = that.sampleRate(),
+            period = sRate,
+            hPeriod = period / 2.0,
             phaseStep,
             newFreq = freq,
             inPeriod;
         
-        //FIXME: dubble code #1
-        T = (2 * Math.PI * freq) / that.sampleRate();
-        period = that.sampleRate() / (freq);
-        hPeriod = period / 2.0;
         
+        phaseStep = freq / sRate;
         for (i = 0; i < that.wantedSamples(); i += 1) {
             
             if (that.haveSpecialInput("freq")) {
@@ -33,33 +31,27 @@ function sGen(args) {
             
             if (newFreq !== freq) {
                 freq = newFreq;
-                //FIXME: dubble code #1
-                T = (2 * Math.PI * freq) / that.sampleRate();
-                period = that.sampleRate() / (freq);
-                hPeriod = period / 2.0;
+                phaseStep = freq / sRate;
             }
-            inPeriod = (inPhase + phase) % period;
+            phaseRun += phaseStep;
+            inPeriod = (phaseRun + phase) * sRate;
+            inPeriod %= sRate;
             
             if (!isOn) {
                 that.genData[i] = 0;
             } else if (type === "sine") {
-                inPhase += T;
-                that.genData[i] = Math.sin(inPhase + phase);
+                that.genData[i] = Math.sin(TwoPi * (phaseRun + phase));
             } else if (type === "square") {
-                inPhase += 1;
                 that.genData[i] = inPeriod < hPeriod ? 1.0 : -1.0;
             } else if (type === "triangle") {
-                inPhase += 1;
                 if (inPeriod <  hPeriod) {
                     that.genData[i] = -1.0 + (2.0 * (inPeriod  / hPeriod));
                 } else {
                     that.genData[i] = 1.0 - (2.0 * (inPeriod - hPeriod)  / hPeriod);
                 }
             } else if (type === "saw") {
-                inPhase += 1;
-                that.genData[i] = -1.0 + (2.0 * (inPeriod  / (period)));
+                that.genData[i] = -1.0 + (2.0 * (inPeriod  / period));
             } else if (type === "noise") {
-                inPhase += 1;
                 that.genData[i] = -1.0 + 2.0 * Math.random();
             }
             
