@@ -58,6 +58,12 @@ function gBase(type) {
         return gui.stylePxIfInt(that, "marginRight", value);
     };
     
+    //normal, nowrap, ...
+    that.whiteSpace = function (value) {
+        that.style.whiteSpace = value;
+        return that;
+    };
+    
     that.move = function (x, y) {
         gui.stylePxIfInt(that, "left", x);
         gui.stylePxIfInt(that, "top", y);
