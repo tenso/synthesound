@@ -106,6 +106,7 @@ function sCIO(container) {
         if (p1.sComp && p2.sComp) {
             if (p1.isOut === p2.isOut) {
                 log.error("connection is not from out to in");
+                that.drawConnections();
                 return false;
             }
             
@@ -180,7 +181,7 @@ function sCIO(container) {
 
         port.onmousedown = function (e) {
             if (e.button === 0) {
-                if (e.target.sComp && e.target.isOut) {
+                if (e.target.sComp) {
                     gui.captureMouse(e);
                 }
             }
@@ -192,7 +193,7 @@ function sCIO(container) {
         };
         
         port.iMouseUpAfterCapture = function (e) {
-            if (e.target.sComp && !e.target.isOut) {
+            if (e.target.sComp) {
                 that.connectPorts(e.mouseCapturer, e.target);
             } else {
                 that.drawConnections();
