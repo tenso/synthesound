@@ -16,7 +16,7 @@ function sDelay(args) {
             inputData,
             inputIndex;
 
-        //FIXME? cant clear data if feedback to same componment is used
+        //NOTE: cant clear data if feedback to same componment is used
         //need to copy, also cant overwrite chanData as we go as this is the shared input
         that.setChannelDataZero();
         

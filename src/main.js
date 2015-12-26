@@ -1,5 +1,4 @@
 "use strict";
-/*global input*/
 /*global log*/
 /*global test*/
 /*global sCIO*/
@@ -7,6 +6,8 @@
 /*global URL*/
 /*global FileReader*/
 /*global workspace*/
+/*global guiInput*/
+/*global gui*/
 
 var app = {
     ver: "1.0",
@@ -25,15 +26,16 @@ var audioWork, /*depends on it: sCOut, sCVKey */
 
 window.onload = function () {
     var freqSelect = document.getElementById("freqSelect"),
-        topMenu;
-    
-    audioWork = workspace(freqSelect);
-    gIO = sCIO(audioWork);
+        topMenu,
+        input;
     
     /*testsuite*/
     test.runTests();
     
-    input.init(audioWork, gIO.resizeCanvas); //update size of canvas on workspace grow
+    audioWork = workspace(freqSelect);
+    gIO = sCIO(audioWork);
+    input = guiInput(audioWork, gIO.resizeCanvas);
+    gui.setInputHandler(input);
     
     topMenu = menuBar(freqSelect, audioWork).move(0, 0);
     
@@ -46,12 +48,10 @@ window.onload = function () {
         topMenu.logError("need FileReader");
     }
     
-    freqSelect.addEventListener("keydown", input.parseInputDown, false);
-    freqSelect.addEventListener("keyup", input.parseInputUp, false);
-
-    if (audioWork.startAudio()) {
+    if (audioWork.init()) {
         audioWork.onworkspacechanged = gIO.resizeCanvas; //update size of canvas on load
         window.addEventListener("resize", gIO.resizeCanvas); //update size of canvas on window-resize
+        audioWork.play();
     } else {
         topMenu.logError("need AudioContext and Array.fill");
     }

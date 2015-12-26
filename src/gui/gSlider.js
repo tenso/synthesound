@@ -1,5 +1,4 @@
 "use strict";
-/*global input*/
 /*global gui*/
 /*global gBase*/
 
@@ -16,7 +15,7 @@ function gSlider(val, min, max, callback) {
     knob.callback = callback;
 
     knob.onmousedown = function (e) {
-        input.setMouseCapturer(e);
+        gui.captureMouse(e);
     };
     knob.iMousePressAndMove = function (e) {
         var maxY = e.mouseCapturer.parentElement.offsetHeight - e.mouseCapturer.offsetHeight,

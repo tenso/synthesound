@@ -1,6 +1,5 @@
 "use strict";
 /*global log*/
-/*global input*/
 /*global gui*/
 /*global gBase*/
 /*global gLabel*/
@@ -106,7 +105,7 @@ function gWidget(container, titleLabel) {
     that.canMove = function (value) {
         if (value) {
             that.onmousedown = function (e) {
-                input.setMouseCapturer(e, that);
+                gui.captureMouse(e, that);
             };
             
             that.iMouseCaptured = function () {

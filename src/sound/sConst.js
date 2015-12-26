@@ -1,8 +1,6 @@
 "use strict";
 /*global sBase*/
 
-//FIXME: calc array once
-
 function sConst(args) {
     var that = sBase("const"),
         valueChanged = true,

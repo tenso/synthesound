@@ -1,10 +1,10 @@
 "use strict";
-/*global input*/
 /*global log*/
 /*global MouseEvent*/
 
 var gui = {
     nextZValue: 1,
+    input: undefined,
     
     nextZ: function () {
         var ret = gui.nextZValue;
@@ -67,5 +67,25 @@ var gui = {
             cancelable: false
         });
         obj.dispatchEvent(clickEvent);
+    },
+    
+    setInputHandler: function (input) {
+        gui.input = input;
+    },
+    
+    captureMouse: function (e, wantedTarget) {
+        if (!gui.input) {
+            log.error("gui.js: no inputhandler set");
+            return false;
+        }
+        gui.input.setMouseCapturer(e, wantedTarget);
+    },
+    
+    captureKey: function (wantedTarget) {
+        if (!gui.input) {
+            log.error("gui.js: no inputhandler set");
+            return false;
+        }
+        gui.input.setKeyCapturer(undefined, wantedTarget);
     }
 };

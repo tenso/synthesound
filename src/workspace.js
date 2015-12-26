@@ -19,7 +19,6 @@
 /*global gIO*/
 /*global util*/
 
-
 /*global scBaseUID*/
 
 function workspace(container) {
@@ -132,18 +131,6 @@ function workspace(container) {
             }
         }
     }
-
-    that.keyDown = function (notePressed) {
-        if (that.key) {
-            that.key.keyDown(notePressed);
-        }
-    };
-
-    that.keyUp = function (notePressed) {
-        if (that.key) {
-            that.key.keyUp(notePressed);
-        }
-    };
     
     that.data = function () {
         var nodes =  that.childNodes,
@@ -191,17 +178,11 @@ function workspace(container) {
         }
     };
     
-    that.startAudio = function (freq) {
-        
+    that.init = function () {
         if (!test.verifyFunctionality(AudioContext, "audio.AudioContext") ||
                 !test.verifyFunctionality(Array.prototype.fill, "Array.fill")) {
             return false;
         }
-        
-        if (audioRunning) {
-            return false;
-        }
-                
         audioCtx = new AudioContext();
         initSComp();
         that.mixerOut = sMix();
@@ -209,20 +190,28 @@ function workspace(container) {
         //create actual output node:
         out = sOutNode(audioCtx, 2, 4096);
         out.setInput(that.mixerOut);
+        return true;
+    };
+    
+    that.play = function () {
+        if (audioRunning) {
+            return false;
+        }
+                
         out.connect(audioCtx.destination);
-
         audioRunning = true;
         log.info("start playback, sample rate:" + out.sampleRate + " channels " + out.channels);
         return true;
     };
 
-    that.stopAudio = function (freq) {
+    that.stop = function (freq) {
         if (!audioRunning) {
             return false;
         }
         audioRunning = false;
 
         out.disconnect(audioCtx.destination);
+        log.info("stop playback");
         return true;
     };
     return that;

@@ -7,6 +7,7 @@
 /*global sCBase*/
 /*global gLabel*/
 /*global audioWork*/
+/*global gButton*/
 
 function sCVKey(container, args, uid) {
     var that,
@@ -24,8 +25,12 @@ function sCVKey(container, args, uid) {
 
     that = sCBase(container, "sCVKey", {gate: gate, freq: hz}, args, uid).addOut("gate").addOut("freq");
     
-    that.addContent(currentNote);
+    that.addContent(gButton("capture", function () {
+        gui.captureKey(keyboard);
+    }).abs().move(60, 50));
     
+    that.addContent(currentNote);
+        
     gate.setArgs({value: isDown ? 1.0 : 0.0});
             
     vkey.className = "collection vkey";
@@ -41,15 +46,12 @@ function sCVKey(container, args, uid) {
         hz.setArgs({value: note.hz(notePressed)});
     };
     
-    that.keyUp = function (notePressed) {
+    that.keyUp = function () {
         isDown = false;
         gate.setArgs({active: isDown});
     };
     
     keyboard = wVKey(vkey, that.keyDown, that.keyUp);
-    
-    //FIXME: global coupling
-    audioWork.key = that;
     
     return that;
 }

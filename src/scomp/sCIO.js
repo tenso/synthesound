@@ -1,6 +1,5 @@
 "use strict";
 /*global log*/
-/*global input*/
 /*global gui*/
 /*global wMenu*/
 /*global ioCon*/
@@ -182,7 +181,7 @@ function sCIO(container) {
         port.onmousedown = function (e) {
             if (e.button === 0) {
                 if (e.target.sComp && e.target.isOut) {
-                    input.setMouseCapturer(e);
+                    gui.captureMouse(e);
                 }
             }
         };

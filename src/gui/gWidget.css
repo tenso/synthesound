@@ -7,7 +7,7 @@
 .gWidgetTable {
     display: inline-block;
     padding: 4px;
-    table-layout: fixed; /*FIXME: does not work, want even spaced columns*/
+    /*table-layout: fixed;*/
 }
 
 .gWidgetRow {
