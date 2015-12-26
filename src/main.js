@@ -8,6 +8,7 @@
 /*global workspace*/
 /*global guiInput*/
 /*global gui*/
+/*global tracker*/
 
 var app = {
     ver: "1.0",
@@ -27,7 +28,14 @@ var audioWork, /*depends on it: sCOut, sCVKey */
 window.onload = function () {
     var freqSelect = document.getElementById("freqSelect"),
         topMenu,
-        input;
+        input,
+        track;
+
+    function stepFrame(frames) {
+        track.stepFrames(frames);
+        topMenu.updateTime(track.timeString());
+    }
+
     
     /*testsuite*/
     test.runTests();
@@ -38,7 +46,7 @@ window.onload = function () {
     gui.setInputHandler(input);
     
     topMenu = menuBar(freqSelect, audioWork).move(0, 0);
-    
+        
     if (!test.verifyFunctionality(URL.createObjectURL, "URL.createObjectURL")
             || !test.verifyFunctionality(URL.revokeObjectURL, "URL.revokeObjectURL")) {
         topMenu.logError("need URL");
@@ -52,6 +60,9 @@ window.onload = function () {
         audioWork.onworkspacechanged = gIO.resizeCanvas; //update size of canvas on load
         window.addEventListener("resize", gIO.resizeCanvas); //update size of canvas on window-resize
         audioWork.play();
+        
+        track = tracker(audioWork.sampleRate());
+        audioWork.setFrameTickCallback(stepFrame);
     } else {
         topMenu.logError("need AudioContext and Array.fill");
     }

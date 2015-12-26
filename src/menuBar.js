@@ -16,11 +16,17 @@ function menuBar(container, contentContainer) {
         menus = [],
         helpString = "Help me!",
         aboutString = "SyntheSound v." + app.ver + "\n(C) 2015 Anton Olofsson, GPL 3",
-        loadInput;
+        loadInput,
+        time = gLabel("--:--:--");
     
-    that.addContent(gButton("panic", function () {
-        contentContainer.stopAudio();
+    that.addContent(gButton("stop", function () {
+        contentContainer.stop();
     }).bg("#f00"));
+    that.addContent(gButton(">", function () {
+        contentContainer.play();
+    }));
+    
+    that.addContent(time);
     
     loadInput = files.createLoadDataInput(function (data) {
         contentContainer.loadWorkspace(data);
@@ -53,6 +59,11 @@ function menuBar(container, contentContainer) {
             wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
         });
         wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
+    };
+    
+    that.updateTime = function (str) {
+        time.set(str);
+        return that;
     };
     
     return that;

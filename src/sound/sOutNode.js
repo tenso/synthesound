@@ -7,7 +7,9 @@ function sOutNode(audioCtx, channels, frameSize) {
     that.input = null;
     that.sampleRate = audioCtx.sampleRate;
     that.channels = channels;
-        
+    
+    that.runIndexUpdated = undefined;
+    
     that.onaudioprocess = function (audioEvent) {
         var index = 0,
             chan = 0,
@@ -23,6 +25,10 @@ function sOutNode(audioCtx, channels, frameSize) {
             buffer.copyToChannel(inData, chan);
         }
         that.runIndex += that.frameSize;
+        
+        if (that.runIndexUpdated) {
+            that.runIndexUpdated(that.frameSize);
+        }
     };
     
     that.setInput = function (input) {

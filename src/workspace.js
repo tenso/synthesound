@@ -190,7 +190,12 @@ function workspace(container) {
         //create actual output node:
         out = sOutNode(audioCtx, 2, 4096);
         out.setInput(that.mixerOut);
+        log.info("init audio, sample rate:" + out.sampleRate + " channels " + out.channels);
         return true;
+    };
+    
+    that.sampleRate = function () {
+        return out.sampleRate;
     };
     
     that.play = function () {
@@ -200,7 +205,6 @@ function workspace(container) {
                 
         out.connect(audioCtx.destination);
         audioRunning = true;
-        log.info("start playback, sample rate:" + out.sampleRate + " channels " + out.channels);
         return true;
     };
 
@@ -211,8 +215,12 @@ function workspace(container) {
         audioRunning = false;
 
         out.disconnect(audioCtx.destination);
-        log.info("stop playback");
         return true;
     };
+    
+    that.setFrameTickCallback = function (cb) {
+        out.runIndexUpdated = cb;
+    };
+    
     return that;
 }
