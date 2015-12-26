@@ -4,20 +4,21 @@
 /*global FileReader*/
 /*global gui*/
 /*global gBase*/
-var Files = {
+
+var files = {
     saveUrl: undefined,
     saveData: function (fileName, data) {
         var stringData = JSON.stringify(data, undefined, 2),
             link = document.createElement("a"),
             blob = new Blob([stringData], {type: "application/json"});
         
-        if (Files.saveUrl) {
-            URL.revokeObjectURL(Files.saveUrl);
-            Files.saveUrl = undefined;
+        if (files.saveUrl) {
+            URL.revokeObjectURL(files.saveUrl);
+            files.saveUrl = undefined;
         }
-        Files.saveUrl = URL.createObjectURL(blob);
+        files.saveUrl = URL.createObjectURL(blob);
         
-        link.href = Files.saveUrl;
+        link.href = files.saveUrl;
         link.download = fileName;
         link.textContent = "download file: " + fileName;
         gui.clickObj(link);

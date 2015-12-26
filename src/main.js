@@ -2,7 +2,7 @@
 /*global input*/
 /*global log*/
 /*global test*/
-/*global gIO*/
+/*global sCIO*/
 /*global menuBar*/
 /*global URL*/
 /*global FileReader*/
@@ -20,14 +20,15 @@ var app = {
 };
 
 /*FIXME: should not be global!!*/
-/*two things depend on it global: sCOut + sCVKey*/
-var audioWork;
+var audioWork, /*depends on it: sCOut, sCVKey */
+    gIO;       /*depends on it: workspace, ioPort, sCBase, gWidget*/
 
 window.onload = function () {
     var freqSelect = document.getElementById("freqSelect"),
         topMenu;
     
     audioWork = workspace(freqSelect);
+    gIO = sCIO(audioWork);
     
     /*testsuite*/
     test.runTests();
@@ -50,7 +51,6 @@ window.onload = function () {
 
     if (audioWork.startAudio()) {
         audioWork.onworkspacechanged = gIO.resizeCanvas; //update size of canvas on load
-        gIO.init(audioWork);
         window.addEventListener("resize", gIO.resizeCanvas); //update size of canvas on window-resize
     } else {
         topMenu.logError("need AudioContext and Array.fill");

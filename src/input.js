@@ -1,7 +1,6 @@
 "use strict";
 /*global note*/
 /*global test*/
-/*global gIO*/
 /*global log*/
 /*global gui*/
 

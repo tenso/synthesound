@@ -6,7 +6,7 @@
 /*global gLabel*/
 /*global wNote*/
 /*global app*/
-/*global Files*/
+/*global files*/
 
 function menuBar(container, contentContainer) {
     var that = gWidget(container).canMove(false).z(10000).border("0").radius(0).w("100%").padding(2),
@@ -22,7 +22,7 @@ function menuBar(container, contentContainer) {
         contentContainer.stopAudio();
     }).bg("#f00"));
     
-    loadInput = Files.createLoadDataInput(function (data) {
+    loadInput = files.createLoadDataInput(function (data) {
         contentContainer.loadWorkspace(data);
     });
     
@@ -31,7 +31,7 @@ function menuBar(container, contentContainer) {
     
     file.add("save", function () {
         var data = contentContainer.data();
-        Files.saveData("synthdata.json", data);
+        files.saveData("synthdata.json", data);
     });
     that.addContent(file);
     
