@@ -7,14 +7,12 @@
 .gWidgetTable {
     display: inline-block;
     padding: 4px;
-    /*table-layout: fixed;*/
 }
 
 .gWidgetRow {
 }
 
 .gWidgetCell {
-    width: 25px;
 }
 
 .gWidgetTitle {

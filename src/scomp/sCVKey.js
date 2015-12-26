@@ -27,8 +27,7 @@ function sCVKey(container, args, uid) {
     
     that.addContent(gButton("capture", function () {
         gui.captureKey(keyboard);
-    }).abs().move(60, 50));
-    
+    }).abs().move(10, 175));
     that.addContent(currentNote);
         
     gate.setArgs({value: isDown ? 1.0 : 0.0});
