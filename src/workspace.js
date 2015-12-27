@@ -81,7 +81,7 @@ function workspace(container) {
             
             for (sConstructor in constructorMap) {
                 if (constructorMap.hasOwnProperty(sConstructor)) {
-                    menu.add(sConstructor, menuEntry(sConstructor, mouse.x, mouse.y));
+                    menu.add(lang.tr(sConstructor), menuEntry(sConstructor, mouse.x, mouse.y));
                 }
             }
         };

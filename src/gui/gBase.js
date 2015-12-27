@@ -180,6 +180,11 @@ function gBase(type) {
         return gui.stylePxIfInt(that, "fontSize", value);
     };
     
+    that.fontFamily = function (value) {
+        that.style.fontFamily = value;
+        return that;
+    };
+    
     that.opacity = function (value) {
         that.style.opacity = value;
         return that;

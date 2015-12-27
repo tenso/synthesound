@@ -5,6 +5,7 @@
 /*global gIO*/
 /*global log*/
 /*global uidGen*/
+/*global lang*/
 
 //FIXME: rename all sC to sG
 //FIXME: rename all sId to portName?
@@ -12,7 +13,7 @@
 var scBaseUID = uidGen();
 
 function sCBase(context, type, sComps, sArgs, uid) {
-    var that = gWidget(context, type),
+    var that = gWidget(context, lang.tr(type)),
         ports = {},
         myUID;
 

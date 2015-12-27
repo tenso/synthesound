@@ -7,6 +7,7 @@
 /*global wNote*/
 /*global app*/
 /*global files*/
+/*global lang*/
 
 function menuBar(container, contentContainer) {
     var that = gWidget(container).canMove(false).z(10000).border("0").radius(0).w("100%").padding(2),
@@ -14,10 +15,10 @@ function menuBar(container, contentContainer) {
         about,
         log,
         menus = [],
-        helpString = "Help me!",
+        helpString = lang.tr("helpText"),
         aboutString = "SyntheSound v." + app.ver + "\n(C) 2015 Anton Olofsson, GPL 3",
         loadInput,
-        time = gLabel("--:--:--");
+        time = gLabel("--:--:--").fontFamily("monospace");
     
     that.logError = function (error) {
         log.bg("#f00").show(true);
@@ -32,7 +33,7 @@ function menuBar(container, contentContainer) {
         return that;
     };
     
-    that.addContent(gButton("stop", function () {
+    that.addContent(gButton(lang.tr("stop"), function () {
         contentContainer.stop();
     }).bg("#f00"));
     
@@ -42,25 +43,25 @@ function menuBar(container, contentContainer) {
     
     that.addContent(time);
 
-    file = wMenuButton("file", menus);
+    file = wMenuButton(lang.tr("file"), menus);
 
     loadInput = files.createLoadDataInput(function (data) {
         contentContainer.loadWorkspace(data);
     });
-    file.addOverlayed("load", loadInput);
+    file.addOverlayed(lang.tr("load"), loadInput);
     
-    file.add("save", function () {
+    file.add(lang.tr("save"), function () {
         var data = contentContainer.data();
         files.saveData("synthdata.json", data);
     });
     that.addContent(file);
     
     about = wMenuButton("?", menus);
-    about.add("help", function () {wNote(contentContainer, helpString).padding(40); });
-    about.add("about", function () {wNote(contentContainer, aboutString).padding(40); });
+    about.add(lang.tr("help"), function () {wNote(contentContainer, helpString).padding(40); });
+    about.add(lang.tr("about"), function () {wNote(contentContainer, aboutString).padding(40); });
     that.addContent(about);
     
-    log = wMenuButton("detected errors", menus).show(false);
+    log = wMenuButton(lang.tr("detectedErrors"), menus).show(false);
     that.addContent(log);
     
     that.addEventListener("mouseleave", function () {
