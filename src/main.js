@@ -9,6 +9,7 @@
 /*global guiInput*/
 /*global gui*/
 /*global tracker*/
+/*global lang*/
 
 var app = {
     ver: "1.0",
@@ -20,6 +21,30 @@ var app = {
         maxY: undefined
     }
 };
+
+function initLanguage() {
+    lang.addLanguage("en", {
+        sCAdsr: "Adsr",
+        sCConst: "Value",
+        sCDelay: "Delay",
+        sCGen: "Gen",
+        sCMix: "Mix",
+        sCVKey: "Keyboard",
+        sCOp: "Operator",
+        sCNotePitch: "Note Pitch",
+        sCOut: "Output",
+        sCScope: "Scope",
+        helpText: "Help...",
+        save: "Save",
+        load: "Load",
+        help: "Help",
+        about: "About",
+        file: "File",
+        stop: "Stop",
+        detectedErrors: "Detected Errors"
+    });
+    lang.setLanguage("en");
+}
 
 /*FIXME: should not be global!!*/
 var audioWork, /*depends on it: sCOut, sCVKey */
@@ -35,7 +60,7 @@ window.onload = function () {
         track.stepFrames(frames);
         topMenu.updateTime(track.timeString());
     }
-
+    initLanguage();
     
     /*testsuite*/
     test.runTests();

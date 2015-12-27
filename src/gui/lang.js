@@ -1,32 +1,23 @@
 "use strict";
+/*global log*/
 
-//FIXME: make set
 var lang = {
-    strings: {
-        en: {
-            sCAdsr: "Adsr",
-            sCConst: "Value",
-            sCDelay: "Delay",
-            sCGen: "Gen",
-            sCMix: "Mix",
-            sCVKey: "Keyboard",
-            sCOp: "Operator",
-            sCNotePitch: "Note Pitch",
-            sCOut: "Output",
-            sCScope: "Scope",
-            helpText: "Help...",
-            save: "Save",
-            load: "Load",
-            help: "Help",
-            about: "About",
-            file: "File",
-            stop: "Stop",
-            detectedErrors: "Detected Errors"
-        }
+    language: "",
+    strings: {},
+    
+    addLanguage: function (language, map) {
+        lang.strings[language] = map;
     },
-    language: "en",
-
+    
+    setLanguage: function (language) {
+        lang.language = language;
+    },
+    
     tr: function (id) {
+        if (!lang.strings.hasOwnProperty(lang.language)) {
+            log.error("no language: '" + lang.language + "'");
+            return id;
+        }
         if (lang.strings[lang.language].hasOwnProperty(id)) {
             return lang.strings[lang.language][id];
         }
