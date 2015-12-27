@@ -20,10 +20,6 @@ function sBase(sId) {
         return sId;
     };
     
-    //FIXME: make private?
-    that.data = [];
-    that.genData = undefined;
-    
     that.setChanUpdatedCallback = function (cb) {
         chanUpdated = cb;
         return that;
@@ -171,6 +167,10 @@ function sBase(sId) {
     that.getInputChannelData = function (index, chan) {
         return inputs[index].data[chan];
     };
+    
+    //FIXME: make private?
+    that.data = [];
+    that.genData = undefined;
     
     return that;
 }

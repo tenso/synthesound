@@ -8,6 +8,7 @@ function gInput(value, callback, label) {
         input = gBase("input").w(60).setClass("gInput").textAlign("right");
     
     input.value = value;
+    
     input.onchange = function () {
         callback(input.value);
     };

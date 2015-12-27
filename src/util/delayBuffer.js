@@ -10,9 +10,7 @@ function delayBuffer(len) {
         length = len,
         buffer = new Float32Array(length),
         setIndex = 0;
-        
-    buffer.fill(0.0);
-    
+
     that.length = function () {
         return length;
     };
@@ -43,6 +41,9 @@ function delayBuffer(len) {
         }
         return str;
     };
+    
+    buffer.fill(0.0);
+    
     return that;
 }
 

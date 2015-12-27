@@ -17,5 +17,6 @@ function ioCon(toPort, fromPort) {
             from: fromPort.data()
         };
     };
+    
     return that;
 }

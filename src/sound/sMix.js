@@ -34,6 +34,7 @@ function sMix(args) {
             gain[1] = typeof args.gainR === "number" ? args.gainR : gain[1];
         }
     };
+    
     that.setArgs(args);
     
     return that;

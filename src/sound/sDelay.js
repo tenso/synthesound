@@ -52,6 +52,7 @@ function sDelay(args) {
             delay = typeof args.delay === "number" ? args.delay : delay;
         }
     };
+    
     that.setArgs(args);
     
     return that;

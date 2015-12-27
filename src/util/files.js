@@ -7,6 +7,7 @@
 
 var files = {
     saveUrl: undefined,
+    
     saveData: function (fileName, data) {
         var stringData = JSON.stringify(data, undefined, 2),
             link = document.createElement("a"),

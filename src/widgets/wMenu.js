@@ -28,6 +28,10 @@ function wMenu(container) {
         return entry;
     }
     
+    function removeListener() {
+        that.remove();
+    }
+    
     that.add = function (string, callback) {
         that.addContent(buildButton(string, callback));
         return that;
@@ -39,10 +43,6 @@ function wMenu(container) {
         that.addContent(entry);
         return that;
     };
-    
-    function removeListener() {
-        that.remove();
-    }
     
     that.removeOnLeave = function (value) {
         if (value) {

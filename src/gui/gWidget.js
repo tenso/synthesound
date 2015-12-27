@@ -11,21 +11,7 @@
 
 function gWidget(container, titleLabel) {
     var that = gBase();
-    
-    that.nextRow = function () {
-        that.content = gBase("tr").setClass("gWidgetRow");
-        that.table.appendChild(that.content);
-        return that;
-    };
-    
-    that.contentCount = function () {
-        return that.content.childNodes.length;
-    };
-    
-    that.remove = function () {
-        that.container.removeChild(that);
-    };
-    
+
     function makeTitle(titleLabel) {
         var titleElem = gBase().marginRight(20);//that is close buttons width
         
@@ -64,8 +50,20 @@ function gWidget(container, titleLabel) {
         that.nextRow();
     }
 
-    containerInit(container, titleLabel);
-
+    that.nextRow = function () {
+        that.content = gBase("tr").setClass("gWidgetRow");
+        that.table.appendChild(that.content);
+        return that;
+    };
+    
+    that.contentCount = function () {
+        return that.content.childNodes.length;
+    };
+    
+    that.remove = function () {
+        that.container.removeChild(that);
+    };
+    
     that.addContent = function (content, wholeRow) {
         var cont = gBase("td").setClass("gWidgetCell");
         cont.appendChild(content);
@@ -109,7 +107,7 @@ function gWidget(container, titleLabel) {
             };
             
             that.iMouseCaptured = function () {
-                that.style.zIndex = gui.nextZ();  
+                that.style.zIndex = gui.nextZ();
             };
             
             that.iMousePressAndMove = function (e, mouse) {
@@ -135,6 +133,7 @@ function gWidget(container, titleLabel) {
         return that;
     };
     
+    containerInit(container, titleLabel);
     that.canMove(true).move(0, 0);
     return that;
 }

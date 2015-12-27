@@ -5,14 +5,14 @@
 /*global audioWork*/
 
 function sCOut(container, args, uid) {
-    var that,
-        mix = sMix();
+    var mix = sMix(),
+        that = sCBase(container, "sCOut", {mix: mix}, args, uid);
         
     function setGain(value) {
         mix.setArgs({gainL: value, gainR: value});
     }
         
-    that = sCBase(container, "sCOut", {mix: mix}, args, uid).addIn("mix");
+    that.addIn("mix");
     that.nextRow();
     that.addLabeledContent(gSlider(mix.getArgs().gainL, 0.0, 1.0, setGain), "VOL");
 

@@ -43,6 +43,7 @@ function sOp(args) {
             op = typeof args.op === "string" ? args.op : op;
         }
     };
+    
     that.setArgs(args);
     
     return that;

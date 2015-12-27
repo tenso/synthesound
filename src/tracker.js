@@ -34,10 +34,6 @@ function tracker(sampleRate) {
         return currentMs;
     };
     
-    that.currentMeasure = function () {
-        
-    };
-    
     that.measureMs = function () {
         var msecPerBeat = 60000 / bpm;
         return parseInt(msecPerBeat * quantization, 10);
@@ -50,8 +46,7 @@ function tracker(sampleRate) {
     that.currentMsQuantized = function () {
         return that.currentMeasure() * that.measureMs();
     };
-    
-        
+            
     that.timeString = function () {
         var seconds = parseInt(currentMs / 1000.0, 10);
         return util.zeroPad(seconds / 60, 2) + ":" + util.zeroPad(seconds % 60, 2) + ":" + util.zeroPad((currentMs % 1000) / 10, 2);

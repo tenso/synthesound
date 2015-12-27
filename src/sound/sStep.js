@@ -38,6 +38,7 @@ function sStep(args) {
             needRefill = true;
         }
     };
+    
     that.setArgs(args);
     
     return that;

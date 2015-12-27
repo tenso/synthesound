@@ -14,48 +14,39 @@ var scBaseUID = uidGen();
 function sCBase(context, type, sComps, sArgs, uid) {
     var that = gWidget(context, type),
         ports = {},
-        sId,
         myUID;
-    
-    if (typeof uid === "number") {
-         myUID = uid;
-    } else {
-        myUID = scBaseUID.getUID();
-    }
-        
-    //FIXME: mixin uid functions?
-    that.uid = function () {
-        return myUID;
-    };
-    
-    that.setUid = function (uid) {
-        var i;
-        myUID = uid;
-        
-        for (i = 0; i < ports[sId].length; i += 1) {
-            ports[sId][i].uid = that.uid();
-        }
-        
-        return that;
-    };
-    
+
     function makeRemoveAllConnections() {
         return function () {
             gIO.delAllConnectionsToAndFromUID(that.uid());
         };
     }
-
-    that.addRemove(makeRemoveAllConnections());
     
-    for (sId in sComps) {
-        if (sComps.hasOwnProperty(sId)) {
-            ports[sId] = [];
-            if (sArgs && sArgs.hasOwnProperty(sId)) {
-                sComps[sId].setArgs(sArgs[sId]);
+    //FIXME: mixin uid functions?
+    that.uid = function () {
+        return myUID;
+    };
+        
+    that.setArgs = function (sArgs) {
+        var sId;
+        for (sId in sComps) {
+            if (sComps.hasOwnProperty(sId)) {
+                if (sArgs && sArgs.hasOwnProperty(sId)) {
+                    sComps[sId].setArgs(sArgs[sId]);
+                }
             }
         }
-    }
-    
+    };
+        
+    that.clearPorts = function () {
+        var sId;
+        for (sId in sComps) {
+            if (sComps.hasOwnProperty(sId)) {
+                ports[sId] = [];
+            }
+        }
+    };
+        
     that.addIn = function (sId, type) {
         if (!sComps.hasOwnProperty(sId)) {
             log.error("sCBase.addIn: dont have:" + sId);
@@ -127,6 +118,16 @@ function sCBase(context, type, sComps, sArgs, uid) {
         log.error("could not find port");
         return undefined;
     };
+    
+    if (typeof uid === "number") {
+        myUID = uid;
+    } else {
+        myUID = scBaseUID.getUID();
+    }
+    
+    that.addRemove(makeRemoveAllConnections());
+    that.setArgs(sArgs);
+    that.clearPorts();
     
     return that;
 }

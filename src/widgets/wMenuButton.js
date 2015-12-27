@@ -12,10 +12,6 @@ function wMenuButton(name, group) {
         that.menu.show(true);
     }).hoverEffect(true);
     
-    that.menu = wMenu(that).removeOnLeave(false).show(false);
-    
-    group.push(that);
-    
     that.closeAll = function (myIndex) {
         var i;
         for (i = 0; i < group.length; i += 1) {
@@ -37,6 +33,9 @@ function wMenuButton(name, group) {
     that.addOverlayed = function (name, element) {
         that.menu.addOverlayed(name, element);
     };
+    
+    that.menu = wMenu(that).removeOnLeave(false).show(false);
+    group.push(that);
     
     return that;
 }

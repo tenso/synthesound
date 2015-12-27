@@ -3,13 +3,14 @@
 
 function gLabel(label) {
     var that = gBase();
-    that.textContent = label;
-    that.className = "gLabel";
-    
+        
     that.set = function (str) {
         that.textContent = str;
         return that;
     };
+    
+    that.textContent = label;
+    that.className = "gLabel";
     
     return that;
 }

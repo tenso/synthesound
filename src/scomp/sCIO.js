@@ -10,39 +10,12 @@ function sCIO(container) {
         linesCtx,
         connections = [];
     
-    container.appendChild(linesCanvas);
-    linesCanvas.className = "gIOCanvas";
-    linesCtx = linesCanvas.getContext("2d");
-    linesCtx.strokeStyle = "#000";
-    linesCtx.lineWidth = 2;
-
     function drawLine(fromX, fromY, toX, toY) {
         linesCtx.beginPath();
         linesCtx.moveTo(fromX, fromY);
         linesCtx.lineTo(toX, toY);
         linesCtx.stroke();
     }
-
-    that.drawConnections = function () {
-        var i,
-            to,
-            from;
-
-        if (!linesCtx) {
-            return;
-        }
-        
-        linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
-
-        for (i = 0; i < connections.length; i += 1) {
-            to = connections[i].to();
-            from = connections[i].from();
-            drawLine(gui.getPos(from).x + gui.getSize(from).w / 2,
-                         gui.getPos(from).y + gui.getSize(from).h / 2,
-                         gui.getPos(to).x + gui.getSize(to).w / 2,
-                         gui.getPos(to).y + gui.getSize(to).h / 2);
-        }
-    };
             
     function haveConnection(from, to) {
         var i;
@@ -77,6 +50,27 @@ function sCIO(container) {
         }
         return ret;
     }
+
+    that.drawConnections = function () {
+        var i,
+            to,
+            from;
+
+        if (!linesCtx) {
+            return;
+        }
+        
+        linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
+
+        for (i = 0; i < connections.length; i += 1) {
+            to = connections[i].to();
+            from = connections[i].from();
+            drawLine(gui.getPos(from).x + gui.getSize(from).w / 2,
+                         gui.getPos(from).y + gui.getSize(from).h / 2,
+                         gui.getPos(to).x + gui.getSize(to).w / 2,
+                         gui.getPos(to).y + gui.getSize(to).h / 2);
+        }
+    };
 
     that.resizeCanvas = function () {
         var workspaceWidth = container.scrollWidth,
@@ -236,6 +230,11 @@ function sCIO(container) {
         };
     };
     
+    container.appendChild(linesCanvas);
+    linesCanvas.className = "gIOCanvas";
+    linesCtx = linesCanvas.getContext("2d");
+    linesCtx.strokeStyle = "#000";
+    linesCtx.lineWidth = 2;
     that.resizeCanvas();
     
     return that;

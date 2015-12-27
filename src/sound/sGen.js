@@ -76,7 +76,9 @@ function sGen(args) {
             isOn = typeof args.isOn === "boolean" ? args.type : isOn;
         }
     };
+    
     that.setArgs(args);
+    
     return that;
 }
 

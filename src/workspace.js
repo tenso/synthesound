@@ -41,14 +41,6 @@ function workspace(container) {
             sCNotePitch: sCNotePitch
         };
     
-    that.className = "workspace";
-    
-    that.key = undefined; /*FIXME: globally coupled to sCVKey*/
-    that.mixerOut = undefined; /*FIXME: globally coupled to sCOut*/
-    that.onworkspacechanged = undefined;
-    
-    container.appendChild(that);
-
     function findSCComp(uid) {
         var nodes =  that.childNodes,
             i;
@@ -221,6 +213,13 @@ function workspace(container) {
     that.setFrameTickCallback = function (cb) {
         out.runIndexUpdated = cb;
     };
+    
+    that.className = "workspace";
+    that.key = undefined; /*FIXME: globally coupled to sCVKey*/
+    that.mixerOut = undefined; /*FIXME: globally coupled to sCOut*/
+    that.onworkspacechanged = undefined;
+    
+    container.appendChild(that);
     
     return that;
 }

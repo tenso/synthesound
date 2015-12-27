@@ -55,6 +55,7 @@ function sNotePitch(args) {
             cents = typeof args.cents === "number" ? args.cents : cents;
         }
     };
+    
     that.setArgs(args);
     
     return that;

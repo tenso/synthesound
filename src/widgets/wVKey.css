@@ -1,5 +1,5 @@
 .vkey-container {
-    width: 1088px;
+    width: 1122px; /*FIXME: zoom will not work for this*/
     height: 160px;
     position: relative;
 }

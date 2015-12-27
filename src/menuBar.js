@@ -19,20 +19,34 @@ function menuBar(container, contentContainer) {
         loadInput,
         time = gLabel("--:--:--");
     
+    that.logError = function (error) {
+        log.bg("#f00").show(true);
+        log.add("error #" + log.menu.contentCount(), function () {
+            wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
+        });
+        wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
+    };
+    
+    that.updateTime = function (str) {
+        time.set(str);
+        return that;
+    };
+    
     that.addContent(gButton("stop", function () {
         contentContainer.stop();
     }).bg("#f00"));
+    
     that.addContent(gButton(">", function () {
         contentContainer.play();
     }));
     
     that.addContent(time);
-    
+
+    file = wMenuButton("file", menus);
+
     loadInput = files.createLoadDataInput(function (data) {
         contentContainer.loadWorkspace(data);
     });
-    
-    file = wMenuButton("file", menus);
     file.addOverlayed("load", loadInput);
     
     file.add("save", function () {
@@ -52,19 +66,6 @@ function menuBar(container, contentContainer) {
     that.addEventListener("mouseleave", function () {
         file.closeAll();
     });
-    
-    that.logError = function (error) {
-        log.bg("#f00").show(true);
-        log.add("error #" + log.menu.contentCount(), function () {
-            wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
-        });
-        wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
-    };
-    
-    that.updateTime = function (str) {
-        time.set(str);
-        return that;
-    };
     
     return that;
 }

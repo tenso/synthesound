@@ -31,6 +31,7 @@ function sConst(args) {
             }
         }
     };
+    
     that.setArgs(args);
     
     return that;

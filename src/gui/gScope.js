@@ -15,11 +15,7 @@ function gScope(channel) {
         halfH = canvas.height / 2.0,
         gotData = 0,
         yMargins = 2;
-
-    canvas.className = "gScope";
-    
-    that.appendChild(canvas);
-    
+        
     that.drawGraph = function (data) {
         var i = 0,
             x = 0,
@@ -56,6 +52,9 @@ function gScope(channel) {
         ctx.stroke();
         return that;
     };
+    
+    canvas.className = "gScope";
+    that.appendChild(canvas);
     
     return that;
 }

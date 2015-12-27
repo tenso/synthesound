@@ -10,9 +10,9 @@
 /*global gButton*/
 
 function sCVKey(container, args, uid) {
-    var that,
-        gate = sStep(),
+    var gate = sStep(),
         hz = sConst(),
+        that = sCBase(container, "sCVKey", {gate: gate, freq: hz}, args, uid),
         gateOut,
         hzOut,
         vkey = document.createElement("td"),
@@ -22,18 +22,6 @@ function sCVKey(container, args, uid) {
         cont,
         keyboard,
         label;
-
-    that = sCBase(container, "sCVKey", {gate: gate, freq: hz}, args, uid).addOut("gate").addOut("freq");
-    
-    that.addContent(gButton("capture", function () {
-        gui.captureKey(keyboard);
-    }).abs().move(10, 175));
-    that.addContent(currentNote);
-        
-    gate.setArgs({value: isDown ? 1.0 : 0.0});
-            
-    vkey.className = "collection vkey";
-    that.addContent(vkey);
     
     that.keyDown = function (notePressed) {
         noteDown = notePressed;
@@ -49,7 +37,20 @@ function sCVKey(container, args, uid) {
         isDown = false;
         gate.setArgs({active: isDown});
     };
+
+    that.addOut("gate").addOut("freq");
     
+    that.addContent(gButton("capture", function () {
+        gui.captureKey(keyboard);
+    }).abs().move(10, 175));
+    
+    that.addContent(currentNote);
+        
+    gate.setArgs({value: isDown ? 1.0 : 0.0});
+            
+    vkey.className = "collection vkey";
+    that.addContent(vkey);
+
     keyboard = wVKey(vkey, that.keyDown, that.keyUp);
     
     return that;

@@ -12,28 +12,6 @@ function wVKey(container, keyDown, keyUp) {
         isDown = false,
         lastNote = -1;
     
-    that.iKeyDown = function (key, shift) {
-        
-        var noteMap = {a: "C",  w: "C#", s: "D",
-                       e: "D#", d: "E",  f: "F",
-                       t: "F#", g: "G",  y: "G#",
-                       h: "A",  u: "A#", j: "B"},
-            cNote,
-            octave = shift ? 2 : 3;
-        
-        cNote = noteMap[key] || 1;
-        cNote += octave;
-        cNote = note.noteFromName(cNote);
-        if (cNote === -1) {
-            return;
-        }
-        keyDown(cNote);
-    };
-
-    that.iKeyUp = function (key, shift) {
-        keyUp();
-    };
-    
     function addKey(container, note) {
         var key = document.createElement("div"),
             flat = true,
@@ -86,6 +64,27 @@ function wVKey(container, keyDown, keyUp) {
         
         return key;
     }
+    
+    that.iKeyDown = function (key, shift) {
+        var noteMap = {a: "C",  w: "C#", s: "D",
+                       e: "D#", d: "E",  f: "F",
+                       t: "F#", g: "G",  y: "G#",
+                       h: "A",  u: "A#", j: "B"},
+            cNote,
+            octave = shift ? 2 : 3;
+        
+        cNote = noteMap[key] || 1;
+        cNote += octave;
+        cNote = note.noteFromName(cNote);
+        if (cNote === -1) {
+            return;
+        }
+        keyDown(cNote);
+    };
+
+    that.iKeyUp = function (key, shift) {
+        keyUp();
+    };
     
     box = document.createElement("div");
     box.className = "vkey-container";

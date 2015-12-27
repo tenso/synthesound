@@ -3,6 +3,8 @@
 /*global log*/
 
 var test = {
+    tests: [],
+    
     verifyFunctionality: function (func, message) {
         if (!func) {
             log.error("no functionality: " + message);
@@ -34,9 +36,7 @@ var test = {
             }
         }
     },
-
-    tests: [],
-        
+    
     addTest: function (func, desc) {
         test.tests.push([desc, func]);
     },

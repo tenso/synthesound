@@ -2,12 +2,16 @@
 
 function sOutNode(audioCtx, channels, frameSize) {
     var that = audioCtx.createScriptProcessor(frameSize, 1, channels);
+    
+    that.setInput = function (input) {
+        that.input = input;
+    };
+    
     that.frameSize = frameSize;
     that.runIndex = 0;
     that.input = null;
     that.sampleRate = audioCtx.sampleRate;
     that.channels = channels;
-    
     that.runIndexUpdated = undefined;
     
     that.onaudioprocess = function (audioEvent) {
@@ -31,9 +35,5 @@ function sOutNode(audioCtx, channels, frameSize) {
         }
     };
     
-    that.setInput = function (input) {
-        that.input = input;
-    };
-        
     return that;
 }
