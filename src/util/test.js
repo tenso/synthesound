@@ -52,11 +52,15 @@ var test = {
         }
     },
 
-    runTests: function () {
-        log.info("running tests...");
+    runTests: function (verbose) {
+        if (verbose) {
+            log.info("running tests...");
+        }
         var i;
         for (i = 0; i < test.tests.length; i += 1) {
-            log.info(" test:" + test.tests[i][0]);
+            if (verbose) {
+                log.info(" test:" + test.tests[i][0]);
+            }
             test.tests[i][1]();
         }
     }
