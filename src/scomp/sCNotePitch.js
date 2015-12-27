@@ -5,15 +5,16 @@
 /*global gLabel*/
 /*global sCBase*/
 
-function sCNotePitch(container, args, uid) {
+function sCNotePitch(container, uid) {
     var out = sNotePitch(),
-        that = sCBase(container, "sCNotePitch", {hz: out}, args, uid),
+        that = sCBase(container, "sCNotePitch", {hz: out}, uid),
         labelIn,
-        labelOut;
+        labelOut,
+        controls = {hz: {}};
             
     function addControl(type) {
         var args;
-        that.addContent(gInput(out.getArgs()[type], function (value) {
+        that.addContent(controls.hz[type] = gInput(out.getArgs()[type], function (value) {
             args = {};
             args[type] = parseInt(value, 10);
             out.setArgs(args);
@@ -34,9 +35,11 @@ function sCNotePitch(container, args, uid) {
     addControl("cents");
         
     out.setNoteUpdatedCallback(function (inNote, outNote) {
-        labelIn.set(inNote);
-        labelOut.set(outNote);
+        labelIn.setValue(inNote);
+        labelOut.setValue(outNote);
     });
+    
+    that.setGuiControls(controls);
     
     return that;
 }

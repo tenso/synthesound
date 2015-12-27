@@ -3,14 +3,17 @@
 /*global sCBase*/
 /*global gSlider*/
 
-function sCDelay(container, args, uid) {
+function sCDelay(container, uid) {
     var delay = sDelay({gain: 0.1, delay: 0.15}),
-        that = sCBase(container, "sCDelay", {delay: delay}, args, uid);
-
+        that = sCBase(container, "sCDelay", {delay: delay}, uid),
+        controls = {delay: {}};
+    
     that.addIn("delay").addOut("delay");
     that.nextRow();
-    that.addLabeledContent(gSlider(delay.getArgs().gain, 0.0, 0.99, function (value) {delay.setArgs({gain: value}); }), "G");
-    that.addLabeledContent(gSlider(delay.getArgs().delay, 0.0, 1.0, function (value) {delay.setArgs({delay: value}); }), "D");
-        
+    that.addLabeledContent(controls.delay.gain = gSlider(delay.getArgs().gain, 0.0, 0.99, function (value) {delay.setArgs({gain: value}); }), "G");
+    that.addLabeledContent(controls.delay.delay = gSlider(delay.getArgs().delay, 0.0, 1.0, function (value) {delay.setArgs({delay: value}); }), "D");
+    
+    that.setGuiControls(controls);
+    
     return that;
 }

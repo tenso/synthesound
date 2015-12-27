@@ -12,16 +12,36 @@
 
 var scBaseUID = uidGen();
 
-function sCBase(context, type, sComps, sArgs, uid) {
+function sCBase(context, type, sComps, uid) {
     var that = gWidget(context, lang.tr(type)),
         ports = {},
-        myUID;
+        myUID,
+        guiControls;
 
     function makeRemoveAllConnections() {
         return function () {
             gIO.delAllConnectionsToAndFromUID(that.uid());
         };
     }
+    
+    function setGuiControlAfterArg(sId, args) {
+        var arg;
+        if (guiControls) {
+            if (guiControls.hasOwnProperty(sId)) {
+                for (arg in args) {
+                    if (args.hasOwnProperty(arg)) {
+                        if (guiControls[sId].hasOwnProperty(arg)) {
+                            guiControls[sId][arg].setValue(args[arg]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    that.setGuiControls = function (controls) {
+        guiControls = controls;
+    };
     
     //FIXME: mixin uid functions?
     that.uid = function () {
@@ -34,6 +54,7 @@ function sCBase(context, type, sComps, sArgs, uid) {
             if (sComps.hasOwnProperty(sId)) {
                 if (sArgs && sArgs.hasOwnProperty(sId)) {
                     sComps[sId].setArgs(sArgs[sId]);
+                    setGuiControlAfterArg(sId, sArgs[sId]);
                 }
             }
         }
@@ -127,7 +148,6 @@ function sCBase(context, type, sComps, sArgs, uid) {
     }
     
     that.addRemove(makeRemoveAllConnections());
-    that.setArgs(sArgs);
     that.clearPorts();
     
     return that;

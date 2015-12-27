@@ -3,36 +3,51 @@
 /*global log*/
 /*global gBase*/
 
-function gButton(name, callback, isRadio, buttonCollection) {
+function gButtonGroup() {
+    var that = [];
+    
+    that.setValue = function (buttonName) {
+        var i;
+        for (i = 0; i < that.length; i += 1) {
+            if (that[i].name === buttonName) {
+                that[i].set();
+            }
+        }
+    };
+    
+    return that;
+}
+
+function gButton(name, callback, isRadio, buttonGroup) {
     var that = gBase();
+        
+    that.pressButton = function (value) {
+        that.value = value;
+        if (that.isRadio) {
+            that.className = "button-class gButton " + (that.value ? "gButtonRadioActive" : "gButtonRadioInactive");
+            if (that.value) {
+                that.callback(that.value);
+            }
+        } else {
+            that.callback(that.value);
+        }
+        return that;
+    };
 
     that.set = function () {
         var i;
-        if (this.isRadio) {
-            for (i = 0; i < this.siblings.length; i += 1) {
-                if (this.siblings[i].isRadio) {
-                    this.siblings[i].setValue(this.siblings[i] === this);
+        if (isRadio) {
+            for (i = 0; i < buttonGroup.length; i += 1) {
+                if (buttonGroup[i].isRadio) {
+                    buttonGroup[i].pressButton(buttonGroup[i] === that);
                 }
             }
         } else {
-            this.setValue(!this.value);
+            that.pressButton(!that.value);
         }
-        return this;
     };
     
-    that.setValue = function (value) {
-        this.value = value;
-        if (this.isRadio) {
-            this.className = "button-class gButton " + (this.value ? "gButtonRadioActive" : "gButtonRadioInactive");
-            if (this.value) {
-                this.callback(this.value);
-            }
-        } else {
-            this.callback(this.value);
-        }
-        return this;
-    };
-
+    that.name = name;
     that.isRadio = isRadio;
     that.className = "button-class gButton";
     that.textContent = name;
@@ -41,9 +56,8 @@ function gButton(name, callback, isRadio, buttonCollection) {
     that.callback = callback;
     
     if (that.isRadio) {
-        if (buttonCollection) {
-            that.siblings = buttonCollection;
-            that.siblings.push(that);
+        if (buttonGroup) {
+            buttonGroup.push(that);
         } else {
             log.error("gRadio: radiobuttons need collection");
         }
@@ -52,7 +66,7 @@ function gButton(name, callback, isRadio, buttonCollection) {
     
     that.onmousedown = function (e) {
         e.stopPropagation();
-        this.set();
+        that.set();
     };
     
     return that;

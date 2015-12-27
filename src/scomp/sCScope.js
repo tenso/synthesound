@@ -4,9 +4,9 @@
 /*global gScope*/
 /*global sMix*/
 
-function sCScope(container, args, uid) {
+function sCScope(container, uid) {
     var mix = sMix(),
-        that = sCBase(container, "sCScope", {mix: mix}, args, uid),
+        that = sCBase(container, "sCScope", {mix: mix}, uid),
         scopes = [];
     
     that.addIn("mix").addOut("mix");

@@ -3,9 +3,9 @@
 /*global sMix*/
 /*global sCBase*/
 
-function sCMix(container, args, uid) {
+function sCMix(container, uid) {
     var mix = sMix(),
-        that = sCBase(container, "sCMix", {mix: mix}, args, uid);
+        that = sCBase(container, "sCMix", {mix: mix}, uid);
     
     that.addIn("mix").addOut("mix");
                     

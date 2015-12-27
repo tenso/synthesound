@@ -2,15 +2,18 @@
 /*global sOp*/
 /*global sCBase*/
 /*global gButton*/
+/*global gButtonGroup*/
 
-function sCOp(container, args, uid) {
+function sCOp(container, uid) {
     var out = sOp(),
-        that = sCBase(container, "sCOp", {op: out}, args, uid),
-        typeButtons = [];
+        that = sCBase(container, "sCOp", {op: out}, uid),
+        buttonGroup = gButtonGroup();
         
     function addOp(op) {
-        var button = gButton(op, function () {out.setArgs({op: op}); }, true, typeButtons).w(32);
-        button.setValue(out.getArgs().op === op);
+        var button = gButton(op, function () {out.setArgs({op: op}); }, true, buttonGroup).w(32);
+        if (out.getArgs().op === op) {
+            button.set();
+        }
         that.addContent(button);
     }
     
@@ -23,6 +26,11 @@ function sCOp(container, args, uid) {
     addOp("-");
     addOp("%");
 
+    that.setGuiControls({
+        op: {
+            op: buttonGroup
+        }
+    });
     
     return that;
 }

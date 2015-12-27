@@ -29,7 +29,7 @@ function menuBar(container, contentContainer) {
     };
     
     that.updateTime = function (str) {
-        time.set(str);
+        time.setValue(str);
         return that;
     };
     

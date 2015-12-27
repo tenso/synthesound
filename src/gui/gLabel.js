@@ -4,7 +4,7 @@
 function gLabel(label) {
     var that = gBase();
         
-    that.set = function (str) {
+    that.setValue = function (str) {
         that.textContent = str;
         return that;
     };

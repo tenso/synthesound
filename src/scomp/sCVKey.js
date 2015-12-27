@@ -9,10 +9,10 @@
 /*global audioWork*/
 /*global gButton*/
 
-function sCVKey(container, args, uid) {
+function sCVKey(container, uid) {
     var gate = sStep(),
         hz = sConst(),
-        that = sCBase(container, "sCVKey", {gate: gate, freq: hz}, args, uid),
+        that = sCBase(container, "sCVKey", {gate: gate, freq: hz}, uid),
         gateOut,
         hzOut,
         vkey = document.createElement("td"),
@@ -27,7 +27,7 @@ function sCVKey(container, args, uid) {
         noteDown = notePressed;
         isDown = true;
         
-        currentNote.set(note.name(notePressed));
+        currentNote.setValue(note.name(notePressed));
         
         gate.setArgs({active: isDown});
         hz.setArgs({value: note.hz(notePressed)});

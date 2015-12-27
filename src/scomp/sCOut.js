@@ -4,18 +4,26 @@
 /*global sCBase*/
 /*global audioWork*/
 
-function sCOut(container, args, uid) {
+function sCOut(container, uid) {
     var mix = sMix(),
-        that = sCBase(container, "sCOut", {mix: mix}, args, uid);
+        that = sCBase(container, "sCOut", {mix: mix}, uid),
+        controls = {mix: {}};
         
-    function setGain(value) {
-        mix.setArgs({gainL: value, gainR: value});
+    function setGainL(value) {
+        mix.setArgs({gainL: value});
+    }
+    
+    function setGainR(value) {
+        mix.setArgs({gainR: value});
     }
         
     that.addIn("mix");
     that.nextRow();
-    that.addLabeledContent(gSlider(mix.getArgs().gainL, 0.0, 1.0, setGain), "VOL");
+    that.addLabeledContent(controls.mix.gainL = gSlider(mix.getArgs().gainL, 0.0, 1.0, setGainL), "L");
+    that.addLabeledContent(controls.mix.gainR = gSlider(mix.getArgs().gainR, 0.0, 1.0, setGainR), "R");
 
+    that.setGuiControls(controls);
+    
     //FIXME: global coupling!
     audioWork.mixerOut.addInput(mix);
     

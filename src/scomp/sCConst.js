@@ -4,14 +4,16 @@
 /*global gInput*/
 /*global sCBase*/
 
-function sCConst(container, args, uid) {
+function sCConst(container, uid) {
     var out = sConst(),
-        that = sCBase(container, "sCConst", {value: out}, args, uid);
+        that = sCBase(container, "sCConst", {value: out}, uid),
+        controls = {value: {}};
 
     that.addOut("value");
-    that.addContent(gInput(out.getArgs().value, function (value) {
+    that.addContent(controls.value.value = gInput(out.getArgs().value, function (value) {
         out.setArgs({value: parseFloat(value)});
     }, "value"));
-                    
+
+    that.setGuiControls(controls);
     return that;
 }

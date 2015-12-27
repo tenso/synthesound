@@ -18,6 +18,7 @@
 /*global app*/
 /*global gIO*/
 /*global util*/
+/*global lang*/
 
 /*global scBaseUID*/
 
@@ -55,12 +56,15 @@ function workspace(container) {
         return undefined;
     }
     
-    function createSComp(data, uid) {
-        if (uid >= scBaseUID.peek()) {
-            scBaseUID.bumpTo(uid + 1);
+    function createSComp(data) {
+        var comp;
+        if (data.uid >= scBaseUID.peek()) {
+            scBaseUID.bumpTo(data.uid + 1);
         }
         if (constructorMap.hasOwnProperty(data.type)) {
-            return constructorMap[data.type](that, data.sArgs, uid).move(data.x, data.y);
+            comp = constructorMap[data.type](that, data.uid);
+            comp.setArgs(data.sArgs);
+            comp.move(data.x, data.y);
         } else {
             log.error("workspace: dont know sId:" + data.type);
         }
@@ -157,7 +161,7 @@ function workspace(container) {
         offsetDataUid(data, uidOffset);
         log.info("create components");
         for (i = 0; i < data.workspace.length; i += 1) {
-            inSComp = createSComp(data.workspace[i], data.workspace[i].uid);
+            inSComp = createSComp(data.workspace[i]);
         }
         
         log.info("create connections");
