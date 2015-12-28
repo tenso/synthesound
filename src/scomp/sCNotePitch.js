@@ -17,7 +17,7 @@ function sCNotePitch(container, uid) {
         that.addContent(controls.hz[type] = gInput(out.getArgs()[type], function (value) {
             args = {};
             args[type] = parseInt(value, 10);
-            out.setArgs(args);
+            that.setAndSaveArgs("hz", args);
         }, type));
     }
         

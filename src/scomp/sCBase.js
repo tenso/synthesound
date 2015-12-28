@@ -6,7 +6,7 @@
 /*global log*/
 /*global uidGen*/
 /*global lang*/
-
+/*global sSequence*/
 //FIXME: rename all sC to sG
 //FIXME: rename all sId to portName?
 
@@ -16,6 +16,7 @@ function sCBase(context, type, sComps, uid) {
     var that = gWidget(context, lang.tr(type)),
         ports = {},
         myUID,
+        seq = {},
         guiControls;
 
     function makeRemoveAllConnections() {
@@ -26,40 +27,59 @@ function sCBase(context, type, sComps, uid) {
     
     function setGuiControlAfterArg(sId, args) {
         var arg;
+        
         if (guiControls) {
             if (guiControls.hasOwnProperty(sId)) {
                 for (arg in args) {
                     if (args.hasOwnProperty(arg)) {
                         if (guiControls[sId].hasOwnProperty(arg)) {
-                            guiControls[sId][arg].setValue(args[arg]);
+                            guiControls[sId][arg].setValue(args[arg], true);
                         }
                     }
                 }
             }
         }
     }
+        
+    function initStates() {
+        var sId;
+        for (sId in sComps) {
+            if (sComps.hasOwnProperty(sId)) {
+                seq[sId] = sSequence(sComps[sId], sId, setGuiControlAfterArg);
+            }
+        }
+    }
+    
+    that.setAndSaveArgs = function (sId, args) {
+        if (sComps.hasOwnProperty(sId)) {
+            seq[sId].setArgs(args);
+            seq[sId].saveAt();
+        } else {
+            log.error("no such sId:" + sId);
+        }
+    };
     
     that.setGuiControls = function (controls) {
         guiControls = controls;
     };
-    
+
     //FIXME: mixin uid functions?
     that.uid = function () {
         return myUID;
     };
-        
+
     that.setArgs = function (sArgs) {
         var sId;
-        for (sId in sComps) {
-            if (sComps.hasOwnProperty(sId)) {
+        for (sId in seq) {
+            if (seq.hasOwnProperty(sId)) {
                 if (sArgs && sArgs.hasOwnProperty(sId)) {
-                    sComps[sId].setArgs(sArgs[sId]);
-                    setGuiControlAfterArg(sId, sArgs[sId]);
+                    seq[sId].load(sArgs[sId]);
+                    setGuiControlAfterArg(sId, sArgs[sId].args);
                 }
             }
         }
     };
-        
+
     that.clearPorts = function () {
         var sId;
         for (sId in sComps) {
@@ -68,7 +88,7 @@ function sCBase(context, type, sComps, uid) {
             }
         }
     };
-        
+
     that.addIn = function (sId, type) {
         if (!sComps.hasOwnProperty(sId)) {
             log.error("sCBase.addIn: dont have:" + sId);
@@ -114,9 +134,9 @@ function sCBase(context, type, sComps, uid) {
             }
         }
         
-        for (sId in sComps) {
-            if (sComps.hasOwnProperty(sId)) {
-                data.sArgs[sId] = sComps[sId].getArgs();
+        for (sId in seq) {
+            if (seq.hasOwnProperty(sId)) {
+                data.sArgs[sId] = seq[sId].data();
             }
         }
         
@@ -141,12 +161,26 @@ function sCBase(context, type, sComps, uid) {
         return undefined;
     };
     
+    that.setMs = function (ms) {
+        if (typeof ms !== "number" || isNaN(ms)) {
+            log.error("scBase.setMs: ms not a number");
+            return;
+        }
+        var sId;
+        for (sId in seq) {
+            if (seq.hasOwnProperty(sId)) {
+                seq[sId].moveToMs(ms);
+            }
+        }
+    };
+    
     if (typeof uid === "number") {
         myUID = uid;
     } else {
         myUID = scBaseUID.getUID();
     }
     
+    initStates();
     that.addRemove(makeRemoveAllConnections());
     that.clearPorts();
     

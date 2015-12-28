@@ -8,15 +8,23 @@ function sCAdsr(container, uid) {
         controls = {adsr: {}},
         that = sCBase(container, "sCAdsr", {adsr: adsr}, uid);
     
+    function makeSet(param) {
+        return function (value) {
+            var args = {};
+            args[param] = value;
+            that.setAndSaveArgs("adsr", args);
+        };
+    }
+    
     that.addIn("adsr").addIn("adsr", "gate").addOut("adsr");
     
     that.nextRow();
-    that.addLabeledContent(controls.adsr.a = gSlider(adsr.getArgs().a, 0.01, 1.0, function (value) {adsr.setArgs({a: value}); }), "A");
-    that.addLabeledContent(controls.adsr.d = gSlider(adsr.getArgs().d, 0.01, 1.0, function (value) {adsr.setArgs({d: value}); }), "D");
-    that.addLabeledContent(controls.adsr.s = gSlider(adsr.getArgs().s, 0.0, 1.0, function (value) {adsr.setArgs({s: value}); }), "S");
-    that.addLabeledContent(controls.adsr.r = gSlider(adsr.getArgs().r, 0.01, 1.0, function (value) {adsr.setArgs({r: value}); }), "R");
+    that.addLabeledContent(controls.adsr.a = gSlider(adsr.getArgs().a, 0.01, 1.0, makeSet("a"), "A"));
+    that.addLabeledContent(controls.adsr.d = gSlider(adsr.getArgs().d, 0.01, 1.0, makeSet("d"), "D"));
+    that.addLabeledContent(controls.adsr.s = gSlider(adsr.getArgs().s, 0.00, 1.0, makeSet("s"), "S"));
+    that.addLabeledContent(controls.adsr.r = gSlider(adsr.getArgs().r, 0.01, 1.0, makeSet("r"), "R"));
     
     that.setGuiControls(controls);
-    
+        
     return that;
 }

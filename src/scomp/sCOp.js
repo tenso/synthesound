@@ -10,7 +10,7 @@ function sCOp(container, uid) {
         buttonGroup = gButtonGroup();
         
     function addOp(op) {
-        var button = gButton(op, function () {out.setArgs({op: op}); }, true, buttonGroup).w(32);
+        var button = gButton(op, function () {that.setAndSaveArgs("op", {op: op}); }, true, buttonGroup).w(32);
         if (out.getArgs().op === op) {
             button.set();
         }

@@ -8,7 +8,6 @@
 /*global workspace*/
 /*global guiInput*/
 /*global gui*/
-/*global tracker*/
 /*global lang*/
 
 var app = {
@@ -53,13 +52,8 @@ var audioWork, /*depends on it: sCOut, sCVKey */
 window.onload = function () {
     var freqSelect = document.getElementById("freqSelect"),
         topMenu,
-        input,
-        track;
+        input;
 
-    function stepFrame(frames) {
-        track.stepFrames(frames);
-        topMenu.updateTime(track.timeString());
-    }
     initLanguage();
     
     /*testsuite*/
@@ -84,10 +78,6 @@ window.onload = function () {
     if (audioWork.init()) {
         audioWork.onworkspacechanged = gIO.resizeCanvas; //update size of canvas on load
         window.addEventListener("resize", gIO.resizeCanvas); //update size of canvas on window-resize
-        audioWork.play();
-        
-        track = tracker(audioWork.sampleRate());
-        audioWork.setFrameTickCallback(stepFrame);
     } else {
         topMenu.logError("need AudioContext and Array.fill");
     }

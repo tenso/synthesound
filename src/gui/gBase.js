@@ -89,32 +89,28 @@ function gBase(type) {
         return that;
     };
         
-    that.left = function (x) {
-        that.style.left = x + "px";
-        return that;
+    that.left = function (value) {
+        return gui.stylePxIfInt(that, "left", value);
     };
     
-    that.x = function (val) {
-        return that.left(val);
+    that.x = function (value) {
+        return that.left(value);
     };
     
-    that.right = function (x) {
-        that.style.right = x + "px";
-        return that;
+    that.right = function (value) {
+        return gui.stylePxIfInt(that, "right", value);
     };
     
-    that.top = function (y) {
-        that.style.top = y + "px";
-        return that;
+    that.top = function (value) {
+        return gui.stylePxIfInt(that, "top", value);
     };
     
-    that.y = function (val) {
-        return that.top(val);
+    that.y = function (value) {
+        return that.top(value);
     };
     
-    that.bottom = function (y) {
-        that.style.bottom = y + "px";
-        return that;
+    that.bottom = function (value) {
+        return gui.stylePxIfInt(that, "bottom", value);
     };
           
     that.w = function (value) {

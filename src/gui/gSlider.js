@@ -6,7 +6,7 @@ function gKnob(min, max, callback) {
     var that = document.createElement("div"),
         value = 0;
         
-    that.setValue = function (val) {
+    that.setValue = function (val, skipCallback) {
         var sliderH = gui.getStyleInt(that.parentElement, "height"),
             knobH = gui.getStyleInt(that, "height"),
             maxY;
@@ -21,7 +21,9 @@ function gKnob(min, max, callback) {
 
         that.style.top = (maxY - ((value - min) / (max - min)) * maxY) + "px";
 
-        callback(value);
+        if (!skipCallback) {
+            callback(value);
+        }
     };
     
     that.getValue = function () {
@@ -58,8 +60,8 @@ function gSlider(val, min, max, callback) {
     var that = gBase(),
         knob = gKnob(min, max, callback);
     
-    that.setValue = function (value) {
-        knob.setValue(value);
+    that.setValue = function (value, skipCallback) {
+        knob.setValue(value, skipCallback);
         return that;
     };
     
@@ -75,7 +77,7 @@ function gSlider(val, min, max, callback) {
     };
 
     that.appendChild(knob);
-    that.setValue(val);
+    that.setValue(val, true);
 
     return that;
 }

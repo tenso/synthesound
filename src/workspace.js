@@ -19,6 +19,8 @@
 /*global gIO*/
 /*global util*/
 /*global lang*/
+/*global workbar*/
+/*global tracker*/
 
 /*global scBaseUID*/
 
@@ -29,6 +31,8 @@ function workspace(container) {
         audioCtx,
         AudioContext = window.AudioContext || window.webkitAudioContext,
         audioRunning = false,
+        timeTracker,
+        bar,
         constructorMap = {
             sCGen: sCGen,
             sCMix: sCMix,
@@ -41,6 +45,7 @@ function workspace(container) {
             sCOp: sCOp,
             sCNotePitch: sCNotePitch
         };
+        
     
     function findSCComp(uid) {
         var nodes =  that.childNodes,
@@ -64,6 +69,7 @@ function workspace(container) {
         if (constructorMap.hasOwnProperty(data.type)) {
             comp = constructorMap[data.type](that, data.uid);
             comp.setArgs(data.sArgs);
+            comp.setMs(timeTracker.currentMs());
             comp.move(data.x, data.y);
         } else {
             log.error("workspace: dont know sId:" + data.type);
@@ -128,6 +134,30 @@ function workspace(container) {
         }
     }
     
+    function updateTime() {
+        var nodes =  that.childNodes,
+            i,
+            sc;
+        
+        bar.updateTime(timeTracker.timeString());
+        
+        for (i = 0; i < nodes.length; i += 1) {
+            if (typeof nodes[i].data === "function") {
+                nodes[i].setMs(timeTracker.currentMs());
+            }
+        }
+    }
+    
+    function stepFrame(frames) {
+        timeTracker.stepFrames(frames);
+        updateTime();
+    }
+    
+    function setFrames(frames) {
+        timeTracker.setFrames(frames);
+        updateTime();
+    }
+    
     that.data = function () {
         var nodes =  that.childNodes,
             i,
@@ -156,6 +186,9 @@ function workspace(container) {
         
         log.info("loading from version: " + data.app.ver);
 
+        log.info("reset tracker time");
+        timeTracker.setFrames(0);
+                
         uidOffset = scBaseUID.peek();
         log.info("workspace uid: " + uidOffset + ", offset loaddata");
         offsetDataUid(data, uidOffset);
@@ -187,6 +220,11 @@ function workspace(container) {
         out = sOutNode(audioCtx, 2, 4096);
         out.setInput(that.mixerOut);
         log.info("init audio, sample rate:" + out.sampleRate + " channels " + out.channels);
+        
+        timeTracker = tracker(that.sampleRate());
+        out.runIndexUpdated = stepFrame;
+        setFrames(0);
+        
         return true;
     };
     
@@ -214,9 +252,6 @@ function workspace(container) {
         return true;
     };
     
-    that.setFrameTickCallback = function (cb) {
-        out.runIndexUpdated = cb;
-    };
     
     that.className = "workspace";
     that.key = undefined; /*FIXME: globally coupled to sCVKey*/
@@ -224,6 +259,7 @@ function workspace(container) {
     that.onworkspacechanged = undefined;
     
     container.appendChild(that);
-    
+    bar = workbar(container).move(app.screen.minX, app.screen.minY - 6);
+        
     return that;
 }

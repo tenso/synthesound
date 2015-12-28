@@ -6,11 +6,11 @@
 function gButtonGroup() {
     var that = [];
     
-    that.setValue = function (buttonName) {
+    that.setValue = function (buttonName, skipCallback) {
         var i;
         for (i = 0; i < that.length; i += 1) {
             if (that[i].name === buttonName) {
-                that[i].set();
+                that[i].set(skipCallback);
             }
         }
     };
@@ -21,29 +21,29 @@ function gButtonGroup() {
 function gButton(name, callback, isRadio, buttonGroup) {
     var that = gBase();
         
-    that.pressButton = function (value) {
+    that.pressButton = function (value, skipCallback) {
         that.value = value;
         if (that.isRadio) {
             that.className = "button-class gButton " + (that.value ? "gButtonRadioActive" : "gButtonRadioInactive");
-            if (that.value) {
+            if (!skipCallback && that.value) {
                 that.callback(that.value);
             }
-        } else {
+        } else if (!skipCallback) {
             that.callback(that.value);
         }
         return that;
     };
 
-    that.set = function () {
+    that.set = function (skipCallback) {
         var i;
         if (isRadio) {
             for (i = 0; i < buttonGroup.length; i += 1) {
                 if (buttonGroup[i].isRadio) {
-                    buttonGroup[i].pressButton(buttonGroup[i] === that);
+                    buttonGroup[i].pressButton(buttonGroup[i] === that, skipCallback);
                 }
             }
         } else {
-            that.pressButton(!that.value);
+            that.pressButton(!that.value, skipCallback);
         }
     };
     

@@ -23,6 +23,13 @@ function tracker(sampleRate) {
         quantization = value;
     };
     
+    that.setFrames = function (frames) {
+        currentFrame = frames;
+        currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
+        
+        currentMeasure = parseInt((bpm / 60000) * currentMs, 10);
+    };
+    
     that.stepFrames = function (frames) {
         currentFrame += frames;
         currentMs = parseInt(1000 * currentFrame / sampleRate, 10);

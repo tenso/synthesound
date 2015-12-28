@@ -10,11 +10,11 @@ function sCOut(container, uid) {
         controls = {mix: {}};
         
     function setGainL(value) {
-        mix.setArgs({gainL: value});
+        that.setAndSaveArgs("mix", {gainL: value});
     }
     
     function setGainR(value) {
-        mix.setArgs({gainR: value});
+        that.setAndSaveArgs("mix", {gainR: value});
     }
         
     that.addIn("mix");

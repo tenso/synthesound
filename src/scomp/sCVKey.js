@@ -29,13 +29,13 @@ function sCVKey(container, uid) {
         
         currentNote.setValue(note.name(notePressed));
         
-        gate.setArgs({active: isDown});
-        hz.setArgs({value: note.hz(notePressed)});
+        that.setAndSaveArgs("gate", {active: isDown});
+        that.setAndSaveArgs("freq", {value: note.hz(notePressed)});
     };
     
     that.keyUp = function () {
         isDown = false;
-        gate.setArgs({active: isDown});
+        that.setAndSaveArgs("gate", {active: isDown});
     };
 
     that.addOut("gate").addOut("freq");

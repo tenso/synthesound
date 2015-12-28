@@ -17,8 +17,7 @@ function menuBar(container, contentContainer) {
         menus = [],
         helpString = lang.tr("helpText"),
         aboutString = "SyntheSound v." + app.ver + "\n(C) 2015 Anton Olofsson, GPL 3",
-        loadInput,
-        time = gLabel("--:--:--").fontFamily("monospace");
+        loadInput;
     
     that.logError = function (error) {
         log.bg("#f00").show(true);
@@ -26,11 +25,6 @@ function menuBar(container, contentContainer) {
             wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
         });
         wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
-    };
-    
-    that.updateTime = function (str) {
-        time.setValue(str);
-        return that;
     };
     
     that.addContent(gButton(lang.tr("stop"), function () {
@@ -41,8 +35,6 @@ function menuBar(container, contentContainer) {
         contentContainer.play();
     }));
     
-    that.addContent(time);
-
     file = wMenuButton(lang.tr("file"), menus);
 
     loadInput = files.createLoadDataInput(function (data) {

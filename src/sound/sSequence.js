@@ -5,42 +5,53 @@ function sSequanceData(sArgs, msTime) {
     return {ms: msTime, args: sArgs};
 }
 
-function sSequence(sComp) {
+function sSequence(sComp, sId, argUpdateCb) {
     var that = {},
-        args = [],
+        seqData = [],
         atMs = -1;
     
+    //FIXME: optimize!
     that.moveToMs = function (ms) {
         var i;
         
-        for (i = 0; i < args.length; i += 1) {
-            if (args[i].ms > atMs && args[i].ms <= ms) {
-                sComp.setArgs(args[i]);
+        for (i = 0; i < seqData.length; i += 1) {
+            if (seqData[i].ms > atMs && seqData[i].ms <= ms) {
+                sComp.setArgs(seqData[i].args);
+                if (argUpdateCb) {
+                    argUpdateCb(sId, seqData[i].args);
+                }
             }
         }
-        
         atMs = ms;
     };
     
     that.saveAt = function (ms) {
         var i,
-            data = sSequanceData(sComp.getArgs(), ms);
+            at = ms || atMs,
+            data = sSequanceData(sComp.getArgs(), at);
         
-        for (i = 0; i < args.length; i += 1) {
-            if (ms <= args[i].ms) {
-                args.splice(i, 0, data);
+        for (i = 0; i < seqData.length; i += 1) {
+            if (at === seqData[i].ms) {
+                seqData[i] = data;
+                return;
+            } else if (at < seqData[i].ms) {
+                seqData.splice(i, 0, data);
                 return;
             }
         }
-        args.splice(args.length, 0, data);
+        seqData.splice(seqData.length, 0, data);
+    };
+    
+    that.setArgs = function (args) {
+        return sComp.setArgs(args);
     };
     
     that.load = function (data) {
-        args = data.slice(0);
+        seqData = data.slice(0);
     };
     
     that.data = function () {
-        return args.slice(0);
+        return seqData.slice(0);
     };
     
     return that;
@@ -60,7 +71,7 @@ function stubScomp() {
     };
     
     that.getArgs = function () {
-        returnedArgs.push({data: "saved" + saveCount});
+        returnedArgs.push("saved" + saveCount);
         saveCount += 1;
         return returnedArgs[returnedArgs.length - 1];
     };
@@ -79,21 +90,21 @@ function stubScomp() {
 
 function test_sSequence() {
     var sComp = stubScomp(),
-        seq = sSequence(sComp),
+        seq = sSequence(sComp, 0),
         saveData,
         loadData = [
             {
                 ms: 0,
-                args: {data: "loaded0"}
+                args: "loaded0"
             },
             {
                 ms: 1000,
-                args: {data: "loaded1"}
+                args: "loaded1"
             }
         ];
 
     function verify_data(seqArg, data) {
-        test.verify(seqArg.args.data, data);
+        test.verify(seqArg, data);
     }
     
     seq.load(loadData);
@@ -128,12 +139,12 @@ function test_sSequence() {
         
     saveData = seq.data();
     test.verify(saveData[0].ms, 0);
-    test.verify(saveData[0].args.data, "loaded0");
+    test.verify(saveData[0].args, "loaded0");
     test.verify(saveData[1].ms, 750);
-    test.verify(saveData[1].args.data, "saved0");
+    test.verify(saveData[1].args, "saved0");
     test.verify(saveData[2].ms, 1000);
-    test.verify(saveData[2].args.data, "loaded1");
+    test.verify(saveData[2].args, "loaded1");
     test.verify(saveData[3].ms, 1500);
-    test.verify(saveData[3].args.data, "saved1");
+    test.verify(saveData[3].args, "saved1");
 }
 test.addTest(test_sSequence, "sSequence");

@@ -11,7 +11,7 @@ function sCConst(container, uid) {
 
     that.addOut("value");
     that.addContent(controls.value.value = gInput(out.getArgs().value, function (value) {
-        out.setArgs({value: parseFloat(value)});
+        that.setAndSaveArgs("value", {value: parseFloat(value)});
     }, "value"));
 
     that.setGuiControls(controls);

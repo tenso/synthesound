@@ -10,8 +10,8 @@ function sCDelay(container, uid) {
     
     that.addIn("delay").addOut("delay");
     that.nextRow();
-    that.addLabeledContent(controls.delay.gain = gSlider(delay.getArgs().gain, 0.0, 0.99, function (value) {delay.setArgs({gain: value}); }), "G");
-    that.addLabeledContent(controls.delay.delay = gSlider(delay.getArgs().delay, 0.0, 1.0, function (value) {delay.setArgs({delay: value}); }), "D");
+    that.addLabeledContent(controls.delay.gain = gSlider(delay.getArgs().gain, 0.0, 0.99, function (value) {that.setAndSaveArgs("delay", {gain: value}); }), "G");
+    that.addLabeledContent(controls.delay.delay = gSlider(delay.getArgs().delay, 0.0, 1.0, function (value) {that.setAndSaveArgs("delay", {delay: value}); }), "D");
     
     that.setGuiControls(controls);
     

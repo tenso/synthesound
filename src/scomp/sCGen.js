@@ -12,9 +12,9 @@ function sCGen(container, uid) {
         ampControl;
             
     function addShape(shape) {
-        var button = gButton(shape, function () {out.setArgs({type: shape}); }, true, buttonGroup);
+        var button = gButton(shape, function () {that.setAndSaveArgs("gen", {type: shape}); }, true, buttonGroup);
         if (out.getArgs().type === shape) {
-            button.set();
+            button.set(true);
         }
         that.addContent(button);
     }
@@ -22,7 +22,7 @@ function sCGen(container, uid) {
     that.addIn("gen", "freq").addOut("gen");
     
     that.addContent(ampControl = gInput(out.getArgs().amp, function (value) {
-        out.setArgs({amp: parseFloat(value)});
+        that.setAndSaveArgs("gen", {amp: parseFloat(value)});
     }, "amp"));
     
     that.nextRow();
