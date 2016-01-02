@@ -12,6 +12,11 @@
 
 var scBaseUID = uidGen();
 
+var sCGlobal = {
+    current: undefined,
+    currentUpdated: undefined
+};
+
 function sCBase(context, type, sComps, uid) {
     var that = gWidget(context, lang.tr(type)),
         ports = {},
@@ -50,6 +55,34 @@ function sCBase(context, type, sComps, uid) {
         }
     }
     
+    that.iWasSelected = function () {
+        if (sCGlobal.current === that) {
+            return;
+        }
+        
+        if (sCGlobal.current) {
+            sCGlobal.current.unselect();
+        }
+        sCGlobal.current = that;
+        sCGlobal.current.select();
+        
+        if (typeof sCGlobal.currentUpdated === "function") {
+            sCGlobal.currentUpdated(sCGlobal.current);
+        }
+    };
+    
+    that.iWasMoved = function (obj) {
+        gIO.drawConnections();
+    };
+
+    that.select = function () {
+        that.border("2px solid #f00");
+    };
+    
+    that.unselect = function () {
+        that.border("2px solid #000");
+    };
+    
     that.setAndSaveArgs = function (sId, args) {
         if (sComps.hasOwnProperty(sId)) {
             seq[sId].setArgs(args);
@@ -79,7 +112,18 @@ function sCBase(context, type, sComps, uid) {
             }
         }
     };
-
+    
+    that.getArgs = function () {
+        var sArgs = [],
+            sId;
+        for (sId in seq) {
+            if (seq.hasOwnProperty(sId)) {
+                sArgs[sId] = seq[sId].data();
+            }
+        }
+        return sArgs;
+    };
+    
     that.clearPorts = function () {
         var sId;
         for (sId in sComps) {
@@ -181,6 +225,7 @@ function sCBase(context, type, sComps, uid) {
     }
     
     initStates();
+    that.typeIs = "sCComp";
     that.addRemove(makeRemoveAllConnections());
     that.clearPorts();
     

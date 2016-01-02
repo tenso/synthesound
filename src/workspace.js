@@ -21,7 +21,7 @@
 /*global lang*/
 /*global workbar*/
 /*global tracker*/
-
+/*global sCGlobal*/
 /*global scBaseUID*/
 
 function workspace(container) {
@@ -260,6 +260,11 @@ function workspace(container) {
     
     container.appendChild(that);
     bar = workbar(container, that);
-        
+    
+    sCGlobal.currentUpdated = function (comp) {
+        log.info("show comp:" + comp.uid() +  " that has args:");
+        log.obj(comp.getArgs());
+    };
+    
     return that;
 }

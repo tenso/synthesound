@@ -4,7 +4,6 @@
 /*global gBase*/
 /*global gLabel*/
 /*global gButton*/
-/*global gIO*/
 /*global app*/
 
 /*FIXME: should be called gContainer maybe?*/
@@ -118,8 +117,6 @@ function gWidget(container, titleLabel) {
                 if (that.getY() < app.screen.minY) {
                     that.y(app.screen.minY);
                 }
-                //FIXME: this is uncessesary coupling
-                gIO.drawConnections();
             };
         } else {
             that.onmousedown = undefined;
@@ -127,7 +124,7 @@ function gWidget(container, titleLabel) {
         }
         return that;
     };
-    
+
     that.padding = function (value) {
         that.table.style.padding = value;
         return that;

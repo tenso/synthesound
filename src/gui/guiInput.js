@@ -6,8 +6,9 @@
 function guiInput(container, sizeOfContainerChanged) {
     var that = {},
         keyIsDown = 0,
-        mouseCapturer = 0,
-        keyCapturer = 0,
+        mouseCapturer,
+        prevMouseCapturer,
+        keyCapturer,
         mouse = {},
         oldSize = {w: 0, h: 0};
     
@@ -28,8 +29,6 @@ function guiInput(container, sizeOfContainerChanged) {
     }
     
     function runCBIfExist(name, e) {
-        setMouseFromEvent(e);
-        
         if (e.target.hasOwnProperty(name)) {
             e.target[name](e, mouse);
         }
@@ -57,13 +56,26 @@ function guiInput(container, sizeOfContainerChanged) {
     
     that.setMouseCapturer = function (e, wantedObject) {
         e.stopPropagation();
+        
         if (!wantedObject) {
             mouseCapturer = e.target;
         } else {
             mouseCapturer = wantedObject;
         }
+        
+        if (prevMouseCapturer) {
+            if (typeof prevMouseCapturer.iWasDeselected === "function") {
+                prevMouseCapturer.iWasDeselected(mouseCapturer);
+            }
+            prevMouseCapturer = undefined;
+        }
+        
         setMouseCaptureFromEvent(e, mouseCapturer);
         runCaptureCBIfExist("iMouseCaptured", e);
+        
+        if (typeof mouseCapturer.iWasSelected === "function") {
+            mouseCapturer.iWasSelected();
+        }
     };
     
     that.setKeyCapturer = function (e, wantedObject) {
@@ -80,6 +92,7 @@ function guiInput(container, sizeOfContainerChanged) {
     document.addEventListener("mouseup", function (e) {
         if (mouseCapturer) {
             runCaptureCBIfExist("iMouseUpAfterCapture", e);
+            prevMouseCapturer = mouseCapturer;
             mouseCapturer = undefined;
         }
     });
@@ -87,6 +100,11 @@ function guiInput(container, sizeOfContainerChanged) {
     document.addEventListener("mousemove", function (e) {
         if (mouseCapturer) {
             runCaptureCBIfExist("iMousePressAndMove", e);
+            
+            if (typeof mouseCapturer.iWasMoved === "function") {
+                mouseCapturer.iWasMoved(mouseCapturer);
+            }
+            
             checkSize(container);
         }
     });
@@ -101,6 +119,7 @@ function guiInput(container, sizeOfContainerChanged) {
         e.preventDefault();
         //NOTE: dont set  captured here: will send all sorts of events...
         setMouseCaptureFromEvent(e, e.target);
+        setMouseFromEvent(e);
         runCBIfExist("iOpenContextMenu", e);
     });
     
