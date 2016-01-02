@@ -13,8 +13,8 @@ function guiInput(container, sizeOfContainerChanged) {
         oldSize = {w: 0, h: 0};
     
     function setMouseFromEvent(e) {
-        mouse.x = e.pageX + container.scrollLeft;
-        mouse.y = e.pageY + container.scrollTop;
+        mouse.x = gui.getEventOffsetInElement(container,  e).x + container.scrollLeft;
+        mouse.y = gui.getEventOffsetInElement(container,  e).y + container.scrollTop;
         mouse.relativeX = mouse.x - mouse.captureOffsetInElement.x;
         mouse.relativeY = mouse.y - mouse.captureOffsetInElement.y;
     }
@@ -38,8 +38,8 @@ function guiInput(container, sizeOfContainerChanged) {
         mouse.captureOffsetInElement = gui.getEventOffsetInElement(target, e);
         mouse.captureOffsetInElement.x += container.scrollLeft;
         mouse.captureOffsetInElement.y += container.scrollTop;
-        mouse.captureX = e.pageX + container.scrollLeft;
-        mouse.captureY = e.pageY + container.scrollTop;
+        mouse.captureX = gui.getEventOffsetInElement(container, e).x + container.scrollLeft;
+        mouse.captureY = gui.getEventOffsetInElement(container, e).y + container.scrollTop;
     }
     
     function checkSize(container) {

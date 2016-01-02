@@ -58,7 +58,7 @@ function gBase(type) {
         return gui.stylePxIfInt(that, "marginRight", value);
     };
     
-    //normal, nowrap, ...
+    //normal, nowrap, pre-line, ...
     that.whiteSpace = function (value) {
         that.style.whiteSpace = value;
         return that;

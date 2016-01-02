@@ -19,21 +19,19 @@
 /*global gIO*/
 /*global util*/
 /*global lang*/
-/*global workbar*/
 /*global tracker*/
 /*global sCGlobal*/
 /*global scBaseUID*/
 /*global gBase*/
 
-function workspace(container) {
-    var that = gBase(),
+function workspace() {
+    var that = gBase().top(app.screen.minY).bottom(app.screen.maxBottom),
         out,
         scope,
         audioCtx,
         AudioContext = window.AudioContext || window.webkitAudioContext,
         audioRunning = false,
         timeTracker,
-        bar,
         constructorMap = {
             sCGen: sCGen,
             sCMix: sCMix,
@@ -140,12 +138,14 @@ function workspace(container) {
             i,
             sc;
         
-        bar.updateTime(timeTracker.timeString());
-        
         for (i = 0; i < nodes.length; i += 1) {
             if (typeof nodes[i].data === "function") {
                 nodes[i].setMs(timeTracker.currentMs());
             }
+        }
+        
+        if (typeof that.timeUpdated === "function") {
+            that.timeUpdated(timeTracker.timeString());
         }
     }
     
@@ -258,9 +258,6 @@ function workspace(container) {
     that.key = undefined; /*FIXME: globally coupled to sCVKey*/
     that.mixerOut = undefined; /*FIXME: globally coupled to sCOut*/
     that.onworkspacechanged = undefined;
-    
-    container.appendChild(that);
-    bar = workbar(container, that);
     
     sCGlobal.currentUpdated = function (comp) {
         log.info("show comp:" + comp.uid());

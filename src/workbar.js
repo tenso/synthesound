@@ -13,7 +13,7 @@ function workbar(container, workspace) {
         return that;
     };
     
-    that.z(10000).border("0").radius(0).padding(0).canMove(false).bottom(0);
+    that.z(10000).border("0").h(app.screen.maxBottom).radius(0).padding(0).canMove(false).bottom(0);
     that.w("100%");
     
     that.addContent(gButton(lang.tr("stop"), function () {
@@ -27,5 +27,8 @@ function workbar(container, workspace) {
     time = gLabel("--:--:--").fontFamily("monospace");
     that.addContent(time);
         
+    workspace.timeUpdated = function (time) {
+        that.updateTime(time);
+    }
     return that;
 }

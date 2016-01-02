@@ -9,6 +9,8 @@
 /*global guiInput*/
 /*global gui*/
 /*global lang*/
+/*global gBase*/
+/*global workbar*/
 
 var app = {
     ver: "1.0",
@@ -17,7 +19,8 @@ var app = {
         minX: 0,
         minY: 32, /*dont allow stuff behind topmenu*/
         maxX: undefined,
-        maxY: undefined
+        maxY: undefined,
+        maxBottom: 32
     }
 };
 
@@ -40,6 +43,7 @@ function initLanguage() {
         about: "About",
         file: "File",
         stop: "Stop",
+        log: "Log",
         detectedErrors: "Detected Errors"
     });
     lang.setLanguage("en");
@@ -52,19 +56,25 @@ var audioWork, /*depends on it: sCOut, sCVKey */
 window.onload = function () {
     var freqSelect = document.getElementById("freqSelect"),
         topMenu,
-        input;
+        input,
+        bar,
+        guiApp = gBase();
 
     initLanguage();
     
-    /*testsuite*/
-    test.runTests();
+    freqSelect.appendChild(guiApp);
     
-    audioWork = workspace(freqSelect);
+    /*testsuite*/
+    test.runTests(true);
+    
+    audioWork = workspace();
     gIO = sCIO(audioWork);
     input = guiInput(audioWork, gIO.resizeCanvas);
     gui.setInputHandler(input);
     
-    topMenu = menuBar(freqSelect, audioWork).move(0, 0);
+    topMenu = menuBar(guiApp, audioWork).move(0, 0);
+    guiApp.appendChild(audioWork);
+    bar = workbar(guiApp, audioWork);
     
     //DEBUG:
     input.mouseOver = function (e, mouseCapturer) {
@@ -79,6 +89,7 @@ window.onload = function () {
         topMenu.logError("need URL");
     }
     
+    //FIXME: does not work! If FileReader is not defined...
     if (!test.verifyFunctionality(FileReader, "FileReader")) {
         topMenu.logError("need FileReader");
     }

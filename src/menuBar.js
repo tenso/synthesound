@@ -11,7 +11,7 @@
 /*global log*/
 
 function menuBar(container, contentContainer) {
-    var that = gWidget(container).canMove(false).z(10000).border("0").radius(0).w("100%").padding(2),
+    var that = gWidget(container).canMove(false).z(10000).border("0").radius(0).w("100%").h(app.screen.minY).padding(2),
         file,
         about,
         errorLog,
@@ -45,7 +45,7 @@ function menuBar(container, contentContainer) {
     about = wMenuButton("?", menus);
     about.add(lang.tr("help"), function () {wNote(contentContainer, helpString).padding(40); });
     about.add(lang.tr("about"), function () {wNote(contentContainer, aboutString).padding(40); });
-    about.add(lang.tr("log"), function () {wNote(contentContainer, log.logData).padding(40); });
+    about.add(lang.tr("log"), function () {wNote(contentContainer, log.logText()).padding(40); });
     that.addContent(about);
     
     errorLog = wMenuButton(lang.tr("detectedErrors"), menus).show(false);
@@ -55,7 +55,7 @@ function menuBar(container, contentContainer) {
         file.closeAll();
     });
     
-    note = gLabel("");
+    note = gLabel("").textAlign("left");
     that.addContent(note);
     
     that.setNote = function (str) {

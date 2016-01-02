@@ -65,10 +65,10 @@ function sCIO(container) {
         for (i = 0; i < connections.length; i += 1) {
             to = connections[i].to();
             from = connections[i].from();
-            drawLine(gui.getPos(from).x + gui.getSize(from).w / 2,
-                         gui.getPos(from).y + gui.getSize(from).h / 2,
-                         gui.getPos(to).x + gui.getSize(to).w / 2,
-                         gui.getPos(to).y + gui.getSize(to).h / 2);
+            drawLine(gui.getOffsetInElement(from, container).x + gui.getSize(from).w / 2,
+                         gui.getOffsetInElement(from, container).y + gui.getSize(from).h / 2,
+                         gui.getOffsetInElement(to, container).x + gui.getSize(to).w / 2,
+                         gui.getOffsetInElement(to, container).y + gui.getSize(to).h / 2);
         }
     };
 

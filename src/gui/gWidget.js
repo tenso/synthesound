@@ -4,7 +4,6 @@
 /*global gBase*/
 /*global gLabel*/
 /*global gButton*/
-/*global app*/
 
 /*FIXME: should be called gContainer maybe?*/
 
@@ -113,11 +112,11 @@ function gWidget(container, titleLabel) {
             
             that.iMousePressAndMove = function (e, mouse) {
                 that.move(mouse.relativeX, mouse.relativeY);
-                if (that.getX() < app.screen.minX) {
-                    that.x(app.screen.minX);
+                if (that.getX() < 0) {
+                    that.x(0);
                 }
-                if (that.getY() < app.screen.minY) {
-                    that.y(app.screen.minY);
+                if (that.getY() < 0) {
+                    that.y(0);
                 }
             };
         } else {

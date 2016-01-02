@@ -9,6 +9,7 @@ body {
     background: #888;
     font-family: sans-serif;
     cursor: default;
+    overflow: hidden;
 }
 
 hr {

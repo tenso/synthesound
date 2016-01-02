@@ -11,7 +11,7 @@ var log = {
 
     info: function (msg) {
         log.logData.push("INFO:" + msg);
-        window.console.log(log.logData[log.logData.length - 1]);
+        //window.console.log(log.logData[log.logData.length - 1]);
     },
     
     obj: function (obj) {
@@ -22,5 +22,9 @@ var log = {
     warn: function (msg) {
         log.logData.push("WARN:" + msg);
         window.console.log(log.logData[log.logData.length - 1]);
+    },
+    
+    logText: function () {
+        return log.logData.join("\n");
     }
 };

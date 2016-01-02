@@ -33,6 +33,16 @@ var gui = {
         };
     },
     
+    getOffsetInElement: function (element, parent) {
+        var pos = gui.getPos(element),
+            parentPos = gui.getPos(parent);
+        
+        return {
+            x: pos.x - parentPos.x,
+            y: pos.y - parentPos.y
+        };
+    },
+    
     getSize: function (elem) {
         var w = elem.offsetWidth,
             h = elem.offsetHeight;

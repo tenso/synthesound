@@ -8,9 +8,9 @@ function gLabel(label) {
         that.textContent = str;
         return that;
     };
-    
-    that.textContent = label;
+        
     that.className = "gLabel";
     that.typeIs = "gLabel";
+    that.textContent = label;
     return that;
 }
