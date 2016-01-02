@@ -1,79 +1,81 @@
-<meta charset="utf-8">
+<!DOCTYPE html>
 <html>
-    <link href="gui/gui.css" rel="stylesheet" type="text/css">
-    <script src="gui/gui.js"></script>
-    <script src="gui/guiInput.js"></script>
-    <script src="gui/gBase.js"></script>
-    <script src="gui/gWidget.js"></script>
-    <link href="gui/gWidget.css" rel="stylesheet" type="text/css">
-    <script src="gui/gButton.js"></script>
-    <link href="gui/gButton.css" rel="stylesheet" type="text/css">
-    <script src="gui/gLabel.js"></script>
-    <link href="gui/gLabel.css" rel="stylesheet" type="text/css">
-    <script src="gui/gSlider.js"></script>
-    <link href="gui/gSlider.css" rel="stylesheet" type="text/css">
-    <script src="gui/gInput.js"></script>
-    <link href="gui/gInput.css" rel="stylesheet" type="text/css">
-    <script src="gui/gScope.js"></script>
-    <link href="gui/gScope.css" rel="stylesheet" type="text/css">
-    
-    <script src="widgets/wMenu.js"></script>
-    <script src="widgets/wMenuButton.js"></script>
-    <script src="widgets/wNote.js"></script>
-    <script src="widgets/wVKey.js"></script>
-    <link href="widgets/wVKey.css" rel="stylesheet" type="text/css">
-    
-    <script src="util/util.js"></script>
-    <script src="util/log.js"></script>
-    <script src="util/uidGen.js"></script>
-    <script src="util/test.js"></script>
-    <script src="util/mUtil.js"></script>
-    <script src="util/delayBuffer.js"></script>
-    <script src="util/files.js"></script>
-    <script src="util/note.js"></script>
-    
-    <script src="sound/sBase.js"></script>
-    <script src="sound/sMix.js"></script>
-    <script src="sound/sGen.js"></script>
-    <script src="sound/sAdsr.js"></script>
-    <script src="sound/sDelay.js"></script>
-    <script src="sound/sOutNode.js"></script>
-    <script src="sound/sConst.js"></script>
-    <script src="sound/sStep.js"></script>
-    <script src="sound/sOp.js"></script>
-    <script src="sound/sNotePitch.js"></script>
-    <script src="sound/sDebug.js"></script>
-    <script src="sound/sSequence.js"></script>
-       
-    <script src="scomp/sCIO.js"></script>
-    <link href="scomp/sCIO.css" rel="stylesheet" type="text/css">
-    <script src="scomp/ioPort.js"></script>
-    <script src="scomp/ioCon.js"></script>
-    <link href="scomp/ioPort.css" rel="stylesheet" type="text/css">
-    <script src="scomp/sCBase.js"></script>
-    <script src="scomp/sCScope.js"></script>
-    <script src="scomp/sCOut.js"></script>
-    <script src="scomp/sCGen.js"></script>
-    <script src="scomp/sCVKey.js"></script>
-    <script src="scomp/sCAdsr.js"></script>
-    <script src="scomp/sCDelay.js"></script>
-    <script src="scomp/sCMix.js"></script>
-    <script src="scomp/sCConst.js"></script>
-    <script src="scomp/sCOp.js"></script>
-    <script src="scomp/sCNotePitch.js"></script>
-   
-    <link href="style.css" rel="stylesheet" type="text/css">
-    <script src="workspace.js"></script>
-    <link href="workspace.css" rel="stylesheet" type="text/css">
-    <script src="workbar.js"></script>
-    <script src="menuBar.js"></script>
-    <script src="main.js"></script>
-    <script src="tracker.js"></script>
-    <script src="gui/lang.js"></script>
-    
     <head>
+        <meta charset="utf-8">
         <title>SyntheSound</title>
+        
+        <link href="gui/gui.css" rel="stylesheet" type="text/css">
+        <script src="gui/gui.js"></script>
+        <script src="gui/guiInput.js"></script>
+        <script src="gui/gBase.js"></script>
+        <script src="gui/gWidget.js"></script>
+        <link href="gui/gWidget.css" rel="stylesheet" type="text/css">
+        <script src="gui/gButton.js"></script>
+        <link href="gui/gButton.css" rel="stylesheet" type="text/css">
+        <script src="gui/gLabel.js"></script>
+        <link href="gui/gLabel.css" rel="stylesheet" type="text/css">
+        <script src="gui/gSlider.js"></script>
+        <link href="gui/gSlider.css" rel="stylesheet" type="text/css">
+        <script src="gui/gInput.js"></script>
+        <link href="gui/gInput.css" rel="stylesheet" type="text/css">
+        <script src="gui/gScope.js"></script>
+        <link href="gui/gScope.css" rel="stylesheet" type="text/css">
+
+        <script src="widgets/wMenu.js"></script>
+        <script src="widgets/wMenuButton.js"></script>
+        <script src="widgets/wNote.js"></script>
+        <script src="widgets/wVKey.js"></script>
+        <link href="widgets/wVKey.css" rel="stylesheet" type="text/css">
+
+        <script src="util/util.js"></script>
+        <script src="util/log.js"></script>
+        <script src="util/uidGen.js"></script>
+        <script src="util/test.js"></script>
+        <script src="util/mUtil.js"></script>
+        <script src="util/delayBuffer.js"></script>
+        <script src="util/files.js"></script>
+        <script src="util/note.js"></script>
+
+        <script src="sound/sBase.js"></script>
+        <script src="sound/sMix.js"></script>
+        <script src="sound/sGen.js"></script>
+        <script src="sound/sAdsr.js"></script>
+        <script src="sound/sDelay.js"></script>
+        <script src="sound/sOutNode.js"></script>
+        <script src="sound/sConst.js"></script>
+        <script src="sound/sStep.js"></script>
+        <script src="sound/sOp.js"></script>
+        <script src="sound/sNotePitch.js"></script>
+        <script src="sound/sDebug.js"></script>
+        <script src="sound/sSequence.js"></script>
+
+        <script src="scomp/sCIO.js"></script>
+        <link href="scomp/sCIO.css" rel="stylesheet" type="text/css">
+        <script src="scomp/ioPort.js"></script>
+        <script src="scomp/ioCon.js"></script>
+        <link href="scomp/ioPort.css" rel="stylesheet" type="text/css">
+        <script src="scomp/sCBase.js"></script>
+        <script src="scomp/sCScope.js"></script>
+        <script src="scomp/sCOut.js"></script>
+        <script src="scomp/sCGen.js"></script>
+        <script src="scomp/sCVKey.js"></script>
+        <script src="scomp/sCAdsr.js"></script>
+        <script src="scomp/sCDelay.js"></script>
+        <script src="scomp/sCMix.js"></script>
+        <script src="scomp/sCConst.js"></script>
+        <script src="scomp/sCOp.js"></script>
+        <script src="scomp/sCNotePitch.js"></script>
+
+        <link href="style.css" rel="stylesheet" type="text/css">
+        <script src="workspace.js"></script>
+        <link href="workspace.css" rel="stylesheet" type="text/css">
+        <script src="workbar.js"></script>
+        <script src="menuBar.js"></script>
+        <script src="main.js"></script>
+        <script src="tracker.js"></script>
+        <script src="gui/lang.js"></script>
     </head>
     
-    <body id="freqSelect"></body>
+    <body id="freqSelect">
+    </body>
 </html>
