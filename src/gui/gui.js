@@ -1,6 +1,7 @@
 "use strict";
 /*global log*/
 /*global MouseEvent*/
+/*global window*/
 
 var gui = {
     nextZValue: 1,

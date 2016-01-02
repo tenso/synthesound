@@ -11,6 +11,7 @@
 /*global lang*/
 /*global gBase*/
 /*global workbar*/
+/*global window*/
 
 var app = {
     ver: "1.0",

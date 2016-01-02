@@ -1,5 +1,6 @@
 "use strict";
 /*global sBase*/
+/*global window*/
 
 function sDebug(args) {
     var that = sBase("debug"),

@@ -6,20 +6,24 @@ var log = {
     logUpdated: undefined,
     
     error: function (msg) {
-        log.update("ERROR", msg);
+        return log.update("ERROR", msg);
     },
 
     info: function (msg) {
-        log.update("INFO", msg, true);
+        return log.update("INFO", msg, true);
     },
     
     obj: function (obj) {
         log.logData.push(obj);
-        log.update();
+        return log.update();
+    },
+    
+    d: function (msg) {
+        return log.update("DBG", msg);
     },
     
     warn: function (msg) {
-        log.update("WARN", msg);
+        return log.update("WARN", msg);
     },
     
     update: function (type, message, skipOutput) {
@@ -32,6 +36,7 @@ var log = {
         if (typeof log.logUpdated === "function") {
             log.logUpdated();
         }
+        return log;
     },
     
     logText: function () {

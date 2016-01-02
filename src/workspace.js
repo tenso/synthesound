@@ -23,6 +23,7 @@
 /*global sCGlobal*/
 /*global scBaseUID*/
 /*global gBase*/
+/*global window*/
 
 function workspace() {
     var that = gBase().top(app.screen.minY).bottom(app.screen.maxBottom),
@@ -260,7 +261,7 @@ function workspace() {
     that.onworkspacechanged = undefined;
     
     sCGlobal.currentUpdated = function (comp) {
-        log.info("show comp:" + comp.uid());
+        log.d("show comp:" + comp.uid());
     };
     
     that.typeIs = "workspace";
