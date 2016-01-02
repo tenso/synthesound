@@ -1,5 +1,7 @@
 "use strict";
 /*global test*/
+/*global util*/
+/*global log*/
 
 function sSequanceData(sArgs, msTime) {
     return {ms: msTime, args: sArgs};
@@ -47,11 +49,16 @@ function sSequence(sComp, sId, argUpdateCb) {
     };
     
     that.load = function (data) {
-        seqData = data.slice(0);
+        if (!util.isArray(data)) {
+            log.warn("sSequence.load: non array data wont load");
+            seqData = [];
+        } else {
+            seqData = data;
+        }
     };
     
     that.data = function () {
-        return seqData.slice(0);
+        return seqData;
     };
     
     return that;

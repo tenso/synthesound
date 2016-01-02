@@ -27,14 +27,6 @@ function menuBar(container, contentContainer) {
         wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
     };
     
-    that.addContent(gButton(lang.tr("stop"), function () {
-        contentContainer.stop();
-    }).bg("#f00"));
-    
-    that.addContent(gButton(">", function () {
-        contentContainer.play();
-    }));
-    
     file = wMenuButton(lang.tr("file"), menus);
 
     loadInput = files.createLoadDataInput(function (data) {

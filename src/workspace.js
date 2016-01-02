@@ -259,7 +259,7 @@ function workspace(container) {
     that.onworkspacechanged = undefined;
     
     container.appendChild(that);
-    bar = workbar(container).move(app.screen.minX, app.screen.minY - 6);
+    bar = workbar(container, that);
         
     return that;
 }

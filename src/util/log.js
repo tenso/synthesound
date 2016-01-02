@@ -1,4 +1,5 @@
 "use strict";
+/*global window*/
 
 var log = {
     error: function (msg) {

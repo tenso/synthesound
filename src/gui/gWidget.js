@@ -134,6 +134,6 @@ function gWidget(container, titleLabel) {
     };
     
     containerInit(container, titleLabel);
-    that.canMove(true).move(0, 0);
+    that.canMove(true);
     return that;
 }
