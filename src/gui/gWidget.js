@@ -10,14 +10,14 @@
 function gWidget(container, titleLabel) {
     var that = gBase();
 
-    function makeTitle(titleLabel) {
+    function makeTitle() {
         var titleElem = gBase().marginRight(20);//that is close buttons width
         
         titleElem.textContent = titleLabel;
         return titleElem;
     }
 
-    function containerInit(container, titleLabel) {
+    function containerInit() {
         if (!that) {
             log.error("gui.containerInit: that is undefined");
         } else if (!container) {
@@ -25,7 +25,6 @@ function gWidget(container, titleLabel) {
         }
         that.typeIs = "gWidget";
         that.typeClass = "gWidget";
-        that.container = container;
         that.className = "gWidget";
         that.style.position = "absolute";
         that.style.zIndex = gui.nextZ();
@@ -34,14 +33,12 @@ function gWidget(container, titleLabel) {
         that.titleRow.setClass("gWidgetTitle");
         that.appendChild(that.titleRow);
         
-        that.contId = container.id;
         //that.table = gBase("table"); //FIXME: gives borders!!
         that.table = document.createElement("table");
         that.table.className = "gWidgetTable";
                         
         if (typeof titleLabel === "string") {
-            that.titleLabel = titleLabel;
-            that.titleRow.appendChild(makeTitle(that.titleLabel));
+            that.titleRow.appendChild(makeTitle());
         }
         
         that.appendChild(that.table);
@@ -61,7 +58,7 @@ function gWidget(container, titleLabel) {
     };
     
     that.remove = function () {
-        that.container.removeChild(that);
+        container.removeChild(that);
     };
     
     that.addContent = function (content, wholeRow) {
@@ -131,7 +128,7 @@ function gWidget(container, titleLabel) {
         return that;
     };
     
-    containerInit(container, titleLabel);
+    containerInit();
     that.canMove(true);
     return that;
 }

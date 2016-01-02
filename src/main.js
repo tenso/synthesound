@@ -72,6 +72,7 @@ window.onload = function () {
     input = guiInput(audioWork, gIO.resizeCanvas);
     gui.setInputHandler(input);
     
+    //FIXME: awkward init and object inter-dependency!
     topMenu = menuBar(guiApp, audioWork).move(0, 0);
     guiApp.appendChild(audioWork);
     bar = workbar(guiApp, audioWork);
