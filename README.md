@@ -1,3 +1,2 @@
-= To be done
-
-Expermimental project
+### Synthesound
+Digital audio workstation in javascript.

@@ -17,7 +17,7 @@ function menuBar(container, contentContainer) {
         errorLog,
         menus = [],
         helpString = lang.tr("helpText"),
-        aboutString = "SyntheSound v." + app.ver + "\n(C) 2015 Anton Olofsson, GPL 3",
+        aboutString = "SyntheSound v." + app.ver + "\n\n" + lang.tr("license"),
         loadInput,
         note;
     
