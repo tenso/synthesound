@@ -2,19 +2,25 @@
 /*global window*/
 
 var log = {
+    logData: [],
+    
     error: function (msg) {
-        window.console.log("ERROR:" + msg);
+        log.logData.push("ERROR:" + msg);
+        window.console.log(log.logData[log.logData.length - 1]);
     },
 
     info: function (msg) {
-        window.console.log("INFO:" + msg);
+        log.logData.push("INFO:" + msg);
+        window.console.log(log.logData[log.logData.length - 1]);
     },
     
     obj: function (obj) {
-        window.console.log(obj);
+        log.logData.push(obj);
+        window.console.log(log.logData[log.logData.length - 1]);
     },
     
     warn: function (msg) {
-        window.console.log("WARN:" + msg);
+        log.logData.push("WARN:" + msg);
+        window.console.log(log.logData[log.logData.length - 1]);
     }
 };

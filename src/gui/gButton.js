@@ -68,6 +68,6 @@ function gButton(name, callback, isRadio, buttonGroup) {
         e.stopPropagation();
         that.set();
     };
-    
+    that.typeIs = "gButton";
     return that;
 }

@@ -89,6 +89,8 @@ function guiInput(container, sizeOfContainerChanged) {
         }
     };
     
+    that.mouseOver = undefined;
+    
     document.addEventListener("mouseup", function (e) {
         if (mouseCapturer) {
             runCaptureCBIfExist("iMouseUpAfterCapture", e);
@@ -112,6 +114,9 @@ function guiInput(container, sizeOfContainerChanged) {
     document.addEventListener("mouseover", function (e) {
         if (mouseCapturer) {
             runCaptureCBIfExist("iMouseOverAfterCapture", e);
+        }
+        if (typeof that.mouseOver === "function") {
+            that.mouseOver(e, mouseCapturer);
         }
     });
 

@@ -8,20 +8,22 @@
 /*global app*/
 /*global files*/
 /*global lang*/
+/*global log*/
 
 function menuBar(container, contentContainer) {
     var that = gWidget(container).canMove(false).z(10000).border("0").radius(0).w("100%").padding(2),
         file,
         about,
-        log,
+        errorLog,
         menus = [],
         helpString = lang.tr("helpText"),
         aboutString = "SyntheSound v." + app.ver + "\n(C) 2015 Anton Olofsson, GPL 3",
-        loadInput;
+        loadInput,
+        note;
     
     that.logError = function (error) {
-        log.bg("#f00").show(true);
-        log.add("error #" + log.menu.contentCount(), function () {
+        errorLog.bg("#f00").show(true);
+        errorLog.add("error #" + errorLog.menu.contentCount(), function () {
             wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
         });
         wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
@@ -43,14 +45,23 @@ function menuBar(container, contentContainer) {
     about = wMenuButton("?", menus);
     about.add(lang.tr("help"), function () {wNote(contentContainer, helpString).padding(40); });
     about.add(lang.tr("about"), function () {wNote(contentContainer, aboutString).padding(40); });
+    about.add(lang.tr("log"), function () {wNote(contentContainer, log.logData).padding(40); });
     that.addContent(about);
     
-    log = wMenuButton(lang.tr("detectedErrors"), menus).show(false);
-    that.addContent(log);
+    errorLog = wMenuButton(lang.tr("detectedErrors"), menus).show(false);
+    that.addContent(errorLog);
     
     that.addEventListener("mouseleave", function () {
         file.closeAll();
     });
+    
+    note = gLabel("");
+    that.addContent(note);
+    
+    that.setNote = function (str) {
+        note.setValue(str);
+        return that;
+    };
     
     return that;
 }

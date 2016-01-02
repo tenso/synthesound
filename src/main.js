@@ -65,7 +65,15 @@ window.onload = function () {
     gui.setInputHandler(input);
     
     topMenu = menuBar(freqSelect, audioWork).move(0, 0);
+    
+    /*DEBUG:
+    input.mouseOver = function (e, mouseCapturer) {
+        var eType = e.target.typeIs || "",
+            mType = mouseCapturer ? (mouseCapturer.typeIs || "") : "";
         
+        topMenu.setNote("e:" + eType + " cap:" + mType);
+    };*/
+    
     if (!test.verifyFunctionality(URL.createObjectURL, "URL.createObjectURL")
             || !test.verifyFunctionality(URL.revokeObjectURL, "URL.revokeObjectURL")) {
         topMenu.logError("need URL");

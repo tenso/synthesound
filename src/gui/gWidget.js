@@ -24,6 +24,7 @@ function gWidget(container, titleLabel) {
         } else if (!container) {
             log.error("gui.containerInit: container is undefined");
         }
+        that.typeIs = "gWidget";
         that.container = container;
         that.className = "gWidget";
         that.style.position = "absolute";

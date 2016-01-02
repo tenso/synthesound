@@ -34,6 +34,7 @@ function wMenuButton(name, group) {
         that.menu.addOverlayed(name, element);
     };
     
+    that.typeIs = "wMenuButton";
     that.menu = wMenu(that).removeOnLeave(false).show(false);
     group.push(that);
     

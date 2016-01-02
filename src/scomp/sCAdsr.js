@@ -25,6 +25,5 @@ function sCAdsr(container, uid) {
     that.addLabeledContent(controls.adsr.r = gSlider(adsr.getArgs().r, 0.01, 1.0, makeSet("r"), "R"));
     
     that.setGuiControls(controls);
-        
     return that;
 }

@@ -93,5 +93,6 @@ function wVKey(container, keyDown, keyUp) {
     for (i = 0; i < keys; i += 1) {
         addKey(box, startKey + i);
     }
+    that.typeIs = "wVKey";
     return that;
 }

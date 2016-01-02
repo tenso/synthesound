@@ -52,7 +52,7 @@ function wMenu(container) {
         }
         return that;
     };
-    
+    that.typeIs = "wMenu";
     that.canMove(false).removeOnLeave(true);
     return that;
 }

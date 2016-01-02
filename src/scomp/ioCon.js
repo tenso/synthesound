@@ -18,5 +18,7 @@ function ioCon(toPort, fromPort) {
         };
     };
     
+    that.typeIs = "ioCon";
+    
     return that;
 }

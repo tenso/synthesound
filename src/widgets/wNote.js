@@ -10,5 +10,6 @@ function wNote(container, note) {
     that.addRemove();
     that.move(100, 100);
     
+    that.typeIs = "wNote";
     return that;
 }

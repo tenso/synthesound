@@ -19,6 +19,6 @@ function gInput(value, callback, label) {
     
     that.appendChild(gLabel(label));
     that.appendChild(input);
-    
+    input.typeIs = "gInput";
     return that;
 }

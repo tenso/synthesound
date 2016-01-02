@@ -20,7 +20,8 @@ function ioPort(uid, sComp, isOut, portName, portType) {
     } else {
         that.className += " ioport-in";
     }
-        
+    
+    that.typeIs = "ioPort";
     that.uid = uid;
     that.sComp = sComp;
     that.isOut = isOut;

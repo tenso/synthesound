@@ -3,7 +3,7 @@
 /*global gBase*/
 
 function gKnob(min, max, callback) {
-    var that = document.createElement("div"),
+    var that = gBase(),
         value = 0;
         
     that.setValue = function (val, skipCallback) {
@@ -52,7 +52,8 @@ function gKnob(min, max, callback) {
         value = min + (max - min) * (1.0 - newY / maxY);
         callback(value);
     };
-
+    
+    that.typeIs = "gKnob";
     return that;
 }
 
@@ -78,6 +79,6 @@ function gSlider(val, min, max, callback) {
 
     that.appendChild(knob);
     that.setValue(val, true);
-
+    that.typeIs = "gSlider";
     return that;
 }

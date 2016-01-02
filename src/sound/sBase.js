@@ -168,6 +168,8 @@ function sBase(sId) {
         return inputs[index].data[chan];
     };
     
+    that.typeIs = "sBase";
+    
     //FIXME: make private?
     that.data = [];
     that.genData = undefined;

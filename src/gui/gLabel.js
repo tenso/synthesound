@@ -11,6 +11,6 @@ function gLabel(label) {
     
     that.textContent = label;
     that.className = "gLabel";
-    
+    that.typeIs = "gLabel";
     return that;
 }
