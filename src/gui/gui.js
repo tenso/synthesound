@@ -63,7 +63,7 @@ var gui = {
     },
     
     stylePxIfInt: function (obj, param, value) {
-        if (typeof value === "integer") {
+        if (typeof value === "number") {
             obj.style[param] = value + "px";
         } else {
             obj.style[param] = value;

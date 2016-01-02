@@ -26,7 +26,7 @@
 /*global window*/
 
 function workspace() {
-    var that = gBase().top(app.screen.minY).bottom(app.screen.maxBottom),
+    var that = gBase().setClass("workspace").top(app.screen.minY).bottom(app.screen.maxBottom),
         out,
         scope,
         audioCtx,
@@ -255,7 +255,6 @@ function workspace() {
     };
     
     
-    that.className = "workspace";
     that.key = undefined; /*FIXME: globally coupled to sCVKey*/
     that.mixerOut = undefined; /*FIXME: globally coupled to sCOut*/
     that.onworkspacechanged = undefined;

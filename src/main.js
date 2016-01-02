@@ -47,6 +47,7 @@ function initLanguage() {
         log: "Log",
         detectedErrors: "Detected Errors",
         license: "Copyright 2015 Anton Olofsson\n" +
+                "\n" +
                 "This program is free software: you can redistribute it and/or modify\n" +
                 "it under the terms of the GNU General Public License as published by\n" +
                 "the Free Software Foundation, either version 3 of the License, or\n" +
@@ -68,7 +69,7 @@ var audioWork, /*depends on it: sCOut, sCVKey */
     gIO;       /*depends on it: workspace, ioPort, sCBase, gWidget*/
 
 window.onload = function () {
-    var freqSelect = document.getElementById("freqSelect"),
+    var appBody = document.getElementById("appBody"),
         topMenu,
         input,
         bar,
@@ -76,7 +77,7 @@ window.onload = function () {
 
     initLanguage();
     
-    freqSelect.appendChild(guiApp);
+    appBody.appendChild(guiApp);
     
     /*testsuite*/
     test.runTests(true);

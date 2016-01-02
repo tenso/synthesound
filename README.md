@@ -1,2 +1,2 @@
 ### Synthesound
-Digital audio workstation in javascript.
+Digital audio workstation for the web.

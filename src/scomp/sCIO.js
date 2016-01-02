@@ -78,8 +78,8 @@ function sCIO(container) {
         
         linesCanvas.width = workspaceWidth;
         linesCanvas.height = workspaceHeight;
-        linesCanvas.style.width = workspaceWidth;
-        linesCanvas.style.height = workspaceHeight;
+        linesCanvas.style.width = workspaceWidth + "px";
+        linesCanvas.style.height = workspaceHeight + "px";
         that.drawConnections();
     };
     
