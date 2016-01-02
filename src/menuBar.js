@@ -42,10 +42,25 @@ function menuBar(container, contentContainer) {
     });
     that.addContent(file);
     
+    function makePopup(message) {
+        return function () {
+            var that,
+                mess;
+            if (typeof message === "function") {
+                mess = message();
+            } else {
+                mess = message;
+            }
+            that = wNote(contentContainer, mess).padding(40);
+            that.left(contentContainer.scrollLeft).top(contentContainer.scrollTop);
+            return that;
+        };
+    }
+    
     about = wMenuButton("?", menus);
-    about.add(lang.tr("help"), function () {wNote(contentContainer, helpString).padding(40); });
-    about.add(lang.tr("about"), function () {wNote(contentContainer, aboutString).padding(40); });
-    about.add(lang.tr("log"), function () {wNote(contentContainer, log.logText()).padding(40); });
+    about.add(lang.tr("help"), makePopup(helpString));
+    about.add(lang.tr("about"), makePopup(aboutString));
+    about.add(lang.tr("log"), makePopup(log.logText));
     that.addContent(about);
     
     errorLog = wMenuButton(lang.tr("detectedErrors"), menus).show(false);

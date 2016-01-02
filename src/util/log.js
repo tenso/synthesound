@@ -3,25 +3,35 @@
 
 var log = {
     logData: [],
+    logUpdated: undefined,
     
     error: function (msg) {
-        log.logData.push("ERROR:" + msg);
-        window.console.log(log.logData[log.logData.length - 1]);
+        log.update("ERROR", msg);
     },
 
     info: function (msg) {
-        log.logData.push("INFO:" + msg);
-        //window.console.log(log.logData[log.logData.length - 1]);
+        log.update("INFO", msg, true);
     },
     
     obj: function (obj) {
         log.logData.push(obj);
-        window.console.log(log.logData[log.logData.length - 1]);
+        log.update();
     },
     
     warn: function (msg) {
-        log.logData.push("WARN:" + msg);
-        window.console.log(log.logData[log.logData.length - 1]);
+        log.update("WARN", msg);
+    },
+    
+    update: function (type, message, skipOutput) {
+        if (type && message) {
+            log.logData.push(type + ":" + message);
+        }
+        if (!skipOutput) {
+            window.console.log(log.logData[log.logData.length - 1]);
+        }
+        if (typeof log.logUpdated === "function") {
+            log.logUpdated();
+        }
     },
     
     logText: function () {
