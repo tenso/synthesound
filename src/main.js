@@ -66,13 +66,13 @@ window.onload = function () {
     
     topMenu = menuBar(freqSelect, audioWork).move(0, 0);
     
-    /*DEBUG:
+    //DEBUG:
     input.mouseOver = function (e, mouseCapturer) {
         var eType = e.target.typeIs || "",
-            mType = mouseCapturer ? (mouseCapturer.typeIs || "") : "";
+            eTypeClass = e.target.typeClass || "";
         
-        topMenu.setNote("e:" + eType + " cap:" + mType);
-    };*/
+        topMenu.setNote(eType + " : " + eTypeClass);
+    };
     
     if (!test.verifyFunctionality(URL.createObjectURL, "URL.createObjectURL")
             || !test.verifyFunctionality(URL.revokeObjectURL, "URL.revokeObjectURL")) {

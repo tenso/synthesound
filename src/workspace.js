@@ -23,9 +23,10 @@
 /*global tracker*/
 /*global sCGlobal*/
 /*global scBaseUID*/
+/*global gBase*/
 
 function workspace(container) {
-    var that = document.createElement("div"),
+    var that = gBase(),
         out,
         scope,
         audioCtx,

@@ -225,6 +225,7 @@ function gBase(type) {
     };
     
     that.typeIs = "gBase";
+    that.typeClass = "gBase";
     
     return that;
 }

@@ -168,7 +168,8 @@ function sBase(sId) {
         return inputs[index].data[chan];
     };
     
-    that.typeIs = "sBase";
+    that.typeClass = "sBase";
+    that.typeIs = sId || "sBase";
     
     //FIXME: make private?
     that.data = [];

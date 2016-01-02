@@ -225,6 +225,7 @@ function sCBase(context, type, sComps, uid) {
     }
     
     initStates();
+    that.typeClass = "sCComp";
     that.typeIs = type || "sCComp";
     that.addRemove(makeRemoveAllConnections());
     that.clearPorts();
