@@ -54,6 +54,7 @@ var files = {
             fileReader.onload = function () {
                 dataCallback(JSON.parse(fileReader.result));
             };
+            input.value = ""; //so that second load of same file works (onchange)
         };
         return input;
     }
