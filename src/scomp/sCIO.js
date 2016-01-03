@@ -3,6 +3,8 @@
 /*global gui*/
 /*global wMenu*/
 /*global ioCon*/
+/*global document*/
+/*global util*/
 
 function sCIO(container) {
     var that = {},
@@ -129,9 +131,9 @@ function sCIO(container) {
             to.sComp.addInput(from.sComp, to.portType);
             that.drawConnections();
             return true;
-        } else {
-            log.error("cant connect to non port(s)");
         }
+
+        log.error("cant connect to non port(s)");
         return false;
     };
 
@@ -182,6 +184,7 @@ function sCIO(container) {
         };
 
         port.iMousePressAndMove = function (e, mouse) {
+            util.unused(e);
             that.drawConnections();
             drawLine(mouse.captureX, mouse.captureY, mouse.x, mouse.y);
         };
@@ -195,7 +198,7 @@ function sCIO(container) {
         };
 
         port.iOpenContextMenu = function (e, mouse) {
-            var connections,
+            var targetConnections,
                 menu,
                 i;
 
@@ -212,19 +215,19 @@ function sCIO(container) {
             }
 
             if (e.target.isOut) {
-                connections = getConnectionsFrom(e.target);
+                targetConnections = getConnectionsFrom(e.target);
             } else {
-                connections = getConnectionsTo(e.target);
+                targetConnections = getConnectionsTo(e.target);
             }
 
-            if (connections.length) {
+            if (targetConnections.length) {
                 menu = wMenu(container).move(mouse.x - 20, mouse.y - 20);
 
-                for (i = 0; i < connections.length; i += 1) {
+                for (i = 0; i < targetConnections.length; i += 1) {
                     menu.add(e.target.sComp.typeId() + " > "
-                             + connections[i].sComp.typeId() + " "
-                             + connections[i].portType + " "
-                             + (connections[i].isOut ? "out" : "in"), makeDelCb(menu, e.target, connections[i]));
+                             + targetConnections[i].sComp.typeId() + " "
+                             + targetConnections[i].portType + " "
+                             + (targetConnections[i].isOut ? "out" : "in"), makeDelCb(menu, e.target, targetConnections[i]));
                 }
             }
         };

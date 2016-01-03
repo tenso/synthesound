@@ -2,7 +2,7 @@
 /*global Float32Array*/
 /*global Map*/
 /*global app*/
-
+/*global util*/
 
 function sBase(sId) {
     var that = {},
@@ -97,8 +97,7 @@ function sBase(sId) {
     };
 
     that.generate = function (sampleRate, fSize, rIndex) {
-        var chan,
-            dataUpdatedEvent;
+        var chan;
 
         if (genIndex === rIndex) {
             return that;
@@ -166,6 +165,14 @@ function sBase(sId) {
 
     that.getInputChannelData = function (index, chan) {
         return inputs[index].data[chan];
+    };
+
+    that.getArgs = function () {
+        return {};
+    };
+
+    that.setArgs = function (args) {
+        util.unused(args);
     };
 
     that.typeClass = "sBase";

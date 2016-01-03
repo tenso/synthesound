@@ -9,10 +9,12 @@ function sCConst(container, uid) {
         that = sCBase(container, "sCConst", {value: out}, uid),
         controls = {value: {}};
 
-    that.addOut("value");
-    that.addContent(controls.value.value = gInput(out.getArgs().value, function (value) {
+    controls.value.value = gInput(out.getArgs().value, function (value) {
         that.setAndSaveArgs("value", {value: parseFloat(value)});
-    }, "value"));
+    }, "value");
+
+    that.addOut("value");
+    that.addContent(controls.value.value);
 
     that.setGuiControls(controls);
     return that;

@@ -1,6 +1,8 @@
 "use strict";
 /*global gui*/
 /*global note*/
+/*global document*/
+/*global util*/
 
 function wVKey(container, keyDown, keyUp) {
     var that = {},
@@ -9,8 +11,7 @@ function wVKey(container, keyDown, keyUp) {
         keys = 60,
         startKey = 16,
         nextX = 0,
-        isDown = false,
-        lastNote = -1;
+        isDown = false;
 
     function addKey(container, note) {
         var key = document.createElement("div"),
@@ -24,17 +25,18 @@ function wVKey(container, keyDown, keyUp) {
             gui.captureMouse(e);
         };
         key.onmouseover = function (e) {
+            util.unused(e);
             if (isDown) {
-                lastNote = key.note;
                 keyDown(key.note);
             }
         };
         key.iMouseCaptured = function (e) {
+            util.unused(e);
             isDown = true;
-            lastNote = key.note;
             keyDown(key.note);
         };
         key.iMouseUpAfterCapture = function (e) {
+            util.unused(e);
             keyUp();
             isDown = false;
         };
@@ -83,6 +85,9 @@ function wVKey(container, keyDown, keyUp) {
     };
 
     that.iKeyUp = function (key, shift) {
+        util.unused(key);
+        util.unused(shift);
+
         keyUp();
     };
 

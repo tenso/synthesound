@@ -10,8 +10,7 @@ function sOp(args) {
             chan = 0,
             chanData,
             inputData,
-            inputIndex,
-            result;
+            inputIndex;
 
         for (chan = 0; chan < that.numChannels(); chan += 1) {
             chanData = that.data[chan];

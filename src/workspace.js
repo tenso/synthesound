@@ -28,7 +28,6 @@
 function workspace() {
     var that = gBase().setClass("workspace").top(app.screen.minY).bottom(app.screen.maxBottom),
         out,
-        scope,
         audioCtx,
         AudioContext = window.AudioContext || window.webkitAudioContext,
         audioRunning = false,
@@ -79,6 +78,7 @@ function workspace() {
 
     function initSComp() {
         that.iOpenContextMenu = function (e, mouse) {
+            util.unused(e);
             var menu = wMenu(that).move(mouse.x - 20, mouse.y - 20),
                 sConstructor;
 
@@ -136,8 +136,7 @@ function workspace() {
 
     function updateTime() {
         var nodes =  that.childNodes,
-            i,
-            sc;
+            i;
 
         for (i = 0; i < nodes.length; i += 1) {
             if (typeof nodes[i].data === "function") {
@@ -182,8 +181,6 @@ function workspace() {
 
     that.loadWorkspace = function (data) {
         var i,
-            j,
-            inSComp,
             uidOffset = 0;
 
         log.info("loading from version: " + data.app.ver);
@@ -196,7 +193,7 @@ function workspace() {
         offsetDataUid(data, uidOffset);
         log.info("create components");
         for (i = 0; i < data.workspace.length; i += 1) {
-            inSComp = createSComp(data.workspace[i]);
+            createSComp(data.workspace[i]);
         }
 
         log.info("create connections");
@@ -245,6 +242,8 @@ function workspace() {
     };
 
     that.stop = function (freq) {
+        util.unused(freq);
+
         if (!audioRunning) {
             return false;
         }

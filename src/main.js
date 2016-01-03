@@ -13,6 +13,7 @@
 /*global workbar*/
 /*global window*/
 /*global document*/
+/*global util*/
 
 var app = {
     ver: "1.0",
@@ -93,7 +94,9 @@ window.onload = function () {
     workbar(guiApp, audioWork);
 
     //DEBUG:
-    input.mouseOver = function (e) {
+    input.mouseOver = function (e, mouseCapturer) {
+        util.unused(mouseCapturer);
+
         var eType = e.target.typeIs || "",
             eTypeClass = e.target.typeClass || "";
 

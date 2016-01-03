@@ -7,6 +7,8 @@
 /*global uidGen*/
 /*global lang*/
 /*global sSequence*/
+/*global util*/
+
 //FIXME: rename all sC to sG
 //FIXME: rename all sId to portName?
 
@@ -72,6 +74,7 @@ function sCBase(context, type, sComps, uid) {
     };
 
     that.iWasMoved = function (obj) {
+        util.unused(obj);
         gIO.drawConnections();
     };
 
@@ -159,7 +162,6 @@ function sCBase(context, type, sComps, uid) {
 
     that.data = function () {
         var sId,
-            i,
             data = {
                 type: type,
                 uid: that.uid(),

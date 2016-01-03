@@ -2,15 +2,14 @@
 /*global delayBuffer*/
 /*global gui*/
 /*global gBase*/
+/*global document*/
 
-function gScope(channel) {
+function gScope() {
     var that = gBase(),
         length = 1024,
         graphData = delayBuffer(length),
         canvas = document.createElement("canvas"),
         ctx = canvas.getContext("2d"),
-        chan = channel,
-        step = 8,
         xStep = canvas.width / graphData.length(),
         halfH = canvas.height / 2.0,
         gotData = 0,

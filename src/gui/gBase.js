@@ -1,5 +1,6 @@
 "use strict";
 /*global gui*/
+/*global document*/
 
 function gBase(type) {
     var that = document.createElement(type || "div"),

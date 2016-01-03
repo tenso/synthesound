@@ -8,8 +8,7 @@ function tracker(sampleRate) {
         bpm = 60,
         currentMs = 0,
         quantization = 1,
-        currentFrame = 0,
-        currentMeasure = 0;
+        currentFrame = 0;
 
     that.setBpm = function (value) {
         bpm = value;
@@ -26,15 +25,11 @@ function tracker(sampleRate) {
     that.setFrames = function (frames) {
         currentFrame = frames;
         currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
-
-        currentMeasure = parseInt((bpm / 60000) * currentMs, 10);
     };
 
     that.stepFrames = function (frames) {
         currentFrame += frames;
         currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
-
-        currentMeasure = parseInt((bpm / 60000) * currentMs, 10);
     };
 
     that.currentMs = function () {
@@ -56,7 +51,7 @@ function tracker(sampleRate) {
 
     that.timeString = function () {
         var seconds = parseInt(currentMs / 1000.0, 10);
-        return util.zeroPad(seconds / 60, 2) + ":" + util.zeroPad(seconds % 60, 2) + ":" + util.zeroPad((currentMs % 1000) / 10, 2);
+        return util.zeroPad(seconds / 60) + ":" + util.zeroPad(seconds % 60) + ":" + util.zeroPad((currentMs % 1000) / 10);
     };
 
     return that;
@@ -67,7 +62,6 @@ function test_tracker() {
         track = tracker(sRate),
         tenth = parseInt(sRate / 10, 10),
         quarter = parseInt(sRate / 4, 10),
-        half = parseInt(sRate / 2, 10),
         full = parseInt(sRate, 10);
 
     track.setBpm(120);

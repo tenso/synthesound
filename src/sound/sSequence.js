@@ -36,7 +36,8 @@ function sSequence(sComp, sId, argUpdateCb) {
             if (at === seqData[i].ms) {
                 seqData[i] = data;
                 return;
-            } else if (at < seqData[i].ms) {
+            }
+            if (at < seqData[i].ms) {
                 seqData.splice(i, 0, data);
                 return;
             }

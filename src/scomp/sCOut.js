@@ -17,10 +17,13 @@ function sCOut(container, uid) {
         that.setAndSaveArgs("mix", {gainR: value});
     }
 
+    controls.mix.gainL = gSlider(mix.getArgs().gainL, 0.0, 1.0, setGainL);
+    controls.mix.gainR = gSlider(mix.getArgs().gainR, 0.0, 1.0, setGainR);
+
     that.addIn("mix");
     that.nextRow();
-    that.addLabeledContent(controls.mix.gainL = gSlider(mix.getArgs().gainL, 0.0, 1.0, setGainL), "L");
-    that.addLabeledContent(controls.mix.gainR = gSlider(mix.getArgs().gainR, 0.0, 1.0, setGainR), "R");
+    that.addLabeledContent(controls.mix.gainL, "L");
+    that.addLabeledContent(controls.mix.gainR, "R");
 
     that.setGuiControls(controls);
 

@@ -13,10 +13,15 @@ var util = {
         return util.isArray(obj) || util.isObject(obj);
     },
 
-    zeroPad: function (value, zeros) {
+    zeroPad: function (value) {
         if (value < 10) {
             return "0" + parseInt(value, 10);
         }
         return parseInt(value, 10);
+    },
+
+    /*NOTE: to fool jslint for function arguments only!*/
+    unused: function (arg) {
+        return arg;
     }
 };

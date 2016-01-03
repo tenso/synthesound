@@ -19,11 +19,12 @@ function sCGen(container, uid) {
         that.addContent(button);
     }
 
-    that.addIn("gen", "freq").addOut("gen");
-
-    that.addContent(ampControl = gInput(out.getArgs().amp, function (value) {
+    ampControl = gInput(out.getArgs().amp, function (value) {
         that.setAndSaveArgs("gen", {amp: parseFloat(value)});
-    }, "amp"));
+    }, "amp");
+
+    that.addIn("gen", "freq").addOut("gen");
+    that.addContent(ampControl);
 
     that.nextRow();
     addShape("sine");

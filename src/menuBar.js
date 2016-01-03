@@ -44,16 +44,16 @@ function menuBar(container, contentContainer) {
 
     function makePopup(message) {
         return function () {
-            var that,
+            var popup,
                 mess;
             if (typeof message === "function") {
                 mess = message();
             } else {
                 mess = message;
             }
-            that = wNote(contentContainer, mess).padding(40);
-            that.left(contentContainer.scrollLeft).top(contentContainer.scrollTop);
-            return that;
+            popup = wNote(contentContainer, mess).padding(40);
+            popup.left(contentContainer.scrollLeft).top(contentContainer.scrollTop);
+            return popup;
         };
     }
 

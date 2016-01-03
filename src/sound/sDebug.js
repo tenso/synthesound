@@ -19,7 +19,8 @@ function sDebug(args) {
 
             for (inputIndex = 0; inputIndex < that.numInputs(); inputIndex += 1) {
                 if (!lastValues[inputIndex]) {
-                    lastValues[inputIndex] = new Array(that.numChannels()); //FIXME: dont use new Array
+                    lastValues[inputIndex] = [];
+                    lastValues[inputIndex].length = that.numChannels();
                     lastValues[inputIndex].fill(0);
                 }
 
@@ -34,13 +35,6 @@ function sDebug(args) {
                 }
             }
         }
-    };
-
-    that.getArgs = function () {
-        return {};
-    };
-
-    that.setArgs = function (args) {
     };
 
     that.setArgs(args);

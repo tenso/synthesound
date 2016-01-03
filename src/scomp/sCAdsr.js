@@ -18,11 +18,16 @@ function sCAdsr(container, uid) {
 
     that.addIn("adsr").addIn("adsr", "gate").addOut("adsr");
 
+    controls.adsr.a = gSlider(adsr.getArgs().a, 0.01, 1.0, makeSet("a"));
+    controls.adsr.d = gSlider(adsr.getArgs().d, 0.01, 1.0, makeSet("d"));
+    controls.adsr.s = gSlider(adsr.getArgs().s, 0.00, 1.0, makeSet("s"));
+    controls.adsr.r = gSlider(adsr.getArgs().r, 0.01, 1.0, makeSet("r"));
+
     that.nextRow();
-    that.addLabeledContent(controls.adsr.a = gSlider(adsr.getArgs().a, 0.01, 1.0, makeSet("a"), "A"));
-    that.addLabeledContent(controls.adsr.d = gSlider(adsr.getArgs().d, 0.01, 1.0, makeSet("d"), "D"));
-    that.addLabeledContent(controls.adsr.s = gSlider(adsr.getArgs().s, 0.00, 1.0, makeSet("s"), "S"));
-    that.addLabeledContent(controls.adsr.r = gSlider(adsr.getArgs().r, 0.01, 1.0, makeSet("r"), "R"));
+    that.addLabeledContent(controls.adsr.a, "A");
+    that.addLabeledContent(controls.adsr.d, "D");
+    that.addLabeledContent(controls.adsr.s, "S");
+    that.addLabeledContent(controls.adsr.r, "R");
 
     that.setGuiControls(controls);
     return that;

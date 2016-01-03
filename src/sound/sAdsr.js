@@ -29,8 +29,6 @@ function sAdsr(args) {
             i = 0,
             chan = 0,
             chanData,
-            period,
-            inPeriod,
             inputIndex,
             inputData,
             nextActive = false,

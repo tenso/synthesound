@@ -4,6 +4,7 @@
 /*global FileReader*/
 /*global gui*/
 /*global gBase*/
+/*global document*/
 
 var files = {
     saveUrl: undefined,

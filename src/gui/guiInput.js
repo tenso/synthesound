@@ -2,6 +2,7 @@
 /*global test*/
 /*global log*/
 /*global gui*/
+/*global document*/
 
 function guiInput(container, sizeOfContainerChanged) {
     var that = {},

@@ -15,10 +15,8 @@ function sOutNode(audioCtx, channels, frameSize) {
     that.runIndexUpdated = undefined;
 
     that.onaudioprocess = function (audioEvent) {
-        var index = 0,
-            chan = 0,
+        var chan = 0,
             inData,
-            dataUpdatedEvent,
             buffer = audioEvent.outputBuffer;
 
         buffer.normalize = false;

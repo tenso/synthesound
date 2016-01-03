@@ -8,23 +8,18 @@
 /*global gLabel*/
 /*global audioWork*/
 /*global gButton*/
+/*global document*/
 
 function sCVKey(container, uid) {
     var gate = sStep(),
         hz = sConst(),
         that = sCBase(container, "sCVKey", {gate: gate, freq: hz}, uid),
-        gateOut,
-        hzOut,
         vkey = document.createElement("td"),
         currentNote = gLabel("--").abs().move(12, 50).setSize(40, 20).bg("#888").color("#fff").radius(4),
-        noteDown = 0,
         isDown = false,
-        cont,
-        keyboard,
-        label;
+        keyboard;
 
     that.keyDown = function (notePressed) {
-        noteDown = notePressed;
         isDown = true;
 
         currentNote.setValue(note.name(notePressed));

@@ -14,11 +14,14 @@ function sCNotePitch(container, uid) {
 
     function addControl(type) {
         var args;
-        that.addContent(controls.hz[type] = gInput(out.getArgs()[type], function (value) {
+
+        controls.hz[type] = gInput(out.getArgs()[type], function (value) {
             args = {};
             args[type] = parseInt(value, 10);
             that.setAndSaveArgs("hz", args);
-        }, type));
+        }, type);
+
+        that.addContent(controls.hz[type]);
     }
 
     labelIn = gLabel("--").w(60).fontSize(10);

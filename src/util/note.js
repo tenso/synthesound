@@ -32,7 +32,7 @@ var note = {
             pos = 0,
             octave = 0;
 
-        if (typeof (str) !== "string") {
+        if (typeof str !== "string") {
             return -1;
         }
 
