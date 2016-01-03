@@ -12,7 +12,7 @@ function gWidget(container, titleLabel) {
 
     function makeTitle() {
         var titleElem = gBase().marginRight(20);//that is close buttons width
-        
+
         titleElem.textContent = titleLabel;
         return titleElem;
     }
@@ -28,19 +28,19 @@ function gWidget(container, titleLabel) {
         that.className = "gWidget";
         that.style.position = "absolute";
         that.style.zIndex = gui.nextZ();
-        
+
         that.titleRow = gBase();
         that.titleRow.setClass("gWidgetTitle");
         that.appendChild(that.titleRow);
-        
+
         //that.table = gBase("table"); //FIXME: gives borders!!
         that.table = document.createElement("table");
         that.table.className = "gWidgetTable";
-                        
+
         if (typeof titleLabel === "string") {
             that.titleRow.appendChild(makeTitle());
         }
-        
+
         that.appendChild(that.table);
         container.appendChild(that);
 
@@ -52,15 +52,15 @@ function gWidget(container, titleLabel) {
         that.table.appendChild(that.content);
         return that;
     };
-    
+
     that.contentCount = function () {
         return that.content.childNodes.length;
     };
-    
+
     that.remove = function () {
         container.removeChild(that);
     };
-    
+
     that.addContent = function (content, wholeRow) {
         var cont = gBase("td").setClass("gWidgetCell");
         cont.appendChild(content);
@@ -70,20 +70,20 @@ function gWidget(container, titleLabel) {
         }
         return that;
     };
-    
+
     that.addLabeledContent = function (content, label) {
         var cont = gBase().display("inline-block"),
             contLabel = gLabel(label);
-        
+
         //if we know its gBase: content.margin("0 auto");
         content.style.margin = "auto";
-        
+
         cont.appendChild(contLabel);
         cont.appendChild(content);
         that.addContent(cont);
         return that;
     };
-    
+
     that.addRemove = function (callback) {
         var button = gButton("x", function () {
             if (callback) {
@@ -91,8 +91,8 @@ function gWidget(container, titleLabel) {
             }
             that.remove();
         }).abs().setClass("button gWidgetCloseButton");
-        
-        
+
+
         that.titleRow.appendChild(button);
         return that;
     };
@@ -102,11 +102,11 @@ function gWidget(container, titleLabel) {
             that.onmousedown = function (e) {
                 gui.captureMouse(e, that);
             };
-            
+
             that.iMouseCaptured = function () {
                 that.style.zIndex = gui.nextZ();
             };
-            
+
             that.iMousePressAndMove = function (e, mouse) {
                 that.move(mouse.relativeX, mouse.relativeY);
                 if (that.getX() < 0) {
@@ -127,7 +127,7 @@ function gWidget(container, titleLabel) {
         that.table.style.padding = value;
         return that;
     };
-    
+
     containerInit();
     that.canMove(true);
     return that;

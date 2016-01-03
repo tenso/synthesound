@@ -11,11 +11,11 @@ function sSequence(sComp, sId, argUpdateCb) {
     var that = {},
         seqData = [],
         atMs = -1;
-    
+
     //FIXME: optimize!
     that.moveToMs = function (ms) {
         var i;
-        
+
         for (i = 0; i < seqData.length; i += 1) {
             if (seqData[i].ms > atMs && seqData[i].ms <= ms) {
                 sComp.setArgs(seqData[i].args);
@@ -26,12 +26,12 @@ function sSequence(sComp, sId, argUpdateCb) {
         }
         atMs = ms;
     };
-    
+
     that.saveAt = function (ms) {
         var i,
             at = ms || atMs,
             data = sSequanceData(sComp.getArgs(), at);
-        
+
         for (i = 0; i < seqData.length; i += 1) {
             if (at === seqData[i].ms) {
                 seqData[i] = data;
@@ -43,11 +43,11 @@ function sSequence(sComp, sId, argUpdateCb) {
         }
         seqData.splice(seqData.length, 0, data);
     };
-    
+
     that.setArgs = function (args) {
         return sComp.setArgs(args);
     };
-    
+
     that.load = function (data) {
         if (!util.isArray(data)) {
             log.warn("sSequence.load: non array data wont load");
@@ -56,11 +56,11 @@ function sSequence(sComp, sId, argUpdateCb) {
             seqData = data;
         }
     };
-    
+
     that.data = function () {
         return seqData;
     };
-    
+
     return that;
 }
 
@@ -71,27 +71,27 @@ function stubScomp() {
         lastArgs = [],
         returnedArgs = [],
         saveCount = 0;
-    
+
     that.setArgs = function (args) {
         lastArgs.push(args);
         return that;
     };
-    
+
     that.getArgs = function () {
         returnedArgs.push("saved" + saveCount);
         saveCount += 1;
         return returnedArgs[returnedArgs.length - 1];
     };
-    
+
     //introspect:
     that.argSeq = function (index) {
         return lastArgs[index];
     };
-    
+
     that.argSeqLength = function () {
         return lastArgs.length;
     };
-      
+
     return that;
 }
 
@@ -113,37 +113,37 @@ function test_sSequence() {
     function verify_data(seqArg, data) {
         test.verify(seqArg, data);
     }
-    
+
     seq.load(loadData);
     seq.moveToMs(0);
     seq.saveAt(750);
-            
+
     verify_data(sComp.argSeq(0), "loaded0");
     test.verify(sComp.argSeqLength(), 1);
-    
+
     seq.moveToMs(500);
     verify_data(sComp.argSeq(0), "loaded0");
     test.verify(sComp.argSeqLength(), 1);
-        
+
     seq.moveToMs(1250);
     verify_data(sComp.argSeq(0), "loaded0");
     verify_data(sComp.argSeq(1), "saved0");
     verify_data(sComp.argSeq(2), "loaded1");
     test.verify(sComp.argSeqLength(), 3);
-    
+
     seq.saveAt(1500);
     verify_data(sComp.argSeq(0), "loaded0");
     verify_data(sComp.argSeq(1), "saved0");
     verify_data(sComp.argSeq(2), "loaded1");
     test.verify(sComp.argSeqLength(), 3);
-    
+
     seq.moveToMs(1500);
     verify_data(sComp.argSeq(0), "loaded0");
     verify_data(sComp.argSeq(1), "saved0");
     verify_data(sComp.argSeq(2), "loaded1");
     verify_data(sComp.argSeq(3), "saved1");
     test.verify(sComp.argSeqLength(), 4);
-        
+
     saveData = seq.data();
     test.verify(saveData[0].ms, 0);
     test.verify(saveData[0].args, "loaded0");

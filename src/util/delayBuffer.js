@@ -14,7 +14,7 @@ function delayBuffer(len) {
     that.length = function () {
         return length;
     };
-    
+
     that.get = function (delay) {
         var index = mUtil.mod(setIndex - delay, length);
         return buffer[index];
@@ -41,9 +41,9 @@ function delayBuffer(len) {
         }
         return str;
     };
-    
+
     buffer.fill(0.0);
-    
+
     return that;
 }
 

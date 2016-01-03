@@ -6,7 +6,7 @@ function sStep(args) {
         wantStep = false,
         stepDone = true,
         needRefill = true;
-    
+
     that.makeAudio = function () {
         var chan = 0;
 
@@ -25,21 +25,21 @@ function sStep(args) {
             }
         }
     };
-    
+
     that.getArgs = function () {
         return {active: wantStep};
     };
-    
+
     that.setArgs = function (args) {
-        
+
         if (args) {
             wantStep = typeof args.active === "boolean" ? args.active : wantStep;
             stepDone = !wantStep;
             needRefill = true;
         }
     };
-    
+
     that.setArgs(args);
-    
+
     return that;
 }

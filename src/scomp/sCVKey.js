@@ -22,36 +22,36 @@ function sCVKey(container, uid) {
         cont,
         keyboard,
         label;
-    
+
     that.keyDown = function (notePressed) {
         noteDown = notePressed;
         isDown = true;
-        
+
         currentNote.setValue(note.name(notePressed));
-        
+
         that.setAndSaveArgs("gate", {active: isDown});
         that.setAndSaveArgs("freq", {value: note.hz(notePressed)});
     };
-    
+
     that.keyUp = function () {
         isDown = false;
         that.setAndSaveArgs("gate", {active: isDown});
     };
 
     that.addOut("gate").addOut("freq");
-    
+
     that.addContent(gButton("capture", function () {
         gui.captureKey(keyboard);
     }).abs().move(10, 175));
-    
+
     that.addContent(currentNote);
-        
+
     gate.setArgs({value: isDown ? 1.0 : 0.0});
-            
+
     vkey.className = "collection vkey";
     that.addContent(vkey);
 
     keyboard = wVKey(vkey, that.keyDown, that.keyUp);
-    
+
     return that;
 }

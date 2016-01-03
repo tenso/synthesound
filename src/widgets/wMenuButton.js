@@ -5,13 +5,13 @@
 function wMenuButton(name, group) {
     var that,
         myIndex = group.length;
-    
+
     that = gButton(name, function () {
         that.closeAll(myIndex);
         that.menu.move(0, that.getH());
         that.menu.show(true);
     }).hoverEffect(true);
-    
+
     that.closeAll = function (myIndex) {
         var i;
         for (i = 0; i < group.length; i += 1) {
@@ -29,14 +29,14 @@ function wMenuButton(name, group) {
         };
         that.menu.add(name, cb);
     };
-    
+
     that.addOverlayed = function (name, element) {
         that.menu.addOverlayed(name, element);
     };
-    
+
     that.typeIs = "wMenuButton";
     that.menu = wMenu(that).removeOnLeave(false).show(false);
     group.push(that);
-    
+
     return that;
 }

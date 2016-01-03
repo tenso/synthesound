@@ -6,7 +6,7 @@
 var gui = {
     nextZValue: 1,
     input: undefined,
-    
+
     nextZ: function () {
         var ret = gui.nextZValue;
         gui.nextZValue += 1;
@@ -25,7 +25,7 @@ var gui = {
 
         return {x: x, y: y};
     },
-    
+
     getEventOffsetInElement: function (element, event) {
         var pos = gui.getPos(element);
         return {
@@ -33,17 +33,17 @@ var gui = {
             y: event.pageY - pos.y
         };
     },
-    
+
     getOffsetInElement: function (element, parent) {
         var pos = gui.getPos(element),
             parentPos = gui.getPos(parent);
-        
+
         return {
             x: pos.x - parentPos.x,
             y: pos.y - parentPos.y
         };
     },
-    
+
     getSize: function (elem) {
         var w = elem.offsetWidth,
             h = elem.offsetHeight;
@@ -61,7 +61,7 @@ var gui = {
     getStyleInt: function (element, property) {
         return parseInt(gui.getStyle(element, property), 10);
     },
-    
+
     stylePxIfInt: function (obj, param, value) {
         if (typeof value === "number") {
             obj.style[param] = value + "px";
@@ -70,7 +70,7 @@ var gui = {
         }
         return obj;
     },
-    
+
     clickObj: function (obj) {
         var clickEvent = new MouseEvent("click", {
             view: window,
@@ -79,11 +79,11 @@ var gui = {
         });
         obj.dispatchEvent(clickEvent);
     },
-    
+
     setInputHandler: function (input) {
         gui.input = input;
     },
-    
+
     captureMouse: function (e, wantedTarget) {
         if (!gui.input) {
             log.error("gui.js: no inputhandler set");
@@ -91,7 +91,7 @@ var gui = {
         }
         gui.input.setMouseCapturer(e, wantedTarget);
     },
-    
+
     captureKey: function (wantedTarget) {
         if (!gui.input) {
             log.error("gui.js: no inputhandler set");

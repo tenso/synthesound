@@ -12,10 +12,11 @@
 /*global gBase*/
 /*global workbar*/
 /*global window*/
+/*global document*/
 
 var app = {
     ver: "1.0",
-    
+
     screen: {
         minX: 0,
         minY: 32, /*dont allow stuff behind topmenu*/
@@ -72,56 +73,54 @@ window.onload = function () {
     var appBody = document.getElementById("appBody"),
         topMenu,
         input,
-        bar,
         guiApp = gBase();
 
     initLanguage();
-    
+
     appBody.appendChild(guiApp);
-    
+
     /*testsuite*/
     test.runTests(true);
-    
+
     audioWork = workspace();
     gIO = sCIO(audioWork);
     input = guiInput(audioWork, gIO.resizeCanvas);
     gui.setInputHandler(input);
-    
+
     //FIXME: awkward init and object inter-dependency!
     topMenu = menuBar(guiApp, audioWork).move(0, 0);
     guiApp.appendChild(audioWork);
-    bar = workbar(guiApp, audioWork);
-    
+    workbar(guiApp, audioWork);
+
     //DEBUG:
-    input.mouseOver = function (e, mouseCapturer) {
+    input.mouseOver = function (e) {
         var eType = e.target.typeIs || "",
             eTypeClass = e.target.typeClass || "";
-        
+
         topMenu.setNote(eType + " : " + eTypeClass);
     };
-    
+
     if (!test.verifyFunctionality(URL.createObjectURL, "URL.createObjectURL")
             || !test.verifyFunctionality(URL.revokeObjectURL, "URL.revokeObjectURL")) {
         topMenu.logError("need URL");
     }
-    
+
     //FIXME: does not work! If FileReader is not defined...
     if (!test.verifyFunctionality(FileReader, "FileReader")) {
         topMenu.logError("need FileReader");
     }
-    
+
     if (audioWork.init()) {
         audioWork.onworkspacechanged = gIO.resizeCanvas; //update size of canvas on load
         window.addEventListener("resize", gIO.resizeCanvas); //update size of canvas on window-resize
     } else {
         topMenu.logError("need AudioContext and Array.fill");
     }
-        
-    function confirmExit(e) {
-        /*var returnValue = "confirm exit!";
+
+    /*function confirmExit(e) {
+        var returnValue = "confirm exit!";
         e.returnValue = returnValue;
-        return returnValue;*/
+        return returnValue;
     }
-    
-    window.addEventListener("beforeunload", confirmExit);
+    window.addEventListener("beforeunload", confirmExit);*/
 };

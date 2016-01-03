@@ -15,33 +15,33 @@ function sBase(sId) {
         inputs = [],
         specialInput = {},
         chanUpdated;
-    
+
     that.typeId = function () {
         return sId;
     };
-    
+
     that.setChanUpdatedCallback = function (cb) {
         chanUpdated = cb;
         return that;
     };
-    
+
     that.sampleRate = function () {
         return sRate;
     };
-        
+
     that.numChannels = function () {
         return channels;
     };
-    
+
     that.wantedSamples = function () {
         return frameSize;
     };
-    
+
     that.getInputs = function () {
         var ret = [],
             i,
             key;
-        
+
         for (i = 0; i < inputs.length; i += 1) {
             ret.push({
                 type: ""
@@ -56,7 +56,7 @@ function sBase(sId) {
         }
         return ret;
     };
-    
+
     that.addInput = function (input, type) {
         if (!type) {
             inputs.push(input);
@@ -128,7 +128,7 @@ function sBase(sId) {
         }
         return that;
     };
-    
+
     that.generateInputs = function () {
         var inputIndex,
             key;
@@ -149,13 +149,13 @@ function sBase(sId) {
 
     that.setChannelDataZero = function () {
         var chan;
-        
+
         for (chan = 0; chan < that.numChannels(); chan += 1) {
             that.data[chan].fill(0);
         }
         return that;
     };
-    
+
     that.getChannelData = function (chan) {
         return that.data[chan];
     };
@@ -163,17 +163,17 @@ function sBase(sId) {
     that.numInputs = function () {
         return inputs.length;
     };
-    
+
     that.getInputChannelData = function (index, chan) {
         return inputs[index].data[chan];
     };
-    
+
     that.typeClass = "sBase";
     that.typeIs = sId || "sBase";
-    
+
     //FIXME: make private?
     that.data = [];
     that.genData = undefined;
-    
+
     return that;
 }

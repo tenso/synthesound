@@ -15,7 +15,7 @@ var note = {
         }
         return Math.round(49 + mUtil.log(hz / 440.0, note.noteBase));
     },
-    
+
     name: function (noteNr) {
         if (noteNr < 1) {
             return "-";
@@ -71,7 +71,7 @@ var note = {
             test.verifyFloat(note.hz(49), 440.0, 3);
             test.verifyFloat(note.hz(69), 1396.91, 2);
         },
-        
+
         test_name: function () {
             test.verify(note.name(-1), "-");
             test.verify(note.name(0), "-");
@@ -94,7 +94,7 @@ var note = {
             test.verify(note.noteFromName("D#4"), 43);
             test.verify(note.noteFromName("F6"), 69);
         },
-        
+
         test_note: function () {
             test.verify(note.note(-1), -1);
             test.verify(note.note(0), -1);
@@ -104,7 +104,7 @@ var note = {
             test.verify(note.note(130.813), 28);
             test.verify(note.note(138.591), 29);
             test.verify(note.note(146.832), 30);
-            
+
         }
     }
 };

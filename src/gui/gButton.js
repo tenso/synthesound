@@ -5,7 +5,7 @@
 
 function gButtonGroup() {
     var that = [];
-    
+
     that.setValue = function (buttonName, skipCallback) {
         var i;
         for (i = 0; i < that.length; i += 1) {
@@ -14,13 +14,13 @@ function gButtonGroup() {
             }
         }
     };
-    
+
     return that;
 }
 
 function gButton(name, callback, isRadio, buttonGroup) {
     var that = gBase();
-        
+
     that.pressButton = function (value, skipCallback) {
         that.value = value;
         if (that.isRadio) {
@@ -46,7 +46,7 @@ function gButton(name, callback, isRadio, buttonGroup) {
             that.pressButton(!that.value, skipCallback);
         }
     };
-    
+
     that.name = name;
     that.isRadio = isRadio;
     that.className = "button-class gButton";
@@ -54,7 +54,7 @@ function gButton(name, callback, isRadio, buttonGroup) {
     that.style.position = "relative";
     that.value = false;
     that.callback = callback;
-    
+
     if (that.isRadio) {
         if (buttonGroup) {
             buttonGroup.push(that);
@@ -63,7 +63,7 @@ function gButton(name, callback, isRadio, buttonGroup) {
         }
         that.className += " gButtonRadioInactive";
     }
-    
+
     that.onmousedown = function (e) {
         e.stopPropagation();
         that.set();

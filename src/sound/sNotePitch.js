@@ -31,23 +31,23 @@ function sNotePitch(args) {
             noteUpdatedCb(that.inNoteName(), that.outNoteName());
         }
     };
-    
+
     that.setNoteUpdatedCallback = function (cb) {
         noteUpdatedCb = cb;
     };
-    
+
     that.inNoteName = function () {
         return note.name(lastNote);
     };
-    
+
     that.outNoteName = function () {
         return note.name(lastNote + octaves * 12 + notes) + "+" + cents + "/100";
     };
-    
+
     that.getArgs = function () {
         return {octaves: octaves, notes: notes, cents: cents};
     };
-    
+
     that.setArgs = function (args) {
         if (args) {
             octaves = typeof args.octaves === "number" ? args.octaves : octaves;
@@ -55,8 +55,8 @@ function sNotePitch(args) {
             cents = typeof args.cents === "number" ? args.cents : cents;
         }
     };
-    
+
     that.setArgs(args);
-    
+
     return that;
 }

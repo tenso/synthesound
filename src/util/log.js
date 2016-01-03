@@ -4,7 +4,7 @@
 var log = {
     logData: [],
     logUpdated: undefined,
-    
+
     error: function (msg) {
         return log.update("ERROR", msg);
     },
@@ -12,20 +12,20 @@ var log = {
     info: function (msg) {
         return log.update("INFO", msg, true);
     },
-    
+
     obj: function (obj) {
         log.logData.push(obj);
         return log.update();
     },
-    
+
     d: function (msg) {
         return log.update("DBG", msg);
     },
-    
+
     warn: function (msg) {
         return log.update("WARN", msg);
     },
-    
+
     update: function (type, message, skipOutput) {
         if (type && message) {
             log.logData.push(type + ":" + message);
@@ -38,7 +38,7 @@ var log = {
         }
         return log;
     },
-    
+
     logText: function () {
         return log.logData.join("\n");
     }

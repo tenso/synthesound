@@ -5,7 +5,7 @@
 function sDebug(args) {
     var that = sBase("debug"),
         lastValues = {};
-    
+
     that.makeAudio = function () {
         var i = 0,
             chan = 0,
@@ -13,7 +13,7 @@ function sDebug(args) {
             inputData,
             inputIndex,
             newVal;
-    
+
         for (chan = 0; chan < that.numChannels(); chan += 1) {
             chanData = that.data[chan];
 
@@ -22,9 +22,9 @@ function sDebug(args) {
                     lastValues[inputIndex] = new Array(that.numChannels()); //FIXME: dont use new Array
                     lastValues[inputIndex].fill(0);
                 }
-                
+
                 inputData = that.getInputChannelData(inputIndex, chan);
-                
+
                 for (i = 0; i < chanData.length; i += 1) {
                     newVal = inputData[i];
                     if (lastValues[inputIndex][chan] !== newVal) {
@@ -35,14 +35,14 @@ function sDebug(args) {
             }
         }
     };
-    
+
     that.getArgs = function () {
         return {};
     };
-    
+
     that.setArgs = function (args) {
     };
-    
+
     that.setArgs(args);
 
     return that;

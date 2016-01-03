@@ -45,12 +45,12 @@ function workspace() {
             sCOp: sCOp,
             sCNotePitch: sCNotePitch
         };
-        
-    
+
+
     function findSCComp(uid) {
         var nodes =  that.childNodes,
             i;
-        
+
         for (i = 0; i < nodes.length; i += 1) {
             if (nodes[i].uid) {
                 if (nodes[i].uid() === uid) {
@@ -60,7 +60,7 @@ function workspace() {
         }
         return undefined;
     }
-    
+
     function createSComp(data) {
         var comp;
         if (data.uid >= scBaseUID.peek()) {
@@ -76,19 +76,19 @@ function workspace() {
         }
         return undefined;
     }
-    
+
     function initSComp() {
         that.iOpenContextMenu = function (e, mouse) {
             var menu = wMenu(that).move(mouse.x - 20, mouse.y - 20),
                 sConstructor;
-            
+
             function menuEntry(id, xPos, yPos) {
                 return function () {
                     createSComp({type: id, x: xPos, y: yPos});
                     menu.remove();
                 };
             }
-            
+
             for (sConstructor in constructorMap) {
                 if (constructorMap.hasOwnProperty(sConstructor)) {
                     menu.add(lang.tr(sConstructor), menuEntry(sConstructor, mouse.x, mouse.y));
@@ -96,16 +96,16 @@ function workspace() {
             }
         };
     }
-    
+
     function addConnection(con) {
         var toSCComp,
             toPort,
             fromSCComp,
             fromPort;
-        
+
         toSCComp = findSCComp(con.to.uid);
         fromSCComp = findSCComp(con.from.uid);
-        
+
         if (toSCComp && fromSCComp) {
             toPort = toSCComp.getPort(con.to.portName, con.to.isOut, con.to.portType);
             fromPort = fromSCComp.getPort(con.from.portName, con.from.isOut, con.from.portType);
@@ -120,7 +120,7 @@ function workspace() {
             log.obj(con);
         }
     }
-    
+
     function offsetDataUid(data, offset) {
         var param;
         for (param in data) {
@@ -133,33 +133,33 @@ function workspace() {
             }
         }
     }
-    
+
     function updateTime() {
         var nodes =  that.childNodes,
             i,
             sc;
-        
+
         for (i = 0; i < nodes.length; i += 1) {
             if (typeof nodes[i].data === "function") {
                 nodes[i].setMs(timeTracker.currentMs());
             }
         }
-        
+
         if (typeof that.timeUpdated === "function") {
             that.timeUpdated(timeTracker.timeString());
         }
     }
-    
+
     function stepFrame(frames) {
         timeTracker.stepFrames(frames);
         updateTime();
     }
-    
+
     function setFrames(frames) {
         timeTracker.setFrames(frames);
         updateTime();
     }
-    
+
     that.data = function () {
         var nodes =  that.childNodes,
             i,
@@ -167,30 +167,30 @@ function workspace() {
                 app: app,
                 workspace: []
             };
-        
+
         //assumptions is that if it has a data property it should be saved.
         for (i = 0; i < nodes.length; i += 1) {
             if (typeof nodes[i].data === "function") {
                 data.workspace.push(nodes[i].data());
             }
         }
-        
+
         data.connections = gIO.data();
-        
+
         return data;
     };
-    
+
     that.loadWorkspace = function (data) {
         var i,
             j,
             inSComp,
             uidOffset = 0;
-        
+
         log.info("loading from version: " + data.app.ver);
 
         log.info("reset tracker time");
         timeTracker.setFrames(0);
-                
+
         uidOffset = scBaseUID.peek();
         log.info("workspace uid: " + uidOffset + ", offset loaddata");
         offsetDataUid(data, uidOffset);
@@ -198,17 +198,17 @@ function workspace() {
         for (i = 0; i < data.workspace.length; i += 1) {
             inSComp = createSComp(data.workspace[i]);
         }
-        
+
         log.info("create connections");
         for (i = 0; i < data.connections.length; i += 1) {
             addConnection(data.connections[i]);
         }
-        
+
         if (that.onworkspacechanged) {
             that.onworkspacechanged();
         }
     };
-    
+
     that.init = function () {
         if (!test.verifyFunctionality(AudioContext, "audio.AudioContext") ||
                 !test.verifyFunctionality(Array.prototype.fill, "Array.fill")) {
@@ -222,23 +222,23 @@ function workspace() {
         out = sOutNode(audioCtx, 2, 4096);
         out.setInput(that.mixerOut);
         log.info("init audio, sample rate:" + out.sampleRate + " channels " + out.channels);
-        
+
         timeTracker = tracker(that.sampleRate());
         out.runIndexUpdated = stepFrame;
         setFrames(0);
-        
+
         return true;
     };
-    
+
     that.sampleRate = function () {
         return out.sampleRate;
     };
-    
+
     that.play = function () {
         if (audioRunning) {
             return false;
         }
-                
+
         out.connect(audioCtx.destination);
         audioRunning = true;
         return true;
@@ -253,17 +253,17 @@ function workspace() {
         out.disconnect(audioCtx.destination);
         return true;
     };
-    
-    
+
+
     that.key = undefined; /*FIXME: globally coupled to sCVKey*/
     that.mixerOut = undefined; /*FIXME: globally coupled to sCOut*/
     that.onworkspacechanged = undefined;
-    
+
     sCGlobal.currentUpdated = function (comp) {
         log.d("show comp:" + comp.uid());
     };
-    
+
     that.typeIs = "workspace";
-    
+
     return that;
 }

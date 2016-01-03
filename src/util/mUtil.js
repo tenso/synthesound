@@ -12,11 +12,11 @@ var mUtil = {
         }
         return arg % base;
     },
-    
+
     log: function (x, base) {
         return Math.log(x) / Math.log(base);
     },
-    
+
     tests: {
         test_mod: function () {
             test.verify(mUtil.mod(-1, 4), 3);
@@ -33,7 +33,7 @@ var mUtil = {
             test.verify(mUtil.mod(4, -3), 1);
             test.verify(mUtil.mod(-48000, 480000), 432000);
         },
-        
+
         test_log: function () {
             test.verify(mUtil.log(8, 2), 3);
             test.verify(mUtil.log(100, 10), 2);

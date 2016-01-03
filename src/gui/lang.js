@@ -4,15 +4,15 @@
 var lang = {
     language: "",
     strings: {},
-    
+
     addLanguage: function (language, map) {
         lang.strings[language] = map;
     },
-    
+
     setLanguage: function (language) {
         lang.language = language;
     },
-    
+
     tr: function (id) {
         if (!lang.strings.hasOwnProperty(lang.language)) {
             log.error("no language: '" + lang.language + "'");

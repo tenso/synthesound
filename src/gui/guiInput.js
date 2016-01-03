@@ -11,14 +11,14 @@ function guiInput(container, sizeOfContainerChanged) {
         keyCapturer,
         mouse = {},
         oldSize = {w: 0, h: 0};
-    
+
     function setMouseFromEvent(e) {
         mouse.x = gui.getEventOffsetInElement(container,  e).x + container.scrollLeft;
         mouse.y = gui.getEventOffsetInElement(container,  e).y + container.scrollTop;
         mouse.relativeX = mouse.x - mouse.captureOffsetInElement.x;
         mouse.relativeY = mouse.y - mouse.captureOffsetInElement.y;
     }
-    
+
     function runCaptureCBIfExist(name, e) {
         setMouseFromEvent(e);
 
@@ -27,13 +27,13 @@ function guiInput(container, sizeOfContainerChanged) {
             mouseCapturer[name](e, mouse);
         }
     }
-    
+
     function runCBIfExist(name, e) {
         if (e.target.hasOwnProperty(name)) {
             e.target[name](e, mouse);
         }
     }
-    
+
     function setMouseCaptureFromEvent(e, target) {
         mouse.captureOffsetInElement = gui.getEventOffsetInElement(target, e);
         mouse.captureOffsetInElement.x += container.scrollLeft;
@@ -41,10 +41,10 @@ function guiInput(container, sizeOfContainerChanged) {
         mouse.captureX = gui.getEventOffsetInElement(container, e).x + container.scrollLeft;
         mouse.captureY = gui.getEventOffsetInElement(container, e).y + container.scrollTop;
     }
-    
+
     function checkSize(container) {
         var newSize = {w: container.scrollWidth, h: container.scrollHeight};
-        
+
         if (newSize.w !== oldSize.w
                 || newSize.h !== oldSize.h) {
             oldSize = newSize;
@@ -53,31 +53,31 @@ function guiInput(container, sizeOfContainerChanged) {
             }
         }
     }
-    
+
     that.setMouseCapturer = function (e, wantedObject) {
         e.stopPropagation();
-        
+
         if (!wantedObject) {
             mouseCapturer = e.target;
         } else {
             mouseCapturer = wantedObject;
         }
-        
+
         if (prevMouseCapturer) {
             if (typeof prevMouseCapturer.iWasDeselected === "function") {
                 prevMouseCapturer.iWasDeselected(mouseCapturer);
             }
             prevMouseCapturer = undefined;
         }
-        
+
         setMouseCaptureFromEvent(e, mouseCapturer);
         runCaptureCBIfExist("iMouseCaptured", e);
-        
+
         if (typeof mouseCapturer.iWasSelected === "function") {
             mouseCapturer.iWasSelected();
         }
     };
-    
+
     that.setKeyCapturer = function (e, wantedObject) {
         if (e) {
             e.stopPropagation();
@@ -88,9 +88,9 @@ function guiInput(container, sizeOfContainerChanged) {
             keyCapturer = wantedObject;
         }
     };
-    
+
     that.mouseOver = undefined;
-    
+
     document.addEventListener("mouseup", function (e) {
         if (mouseCapturer) {
             runCaptureCBIfExist("iMouseUpAfterCapture", e);
@@ -102,11 +102,11 @@ function guiInput(container, sizeOfContainerChanged) {
     document.addEventListener("mousemove", function (e) {
         if (mouseCapturer) {
             runCaptureCBIfExist("iMousePressAndMove", e);
-            
+
             if (typeof mouseCapturer.iWasMoved === "function") {
                 mouseCapturer.iWasMoved(mouseCapturer);
             }
-            
+
             checkSize(container);
         }
     });
@@ -127,7 +127,7 @@ function guiInput(container, sizeOfContainerChanged) {
         setMouseFromEvent(e);
         runCBIfExist("iOpenContextMenu", e);
     });
-    
+
     document.addEventListener("keydown", function (e) {
         if (keyCapturer) {
             if (keyCapturer.iKeyDown) {
@@ -141,7 +141,7 @@ function guiInput(container, sizeOfContainerChanged) {
             }
         }
     }, false);
-    
+
     document.addEventListener("keyup", function (e) {
         if (keyCapturer) {
             if (keyCapturer.iKeyUp) {
@@ -155,6 +155,6 @@ function guiInput(container, sizeOfContainerChanged) {
             }
         }
     }, false);
-    
+
     return that;
 }

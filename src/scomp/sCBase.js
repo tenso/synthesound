@@ -29,10 +29,10 @@ function sCBase(context, type, sComps, uid) {
             gIO.delAllConnectionsToAndFromUID(that.uid());
         };
     }
-    
+
     function setGuiControlAfterArg(sId, args) {
         var arg;
-        
+
         if (guiControls) {
             if (guiControls.hasOwnProperty(sId)) {
                 for (arg in args) {
@@ -45,7 +45,7 @@ function sCBase(context, type, sComps, uid) {
             }
         }
     }
-        
+
     function initStates() {
         var sId;
         for (sId in sComps) {
@@ -54,23 +54,23 @@ function sCBase(context, type, sComps, uid) {
             }
         }
     }
-    
+
     that.iWasSelected = function () {
         if (sCGlobal.current === that) {
             return;
         }
-        
+
         if (sCGlobal.current) {
             sCGlobal.current.unselect();
         }
         sCGlobal.current = that;
         sCGlobal.current.select();
-        
+
         if (typeof sCGlobal.currentUpdated === "function") {
             sCGlobal.currentUpdated(sCGlobal.current);
         }
     };
-    
+
     that.iWasMoved = function (obj) {
         gIO.drawConnections();
     };
@@ -78,11 +78,11 @@ function sCBase(context, type, sComps, uid) {
     that.select = function () {
         that.border("2px solid #f00");
     };
-    
+
     that.unselect = function () {
         that.border("2px solid #000");
     };
-    
+
     that.setAndSaveArgs = function (sId, args) {
         if (sComps.hasOwnProperty(sId)) {
             seq[sId].setArgs(args);
@@ -91,7 +91,7 @@ function sCBase(context, type, sComps, uid) {
             log.error("no such sId:" + sId);
         }
     };
-    
+
     that.setGuiControls = function (controls) {
         guiControls = controls;
     };
@@ -112,7 +112,7 @@ function sCBase(context, type, sComps, uid) {
             }
         }
     };
-    
+
     that.getArgs = function () {
         var sArgs = [],
             sId;
@@ -123,7 +123,7 @@ function sCBase(context, type, sComps, uid) {
         }
         return sArgs;
     };
-    
+
     that.clearPorts = function () {
         var sId;
         for (sId in sComps) {
@@ -138,25 +138,25 @@ function sCBase(context, type, sComps, uid) {
             log.error("sCBase.addIn: dont have:" + sId);
             return;
         }
-        
+
         var port = inPort(that.uid(), sComps[sId], sId, type);
         that.addLabeledContent(port, type || "in");
         ports[sId].push(port);
         return that;
     };
-    
+
     that.addOut = function (sId, type) {
         if (!sComps.hasOwnProperty(sId)) {
             log.error("sCBase.addOut dont have:" + sId);
             return;
         }
-        
+
         var port = outPort(that.uid(), sComps[sId], sId, type);
         that.addLabeledContent(port, type || sId || "out");
         ports[sId].push(port);
         return that;
     };
-    
+
     that.data = function () {
         var sId,
             i,
@@ -177,25 +177,25 @@ function sCBase(context, type, sComps, uid) {
                 });
             }
         }
-        
+
         for (sId in seq) {
             if (seq.hasOwnProperty(sId)) {
                 data.sArgs[sId] = seq[sId].data();
             }
         }
-        
+
         return data;
     };
-    
+
     that.getPort = function (sId, isOut, type) {
         var i;
-        
+
         if (!sComps.hasOwnProperty(sId)) {
             log.error(that.uid() + ".getPort: dont have:" + sId);
             log.obj(sComps);
             return;
         }
-        
+
         for (i = 0; i < ports[sId].length; i += 1) {
             if (ports[sId][i].isOut === isOut && ports[sId][i].portType === type) {
                 return ports[sId][i];
@@ -204,7 +204,7 @@ function sCBase(context, type, sComps, uid) {
         log.error("could not find port");
         return undefined;
     };
-    
+
     that.setMs = function (ms) {
         if (typeof ms !== "number" || isNaN(ms)) {
             log.error("scBase.setMs: ms not a number");
@@ -217,18 +217,18 @@ function sCBase(context, type, sComps, uid) {
             }
         }
     };
-    
+
     if (typeof uid === "number") {
         myUID = uid;
     } else {
         myUID = scBaseUID.getUID();
     }
-    
+
     initStates();
     that.typeClass = "sCComp";
     that.typeIs = type || "sCComp";
     that.addRemove(makeRemoveAllConnections());
     that.clearPorts();
-    
+
     return that;
 }

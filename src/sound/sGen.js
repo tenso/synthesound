@@ -10,7 +10,7 @@ function sGen(args) {
         type = "sine",
         isOn = true,
         TwoPi = 2 * Math.PI;
-    
+
     that.makeAudio = function () {
         var i = 0,
             chan = 0,
@@ -20,15 +20,15 @@ function sGen(args) {
             phaseStep,
             newFreq = freq,
             inPeriod;
-        
-        
+
+
         phaseStep = freq / sRate;
         for (i = 0; i < that.wantedSamples(); i += 1) {
-            
+
             if (that.haveSpecialInput("freq")) {
                 newFreq = that.getSpecialChannelData("freq", 0)[i];
             }
-            
+
             if (newFreq !== freq) {
                 freq = newFreq;
                 phaseStep = freq / sRate;
@@ -36,7 +36,7 @@ function sGen(args) {
             phaseRun += phaseStep;
             inPeriod = (phaseRun + phase) * sRate;
             inPeriod %= sRate;
-            
+
             if (!isOn) {
                 that.genData[i] = 0;
             } else if (type === "sine") {
@@ -54,7 +54,7 @@ function sGen(args) {
             } else if (type === "noise") {
                 that.genData[i] = -1.0 + 2.0 * Math.random();
             }
-            
+
             that.genData[i] *= amp;
         }
 
@@ -66,7 +66,7 @@ function sGen(args) {
     that.getArgs = function () {
         return {amp: amp/*, freq: freq*/, phase: phase, type: type, isOn: isOn};
     };
-    
+
     that.setArgs = function (args) {
         if (args) {
             amp = typeof args.amp === "number" ? args.amp : amp;
@@ -76,9 +76,9 @@ function sGen(args) {
             isOn = typeof args.isOn === "boolean" ? args.type : isOn;
         }
     };
-    
+
     that.setArgs(args);
-    
+
     return that;
 }
 

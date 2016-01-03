@@ -9,14 +9,14 @@ function sCIO(container) {
         linesCanvas = document.createElement("canvas"),
         linesCtx,
         connections = [];
-    
+
     function drawLine(fromX, fromY, toX, toY) {
         linesCtx.beginPath();
         linesCtx.moveTo(fromX, fromY);
         linesCtx.lineTo(toX, toY);
         linesCtx.stroke();
     }
-            
+
     function haveConnection(from, to) {
         var i;
         for (i = 0; i < connections.length; i += 1) {
@@ -30,7 +30,7 @@ function sCIO(container) {
     function getConnectionsFrom(ioPort) {
         var i,
             ret = [];
-        
+
         for (i = 0; i < connections.length; i += 1) {
             if (connections[i].from() === ioPort) {
                 ret.push(connections[i].to());
@@ -38,11 +38,11 @@ function sCIO(container) {
         }
         return ret;
     }
-    
+
     function getConnectionsTo(ioPort) {
         var i,
             ret = [];
-        
+
         for (i = 0; i < connections.length; i += 1) {
             if (connections[i].to() === ioPort) {
                 ret.push(connections[i].from());
@@ -59,7 +59,7 @@ function sCIO(container) {
         if (!linesCtx) {
             return;
         }
-        
+
         linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
 
         for (i = 0; i < connections.length; i += 1) {
@@ -75,14 +75,14 @@ function sCIO(container) {
     that.resizeCanvas = function () {
         var workspaceWidth = container.scrollWidth,
             workspaceHeight = container.scrollHeight;
-        
+
         linesCanvas.width = workspaceWidth;
         linesCanvas.height = workspaceHeight;
         linesCanvas.style.width = workspaceWidth + "px";
         linesCanvas.style.height = workspaceHeight + "px";
         that.drawConnections();
     };
-    
+
     that.data = function () {
         var ret = [],
             i;
@@ -91,19 +91,19 @@ function sCIO(container) {
         }
         return ret;
     };
-    
+
     that.connectPorts = function (p1, p2) {
         var from,
             to,
             con;
-        
+
         if (p1.sComp && p2.sComp) {
             if (p1.isOut === p2.isOut) {
                 log.error("connection is not from out to in");
                 that.drawConnections();
                 return false;
             }
-            
+
             if (p1.isOut) {
                 from = p1;
                 to = p2;
@@ -111,7 +111,7 @@ function sCIO(container) {
                 from = p2;
                 to = p1;
             }
-               
+
             if (from.sComp === to.sComp) {
                 log.warn("inter component feedback not allowed");
                 that.drawConnections();
@@ -122,7 +122,7 @@ function sCIO(container) {
                 that.drawConnections();
                 return false;
             }
-            
+
             con = ioCon(to, from);
             connections.push(con);
 
@@ -134,12 +134,12 @@ function sCIO(container) {
         }
         return false;
     };
-    
+
     that.delConnection = function (p1, p2) {
         var from,
             to,
             i;
-        
+
         if (p1.isOut) {
             from = p1;
             to = p2;
@@ -147,9 +147,9 @@ function sCIO(container) {
             from = p2;
             to = p1;
         }
-        
+
         to.sComp.delInput(from.sComp, to.portType);
-        
+
         for (i = 0; i < connections.length; i += 1) {
             if (connections[i].from() === from && connections[i].to() === to) {
                 connections.splice(i, 1);
@@ -158,7 +158,7 @@ function sCIO(container) {
             }
         }
     };
-    
+
     that.delAllConnectionsToAndFromUID = function (uid) {
         var i;
         for (i = 0; i < connections.length; i += 0) {
@@ -170,7 +170,7 @@ function sCIO(container) {
         }
         that.drawConnections();
     };
-    
+
     that.addMouseEventsToPort = function (port) {
 
         port.onmousedown = function (e) {
@@ -180,12 +180,12 @@ function sCIO(container) {
                 }
             }
         };
-        
+
         port.iMousePressAndMove = function (e, mouse) {
             that.drawConnections();
             drawLine(mouse.captureX, mouse.captureY, mouse.x, mouse.y);
         };
-        
+
         port.iMouseUpAfterCapture = function (e) {
             if (e.target.sComp) {
                 that.connectPorts(e.mouseCapturer, e.target);
@@ -193,30 +193,30 @@ function sCIO(container) {
                 that.drawConnections();
             }
         };
-        
+
         port.iOpenContextMenu = function (e, mouse) {
             var connections,
                 menu,
                 i;
-            
+
             function makeDelCb(menu, port1, port2) {
                 return function () {
                     that.delConnection(port1, port2);
                     menu.remove();
                 };
             }
-            
+
             if (!e.target.sComp) {
                 log.error("no sComp found");
                 return;
             }
-            
+
             if (e.target.isOut) {
                 connections = getConnectionsFrom(e.target);
             } else {
                 connections = getConnectionsTo(e.target);
             }
-            
+
             if (connections.length) {
                 menu = wMenu(container).move(mouse.x - 20, mouse.y - 20);
 
@@ -229,13 +229,13 @@ function sCIO(container) {
             }
         };
     };
-    
+
     container.appendChild(linesCanvas);
     linesCanvas.className = "gIOCanvas";
     linesCtx = linesCanvas.getContext("2d");
     linesCtx.strokeStyle = "#000";
     linesCtx.lineWidth = 2;
     that.resizeCanvas();
-    
+
     return that;
 }

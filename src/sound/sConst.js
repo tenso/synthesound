@@ -5,7 +5,7 @@ function sConst(args) {
     var that = sBase("const"),
         valueChanged = true,
         value = 1.0;
-        
+
     that.makeAudio = function () {
         var chan = 0;
 
@@ -16,11 +16,11 @@ function sConst(args) {
             valueChanged = false;
         }
     };
-    
+
     that.getArgs = function () {
         return {value: value};
     };
-    
+
     that.setArgs = function (args) {
         var newValue;
         if (args) {
@@ -31,8 +31,8 @@ function sConst(args) {
             }
         }
     };
-    
+
     that.setArgs(args);
-    
+
     return that;
 }

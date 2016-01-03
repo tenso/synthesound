@@ -13,7 +13,7 @@ function sAdsr(args) {
         d = 0.1, /*seconds*/
         s = 0.3, /*0-1*/
         r = 1.0; /*seconds*/
-    
+
     function setActive(value) {
         if (!active && value) {
             activeIndex = tick - (lastGain * a * that.sampleRate());
@@ -23,7 +23,7 @@ function sAdsr(args) {
         }
         active = value;
     }
-    
+
     that.makeAudio = function () {
         var index = 0,
             i = 0,
@@ -39,7 +39,7 @@ function sAdsr(args) {
             rLen = r * that.sampleRate();
 
         that.setChannelDataZero();
-        
+
         for (chan = 0; chan < that.numChannels(); chan += 1) {
             chanData = that.data[chan];
 
@@ -51,7 +51,7 @@ function sAdsr(args) {
                         setActive(nextActive);
                     }
                 }
-                
+
                 if (active) {
                     index = tick - activeIndex + i;
 
@@ -84,20 +84,20 @@ function sAdsr(args) {
     that.getArgs = function () {
         return {a: a, d: d, s: s, r: r/*, active: active*/};
     };
-    
+
     that.setArgs = function (args) {
         if (args) {
             a = typeof args.a === "number" ? args.a : a;
             d = typeof args.d === "number" ? args.d : d;
             s = typeof args.s === "number" ? args.s : s;
             r = typeof args.r === "number" ? args.r : r;
-            
+
             if (typeof args.active === "boolean") {
                 setActive(args.active);
             }
         }
     };
-    
+
     that.setArgs(args);
     return that;
 }

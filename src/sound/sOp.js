@@ -33,18 +33,18 @@ function sOp(args) {
             }
         }
     };
- 
+
     that.getArgs = function () {
         return {op: op};
     };
-    
+
     that.setArgs = function (args) {
         if (args) {
             op = typeof args.op === "string" ? args.op : op;
         }
     };
-    
+
     that.setArgs(args);
-    
+
     return that;
 }

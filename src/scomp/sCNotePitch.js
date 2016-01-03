@@ -11,7 +11,7 @@ function sCNotePitch(container, uid) {
         labelIn,
         labelOut,
         controls = {hz: {}};
-            
+
     function addControl(type) {
         var args;
         that.addContent(controls.hz[type] = gInput(out.getArgs()[type], function (value) {
@@ -20,26 +20,26 @@ function sCNotePitch(container, uid) {
             that.setAndSaveArgs("hz", args);
         }, type));
     }
-        
+
     labelIn = gLabel("--").w(60).fontSize(10);
     that.addContent(labelIn);
     that.addIn("hz");
-    
+
     labelOut = gLabel("--").w(60).fontSize(10);
     that.addContent(labelOut);
     that.addOut("hz");
-    
+
     that.nextRow();
     addControl("octaves");
     addControl("notes");
     addControl("cents");
-        
+
     out.setNoteUpdatedCallback(function (inNote, outNote) {
         labelIn.setValue(inNote);
         labelOut.setValue(outNote);
     });
-    
+
     that.setGuiControls(controls);
-    
+
     return that;
 }

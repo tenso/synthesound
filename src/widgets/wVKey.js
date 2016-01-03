@@ -11,15 +11,15 @@ function wVKey(container, keyDown, keyUp) {
         nextX = 0,
         isDown = false,
         lastNote = -1;
-    
+
     function addKey(container, note) {
         var key = document.createElement("div"),
             flat = true,
             keyX = 0;
-        
+
         key.id = "vkeyb-note-" + note;
         key.note = note;
-                
+
         key.onmousedown = function (e) {
             gui.captureMouse(e);
         };
@@ -38,33 +38,33 @@ function wVKey(container, keyDown, keyUp) {
             keyUp();
             isDown = false;
         };
-        
+
         container.appendChild(key);
-        
+
         if (note % 12 === 2 || note % 12 === 5 || note % 12 === 7
                 || note % 12 === 10 || note % 12 === 0) {
             flat = false;
         }
-        
+
         if (flat) {
             key.className = "vkey-key-flat";
         } else {
             key.className = "vkey-key-sharp";
         }
         keyX = nextX;
-        
+
         if (flat) {
             nextX += gui.getStyleInt(key, "width");
         } else {
             keyX -= gui.getStyleInt(key, "width") / 2;
         }
-        
+
         key.style.left = keyX + "px";
         key.style.top = "0px";
-        
+
         return key;
     }
-    
+
     that.iKeyDown = function (key, shift) {
         var noteMap = {a: "C",  w: "C#", s: "D",
                        e: "D#", d: "E",  f: "F",
@@ -72,7 +72,7 @@ function wVKey(container, keyDown, keyUp) {
                        h: "A",  u: "A#", j: "B"},
             cNote,
             octave = shift ? 2 : 3;
-        
+
         cNote = noteMap[key] || 1;
         cNote += octave;
         cNote = note.noteFromName(cNote);
@@ -85,11 +85,11 @@ function wVKey(container, keyDown, keyUp) {
     that.iKeyUp = function (key, shift) {
         keyUp();
     };
-    
+
     box = document.createElement("div");
     box.className = "vkey-container";
     container.appendChild(box);
-    
+
     for (i = 0; i < keys; i += 1) {
         addKey(box, startKey + i);
     }

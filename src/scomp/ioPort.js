@@ -4,7 +4,7 @@
 
 function ioPort(uid, sComp, isOut, portName, portType) {
     var that = gBase();
-    
+
     that.data = function () {
         return {
             uid: that.uid,
@@ -13,14 +13,14 @@ function ioPort(uid, sComp, isOut, portName, portType) {
             portType: that.portType
         };
     };
-    
+
     that.className = "ioport";
     if (isOut) {
         that.className += " ioport-out";
     } else {
         that.className += " ioport-in";
     }
-    
+
     that.typeIs = "ioPort";
     that.uid = uid;
     that.sComp = sComp;
@@ -28,7 +28,7 @@ function ioPort(uid, sComp, isOut, portName, portType) {
     that.portName = portName;
     that.portType = portType || "";
     that.isIOPort = true;
-    
+
     gIO.addMouseEventsToPort(that);
     return that;
 }
