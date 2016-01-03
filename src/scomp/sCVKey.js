@@ -6,9 +6,7 @@
 /*global wVKey*/
 /*global sCBase*/
 /*global gLabel*/
-/*global audioWork*/
 /*global gButton*/
-/*global document*/
 
 function sCVKey(container, uid) {
     var gate = sStep(),

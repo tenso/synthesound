@@ -13,7 +13,6 @@
 /*global sCConst*/
 /*global sCOp*/
 /*global sCNotePitch*/
-/*global gui*/
 /*global wMenu*/
 /*global app*/
 /*global gIO*/

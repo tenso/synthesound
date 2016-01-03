@@ -1,5 +1,4 @@
 "use strict";
-/*global gui*/
 /*global sConst*/
 /*global gInput*/
 /*global sCBase*/

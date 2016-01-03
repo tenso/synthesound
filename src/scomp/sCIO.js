@@ -3,11 +3,11 @@
 /*global gui*/
 /*global wMenu*/
 /*global ioCon*/
-/*global document*/
+/*global gBase*/
 /*global util*/
 
 function sCIO() {
-    var that = document.createElement("canvas"),
+    var that = gBase("canvas"),
         linesCtx,
         connections = [];
 

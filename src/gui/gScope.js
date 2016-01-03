@@ -1,8 +1,6 @@
 "use strict";
 /*global delayBuffer*/
-/*global gui*/
 /*global gBase*/
-/*global document*/
 
 function gScope() {
     var that = gBase("canvas").setClass("gScope"),

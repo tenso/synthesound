@@ -1,5 +1,4 @@
 "use strict";
-/*global gui*/
 /*global sMix*/
 /*global sCBase*/
 
