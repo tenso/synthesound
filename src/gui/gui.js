@@ -52,10 +52,15 @@ var gui = {
     },
 
     getStyle: function (element, property) {
+        var computed;
         if (element.style[property]) {
             return element.style[property];
         }
-        return window.getComputedStyle(element, undefined).getPropertyValue(property);
+        computed = window.getComputedStyle(element, undefined).getPropertyValue(property);
+        if (typeof computed === "number" && isFinite(computed)) {
+            return computed;
+        }
+        return 0;
     },
 
     getStyleInt: function (element, property) {

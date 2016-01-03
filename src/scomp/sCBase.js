@@ -19,7 +19,7 @@ var sCGlobal = {
     currentUpdated: undefined
 };
 
-function sCBase(context, type, sComps, uid) {
+function sCBase(container, type, sComps, uid) {
     var that = gWidget(),
         ports = {},
         myUID,
@@ -222,7 +222,7 @@ function sCBase(context, type, sComps, uid) {
 
     that.setTitle(lang.tr(type));
     that.addRemove(makeRemoveAllConnections());
-    context.add(that);
+    container.add(that);
 
     if (typeof uid === "number") {
         myUID = uid;

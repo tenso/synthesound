@@ -30,10 +30,7 @@ function gKnob(min, max, callback) {
         return value;
     };
 
-    that.className = "button-class gKnob";
-    that.style.position = "relative";
-    that.style.top = "0px";
-    that.style.height = "25px";
+    that.setClass("button-class gKnob").pos("relative").top(0).h(25);
 
     that.onmousedown = function (e) {
         gui.captureMouse(e);

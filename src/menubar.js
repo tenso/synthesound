@@ -10,7 +10,7 @@
 /*global lang*/
 /*global log*/
 
-function menuBar(contentContainer) {
+function menubar(contentContainer) {
     var that = gWidget().canMove(false).z(10000).border("0").radius(0).w("100%").h(app.screen.minY).padding(2),
         file,
         about,

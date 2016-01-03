@@ -2,10 +2,14 @@
 /*global gui*/
 /*global document*/
 
+/*NOTE: cant use getW/getX etc functions unless element as already in the DOM*/
+
 function gBase(type) {
     var that = document.createElement(type || "div"),
         originalColor,
         hoverColor,
+        pressColor,
+        originalPressColor,
         oldDisplay;
 
     that.show = function (value) {
@@ -32,23 +36,19 @@ function gBase(type) {
     };
 
     that.padding = function (value) {
-        that.style.padding = value;
-        return that;
+        return gui.stylePxIfInt(that, "padding", value);
     };
 
     that.paddingLeft = function (value) {
-        that.style.paddingLeft = value;
-        return that;
+        return gui.stylePxIfInt(that, "paddingLeft", value);
     };
 
     that.paddingRight = function (value) {
-        that.style.paddingRight = value;
-        return that;
+        return gui.stylePxIfInt(that, "paddingRight", value);
     };
 
     that.margin = function (value) {
-        that.style.margin = value;
-        return that;
+        return gui.stylePxIfInt(that, "margin", value);
     };
 
     that.marginLeft = function (value) {
@@ -57,6 +57,10 @@ function gBase(type) {
 
     that.marginRight = function (value) {
         return gui.stylePxIfInt(that, "marginRight", value);
+    };
+
+    that.lineHeight = function (value) {
+        return gui.stylePxIfInt(that, "lineHeight", value);
     };
 
     //normal, nowrap, pre-line, ...
@@ -94,32 +98,64 @@ function gBase(type) {
         return gui.stylePxIfInt(that, "left", value);
     };
 
+    that.getLeft = function () {
+        return that.offsetLeft;
+    };
+
     that.x = function (value) {
         return that.left(value);
+    };
+
+    that.getX = function () {
+        return that.getLeft();
     };
 
     that.right = function (value) {
         return gui.stylePxIfInt(that, "right", value);
     };
 
+    that.getRight = function () {
+        return gui.getStyleInt(that, "right") || that.getX() + that.getW();
+    };
+
     that.top = function (value) {
         return gui.stylePxIfInt(that, "top", value);
+    };
+
+    that.getTop = function () {
+        return that.offsetTop;
     };
 
     that.y = function (value) {
         return that.top(value);
     };
 
+    that.getY = function () {
+        return that.getTop();
+    };
+
     that.bottom = function (value) {
         return gui.stylePxIfInt(that, "bottom", value);
+    };
+
+    that.getBottom = function () {
+        return gui.getStyleInt(that, "bottom") || that.getY() + that.getH();
     };
 
     that.w = function (value) {
         return gui.stylePxIfInt(that, "width", value);
     };
 
+    that.getW = function () {
+        return that.offsetWidth;
+    };
+
     that.h = function (value) {
         return gui.stylePxIfInt(that, "height", value);
+    };
+
+    that.getH = function () {
+        return that.offsetHeight;
     };
 
     that.minWidth = function (value) {
@@ -155,22 +191,6 @@ function gBase(type) {
         gui.stylePxIfInt(that, "width", w);
         gui.stylePxIfInt(that, "height", h);
         return that;
-    };
-
-    that.getX = function () {
-        return that.offsetLeft;
-    };
-
-    that.getY = function () {
-        return that.offsetTop;
-    };
-
-    that.getW = function () {
-        return that.offsetWidth;
-    };
-
-    that.getH = function () {
-        return that.offsetHeight;
     };
 
     that.fontSize = function (value) {
@@ -209,6 +229,30 @@ function gBase(type) {
         return that;
     };
 
+    function mouseDownCallback() {
+        originalPressColor = that.style.color;
+        that.style.color = pressColor || "#888";
+    }
+
+    function mouseUpCallback() {
+        that.style.color = originalPressColor;
+    }
+
+    that.pressEffect = function (value, color) {
+        pressColor = color;
+        if (value) {
+            that.addEventListener("mousedown", mouseDownCallback);
+            that.addEventListener("mouseup", mouseUpCallback);
+            that.addEventListener("mouseleave", mouseUpCallback);
+        } else {
+            that.removeEventListener("mousedown", mouseDownCallback);
+            that.removeEventListener("mouseup", mouseUpCallback);
+            that.removeEventListener("mouseleave", mouseUpCallback);
+        }
+
+        return that;
+    };
+
     that.float = function (value) {
         that.style.float = value;
         return that;
@@ -222,6 +266,11 @@ function gBase(type) {
 
     that.add = function (element) {
         that.appendChild(element);
+        return that;
+    };
+
+    that.addTo = function (element) {
+        element.appendChild(that);
         return that;
     };
 

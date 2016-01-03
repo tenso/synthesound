@@ -2,7 +2,7 @@
 /*global log*/
 /*global test*/
 /*global sCIO*/
-/*global menuBar*/
+/*global menubar*/
 /*global URL*/
 /*global FileReader*/
 /*global workspace*/
@@ -23,7 +23,7 @@ var app = {
         minY: 32, /*dont allow stuff behind topmenu*/
         maxX: undefined,
         maxY: undefined,
-        maxBottom: 32
+        maxBottom: 200 /*this is effectively the hight of the "workbar".*/
     }
 };
 
@@ -87,7 +87,7 @@ window.onload = function () {
     audioWork = workspace();
     audioBar = workbar(audioWork);
     gIO = sCIO();
-    topMenu = menuBar(audioWork).move(0, 0);
+    topMenu = menubar(audioWork).move(0, 0);
     input = guiInput(audioWork, gIO.resizeCanvas);
     gui.setInputHandler(input);
 

@@ -7,16 +7,11 @@
 /*global document*/
 /*global util*/
 
-/*FIXME: should be called gContainer maybe?*/
-
 function gWidget() {
     var that = gBase(),
         titleElem = gBase().marginRight(20); //that is close buttons width
 
     function containerInit() {
-        if (!that) {
-            log.error("gui.containerInit: that is undefined");
-        }
         that.typeIs = "gWidget";
         that.typeClass = "gWidget";
         that.className = "gWidget";
@@ -85,7 +80,7 @@ function gWidget() {
                 callback();
             }
             that.remove();
-        }).abs().setClass("button gWidgetCloseButton");
+        }).abs().setClass("gWidgetCloseButton").hoverEffect(true, "#444");
 
 
         that.titleRow.add(button);
@@ -126,5 +121,6 @@ function gWidget() {
 
     containerInit();
     that.canMove(true);
+
     return that;
 }
