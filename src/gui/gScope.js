@@ -5,13 +5,12 @@
 /*global document*/
 
 function gScope() {
-    var that = gBase(),
+    var that = gBase("canvas").setClass("gScope"),
         length = 1024,
         graphData = delayBuffer(length),
-        canvas = document.createElement("canvas"),
-        ctx = canvas.getContext("2d"),
-        xStep = canvas.width / graphData.length(),
-        halfH = canvas.height / 2.0,
+        ctx = that.getContext("2d"),
+        xStep = that.width / graphData.length(),
+        halfH = that.height / 2.0,
         gotData = 0,
         yMargins = 2;
 
@@ -29,13 +28,13 @@ function gScope() {
             graphData.setArray(data);
         }
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, that.width, that.height);
 
         ctx.strokeStyle = "#aaa";
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(0,  halfH);
-        ctx.lineTo(canvas.width, halfH);
+        ctx.lineTo(that.width, halfH);
         ctx.stroke();
 
         ctx.lineWidth = 2;
@@ -52,9 +51,7 @@ function gScope() {
         return that;
     };
 
-    canvas.className = "gScope";
     that.typeIs = "gScope";
-    that.add(canvas);
 
     return that;
 }
