@@ -54,7 +54,7 @@ function gScope() {
 
     canvas.className = "gScope";
     that.typeIs = "gScope";
-    that.appendChild(canvas);
+    that.add(canvas);
 
     return that;
 }

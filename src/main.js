@@ -68,12 +68,13 @@ function initLanguage() {
 
 /*FIXME: should not be global!!*/
 var audioWork, /*depends on it: sCOut, sCVKey */
-    gIO;       /*depends on it: workspace, ioPort, sCBase, gWidget*/
+    gIO;       /*depends on it: workspace, ioPort, sCBase*/
 
 window.onload = function () {
     var appBody = document.getElementById("appBody"),
         topMenu,
         input,
+        audioBar,
         guiApp = gBase();
 
     initLanguage();
@@ -84,14 +85,16 @@ window.onload = function () {
     test.runTests(true);
 
     audioWork = workspace();
-    gIO = sCIO(audioWork);
+    audioBar = workbar(audioWork);
+    gIO = sCIO();
+    topMenu = menuBar(audioWork).move(0, 0);
     input = guiInput(audioWork, gIO.resizeCanvas);
     gui.setInputHandler(input);
 
-    //FIXME: awkward init and object inter-dependency!
-    topMenu = menuBar(guiApp, audioWork).move(0, 0);
-    guiApp.appendChild(audioWork);
-    workbar(guiApp, audioWork);
+    guiApp.add(topMenu);
+    guiApp.add(audioWork);
+    audioWork.add(gIO);
+    guiApp.add(audioBar);
 
     //DEBUG:
     input.mouseOver = function (e, mouseCapturer) {

@@ -77,7 +77,7 @@ function gSlider(val, min, max, callback) {
         that.setValue(max - (max - min) * (e.offsetY / that.offsetHeight));
     };
 
-    that.appendChild(knob);
+    that.add(knob);
     that.setValue(val, true);
     that.typeIs = "gSlider";
     return that;

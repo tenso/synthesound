@@ -220,6 +220,11 @@ function gBase(type) {
         return that;
     };
 
+    that.add = function (element) {
+        that.appendChild(element);
+        return that;
+    };
+
     that.textAlign = function (value) {
         that.style.textAlign = value;
         return that;

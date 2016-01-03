@@ -21,15 +21,15 @@ function sCNotePitch(container, uid) {
             that.setAndSaveArgs("hz", args);
         }, type);
 
-        that.addContent(controls.hz[type]);
+        that.addTabled(controls.hz[type]);
     }
 
     labelIn = gLabel("--").w(60).fontSize(10);
-    that.addContent(labelIn);
+    that.addTabled(labelIn);
     that.addIn("hz");
 
     labelOut = gLabel("--").w(60).fontSize(10);
-    that.addContent(labelOut);
+    that.addTabled(labelOut);
     that.addOut("hz");
 
     that.nextRow();

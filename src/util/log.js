@@ -10,7 +10,7 @@ var log = {
     },
 
     info: function (msg) {
-        return log.update("INFO", msg, true);
+        return log.update("INFO", msg);
     },
 
     obj: function (obj) {

@@ -3,23 +3,20 @@
 /*global note*/
 /*global document*/
 /*global util*/
+/*global gBase*/
 
-function wVKey(container, keyDown, keyUp) {
-    var that = {},
+function wVKey(keyDown, keyUp) {
+    var that = gBase().setClass("vkey-container").h(160),
         i = 0,
-        box,
         keys = 60,
         startKey = 16,
         nextX = 0,
         isDown = false;
 
-    function addKey(container, note) {
-        var key = document.createElement("div"),
+    function addKey(note) {
+        var key = gBase(),
             flat = true,
             keyX = 0;
-
-        key.id = "vkeyb-note-" + note;
-        key.note = note;
 
         key.onmousedown = function (e) {
             gui.captureMouse(e);
@@ -27,13 +24,13 @@ function wVKey(container, keyDown, keyUp) {
         key.onmouseover = function (e) {
             util.unused(e);
             if (isDown) {
-                keyDown(key.note);
+                keyDown(note);
             }
         };
         key.iMouseCaptured = function (e) {
             util.unused(e);
             isDown = true;
-            keyDown(key.note);
+            keyDown(note);
         };
         key.iMouseUpAfterCapture = function (e) {
             util.unused(e);
@@ -41,7 +38,7 @@ function wVKey(container, keyDown, keyUp) {
             isDown = false;
         };
 
-        container.appendChild(key);
+        that.add(key);
 
         if (note % 12 === 2 || note % 12 === 5 || note % 12 === 7
                 || note % 12 === 10 || note % 12 === 0) {
@@ -50,8 +47,10 @@ function wVKey(container, keyDown, keyUp) {
 
         if (flat) {
             key.className = "vkey-key-flat";
+            key.w(32).h(160);
         } else {
             key.className = "vkey-key-sharp";
+            key.w(24).h(96);
         }
         keyX = nextX;
 
@@ -60,10 +59,7 @@ function wVKey(container, keyDown, keyUp) {
         } else {
             keyX -= gui.getStyleInt(key, "width") / 2;
         }
-
-        key.style.left = keyX + "px";
-        key.style.top = "0px";
-
+        key.left(keyX).top(0);
         return key;
     }
 
@@ -91,13 +87,10 @@ function wVKey(container, keyDown, keyUp) {
         keyUp();
     };
 
-    box = document.createElement("div");
-    box.className = "vkey-container";
-    container.appendChild(box);
-
     for (i = 0; i < keys; i += 1) {
-        addKey(box, startKey + i);
+        addKey(startKey + i);
     }
+    that.w(nextX);
     that.typeIs = "wVKey";
     return that;
 }

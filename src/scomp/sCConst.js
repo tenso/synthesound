@@ -14,7 +14,7 @@ function sCConst(container, uid) {
     }, "value");
 
     that.addOut("value");
-    that.addContent(controls.value.value);
+    that.addTabled(controls.value.value);
 
     that.setGuiControls(controls);
     return that;

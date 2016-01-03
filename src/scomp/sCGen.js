@@ -16,7 +16,7 @@ function sCGen(container, uid) {
         if (out.getArgs().type === shape) {
             button.set(true);
         }
-        that.addContent(button);
+        that.addTabled(button);
     }
 
     ampControl = gInput(out.getArgs().amp, function (value) {
@@ -24,7 +24,7 @@ function sCGen(container, uid) {
     }, "amp");
 
     that.addIn("gen", "freq").addOut("gen");
-    that.addContent(ampControl);
+    that.addTabled(ampControl);
 
     that.nextRow();
     addShape("sine");

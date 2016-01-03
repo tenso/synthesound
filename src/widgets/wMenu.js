@@ -2,9 +2,10 @@
 /*global gWidget*/
 /*global gLabel*/
 
-function wMenu(container) {
-    var that = gWidget(container);
+function wMenu() {
+    var that = gWidget();
 
+    //FIXME: buildButton changes that!
     function buildButton(string, callback) {
         var entry,
             originalBg;
@@ -32,15 +33,15 @@ function wMenu(container) {
         that.remove();
     }
 
-    that.add = function (string, callback) {
-        that.addContent(buildButton(string, callback));
+    that.addRow = function (string, callback) {
+        that.addTabled(buildButton(string, callback));
         return that;
     };
 
     that.addOverlayed = function (string, element) {
         var entry = buildButton(string);
-        entry.appendChild(element);
-        that.addContent(entry);
+        entry.add(element);
+        that.addTabled(entry);
         return that;
     };
 
@@ -52,6 +53,7 @@ function wMenu(container) {
         }
         return that;
     };
+
     that.typeIs = "wMenu";
     that.canMove(false).removeOnLeave(true);
     return that;

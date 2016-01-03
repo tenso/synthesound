@@ -1,12 +1,8 @@
 .vkey-container {
-    width: 1122px; /*FIXME: zoom will not work for this*/
-    height: 160px;
     position: relative;
 }
 .vkey-key-flat {
     position: absolute;
-    width: 32px;
-    height: 160px;
     background: #fff;
     border: 1px solid #000;
     border-radius: 4px;
@@ -19,8 +15,6 @@
 
 .vkey-key-sharp {
     position: absolute;
-    width: 24px;
-    height: 96px;
     background: #000;
     border: 1px solid #fff;
     border-radius: 4px;

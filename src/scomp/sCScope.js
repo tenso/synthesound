@@ -14,7 +14,7 @@ function sCScope(container, uid) {
     scopes[0] = gScope().drawGraph();
     scopes[1] = gScope().drawGraph();
 
-    that.nextRow().addContent(scopes[0], true).nextRow().addContent(scopes[1], true);
+    that.nextRow().addTabled(scopes[0], true).nextRow().addTabled(scopes[1], true);
 
     return that;
 }

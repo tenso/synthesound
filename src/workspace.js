@@ -79,7 +79,7 @@ function workspace() {
     function initSComp() {
         that.iOpenContextMenu = function (e, mouse) {
             util.unused(e);
-            var menu = wMenu(that).move(mouse.x - 20, mouse.y - 20),
+            var menu = wMenu().move(mouse.x - 20, mouse.y - 20),
                 sConstructor;
 
             function menuEntry(id, xPos, yPos) {
@@ -89,9 +89,11 @@ function workspace() {
                 };
             }
 
+            that.add(menu);
+
             for (sConstructor in constructorMap) {
                 if (constructorMap.hasOwnProperty(sConstructor)) {
-                    menu.add(lang.tr(sConstructor), menuEntry(sConstructor, mouse.x, mouse.y));
+                    menu.addRow(lang.tr(sConstructor), menuEntry(sConstructor, mouse.x, mouse.y));
                 }
             }
         };
@@ -139,7 +141,7 @@ function workspace() {
             i;
 
         for (i = 0; i < nodes.length; i += 1) {
-            if (typeof nodes[i].data === "function") {
+            if (typeof nodes[i].setMs === "function") {
                 nodes[i].setMs(timeTracker.currentMs());
             }
         }
@@ -167,10 +169,11 @@ function workspace() {
                 workspace: []
             };
 
-        //assumptions is that if it has a data property it should be saved.
         for (i = 0; i < nodes.length; i += 1) {
-            if (typeof nodes[i].data === "function") {
-                data.workspace.push(nodes[i].data());
+            if (typeof nodes[i].typeClass === "string") {
+                if (nodes[i].typeClass === "sCBase") {
+                    data.workspace.push(nodes[i].data());
+                }
             }
         }
 

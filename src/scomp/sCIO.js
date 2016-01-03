@@ -6,9 +6,8 @@
 /*global document*/
 /*global util*/
 
-function sCIO(container) {
-    var that = {},
-        linesCanvas = document.createElement("canvas"),
+function sCIO() {
+    var that = document.createElement("canvas"),
         linesCtx,
         connections = [];
 
@@ -62,26 +61,26 @@ function sCIO(container) {
             return;
         }
 
-        linesCtx.clearRect(0, 0, linesCanvas.width, linesCanvas.height);
+        linesCtx.clearRect(0, 0, that.width, that.height);
 
         for (i = 0; i < connections.length; i += 1) {
             to = connections[i].to();
             from = connections[i].from();
-            drawLine(gui.getOffsetInElement(from, container).x + gui.getSize(from).w / 2,
-                         gui.getOffsetInElement(from, container).y + gui.getSize(from).h / 2,
-                         gui.getOffsetInElement(to, container).x + gui.getSize(to).w / 2,
-                         gui.getOffsetInElement(to, container).y + gui.getSize(to).h / 2);
+            drawLine(gui.getOffsetInElement(from, that.parentNode).x + gui.getSize(from).w / 2,
+                         gui.getOffsetInElement(from, that.parentNode).y + gui.getSize(from).h / 2,
+                         gui.getOffsetInElement(to, that.parentNode).x + gui.getSize(to).w / 2,
+                         gui.getOffsetInElement(to, that.parentNode).y + gui.getSize(to).h / 2);
         }
     };
 
     that.resizeCanvas = function () {
-        var workspaceWidth = container.scrollWidth,
-            workspaceHeight = container.scrollHeight;
+        var workspaceWidth = that.parentNode.scrollWidth,
+            workspaceHeight = that.parentNode.scrollHeight;
 
-        linesCanvas.width = workspaceWidth;
-        linesCanvas.height = workspaceHeight;
-        linesCanvas.style.width = workspaceWidth + "px";
-        linesCanvas.style.height = workspaceHeight + "px";
+        that.width = workspaceWidth;
+        that.height = workspaceHeight;
+        that.style.width = workspaceWidth + "px";
+        that.style.height = workspaceHeight + "px";
         that.drawConnections();
     };
 
@@ -221,10 +220,11 @@ function sCIO(container) {
             }
 
             if (targetConnections.length) {
-                menu = wMenu(container).move(mouse.x - 20, mouse.y - 20);
+                menu = wMenu().move(mouse.x - 20, mouse.y - 20);
+                that.parentNode.add(menu);
 
                 for (i = 0; i < targetConnections.length; i += 1) {
-                    menu.add(e.target.sComp.typeId() + " > "
+                    menu.addRow(e.target.sComp.typeId() + " > "
                              + targetConnections[i].sComp.typeId() + " "
                              + targetConnections[i].portType + " "
                              + (targetConnections[i].isOut ? "out" : "in"), makeDelCb(menu, e.target, targetConnections[i]));
@@ -233,12 +233,10 @@ function sCIO(container) {
         };
     };
 
-    container.appendChild(linesCanvas);
-    linesCanvas.className = "gIOCanvas";
-    linesCtx = linesCanvas.getContext("2d");
+    that.className = "gIOCanvas";
+    linesCtx = that.getContext("2d");
     linesCtx.strokeStyle = "#000";
     linesCtx.lineWidth = 2;
-    that.resizeCanvas();
 
     return that;
 }

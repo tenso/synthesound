@@ -20,7 +20,7 @@ var sCGlobal = {
 };
 
 function sCBase(context, type, sComps, uid) {
-    var that = gWidget(context, lang.tr(type)),
+    var that = gWidget(),
         ports = {},
         myUID,
         seq = {},
@@ -220,6 +220,10 @@ function sCBase(context, type, sComps, uid) {
         }
     };
 
+    that.setTitle(lang.tr(type));
+    that.addRemove(makeRemoveAllConnections());
+    context.add(that);
+
     if (typeof uid === "number") {
         myUID = uid;
     } else {
@@ -227,9 +231,8 @@ function sCBase(context, type, sComps, uid) {
     }
 
     initStates();
-    that.typeClass = "sCComp";
-    that.typeIs = type || "sCComp";
-    that.addRemove(makeRemoveAllConnections());
+    that.typeClass = "sCBase";
+    that.typeIs = type || "sCBase";
     that.clearPorts();
 
     return that;

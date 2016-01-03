@@ -5,8 +5,9 @@
 /*global lang*/
 /*global app*/
 
-function workbar(container, workspace) {
-    var that = gWidget(container),
+/*FIXME: rename to workBar (or rename menuBar to menubar)*/
+function workbar(workspace) {
+    var that = gWidget(),
         time;
 
     that.updateTime = function (str) {
@@ -17,19 +18,20 @@ function workbar(container, workspace) {
     that.z(10000).border("0").h(app.screen.maxBottom).radius(0).padding(0).canMove(false).bottom(0);
     that.w("100%");
 
-    that.addContent(gButton(lang.tr("stop"), function () {
+    that.addTabled(gButton(lang.tr("stop"), function () {
         workspace.stop();
     }).bg("#f00"));
 
-    that.addContent(gButton(">", function () {
+    that.addTabled(gButton(">", function () {
         workspace.play();
     }));
 
     time = gLabel("--:--:--").fontFamily("monospace");
-    that.addContent(time);
+    that.addTabled(time);
 
     workspace.timeUpdated = function (time) {
         that.updateTime(time);
     };
+
     return that;
 }

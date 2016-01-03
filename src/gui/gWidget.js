@@ -9,21 +9,13 @@
 
 /*FIXME: should be called gContainer maybe?*/
 
-function gWidget(container, titleLabel) {
-    var that = gBase();
-
-    function makeTitle() {
-        var titleElem = gBase().marginRight(20);//that is close buttons width
-
-        titleElem.textContent = titleLabel;
-        return titleElem;
-    }
+function gWidget() {
+    var that = gBase(),
+        titleElem = gBase().marginRight(20); //that is close buttons width
 
     function containerInit() {
         if (!that) {
             log.error("gui.containerInit: that is undefined");
-        } else if (!container) {
-            log.error("gui.containerInit: container is undefined");
         }
         that.typeIs = "gWidget";
         that.typeClass = "gWidget";
@@ -33,25 +25,25 @@ function gWidget(container, titleLabel) {
 
         that.titleRow = gBase();
         that.titleRow.setClass("gWidgetTitle");
-        that.appendChild(that.titleRow);
+        that.add(that.titleRow);
 
         //that.table = gBase("table"); //FIXME: gives borders!!
         that.table = document.createElement("table");
         that.table.className = "gWidgetTable";
 
-        if (typeof titleLabel === "string") {
-            that.titleRow.appendChild(makeTitle());
-        }
-
-        that.appendChild(that.table);
-        container.appendChild(that);
-
+        that.titleRow.add(titleElem);
+        that.add(that.table);
         that.nextRow();
     }
 
+    that.setTitle = function (title) {
+        titleElem.textContent = title;
+        return that;
+    };
+
     that.nextRow = function () {
         that.content = gBase("tr").setClass("gWidgetRow");
-        that.table.appendChild(that.content);
+        that.table.appendChild(that.content); //FIXME: not a gBase
         return that;
     };
 
@@ -60,13 +52,14 @@ function gWidget(container, titleLabel) {
     };
 
     that.remove = function () {
-        container.removeChild(that);
+        that.parentNode.removeChild(that);
+        return that;
     };
 
-    that.addContent = function (content, wholeRow) {
+    that.addTabled = function (content, wholeRow) {
         var cont = gBase("td").setClass("gWidgetCell");
-        cont.appendChild(content);
-        that.content.appendChild(cont);
+        cont.add(content);
+        that.content.add(cont);
         if (wholeRow) {
             cont.colSpan = 1000;
         }
@@ -80,9 +73,9 @@ function gWidget(container, titleLabel) {
         //if we know its gBase: content.margin("0 auto");
         content.style.margin = "auto";
 
-        cont.appendChild(contLabel);
-        cont.appendChild(content);
-        that.addContent(cont);
+        cont.add(contLabel);
+        cont.add(content);
+        that.addTabled(cont);
         return that;
     };
 
@@ -95,7 +88,7 @@ function gWidget(container, titleLabel) {
         }).abs().setClass("button gWidgetCloseButton");
 
 
-        that.titleRow.appendChild(button);
+        that.titleRow.add(button);
         return that;
     };
 

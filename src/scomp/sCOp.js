@@ -14,7 +14,7 @@ function sCOp(container, uid) {
         if (out.getArgs().op === op) {
             button.set();
         }
-        that.addContent(button);
+        that.addTabled(button);
     }
 
     that.addIn("op").addOut("op");

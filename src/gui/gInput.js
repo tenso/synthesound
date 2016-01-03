@@ -1,6 +1,5 @@
 "use strict";
 /*global gBase*/
-/*global gWidget*/
 /*global gLabel*/
 /*global util*/
 
@@ -19,8 +18,8 @@ function gInput(value, callback, label) {
         callback(input.value);
     };
 
-    that.appendChild(gLabel(label));
-    that.appendChild(input);
+    that.add(gLabel(label));
+    that.add(input);
     input.typeIs = "gInput";
     return that;
 }

@@ -21,13 +21,13 @@ function wMenuButton(name, group) {
         }
     };
 
-    that.add = function (name, callback) {
+    that.addRow = function (name, callback) {
         var cb = function () {
             callback();
             //FIXME: does not work:
             //that.menu.show(false);
         };
-        that.menu.add(name, cb);
+        that.menu.addRow(name, cb);
     };
 
     that.addOverlayed = function (name, element) {
@@ -35,7 +35,8 @@ function wMenuButton(name, group) {
     };
 
     that.typeIs = "wMenuButton";
-    that.menu = wMenu(that).removeOnLeave(false).show(false);
+    that.menu = wMenu().removeOnLeave(false).show(false);
+    that.appendChild(that.menu);
     group.push(that);
 
     return that;
