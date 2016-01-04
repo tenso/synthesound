@@ -220,6 +220,16 @@ function sCBase(container, type, sComps, uid) {
         }
     };
 
+    that.saveArgs =  function (ms) {
+        var sId;
+        for (sId in seq) {
+            if (seq.hasOwnProperty(sId)) {
+                seq[sId].saveAt(ms);
+            }
+        }
+        return that;
+    };
+
     that.setTitle(lang.tr(type));
     that.addRemove(makeRemoveAllConnections());
     container.add(that);

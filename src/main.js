@@ -86,15 +86,18 @@ window.onload = function () {
 
     audioWork = workspace();
     audioBar = workbar(audioWork);
+    audioBar.changeMs = audioWork.setMs;
     gIO = sCIO();
     topMenu = menubar(audioWork).move(0, 0);
-    input = guiInput(audioWork, gIO.resizeCanvas);
+    input = guiInput(audioWork, gIO.resizeCanvas); //resize is when scrollWidth/scrollHeigth changes
     gui.setInputHandler(input);
 
     guiApp.add(topMenu);
     guiApp.add(audioWork);
     audioWork.add(gIO);
     guiApp.add(audioBar);
+
+    audioBar.resizeCanvas();
 
     //DEBUG:
     input.mouseOver = function (e, mouseCapturer) {
@@ -118,7 +121,6 @@ window.onload = function () {
 
     if (audioWork.init()) {
         audioWork.onworkspacechanged = gIO.resizeCanvas; //update size of canvas on load
-        window.addEventListener("resize", gIO.resizeCanvas); //update size of canvas on window-resize
     } else {
         topMenu.logError("need AudioContext and Array.fill");
     }

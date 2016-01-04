@@ -16,6 +16,12 @@ function sSequence(sComp, sId, argUpdateCb) {
     that.moveToMs = function (ms) {
         var i;
 
+        if (ms < atMs) {
+            //jump back in time, activate prev. state
+            //NOTE: activate all prev steps so complete states are not needed
+            atMs = -1;
+        }
+
         for (i = 0; i < seqData.length; i += 1) {
             if (seqData[i].ms > atMs && seqData[i].ms <= ms) {
                 sComp.setArgs(seqData[i].args);
@@ -27,6 +33,7 @@ function sSequence(sComp, sId, argUpdateCb) {
         atMs = ms;
     };
 
+    //FIXME: dont want complete states, only changes
     that.saveAt = function (ms) {
         var i,
             at = ms || atMs,

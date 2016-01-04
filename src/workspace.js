@@ -68,6 +68,7 @@ function workspace() {
             comp = constructorMap[data.type](that, data.uid);
             comp.setArgs(data.sArgs);
             comp.setMs(timeTracker.currentMs());
+            comp.saveArgs();
             comp.move(data.x, data.y);
         } else {
             log.error("workspace: dont know sId:" + data.type);
@@ -146,7 +147,7 @@ function workspace() {
         }
 
         if (typeof that.timeUpdated === "function") {
-            that.timeUpdated(timeTracker.timeString());
+            that.timeUpdated(timeTracker.timeString(), timeTracker.currentMs(), timeTracker.totalMs());
         }
     }
 
@@ -160,11 +161,18 @@ function workspace() {
         updateTime();
     }
 
+    that.setMs = function (ms) {
+        timeTracker.setCurrentMs(ms);
+        updateTime();
+        return that;
+    };
+
     that.data = function () {
         var nodes =  that.childNodes,
             i,
             data = {
                 app: app,
+                tracker: {},
                 workspace: []
             };
 
@@ -175,7 +183,7 @@ function workspace() {
                 }
             }
         }
-
+        data.tracker = timeTracker.data();
         data.connections = gIO.data();
 
         return data;
@@ -206,6 +214,9 @@ function workspace() {
         if (that.onworkspacechanged) {
             that.onworkspacechanged();
         }
+
+        log.info("load tracker");
+        timeTracker.load(data.tracker);
     };
 
     that.init = function () {

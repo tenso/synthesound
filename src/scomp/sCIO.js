@@ -5,6 +5,7 @@
 /*global ioCon*/
 /*global gBase*/
 /*global util*/
+/*global window*/
 
 function sCIO() {
     var that = gBase("canvas"),
@@ -232,6 +233,8 @@ function sCIO() {
             }
         };
     };
+
+    window.addEventListener("resize", that.resizeCanvas); //update size of canvas on window-resize
 
     that.className = "gIOCanvas";
     linesCtx = that.getContext("2d");

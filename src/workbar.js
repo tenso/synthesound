@@ -8,7 +8,7 @@
 
 function workbar(workspace) {
     var that = gWidget(),
-        bar = wTimeBar(),
+        timeBar = wTimeBar(),
         stop,
         play,
         marginX = 4,
@@ -16,10 +16,12 @@ function workbar(workspace) {
         buttonH = 16,
         time;
 
-    that.updateTime = function (str) {
-        time.setValue(str);
+    that.resizeCanvas = function () {
+        timeBar.resizeCanvas();
         return that;
     };
+
+    that.changeMs = undefined;
 
     stop = gButton(lang.tr("stop"), function () {
         workspace.stop();
@@ -36,10 +38,18 @@ function workbar(workspace) {
     stop.addTo(that).abs().x(marginX).y(marginY);
     play.addTo(that).abs().x(60 + marginX).y(marginY);
     time.addTo(that).abs().x(120 + marginX).y(marginY);
-    bar.addTo(that).abs().left(marginX).right(marginX).top(buttonH + 2 * marginY).bottom(marginY);
+    timeBar.addTo(that).abs().left(marginX).right(marginX).top(buttonH + 2 * marginY).bottom(marginY);
 
-    workspace.timeUpdated = function (time) {
-        that.updateTime(time);
+    timeBar.changeMs = function (ms) {
+        if (typeof that.changeMs === "function") {
+            that.changeMs(ms);
+        }
+    };
+
+    workspace.timeUpdated = function (timeStr, currentMs, totalMs) {
+        time.setValue(timeStr);
+        timeBar.setTotalMs(totalMs);
+        timeBar.setCurrentMs(currentMs);
     };
 
     return that;

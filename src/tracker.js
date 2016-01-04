@@ -8,14 +8,39 @@ function tracker(sampleRate) {
         bpm = 60,
         currentMs = 0,
         quantization = 1,
-        currentFrame = 0;
+        currentFrame = 0,
+        totalMs = 60000;
+
+    that.data = function () {
+        return {
+            bpm: bpm,
+            totalMs: totalMs,
+            quantization: quantization,
+            currentMs: currentMs
+        };
+    };
+
+    that.load = function (data) {
+        bpm = data.bpm;
+        totalMs = data.totalMs;
+        quantization = data.quantization;
+        currentMs = data.currentMs;
+    };
 
     that.setBpm = function (value) {
         bpm = value;
     };
 
-    that.getBpm = function () {
+    that.bpm = function () {
         return bpm;
+    };
+
+    that.setTotalMs = function (value) {
+        totalMs = value;
+    };
+
+    that.totalMs = function () {
+        return totalMs;
     };
 
     that.setQuantization = function (value) {
@@ -31,6 +56,11 @@ function tracker(sampleRate) {
         currentFrame += frames;
         currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
     };
+
+    that.setCurrentMs = function (ms) {
+        currentMs = ms;
+        currentFrame = parseInt(currentMs * sampleRate / 1000, 10);
+    }
 
     that.currentMs = function () {
         return currentMs;
