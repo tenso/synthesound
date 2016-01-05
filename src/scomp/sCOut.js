@@ -22,8 +22,8 @@ function sCOut(container, uid) {
 
     that.addIn("mix");
     that.nextRow();
-    that.addLabeledContent(controls.mix.gainL, "L");
-    that.addLabeledContent(controls.mix.gainR, "R");
+    that.addTabled(controls.mix.gainL, "L");
+    that.addTabled(controls.mix.gainR, "R");
 
     that.setGuiControls(controls);
 

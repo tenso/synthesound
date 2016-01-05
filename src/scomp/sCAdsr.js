@@ -24,10 +24,10 @@ function sCAdsr(container, uid) {
     controls.adsr.r = gSlider(adsr.getArgs().r, 0.01, 1.0, makeSet("r"));
 
     that.nextRow();
-    that.addLabeledContent(controls.adsr.a, "A");
-    that.addLabeledContent(controls.adsr.d, "D");
-    that.addLabeledContent(controls.adsr.s, "S");
-    that.addLabeledContent(controls.adsr.r, "R");
+    that.addTabled(controls.adsr.a, "A");
+    that.addTabled(controls.adsr.d, "D");
+    that.addTabled(controls.adsr.s, "S");
+    that.addTabled(controls.adsr.r, "R");
 
     that.setGuiControls(controls);
     return that;

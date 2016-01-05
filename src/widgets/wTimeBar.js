@@ -74,6 +74,10 @@ function wTimeBar() {
         return that;
     };
 
+    that.setTimeParams = function (bpm, quant) {
+        return that;
+    };
+
     that.changeCurrentMs = undefined;
 
     canvas.onmousedown = function (e) {

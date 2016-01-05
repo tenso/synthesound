@@ -11,6 +11,18 @@ function gWidget() {
     var that = gBase(),
         titleElem = gBase().marginRight(20); //that is close buttons width
 
+    function makeLabeledCont(content, label) {
+        var cont = gBase().display("inline-block"),
+            contLabel = gLabel(label);
+
+        //if we know its gBase: content.margin("0 auto");
+        content.style.margin = "auto";
+
+        cont.add(contLabel);
+        cont.add(content);
+        return cont;
+    }
+
     function containerInit() {
         that.typeIs = "gWidget";
         that.typeClass = "gWidget";
@@ -51,26 +63,19 @@ function gWidget() {
         return that;
     };
 
-    that.addTabled = function (content, wholeRow) {
-        var cont = gBase("td").setClass("gWidgetCell");
-        cont.add(content);
+    that.addTabled = function (content, label, wholeRow) {
+        var cont = gBase("td").setClass("gWidgetCell"),
+            contentToAdd = content;
+
+        if (label !== "") {
+            contentToAdd = makeLabeledCont(content, label);
+        }
+
+        cont.add(contentToAdd);
         that.content.add(cont);
         if (wholeRow) {
             cont.colSpan = 1000;
         }
-        return that;
-    };
-
-    that.addLabeledContent = function (content, label) {
-        var cont = gBase().display("inline-block"),
-            contLabel = gLabel(label);
-
-        //if we know its gBase: content.margin("0 auto");
-        content.style.margin = "auto";
-
-        cont.add(contLabel);
-        cont.add(content);
-        that.addTabled(cont);
         return that;
     };
 

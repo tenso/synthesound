@@ -46,6 +46,11 @@ function gButton(name, callback, isRadio, buttonGroup) {
         }
     };
 
+    that.setTitle = function (title) {
+        that.textContent = title;
+        return that;
+    };
+
     that.name = name;
     that.isRadio = isRadio;
     that.setClass("button-class");

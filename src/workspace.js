@@ -252,9 +252,19 @@ function workspace() {
 
         timeTracker = tracker(that.sampleRate());
         out.runIndexUpdated = stepFrame;
+        that.setTimeParams(120, 4);
         setFrames(0);
 
         return true;
+    };
+
+    that.setTimeParams = function (bpm, quant) {
+        timeTracker.setBpm(bpm);
+        timeTracker.setQuantization(quant);
+
+        if (typeof that.timeParamsUpdated === "function") {
+            that.timeParamsUpdated(bpm, quant);
+        }
     };
 
     that.sampleRate = function () {
@@ -290,6 +300,7 @@ function workspace() {
     //callbacks
     that.onworkspacechanged = undefined;
     that.timeUpdated = undefined;
+    that.timeParamsUpdated = undefined;
     that.currentSCompUpdated = undefined;
 
     sCGlobal.currentUpdated = function (comp) {

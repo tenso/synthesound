@@ -13,8 +13,8 @@ function sCDelay(container, uid) {
 
     that.addIn("delay").addOut("delay");
     that.nextRow();
-    that.addLabeledContent(controls.delay.gain, "G");
-    that.addLabeledContent(controls.delay.delay, "D");
+    that.addTabled(controls.delay.gain, "G");
+    that.addTabled(controls.delay.delay, "D");
 
     that.setGuiControls(controls);
 

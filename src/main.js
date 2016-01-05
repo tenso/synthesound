@@ -89,8 +89,10 @@ window.onload = function () {
 
     audioBar.changeCurrentMs = audioWork.setCurrentMs;
     audioBar.changeTotalMs = audioWork.setTotalMs;
+    audioBar.changeTimeParams = audioWork.setTimeParams;
     audioWork.timeUpdated = audioBar.setTime;
     audioWork.currentSCompUpdated = audioBar.setCurrentSComp;
+    audioWork.timeParamsUpdated = audioBar.setTimeParams;
 
     gIO = sCIO();
     topMenu = menubar(audioWork).move(0, 0);
@@ -105,14 +107,14 @@ window.onload = function () {
     audioBar.resizeCanvas();
 
     //DEBUG:
-    input.mouseOver = function (e, mouseCapturer) {
+    /*input.mouseOver = function (e, mouseCapturer) {
         util.unused(mouseCapturer);
 
         var eType = e.target.typeIs || "",
             eTypeClass = e.target.typeClass || "";
 
         topMenu.setNote(eType + " : " + eTypeClass);
-    };
+    };*/
 
     if (!test.verifyFunctionality(URL.createObjectURL, "URL.createObjectURL")
             || !test.verifyFunctionality(URL.revokeObjectURL, "URL.revokeObjectURL")) {

@@ -19,6 +19,9 @@ function workbar(workspace) {
         buttonH = 16,
         totalTime,
         sComp,
+        toggleSize,
+        bpmInput,
+        quantInput,
         time;
 
     /*FIXME: render sArgs, move*/
@@ -57,6 +60,12 @@ function workbar(workspace) {
 
     /**/
 
+    function updateBpmAndQuantification() {
+        if (typeof that.changeTimeParams === "function") {
+            that.changeTimeParams(bpmInput.getValueInt(), quantInput.getValueInt());
+        }
+    }
+
     function setTotalTime() {
         var total = util.stringToMs(totalTime.getValue());
         if (typeof that.changeTotalMs === "function") {
@@ -81,6 +90,12 @@ function workbar(workspace) {
         return that;
     };
 
+    that.setTimeParams = function (bpm, quant) {
+        bpmInput.setValue(bpm);
+        quantInput.setValue(quant);
+        timeBar.setTimeParams(bpm, quant);
+    };
+
     that.setCurrentSComp = function (comp) {
         sComp = comp;
 
@@ -92,9 +107,13 @@ function workbar(workspace) {
         return that;
     };
 
+    that.z(10000).border("0").h(app.screen.maxBottom).radius(0).padding(0).canMove(false).bottom(0);
+    that.w("100%");
+
     //callbacks:
     that.changeCurrentMs = undefined;
     that.changeTotalMs = undefined;
+    that.changeTimeParams = undefined;
 
     stop = gButton(lang.tr("stop"), function () {
         workspace.stop();
@@ -106,13 +125,29 @@ function workbar(workspace) {
     time = gLabel("--:--:--").fontFamily("monospace");
     totalTime = gInput("--:--:--", setTotalTime, "").fontFamily("monospace");
 
-    that.z(10000).border("0").h(app.screen.maxBottom).radius(0).padding(0).canMove(false).bottom(0);
-    that.w("100%");
+    bpmInput = gInput("", updateBpmAndQuantification, "bpm", 30).labelPos("left");
+    quantInput = gInput("", updateBpmAndQuantification, "quant 1/", 30).labelPos("left");
+
+    toggleSize = gButton("^", function () {
+        if (that.getH() > app.screen.maxBottom) {
+            that.h(app.screen.maxBottom);
+            toggleSize.setTitle("^");
+        } else {
+            that.h("80%");
+            toggleSize.setTitle("-");
+        }
+        timeBar.resizeCanvas();
+    });
 
     stop.addTo(that).abs().x(marginX).y(marginY);
     play.addTo(that).abs().x(60 + marginX).y(marginY);
     time.addTo(that).abs().x(120 + marginX).y(marginY);
     totalTime.addTo(that).abs().x(200 + marginX).y(marginY);
+    bpmInput.addTo(that).abs().x(300 + marginX).y(marginY);
+    quantInput.addTo(that).abs().x(400 + marginX).y(marginY);
+
+    toggleSize.addTo(that).abs().right(marginX).y(marginY);
+
     timeBar.addTo(that).abs().left(marginX).right(marginX).top(buttonH + 2 * marginY).bottom(marginY);
 
     timeBar.changeCurrentMs = function (ms) {

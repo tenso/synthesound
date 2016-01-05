@@ -149,7 +149,7 @@ function sCBase(container, type, sComps, uid) {
         }
 
         var port = inPort(that.uid(), sComps[sId], sId, type);
-        that.addLabeledContent(port, type || "in");
+        that.addTabled(port, type || "in");
         ports[sId].push(port);
         return that;
     };
@@ -161,7 +161,7 @@ function sCBase(container, type, sComps, uid) {
         }
 
         var port = outPort(that.uid(), sComps[sId], sId, type);
-        that.addLabeledContent(port, type || sId || "out");
+        that.addTabled(port, type || sId || "out");
         ports[sId].push(port);
         return that;
     };

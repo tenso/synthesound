@@ -18,16 +18,16 @@ function sCNotePitch(container, uid) {
             args = {};
             args[type] = parseInt(value, 10);
             that.setAndSaveArgs("hz", args);
-        }, type);
+        }, type, 30);
 
         that.addTabled(controls.hz[type]);
     }
 
-    labelIn = gLabel("--").w(60).fontSize(10);
+    labelIn = gLabel("--").w(60).fontSize(12);
     that.addTabled(labelIn);
     that.addIn("hz");
 
-    labelOut = gLabel("--").w(60).fontSize(10);
+    labelOut = gLabel("--").w(60).fontSize(12);
     that.addTabled(labelOut);
     that.addOut("hz");
 
