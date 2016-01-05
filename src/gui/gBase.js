@@ -85,6 +85,16 @@ function gBase(type) {
         return that;
     };
 
+    that.overflowX = function (value) {
+        that.style.overflowX = value;
+        return that;
+    };
+
+    that.overflowY = function (value) {
+        that.style.overflowY = value;
+        return that;
+    };
+
     that.abs = function () {
         return that.pos("absolute");
     };

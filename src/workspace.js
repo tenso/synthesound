@@ -252,7 +252,7 @@ function workspace() {
 
         timeTracker = tracker(that.sampleRate());
         out.runIndexUpdated = stepFrame;
-        that.setTimeParams(120, 4);
+        that.setTimeParams(120, 1 / 4);
         setFrames(0);
 
         return true;
@@ -263,7 +263,7 @@ function workspace() {
         timeTracker.setQuantization(quant);
 
         if (typeof that.timeParamsUpdated === "function") {
-            that.timeParamsUpdated(bpm, quant);
+            that.timeParamsUpdated(bpm, quant, timeTracker.measureMs());
         }
     };
 

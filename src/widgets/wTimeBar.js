@@ -12,23 +12,41 @@ function wTimeBar() {
         halfH = that.height / 2.0,
         totalMs = 1000,
         currentMs = 0,
+        measureMs = 500,
+        quant = 0,
+        bpm = 0,
+        pixelsPerMs = 0,
         renderOver;
 
     function drawBg() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        var ms = 0,
+            timeX = 0;
 
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.strokeStyle = "#aaa";
         ctx.lineWidth = 1;
+
         ctx.beginPath();
         ctx.moveTo(0,  halfH);
         ctx.lineTo(canvas.width, halfH);
+
+
+        if (measureMs > 0) {
+            while (ms < totalMs) {
+                ms += measureMs;
+                timeX = ms * pixelsPerMs;
+                ctx.moveTo(timeX,  0);
+                ctx.lineTo(timeX, canvas.height);
+            }
+        }
+
         ctx.stroke();
 
         return that;
     }
 
     function drawFg() {
-        var timeX = currentMs * canvas.width / totalMs;
+        var timeX = currentMs * pixelsPerMs;
 
         ctx.beginPath();
         ctx.strokeStyle = "#8f8";
@@ -40,11 +58,13 @@ function wTimeBar() {
     }
 
     that.draw = function () {
+        pixelsPerMs = canvas.width / totalMs;
         drawBg();
         if (typeof renderOver === "function") {
-            renderOver(canvas, ctx, currentMs, totalMs, canvas.width / totalMs);
+            renderOver(canvas, ctx, currentMs, totalMs, pixelsPerMs);
         }
         drawFg();
+        return that;
     };
 
     that.resizeCanvas = function () {
@@ -54,19 +74,17 @@ function wTimeBar() {
         canvas.width = workspaceWidth;
         canvas.height = workspaceHeight;
         halfH = canvas.height / 2.0;
-        that.draw();
+        return that.draw();
     };
 
     that.setRenderer = function (render) {
         renderOver = render;
-        that.draw();
-        return that;
+        return that.draw();
     };
 
     that.setCurrentMs = function (ms) {
         currentMs = ms;
-        that.draw();
-        return that;
+        return that.draw();
     };
 
     that.setTotalMs = function (ms) {
@@ -74,8 +92,11 @@ function wTimeBar() {
         return that;
     };
 
-    that.setTimeParams = function (bpm, quant) {
-        return that;
+    that.setTimeParams = function (bpmValue, quantValue, measureMsValue) {
+        bpm = bpmValue;
+        quant = quantValue;
+        measureMs = measureMsValue;
+        return that.draw();
     };
 
     that.changeCurrentMs = undefined;
@@ -86,13 +107,13 @@ function wTimeBar() {
 
     canvas.iMouseCaptured = function (e, mouse) {
         if (typeof that.changeCurrentMs === "function") {
-            that.changeCurrentMs(totalMs * mouse.x / canvas.width);
+            that.changeCurrentMs(totalMs * (that.parentNode.scrollLeft + mouse.x) / canvas.width);
         }
     };
 
     canvas.iMousePressAndMove = function (e, mouse) {
         if (typeof that.changeCurrentMs === "function") {
-            that.changeCurrentMs(totalMs * mouse.x / canvas.width);
+            that.changeCurrentMs(totalMs * (that.parentNode.scrollLeft + mouse.x) / canvas.width);
         }
     };
 

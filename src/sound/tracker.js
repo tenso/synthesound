@@ -44,6 +44,9 @@ function tracker(sampleRate) {
     };
 
     that.setQuantization = function (value) {
+        if (value <= 0) {
+            return;
+        }
         quantization = value;
     };
 
@@ -90,9 +93,12 @@ function test_tracker() {
         full = parseInt(sRate, 10);
 
     track.setBpm(120);
-    track.setQuantization(0.5);
 
+    track.setQuantization(1 / 2);
     test.verify(track.measureMs(), 250);
+    track.setQuantization(1 / 4);
+    test.verify(track.measureMs(), 125);
+    track.setQuantization(1 / 2);
 
     test.verify(track.currentMs(), 0);
     test.verify(track.currentMeasure(), 0);

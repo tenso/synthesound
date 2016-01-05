@@ -8,9 +8,11 @@
 /*global util*/
 /*global gInput*/
 /*global log*/
+/*global gBase*/
 
 function workbar(workspace) {
     var that = gWidget(),
+        timeScroll = gBase(),
         timeBar = wTimeBar(),
         stop,
         play,
@@ -22,6 +24,8 @@ function workbar(workspace) {
         toggleSize,
         bpmInput,
         quantInput,
+        zoomX,
+        zoomY,
         time;
 
     /*FIXME: render sArgs, move*/
@@ -62,7 +66,7 @@ function workbar(workspace) {
 
     function updateBpmAndQuantification() {
         if (typeof that.changeTimeParams === "function") {
-            that.changeTimeParams(bpmInput.getValueInt(), quantInput.getValueInt());
+            that.changeTimeParams(bpmInput.getValueInt(), 1 / quantInput.getValue());
         }
     }
 
@@ -72,6 +76,11 @@ function workbar(workspace) {
             that.changeTotalMs(total);
         }
         return that;
+    }
+
+    function zoomTimeBar() {
+        timeBar.w(zoomX.getValueInt() + "%").h(zoomY.getValueInt() + "%");
+        timeBar.resizeCanvas();
     }
 
     that.resizeCanvas = function () {
@@ -90,10 +99,10 @@ function workbar(workspace) {
         return that;
     };
 
-    that.setTimeParams = function (bpm, quant) {
-        bpmInput.setValue(bpm);
-        quantInput.setValue(quant);
-        timeBar.setTimeParams(bpm, quant);
+    that.setTimeParams = function (bpm, quant, measureMs) {
+        bpmInput.setValue(bpm, true);
+        quantInput.setValue(1 / quant, true);
+        timeBar.setTimeParams(bpm, quant, measureMs);
     };
 
     that.setCurrentSComp = function (comp) {
@@ -107,8 +116,8 @@ function workbar(workspace) {
         return that;
     };
 
-    that.z(10000).border("0").h(app.screen.maxBottom).radius(0).padding(0).canMove(false).bottom(0);
-    that.w("100%");
+    that.z(10000).border("0").radius(0).padding(0).canMove(false);
+    that.w("100%").h(app.screen.maxBottom).bottom(0);
 
     //callbacks:
     that.changeCurrentMs = undefined;
@@ -128,6 +137,9 @@ function workbar(workspace) {
     bpmInput = gInput("", updateBpmAndQuantification, "bpm", 30).labelPos("left");
     quantInput = gInput("", updateBpmAndQuantification, "quant 1/", 30).labelPos("left");
 
+    zoomX = gInput("100", zoomTimeBar, "%", 30).labelPos("left");
+    zoomY = gInput("100", zoomTimeBar, "x %", 30).labelPos("left");
+
     toggleSize = gButton("^", function () {
         if (that.getH() > app.screen.maxBottom) {
             that.h(app.screen.maxBottom);
@@ -144,11 +156,15 @@ function workbar(workspace) {
     time.addTo(that).abs().x(120 + marginX).y(marginY);
     totalTime.addTo(that).abs().x(200 + marginX).y(marginY);
     bpmInput.addTo(that).abs().x(300 + marginX).y(marginY);
-    quantInput.addTo(that).abs().x(400 + marginX).y(marginY);
+    quantInput.addTo(that).abs().x(380 + marginX).y(marginY);
+    zoomX.addTo(that).abs().x(600 + marginX).y(marginY);
+    zoomY.addTo(that).abs().x(660 + marginX).y(marginY);
+
+    timeScroll.addTo(that).abs().left(marginX).right(marginX).top(buttonH + 2 * marginY).bottom(0);
+    timeScroll.overflow("scroll");
 
     toggleSize.addTo(that).abs().right(marginX).y(marginY);
-
-    timeBar.addTo(that).abs().left(marginX).right(marginX).top(buttonH + 2 * marginY).bottom(marginY);
+    timeBar.addTo(timeScroll).abs().left(0).top(0).w("100%").h("100%");
 
     timeBar.changeCurrentMs = function (ms) {
         if (typeof that.changeCurrentMs === "function") {
