@@ -86,7 +86,12 @@ window.onload = function () {
 
     audioWork = workspace();
     audioBar = workbar(audioWork);
-    audioBar.changeMs = audioWork.setMs;
+
+    audioBar.changeCurrentMs = audioWork.setCurrentMs;
+    audioBar.changeTotalMs = audioWork.setTotalMs;
+    audioWork.timeUpdated = audioBar.setTime;
+    audioWork.currentSCompUpdated = audioBar.setCurrentSComp;
+
     gIO = sCIO();
     topMenu = menubar(audioWork).move(0, 0);
     input = guiInput(audioWork, gIO.resizeCanvas); //resize is when scrollWidth/scrollHeigth changes

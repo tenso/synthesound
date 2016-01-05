@@ -67,7 +67,7 @@ function workspace() {
         if (constructorMap.hasOwnProperty(data.type)) {
             comp = constructorMap[data.type](that, data.uid);
             comp.setArgs(data.sArgs);
-            comp.setMs(timeTracker.currentMs());
+            comp.setCurrentMs(timeTracker.currentMs());
             comp.saveArgs();
             comp.move(data.x, data.y);
         } else {
@@ -141,13 +141,18 @@ function workspace() {
             i;
 
         for (i = 0; i < nodes.length; i += 1) {
-            if (typeof nodes[i].setMs === "function") {
-                nodes[i].setMs(timeTracker.currentMs());
+            if (typeof nodes[i].setCurrentMs === "function") {
+                nodes[i].setCurrentMs(timeTracker.currentMs());
             }
         }
 
         if (typeof that.timeUpdated === "function") {
-            that.timeUpdated(timeTracker.timeString(), timeTracker.currentMs(), timeTracker.totalMs());
+            that.timeUpdated(timeTracker.currentMs(), timeTracker.totalMs());
+        }
+
+        if (timeTracker.currentMs() >= timeTracker.totalMs()) {
+            that.setCurrentMs(0);
+            that.stop();
         }
     }
 
@@ -161,8 +166,16 @@ function workspace() {
         updateTime();
     }
 
-    that.setMs = function (ms) {
-        timeTracker.setCurrentMs(ms);
+    that.setCurrentMs = function (ms) {
+        if (ms !== timeTracker.currentMs()) {
+            timeTracker.setCurrentMs(ms);
+            updateTime();
+        }
+        return that;
+    };
+
+    that.setTotalMs = function (ms) {
+        timeTracker.setTotalMs(ms);
         updateTime();
         return that;
     };
@@ -269,10 +282,16 @@ function workspace() {
 
     that.key = undefined; /*FIXME: globally coupled to sCVKey*/
     that.mixerOut = undefined; /*FIXME: globally coupled to sCOut*/
+
+    //callbacks
     that.onworkspacechanged = undefined;
+    that.timeUpdated = undefined;
+    that.currentSCompUpdated = undefined;
 
     sCGlobal.currentUpdated = function (comp) {
-        log.d("show comp:" + comp.uid());
+        if (typeof that.currentSCompUpdated === "function") {
+            that.currentSCompUpdated(comp);
+        }
     };
 
     that.typeIs = "workspace";

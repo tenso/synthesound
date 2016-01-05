@@ -29,6 +29,12 @@ function sCBase(container, type, sComps, uid) {
     function makeRemoveAllConnections() {
         return function () {
             gIO.delAllConnectionsToAndFromUID(that.uid());
+
+            if (sCGlobal.current === that) {
+                sCGlobal.current = undefined;
+                sCGlobal.currentUpdated(sCGlobal.current);
+            }
+
         };
     }
 
@@ -207,9 +213,9 @@ function sCBase(container, type, sComps, uid) {
         return undefined;
     };
 
-    that.setMs = function (ms) {
+    that.setCurrentMs = function (ms) {
         if (typeof ms !== "number" || isNaN(ms)) {
-            log.error("scBase.setMs: ms not a number");
+            log.error("scBase.setCurrentMs: ms not a number");
             return;
         }
         var sId;

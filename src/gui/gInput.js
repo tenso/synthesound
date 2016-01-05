@@ -12,6 +12,18 @@ function gInput(value, callback, label) {
         input.value = value;
     };
 
+    that.getValue = function () {
+        return input.value;
+    };
+
+    that.getValueInt = function () {
+        return parseInt(input.value, 10);
+    };
+
+    that.getValueFloat = function () {
+        return parseFloat(input.value);
+    };
+
     input.value = value;
 
     input.onchange = function () {

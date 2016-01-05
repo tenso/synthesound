@@ -38,14 +38,14 @@ function wTimeBar() {
     };
 
     canvas.iMouseCaptured = function (e, mouse) {
-        if (typeof that.changeMs === "function") {
-            that.changeMs(totalMs * mouse.x / canvas.width);
+        if (typeof that.changeCurrentMs === "function") {
+            that.changeCurrentMs(totalMs * mouse.x / canvas.width);
         }
     };
 
     canvas.iMousePressAndMove = function (e, mouse) {
-        if (typeof that.changeMs === "function") {
-            that.changeMs(totalMs * mouse.x / canvas.width);
+        if (typeof that.changeCurrentMs === "function") {
+            that.changeCurrentMs(totalMs * mouse.x / canvas.width);
         }
     };
 
@@ -75,7 +75,7 @@ function wTimeBar() {
         return that;
     };
 
-    that.changeMs = undefined;
+    that.changeCurrentMs = undefined;
 
     window.addEventListener("resize", that.resizeCanvas);
     that.typeIs = "wTimeBar";
