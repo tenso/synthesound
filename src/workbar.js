@@ -21,11 +21,48 @@ function workbar(workspace) {
         sComp,
         time;
 
+    /*FIXME: render sArgs, move*/
+
+    function renderEvents(canvas, ctx, currentMs, totalMs, pixelsPerMs) {
+        if (!sComp) {
+            log.error("workbar.renderEvents: no sComp");
+            return that;
+        }
+        var sArgs = sComp.getArgs(),
+            type,
+            colors = ["#000", "#f00", "#00f"],
+            currentColor = 0,
+            i,
+            timeX;
+
+        for (type in sArgs) {
+            if (sArgs.hasOwnProperty(type)) {
+                ctx.beginPath();
+                ctx.strokeStyle = colors[currentColor];
+
+                for (i = 0; i < sArgs[type].length; i += 1) {
+                    timeX = sArgs[type][i].ms * pixelsPerMs;
+                    ctx.moveTo(timeX,  0);
+                    ctx.lineTo(timeX, canvas.height);
+                }
+
+                ctx.stroke();
+
+                currentColor += 1;
+                currentColor %= colors.length;
+            }
+        }
+        return that;
+    }
+
+    /**/
+
     function setTotalTime() {
         var total = util.stringToMs(totalTime.getValue());
         if (typeof that.changeTotalMs === "function") {
             that.changeTotalMs(total);
         }
+        return that;
     }
 
     that.resizeCanvas = function () {
@@ -41,16 +78,18 @@ function workbar(workspace) {
         }
         timeBar.setTotalMs(totalMs);
         timeBar.setCurrentMs(currentMs);
+        return that;
     };
 
     that.setCurrentSComp = function (comp) {
         sComp = comp;
 
         if (!comp) {
-            log.d("clear");
+            timeBar.setRenderer(undefined);
         } else {
-            log.d("show comp:" + comp.uid());
+            timeBar.setRenderer(renderEvents);
         }
+        return that;
     };
 
     //callbacks:

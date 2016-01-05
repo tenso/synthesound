@@ -34,8 +34,6 @@ function sCGen(container, uid) {
     addShape("triangle");
     addShape("noise");
 
-
-
     that.setGuiControls({
         gen: {
             type: buttonGroup,

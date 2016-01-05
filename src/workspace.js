@@ -229,7 +229,11 @@ function workspace() {
         }
 
         log.info("load tracker");
-        timeTracker.load(data.tracker);
+        if (data.tracker) {
+            timeTracker.load(data.tracker);
+        } else {
+            log.error("file is missing tracker data");
+        }
     };
 
     that.init = function () {

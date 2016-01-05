@@ -178,10 +178,16 @@ function gBase(type) {
         that.style.border = value;
         return that;
     };
+    that.borderColor = function (value) {
+        that.style.borderColor = value;
+        return that;
+    };
+
     that.radius = function (value) {
         that.style.borderRadius = value + "px";
         return that;
     };
+
     that.color = function (value) {
         that.style.color = value;
         return that;

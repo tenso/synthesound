@@ -12,22 +12,35 @@ function sCVKey(container, uid) {
     var gate = sStep(),
         hz = sConst(),
         that = sCBase(container, "sCVKey", {gate: gate, freq: hz}, uid),
-        currentNote = gLabel("--").abs().move(12, 50).setSize(40, 20).bg("#888").color("#fff").radius(4),
+        currentNote = gLabel("--").abs().move(12, 50).setSize(40, 20).bg("#888").color("#000").border("2px solid #888").radius(4),
         isDown = false,
-        keyboard;
+        keyboard,
+        noteDisplay = {
+            setValue: function () {
+                currentNote.setValue(note.name(note.note(hz.getArgs().value)));
+
+                if (gate.getArgs().active) {
+                    currentNote.borderColor("#f00");
+                } else {
+                    currentNote.borderColor("#888");
+                }
+            }
+        };
+
 
     that.keyDown = function (notePressed) {
+        var hz = note.hz(notePressed);
+
         isDown = true;
-
-        currentNote.setValue(note.name(notePressed));
-
+        that.setAndSaveArgs("freq", {value: hz});
         that.setAndSaveArgs("gate", {active: isDown});
-        that.setAndSaveArgs("freq", {value: note.hz(notePressed)});
+        noteDisplay.setValue(hz);
     };
 
     that.keyUp = function () {
         isDown = false;
         that.setAndSaveArgs("gate", {active: isDown});
+        noteDisplay.setValue(0);
     };
 
     that.addOut("gate").addOut("freq");
@@ -42,6 +55,15 @@ function sCVKey(container, uid) {
 
     keyboard = wVKey(that.keyDown, that.keyUp);
     that.addTabled(keyboard);
+
+    that.setGuiControls({
+        freq: {
+            value: noteDisplay
+        },
+        gate: {
+            active: noteDisplay
+        }
+    });
 
     return that;
 }

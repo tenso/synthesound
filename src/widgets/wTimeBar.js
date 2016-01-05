@@ -11,10 +11,10 @@ function wTimeBar() {
         ctx = canvas.getContext("2d"),
         halfH = that.height / 2.0,
         totalMs = 1000,
-        currentMs = 0;
+        currentMs = 0,
+        renderOver;
 
-    function draw() {
-        var timeX = currentMs * canvas.width / totalMs;
+    function drawBg() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         ctx.strokeStyle = "#aaa";
@@ -24,6 +24,12 @@ function wTimeBar() {
         ctx.lineTo(canvas.width, halfH);
         ctx.stroke();
 
+        return that;
+    }
+
+    function drawFg() {
+        var timeX = currentMs * canvas.width / totalMs;
+
         ctx.beginPath();
         ctx.strokeStyle = "#8f8";
         ctx.moveTo(timeX,  0);
@@ -32,6 +38,43 @@ function wTimeBar() {
 
         return that;
     }
+
+    that.draw = function () {
+        drawBg();
+        if (typeof renderOver === "function") {
+            renderOver(canvas, ctx, currentMs, totalMs, canvas.width / totalMs);
+        }
+        drawFg();
+    };
+
+    that.resizeCanvas = function () {
+        var workspaceWidth = that.offsetWidth,
+            workspaceHeight = that.offsetHeight;
+
+        canvas.width = workspaceWidth;
+        canvas.height = workspaceHeight;
+        halfH = canvas.height / 2.0;
+        that.draw();
+    };
+
+    that.setRenderer = function (render) {
+        renderOver = render;
+        that.draw();
+        return that;
+    };
+
+    that.setCurrentMs = function (ms) {
+        currentMs = ms;
+        that.draw();
+        return that;
+    };
+
+    that.setTotalMs = function (ms) {
+        totalMs = ms;
+        return that;
+    };
+
+    that.changeCurrentMs = undefined;
 
     canvas.onmousedown = function (e) {
         gui.captureMouse(e);
@@ -48,34 +91,6 @@ function wTimeBar() {
             that.changeCurrentMs(totalMs * mouse.x / canvas.width);
         }
     };
-
-    that.resizeCanvas = function () {
-        var workspaceWidth = that.offsetWidth,
-            workspaceHeight = that.offsetHeight;
-
-        canvas.width = workspaceWidth;
-        canvas.height = workspaceHeight;
-        halfH = canvas.height / 2.0;
-        draw();
-    };
-
-    that.setActiveSComp = function (scomp) {
-        log.d("active comp:" + scomp.uid());
-        return that;
-    };
-
-    that.setCurrentMs = function (ms) {
-        currentMs = ms;
-        draw();
-        return that;
-    };
-
-    that.setTotalMs = function (ms) {
-        totalMs = ms;
-        return that;
-    };
-
-    that.changeCurrentMs = undefined;
 
     window.addEventListener("resize", that.resizeCanvas);
     that.typeIs = "wTimeBar";
