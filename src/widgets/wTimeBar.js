@@ -89,7 +89,7 @@ function wTimeBar() {
 
     that.setTotalMs = function (ms) {
         totalMs = ms;
-        return that;
+        return that.draw();
     };
 
     that.setTimeParams = function (bpmValue, quantValue, measureMsValue) {

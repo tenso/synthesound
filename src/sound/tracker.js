@@ -9,7 +9,9 @@ function tracker(sampleRate) {
         currentMs = 0,
         quantization = 1,
         currentFrame = 0,
+        currentStepMs = 0,
         totalMs = 60000,
+        quantizeOn = false,
         play = false;
 
     that.data = function () {
@@ -51,21 +53,40 @@ function tracker(sampleRate) {
         quantization = value;
     };
 
+    that.setQuantizationOn = function (value) {
+        quantizeOn = value;
+    };
+
     that.setFrames = function (frames) {
+        var stepBefore = that.currentStepMs();
         currentFrame = frames;
         currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
+        return that.currentStepMs() !== stepBefore;
     };
 
     that.stepFrames = function (frames) {
+        var stepBefore = that.currentStepMs();
         if (play) {
             currentFrame += frames;
             currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
         }
+        return that.currentStepMs() !== stepBefore;
     };
 
     that.setCurrentMs = function (ms) {
+        var stepBefore = that.currentStepMs();
+
         currentMs = ms;
         currentFrame = parseInt(currentMs * sampleRate / 1000, 10);
+
+        return that.currentStepMs() !== stepBefore;
+    };
+
+    that.currentStepMs = function () {
+        if (quantizeOn) {
+            return that.currentMsQuantized();
+        }
+        return that.currentMs();
     };
 
     that.currentMs = function () {
@@ -101,6 +122,7 @@ function test_tracker() {
 
     track.setBpm(120);
     track.setPlayback(true);
+    track.setQuantization(false);
 
     track.setQuantization(1 / 2);
     test.verify(track.measureMs(), 250);
@@ -132,25 +154,50 @@ function test_tracker() {
     test.verify(track.currentMeasure(), 5);
     test.verify(track.currentMsQuantized(), 1250);
 
+    track.setQuantizationOn(true);
+    test.verify(track.currentStepMs(), track.currentMsQuantized());
+    track.setQuantizationOn(false);
+    test.verify(track.currentStepMs(), track.currentMs());
+
     track.stepFrames(quarter + 4 * tenth);
     test.verify(track.currentMs(), 2000);
     test.verify(track.currentMeasure(), 8);
     test.verify(track.currentMsQuantized(), 2000);
+
+    track.setQuantizationOn(true);
+    test.verify(track.currentStepMs(), track.currentMsQuantized());
+    track.setQuantizationOn(false);
+    test.verify(track.currentStepMs(), track.currentMs());
 
     track.stepFrames(full * 60);//+1min
     test.verify(track.currentMs(), 62000);
     test.verify(track.currentMeasure(), 4 * 60 + 8);
     test.verify(track.currentMsQuantized(), 62000);
 
+    track.setQuantizationOn(true);
+    test.verify(track.currentStepMs(), track.currentMsQuantized());
+    track.setQuantizationOn(false);
+    test.verify(track.currentStepMs(), track.currentMs());
+
     track.stepFrames(full * 600);//+10min
     test.verify(track.currentMs(), 662000);
     test.verify(track.currentMeasure(), 4 * 600 + 4 * 60 + 8);
     test.verify(track.currentMsQuantized(), 662000);
 
+    track.setQuantizationOn(true);
+    test.verify(track.currentStepMs(), track.currentMsQuantized());
+    track.setQuantizationOn(false);
+    test.verify(track.currentStepMs(), track.currentMs());
+
     track.stepFrames(full * 3600); //+60min +3600000ms
     test.verify(track.currentMs(), 4262000);
     test.verify(track.currentMeasure(), 4 * 3600 + 4 * 600 + 4 * 60 + 8);
     test.verify(track.currentMsQuantized(), 4262000);
+
+    track.setQuantizationOn(true);
+    test.verify(track.currentStepMs(), track.currentMsQuantized());
+    track.setQuantizationOn(false);
+    test.verify(track.currentStepMs(), track.currentMs());
 }
 
 test.addTest(test_tracker, "test_tracker");

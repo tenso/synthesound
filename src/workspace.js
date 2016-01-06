@@ -67,7 +67,7 @@ function workspace() {
         if (constructorMap.hasOwnProperty(data.type)) {
             comp = constructorMap[data.type](that, data.uid);
             comp.setArgs(data.sArgs);
-            comp.setCurrentMs(timeTracker.currentMs());
+            comp.setCurrentMs(timeTracker.currentStepMs());
             comp.saveArgs(0); //add inital state as ms=0
             comp.move(data.x, data.y);
         } else {
@@ -142,33 +142,34 @@ function workspace() {
 
         for (i = 0; i < nodes.length; i += 1) {
             if (typeof nodes[i].setCurrentMs === "function") {
-                nodes[i].setCurrentMs(timeTracker.currentMs());
+                nodes[i].setCurrentMs(timeTracker.currentStepMs());
             }
         }
 
         if (typeof that.timeUpdated === "function") {
-            that.timeUpdated(timeTracker.currentMs());
+            that.timeUpdated(timeTracker.currentStepMs());
         }
 
-        if (timeTracker.currentMs() >= timeTracker.totalMs()) {
+        if (timeTracker.currentStepMs() >= timeTracker.totalMs()) {
             that.setCurrentMs(0);
             that.setPlayback(false);
         }
     }
 
     function stepFrame(frames) {
-        timeTracker.stepFrames(frames);
-        updateTime();
+        if (timeTracker.stepFrames(frames)) {
+            updateTime();
+        }
     }
 
     function setFrames(frames) {
-        timeTracker.setFrames(frames);
-        updateTime();
+        if (timeTracker.setFrames(frames)) {
+            updateTime();
+        }
     }
 
     that.setCurrentMs = function (ms) {
-        if (ms !== timeTracker.currentMs()) {
-            timeTracker.setCurrentMs(ms);
+        if (timeTracker.setCurrentMs(ms)) {
             updateTime();
         }
         return that;
@@ -256,15 +257,16 @@ function workspace() {
         timeTracker = tracker(that.sampleRate());
         out.runIndexUpdated = stepFrame;
         that.setTotalMs(60000);
-        that.setTimeParams(120, 1 / 4);
+        that.setTimeParams(120, 1 / 4, false);
         setFrames(0);
         that.startAudio();
         return true;
     };
 
-    that.setTimeParams = function (bpm, quant) {
+    that.setTimeParams = function (bpm, quant, quantOn) {
         timeTracker.setBpm(bpm);
         timeTracker.setQuantization(quant);
+        timeTracker.setQuantizationOn(quantOn);
 
         if (typeof that.timeParamsUpdated === "function") {
             that.timeParamsUpdated(bpm, quant, timeTracker.measureMs());

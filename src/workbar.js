@@ -24,13 +24,15 @@ function workbar() {
         toggleSize,
         bpmInput,
         quantInput,
+        quantOn,
         zoomX,
         zoomY,
         recordOn,
         time,
-        buttonGroup = gContainer(),
-        timeGroup = gContainer(),
-        zoomGroup = gContainer();
+        buttonGroup = gContainer().paddingRight(25),
+        timeGroup = gContainer().paddingRight(25),
+        quantGroup = gContainer().paddingRight(25),
+        zoomGroup = gContainer().paddingRight(25);
 
     /*FIXME: render sArgs, move*/
 
@@ -70,7 +72,7 @@ function workbar() {
 
     function updateBpmAndQuantification() {
         if (typeof that.changeTimeParams === "function") {
-            that.changeTimeParams(bpmInput.getValueInt(), 1 / quantInput.getValue());
+            that.changeTimeParams(bpmInput.getValueInt(), 1 / quantInput.getValue(), quantOn.getValue());
         }
     }
 
@@ -151,7 +153,8 @@ function workbar() {
     totalTime = gInput("--:--:--", updateTotalTime, "").fontFamily("monospace");
 
     bpmInput = gInput("", updateBpmAndQuantification, "bpm", 30).labelPos("left");
-    quantInput = gInput("", updateBpmAndQuantification, "quant 1/", 30).labelPos("left");
+    quantInput = gInput("", updateBpmAndQuantification, "/", 30).labelPos("left");
+    quantOn = gButton("1", updateBpmAndQuantification, true).w(20).h(buttonH);
 
     zoomX = gInput("100", zoomTimeBar, "%", 30).labelPos("left");
     zoomY = gInput("100", zoomTimeBar, "x %", 30).labelPos("left");
@@ -173,18 +176,22 @@ function workbar() {
     that.addTabled(buttonGroup);
 
     //time
-    timeGroup.addTabled(time).addTabled(totalTime).addTabled(bpmInput).addTabled(quantInput);
+    timeGroup.addTabled(time).addTabled(totalTime);
     that.addTabled(timeGroup);
 
+    quantGroup.addTabled(bpmInput.paddingRight(10)).addTabled(quantOn).addTabled(quantInput);
+    that.addTabled(quantGroup);
+
+
     //zoom
-    zoomGroup.addTabled(zoomX).addTabled(zoomY);
-    that.addTabled(zoomGroup);
+    zoomGroup.addTabled(zoomX).addTabled(zoomY).addTabled(toggleSize);
+    that.add(zoomGroup.abs().right(marginX).y(marginY));
+
 
     //timeBar
     timeScroll.addTo(that).abs().left(marginX).right(marginX).top(buttonH + 2 * marginY).bottom(0);
     timeScroll.overflow("scroll");
 
-    toggleSize.addTo(that).abs().right(marginX).y(marginY);
     timeBar.addTo(timeScroll).abs().left(0).top(0).w("100%").h("100%");
 
     timeBar.changeCurrentMs = function (ms) {
