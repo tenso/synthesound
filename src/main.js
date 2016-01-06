@@ -20,7 +20,7 @@ var app = {
 
     screen: {
         minX: 0,
-        minY: 32, /*dont allow stuff behind topmenu*/
+        minY: 24, /*dont allow stuff behind topmenu*/
         maxX: undefined,
         maxY: undefined,
         maxBottom: 200 /*this is effectively the hight of the "workbar".*/
@@ -46,7 +46,12 @@ function initLanguage() {
         about: "About",
         file: "File",
         stop: "Stop",
+        rec: "Rec",
         log: "Log",
+        info: "Info",
+        process: "Process",
+        processOn: "Process on",
+        processOff: "Process off",
         detectedErrors: "Detected Errors",
         license: "Copyright 2015 Anton Olofsson\n" +
                 "\n" +
@@ -90,9 +95,12 @@ window.onload = function () {
     audioBar.changeCurrentMs = audioWork.setCurrentMs;
     audioBar.changeTotalMs = audioWork.setTotalMs;
     audioBar.changeTimeParams = audioWork.setTimeParams;
+    audioBar.changePlayback = audioWork.setPlayback;
+    audioBar.changeRecord = audioWork.setRecord;
     audioWork.timeUpdated = audioBar.setTime;
     audioWork.currentSCompUpdated = audioBar.setCurrentSComp;
     audioWork.timeParamsUpdated = audioBar.setTimeParams;
+    audioWork.totalTimeUpdated = audioBar.setTotalTime;
 
     gIO = sCIO();
     topMenu = menubar(audioWork).move(0, 0);

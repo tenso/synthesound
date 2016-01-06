@@ -10,7 +10,7 @@ function wMenuButton(name, group) {
         that.closeAll(myIndex);
         that.menu.move(0, that.getH());
         that.menu.show(true);
-    }).hoverEffect(true).pos("relative");
+    }).hoverEffect(true).rel();
 
     that.closeAll = function (myIndex) {
         var i;
@@ -36,7 +36,7 @@ function wMenuButton(name, group) {
 
     that.typeIs = "wMenuButton";
     that.menu = wMenu().removeOnLeave(false).show(false);
-    that.appendChild(that.menu);
+    that.add(that.menu);
     group.push(that);
 
     return that;

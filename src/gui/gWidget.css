@@ -4,17 +4,6 @@
     border-radius: 4px;
 }
 
-.gWidgetTable {
-    display: inline-block;
-    padding: 4px;
-}
-
-.gWidgetRow {
-}
-
-.gWidgetCell {
-}
-
 .gWidgetTitle {
     color: #fff;
     background: #aaa;

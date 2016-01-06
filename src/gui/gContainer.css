@@ -1,0 +1,22 @@
+.gContainer {
+    padding: 0px;
+    margin: 0px;
+}
+
+.gContainerTable {
+    display: inline-block;
+    padding: 0px;
+    margin: 0px;
+    /*border-collapse: collapse;*/
+    border-spacing: 2px;
+}
+
+.gContainerRow {
+    padding: 0px;
+    margin: 0px;
+}
+
+.gContainerCell {
+    padding: 0px;
+    margin: 0px;
+}

@@ -18,31 +18,50 @@ function gButtonGroup() {
 }
 
 function gButton(name, callback, isRadio, buttonGroup) {
-    var that = gBase();
+    var that = gBase(),
+        value = false,
+        colorActive = "#fff",
+        color = "#888";
 
-    that.pressButton = function (value, skipCallback) {
-        that.value = value;
+    that.setColor = function (inactive, active) {
+        color = inactive;
+        colorActive = active;
+        that.color(value ? colorActive : color);
+    };
+
+    that.getValue = function () {
+        return value;
+    };
+
+    that.setValue = function (newValue, skipCallback) {
+        value = newValue;
         if (that.isRadio) {
-            that.color(that.value ? "#fff" : "#888");
-            if (!skipCallback && that.value) {
-                that.callback(that.value);
+            that.color(value ? colorActive : color);
+            if (!skipCallback) {
+                if (buttonGroup && buttonGroup.length) {
+                    if (value) {
+                        that.callback(value);
+                    }
+                } else {
+                    that.callback(value);
+                }
             }
         } else if (!skipCallback) {
-            that.callback(that.value);
+            that.callback(value);
         }
         return that;
     };
 
     that.set = function (skipCallback) {
         var i;
-        if (isRadio) {
+        if (isRadio && buttonGroup && buttonGroup.length) {
             for (i = 0; i < buttonGroup.length; i += 1) {
                 if (buttonGroup[i].isRadio) {
-                    buttonGroup[i].pressButton(buttonGroup[i] === that, skipCallback);
+                    buttonGroup[i].setValue(buttonGroup[i] === that, skipCallback);
                 }
             }
         } else {
-            that.pressButton(!that.value, skipCallback);
+            that.setValue(!value, skipCallback);
         }
     };
 
@@ -55,10 +74,8 @@ function gButton(name, callback, isRadio, buttonGroup) {
     that.isRadio = isRadio;
     that.setClass("button-class");
     that.textContent = name;
-    that.value = false;
     that.callback = callback;
     that.padding("1px 4px 1px 4px").lineHeight("100%").display("inline-block");
-
 
     if (that.isRadio) {
         if (buttonGroup) {
@@ -66,9 +83,9 @@ function gButton(name, callback, isRadio, buttonGroup) {
         } else {
             log.error("gRadio: radiobuttons need collection");
         }
-        that.color("#888");
+        that.color(color);
     } else {
-        that.color("#fff").pressEffect(true);
+        that.color(colorActive).pressEffect(true);
     }
 
     that.onmousedown = function (e) {

@@ -1,5 +1,5 @@
 "use strict";
-/*global gWidget*/
+/*global gContainer*/
 /*global gButton*/
 /*global wMenuButton*/
 /*global wMenu*/
@@ -11,9 +11,10 @@
 /*global log*/
 
 function menubar(contentContainer) {
-    var that = gWidget().canMove(false).z(10000).border("0").radius(0).w("100%").h(app.screen.minY).padding(2),
+    var that = gContainer().abs().z(10000).w("100%").h(app.screen.minY).bg("#fff"),
         file,
         about,
+        audio,
         errorLog,
         menus = [],
         helpString = lang.tr("helpText"),
@@ -24,9 +25,9 @@ function menubar(contentContainer) {
     that.logError = function (error) {
         errorLog.bg("#f00").show(true);
         errorLog.addRow("error #" + errorLog.menu.contentCount(), function () {
-            wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
+            wNote(contentContainer, error).bg("#f00").color("#000");
         });
-        wNote(contentContainer, error).padding(40).bg("#f00").color("#000");
+        wNote(contentContainer, error).bg("#f00").color("#000");
     };
 
     file = wMenuButton(lang.tr("file"), menus);
@@ -51,14 +52,19 @@ function menubar(contentContainer) {
             } else {
                 mess = message;
             }
-            popup = wNote(mess).padding(40);
+            popup = wNote(mess);
             contentContainer.add(popup);
             popup.left(contentContainer.scrollLeft).top(contentContainer.scrollTop);
             return popup;
         };
     }
 
-    about = wMenuButton("?", menus);
+    audio = wMenuButton(lang.tr("process"), menus);
+    audio.addRow(lang.tr("processOn"), contentContainer.startAudio); //FIXME: dont do callback like this!
+    audio.addRow(lang.tr("processOff"), contentContainer.stopAudio); //FIXME: dont do callback like this!
+    that.addTabled(audio);
+
+    about = wMenuButton(lang.tr("info"), menus);
     about.addRow(lang.tr("help"), makePopup(helpString));
     about.addRow(lang.tr("about"), makePopup(aboutString));
     about.addRow(lang.tr("log"), makePopup(log.logText));

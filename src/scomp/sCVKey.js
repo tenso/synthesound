@@ -47,7 +47,7 @@ function sCVKey(container, uid) {
 
     that.addTabled(gButton("capture", function () {
         gui.captureKey(keyboard);
-    }).abs().move(10, 175));
+    }).abs().move(5, 170));
 
     that.addTabled(currentNote);
 

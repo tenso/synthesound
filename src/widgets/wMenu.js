@@ -1,9 +1,9 @@
 "use strict";
-/*global gWidget*/
+/*global gContainer*/
 /*global gLabel*/
 
 function wMenu() {
-    var that = gWidget();
+    var that = gContainer().abs().bg("#fff");
 
     //FIXME: buildButton changes that!
     function buildButton(string, callback) {
@@ -13,7 +13,7 @@ function wMenu() {
         if (that.contentCount() > 0) {
             that.nextRow();
         }
-        entry = gLabel(string).textAlign("left");
+        entry = gLabel(string).textAlign("left").color("#000");
         if (callback) {
             entry.onmousedown = callback;
         }
@@ -55,6 +55,6 @@ function wMenu() {
     };
 
     that.typeIs = "wMenu";
-    that.canMove(false).removeOnLeave(true);
+    that.removeOnLeave(true);
     return that;
 }

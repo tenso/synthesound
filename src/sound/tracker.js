@@ -9,7 +9,8 @@ function tracker(sampleRate) {
         currentMs = 0,
         quantization = 1,
         currentFrame = 0,
-        totalMs = 60000;
+        totalMs = 60000,
+        play = false;
 
     that.data = function () {
         return {
@@ -56,8 +57,10 @@ function tracker(sampleRate) {
     };
 
     that.stepFrames = function (frames) {
-        currentFrame += frames;
-        currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
+        if (play) {
+            currentFrame += frames;
+            currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
+        }
     };
 
     that.setCurrentMs = function (ms) {
@@ -82,6 +85,10 @@ function tracker(sampleRate) {
         return that.currentMeasure() * that.measureMs();
     };
 
+    that.setPlayback = function (playValue) {
+        play = playValue;
+    };
+
     return that;
 }
 
@@ -93,6 +100,7 @@ function test_tracker() {
         full = parseInt(sRate, 10);
 
     track.setBpm(120);
+    track.setPlayback(true);
 
     track.setQuantization(1 / 2);
     test.verify(track.measureMs(), 250);

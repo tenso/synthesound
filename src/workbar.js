@@ -1,5 +1,5 @@
 "use strict";
-/*global gWidget*/
+/*global gContainer*/
 /*global gLabel*/
 /*global gButton*/
 /*global lang*/
@@ -10,12 +10,13 @@
 /*global log*/
 /*global gBase*/
 
-function workbar(workspace) {
-    var that = gWidget(),
+function workbar() {
+    var that = gContainer(),
         timeScroll = gBase(),
         timeBar = wTimeBar(),
         stop,
         play,
+        record,
         marginX = 4,
         marginY = 6,
         buttonH = 16,
@@ -26,7 +27,12 @@ function workbar(workspace) {
         quantInput,
         zoomX,
         zoomY,
-        time;
+        playOn,
+        recordOn,
+        time,
+        buttonGroup = gContainer(),
+        timeGroup = gContainer(),
+        zoomGroup = gContainer();
 
     /*FIXME: render sArgs, move*/
 
@@ -70,7 +76,7 @@ function workbar(workspace) {
         }
     }
 
-    function setTotalTime() {
+    function updateTotalTime() {
         var total = util.stringToMs(totalTime.getValue());
         if (typeof that.changeTotalMs === "function") {
             that.changeTotalMs(total);
@@ -83,19 +89,36 @@ function workbar(workspace) {
         timeBar.resizeCanvas();
     }
 
+    function makeUpdatePlayback(play) {
+        return function () {
+            playOn = play;
+            if (typeof that.changePlayback === "function") {
+                that.changePlayback(playOn);
+            }
+        };
+    }
+
+    function updateRecord() {
+        recordOn = record.getValue();
+        if (typeof that.changeRecord === "function") {
+            that.changeRecord(recordOn);
+        }
+    }
+
     that.resizeCanvas = function () {
         timeBar.resizeCanvas();
         return that;
     };
 
-    that.setTime = function (currentMs, totalMs) {
-        var strVal = util.msToString(totalMs);
+    that.setTime = function (currentMs) {
         time.setValue(util.msToString(currentMs));
-        if (totalTime.getValue() !== strVal) {
-            totalTime.setValue(strVal);
-        }
-        timeBar.setTotalMs(totalMs);
         timeBar.setCurrentMs(currentMs);
+        return that;
+    };
+
+    that.setTotalTime = function (totalMs) {
+        totalTime.setValue(util.msToString(totalMs));
+        timeBar.setTotalMs(totalMs);
         return that;
     };
 
@@ -116,23 +139,22 @@ function workbar(workspace) {
         return that;
     };
 
-    that.z(10000).border("0").radius(0).padding(0).canMove(false);
+    that.abs().z(10000).bg("#fff");
     that.w("100%").h(app.screen.maxBottom).bottom(0);
 
     //callbacks:
     that.changeCurrentMs = undefined;
     that.changeTotalMs = undefined;
     that.changeTimeParams = undefined;
+    that.changePlayback = undefined;
 
-    stop = gButton(lang.tr("stop"), function () {
-        workspace.stop();
-    }).bg("#f00").w(40).h(buttonH);
+    stop = gButton(lang.tr("stop"), makeUpdatePlayback(false)).w(40).h(buttonH);
+    play = gButton(">", makeUpdatePlayback(true)).w(40).h(buttonH);
+    record = gButton(lang.tr("rec"), updateRecord, true).bg("#f00").w(40).h(buttonH);
+    record.setColor("#000", "#fff");
 
-    play = gButton(">", function () {
-        workspace.play();
-    }).w(40).h(buttonH);
     time = gLabel("--:--:--").fontFamily("monospace");
-    totalTime = gInput("--:--:--", setTotalTime, "").fontFamily("monospace");
+    totalTime = gInput("--:--:--", updateTotalTime, "").fontFamily("monospace");
 
     bpmInput = gInput("", updateBpmAndQuantification, "bpm", 30).labelPos("left");
     quantInput = gInput("", updateBpmAndQuantification, "quant 1/", 30).labelPos("left");
@@ -151,15 +173,21 @@ function workbar(workspace) {
         timeBar.resizeCanvas();
     });
 
-    stop.addTo(that).abs().x(marginX).y(marginY);
-    play.addTo(that).abs().x(60 + marginX).y(marginY);
-    time.addTo(that).abs().x(120 + marginX).y(marginY);
-    totalTime.addTo(that).abs().x(200 + marginX).y(marginY);
-    bpmInput.addTo(that).abs().x(300 + marginX).y(marginY);
-    quantInput.addTo(that).abs().x(380 + marginX).y(marginY);
-    zoomX.addTo(that).abs().x(600 + marginX).y(marginY);
-    zoomY.addTo(that).abs().x(660 + marginX).y(marginY);
+    //buttons
+    buttonGroup.addTabled(stop);
+    buttonGroup.addTabled(record);
+    buttonGroup.addTabled(play);
+    that.addTabled(buttonGroup);
 
+    //time
+    timeGroup.addTabled(time).addTabled(totalTime).addTabled(bpmInput).addTabled(quantInput);
+    that.addTabled(timeGroup);
+
+    //zoom
+    zoomGroup.addTabled(zoomX).addTabled(zoomY);
+    that.addTabled(zoomGroup);
+
+    //timeBar
     timeScroll.addTo(that).abs().left(marginX).right(marginX).top(buttonH + 2 * marginY).bottom(0);
     timeScroll.overflow("scroll");
 

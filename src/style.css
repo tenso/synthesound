@@ -6,6 +6,7 @@ body {
     -ms-user-select: none;
     user-select: none;
     margin: 0px;
+    padding: 0px;
     background: #888;
     font-family: sans-serif;
     cursor: default;

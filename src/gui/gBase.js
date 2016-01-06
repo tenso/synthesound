@@ -12,6 +12,24 @@ function gBase(type) {
         originalPressColor,
         oldDisplay;
 
+    function mouseEnterCallback() {
+        originalColor = that.style.color;
+        that.style.color = hoverColor || "#888";
+    }
+
+    function mouseLeaveCallback() {
+        that.style.color = originalColor;
+    }
+
+    function mouseDownCallback() {
+        originalPressColor = that.style.color;
+        that.style.color = pressColor || "#888";
+    }
+
+    function mouseUpCallback() {
+        that.style.color = originalPressColor;
+    }
+
     that.show = function (value) {
         if (!value && that.style.display !== "none") {
             oldDisplay = that.style.display;
@@ -97,6 +115,10 @@ function gBase(type) {
 
     that.abs = function () {
         return that.pos("absolute");
+    };
+
+    that.rel = function () {
+        return that.pos("relative");
     };
 
     that.pos = function (pos) {
@@ -223,15 +245,6 @@ function gBase(type) {
         return that;
     };
 
-    function mouseEnterCallback() {
-        originalColor = that.style.color;
-        that.style.color = hoverColor || "#888";
-    }
-
-    function mouseLeaveCallback() {
-        that.style.color = originalColor;
-    }
-
     that.hoverEffect = function (value, color) {
         hoverColor = color;
         if (value) {
@@ -244,15 +257,6 @@ function gBase(type) {
 
         return that;
     };
-
-    function mouseDownCallback() {
-        originalPressColor = that.style.color;
-        that.style.color = pressColor || "#888";
-    }
-
-    function mouseUpCallback() {
-        that.style.color = originalPressColor;
-    }
 
     that.pressEffect = function (value, color) {
         pressColor = color;
@@ -292,6 +296,11 @@ function gBase(type) {
 
     that.textAlign = function (value) {
         that.style.textAlign = value;
+        return that;
+    };
+
+    that.remove = function () {
+        that.parentNode.removeChild(that);
         return that;
     };
 
