@@ -36,7 +36,7 @@ function sSequence(sComp, sId, argUpdateCb) {
     //FIXME: dont want complete states, only changes
     that.saveAt = function (ms) {
         var i,
-            at = ms || atMs,
+            at = typeof ms === "number" ? ms : atMs,
             data = sSequanceData(sComp.getArgs(), at);
 
         for (i = 0; i < seqData.length; i += 1) {

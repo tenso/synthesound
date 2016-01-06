@@ -25,7 +25,7 @@
 /*global window*/
 
 function workspace() {
-    var that = gBase().setClass("workspace").top(app.screen.minY).bottom(app.screen.maxBottom),
+    var that = gBase().setClass("workspace").top(app.screen.minY).h("100%"),
         out,
         audioCtx,
         AudioContext = window.AudioContext || window.webkitAudioContext,
@@ -307,6 +307,9 @@ function workspace() {
         return true;
     };
 
+    that.setViewHeight = function (h) {
+        that.h(h - that.offsetTop + 1); //FIXME: dont know why +1 is needed
+    };
 
     that.key = undefined; /*FIXME: globally coupled to sCVKey*/
     that.mixerOut = undefined; /*FIXME: globally coupled to sCOut*/

@@ -9,6 +9,9 @@
 /*global gInput*/
 /*global log*/
 /*global gBase*/
+/*global document*/
+/*global gui*/
+/*global window*/
 
 function workbar() {
     var that = gContainer(),
@@ -19,9 +22,10 @@ function workbar() {
         marginX = 4,
         marginY = 6,
         buttonH = 16,
+        minHeight = 46,
+        initialHeight = 200,
         totalTime,
         sComp,
-        toggleSize,
         bpmInput,
         quantInput,
         quantOn,
@@ -103,7 +107,7 @@ function workbar() {
     }
 
     that.resizeCanvas = function () {
-        timeBar.resizeCanvas();
+        that.setTopOfBar(that.parentNode.offsetHeight - initialHeight);
         return that;
     };
 
@@ -137,13 +141,14 @@ function workbar() {
     };
 
     that.abs().z(10000).bg("#fff");
-    that.w("100%").h(app.screen.maxBottom).bottom(0);
+    that.w("100%").bottom(0);
 
     //callbacks:
     that.changeCurrentMs = undefined;
     that.changeTotalMs = undefined;
     that.changeTimeParams = undefined;
     that.changePlayback = undefined;
+    that.changeSize = undefined;
 
     play = gButton(">", updatePlayback, true).w(40).h(buttonH);
     record = gButton(lang.tr("rec"), updateRecord, true).bg("#f00").w(40).h(buttonH);
@@ -157,18 +162,7 @@ function workbar() {
     quantOn = gButton("1", updateBpmAndQuantification, true).w(20).h(buttonH);
 
     zoomX = gInput("100", zoomTimeBar, "%", 30).labelPos("left");
-    zoomY = gInput("100", zoomTimeBar, "x %", 30).labelPos("left");
-
-    toggleSize = gButton("^", function () {
-        if (that.getH() > app.screen.maxBottom) {
-            that.h(app.screen.maxBottom);
-            toggleSize.setTitle("^");
-        } else {
-            that.h("80%");
-            toggleSize.setTitle("-");
-        }
-        timeBar.resizeCanvas();
-    });
+    zoomY = gInput("100", zoomTimeBar, " x %", 30).labelPos("left");
 
     //buttons
     buttonGroup.addTabled(record);
@@ -182,10 +176,9 @@ function workbar() {
     quantGroup.addTabled(bpmInput.paddingRight(10)).addTabled(quantOn).addTabled(quantInput);
     that.addTabled(quantGroup);
 
-
     //zoom
-    zoomGroup.addTabled(zoomX).addTabled(zoomY).addTabled(toggleSize);
-    that.add(zoomGroup.abs().right(marginX).y(marginY));
+    zoomGroup.addTabled(zoomX).addTabled(zoomY);
+    that.add(zoomGroup.abs().right(marginX).y(2));
 
 
     //timeBar
@@ -199,6 +192,51 @@ function workbar() {
             that.changeCurrentMs(ms);
         }
     };
+
+    that.setTopOfBar = function (y) {
+        var newY = y;
+        that.top(newY);
+
+        if (that.getTop() < app.screen.minY) {
+            newY = app.screen.minY;
+            that.top(newY);
+        }
+
+        if (that.getH() < minHeight) {
+            newY = that.parentNode.offsetHeight - minHeight;
+            that.top(newY);
+        }
+
+        if (typeof that.changeTopPosition === "function") {
+            that.changeTopPosition(newY);
+        }
+        timeBar.resizeCanvas();
+
+        return that;
+    };
+
+    //keyboard and mouse
+
+    that.onmousedown = function (e) {
+        gui.captureMouse(e);
+    };
+
+    that.iMousePressAndMove = function (e, mouse) {
+        that.setTopOfBar(e.pageY);
+    };
+
+    document.addEventListener("keydown", function (e) {
+        var key = String.fromCharCode(e.keyCode).toLowerCase();
+
+        if (key === " ") {
+            e.preventDefault();
+            play.set();
+        }
+    }, false);
+
+    window.addEventListener("resize", function (e) {
+        that.resizeCanvas();
+    }, false);
 
     return that;
 }

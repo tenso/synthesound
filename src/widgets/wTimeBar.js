@@ -68,11 +68,8 @@ function wTimeBar() {
     };
 
     that.resizeCanvas = function () {
-        var workspaceWidth = that.offsetWidth,
-            workspaceHeight = that.offsetHeight;
-
-        canvas.width = workspaceWidth;
-        canvas.height = workspaceHeight;
+        canvas.width = that.offsetWidth;
+        canvas.height = that.offsetHeight;
         halfH = canvas.height / 2.0;
         return that.draw();
     };
@@ -105,15 +102,15 @@ function wTimeBar() {
         gui.captureMouse(e);
     };
 
-    canvas.iMouseCaptured = function (e, mouse) {
+    canvas.iMouseCaptured = function (e) {
         if (typeof that.changeCurrentMs === "function") {
-            that.changeCurrentMs(totalMs * (that.parentNode.scrollLeft + mouse.x) / canvas.width);
+            that.changeCurrentMs(totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width);
         }
     };
 
-    canvas.iMousePressAndMove = function (e, mouse) {
+    canvas.iMousePressAndMove = function (e) {
         if (typeof that.changeCurrentMs === "function") {
-            that.changeCurrentMs(totalMs * (that.parentNode.scrollLeft + mouse.x) / canvas.width);
+            that.changeCurrentMs(totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width);
         }
     };
 

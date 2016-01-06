@@ -22,8 +22,7 @@ var app = {
         minX: 0,
         minY: 24, /*dont allow stuff behind topmenu*/
         maxX: undefined,
-        maxY: undefined,
-        maxBottom: 200 /*this is effectively the hight of the "workbar".*/
+        maxY: undefined
     }
 };
 
@@ -39,7 +38,7 @@ function initLanguage() {
         sCNotePitch: "Note Pitch",
         sCOut: "Output",
         sCScope: "Scope",
-        helpText: "Help...",
+        helpText: "Space: play/pause",
         save: "Save",
         load: "Load",
         help: "Help",
@@ -80,7 +79,7 @@ window.onload = function () {
         topMenu,
         input,
         audioBar,
-        guiApp = gBase();
+        guiApp = gBase().abs().w("100%").h("100%");
 
     initLanguage();
 
@@ -90,13 +89,14 @@ window.onload = function () {
     test.runTests(true);
 
     audioWork = workspace();
-    audioBar = workbar(audioWork);
+    audioBar = workbar();
 
     audioBar.changeCurrentMs = audioWork.setCurrentMs;
     audioBar.changeTotalMs = audioWork.setTotalMs;
     audioBar.changeTimeParams = audioWork.setTimeParams;
     audioBar.changePlayback = audioWork.setPlayback;
     audioBar.changeRecord = audioWork.setRecord;
+    audioBar.changeTopPosition = audioWork.setViewHeight;
     audioWork.timeUpdated = audioBar.setTime;
     audioWork.currentSCompUpdated = audioBar.setCurrentSComp;
     audioWork.timeParamsUpdated = audioBar.setTimeParams;
