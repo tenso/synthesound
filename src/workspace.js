@@ -68,7 +68,7 @@ function workspace() {
             comp = constructorMap[data.type](that, data.uid);
             comp.setArgs(data.sArgs);
             comp.setCurrentMs(timeTracker.currentMs());
-            comp.saveArgs();
+            comp.saveArgs(0); //add inital state as ms=0
             comp.move(data.x, data.y);
         } else {
             log.error("workspace: dont know sId:" + data.type);
@@ -280,7 +280,7 @@ function workspace() {
     };
 
     that.setRecord = function (record) {
-        log.d("record:" + record);
+        sCGlobal.recordingOn = record;
     };
 
     that.startAudio = function () {

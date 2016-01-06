@@ -80,8 +80,6 @@ function gButton(name, callback, isRadio, buttonGroup) {
     if (that.isRadio) {
         if (buttonGroup) {
             buttonGroup.push(that);
-        } else {
-            log.error("gRadio: radiobuttons need collection");
         }
         that.color(color);
     } else {

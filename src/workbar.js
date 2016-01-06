@@ -14,7 +14,6 @@ function workbar() {
     var that = gContainer(),
         timeScroll = gBase(),
         timeBar = wTimeBar(),
-        stop,
         play,
         record,
         marginX = 4,
@@ -27,7 +26,6 @@ function workbar() {
         quantInput,
         zoomX,
         zoomY,
-        playOn,
         recordOn,
         time,
         buttonGroup = gContainer(),
@@ -89,13 +87,10 @@ function workbar() {
         timeBar.resizeCanvas();
     }
 
-    function makeUpdatePlayback(play) {
-        return function () {
-            playOn = play;
-            if (typeof that.changePlayback === "function") {
-                that.changePlayback(playOn);
-            }
-        };
+    function updatePlayback() {
+        if (typeof that.changePlayback === "function") {
+            that.changePlayback(play.getValue());
+        }
     }
 
     function updateRecord() {
@@ -148,8 +143,7 @@ function workbar() {
     that.changeTimeParams = undefined;
     that.changePlayback = undefined;
 
-    stop = gButton(lang.tr("stop"), makeUpdatePlayback(false)).w(40).h(buttonH);
-    play = gButton(">", makeUpdatePlayback(true)).w(40).h(buttonH);
+    play = gButton(">", updatePlayback, true).w(40).h(buttonH);
     record = gButton(lang.tr("rec"), updateRecord, true).bg("#f00").w(40).h(buttonH);
     record.setColor("#000", "#fff");
 
@@ -174,7 +168,6 @@ function workbar() {
     });
 
     //buttons
-    buttonGroup.addTabled(stop);
     buttonGroup.addTabled(record);
     buttonGroup.addTabled(play);
     that.addTabled(buttonGroup);

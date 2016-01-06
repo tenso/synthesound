@@ -16,7 +16,8 @@ var scBaseUID = uidGen();
 
 var sCGlobal = {
     current: undefined,
-    currentUpdated: undefined
+    currentUpdated: undefined,
+    recordingOn: false
 };
 
 function sCBase(container, type, sComps, uid) {
@@ -95,7 +96,9 @@ function sCBase(container, type, sComps, uid) {
     that.setAndSaveArgs = function (sId, args) {
         if (sComps.hasOwnProperty(sId)) {
             seq[sId].setArgs(args);
-            seq[sId].saveAt();
+            if (sCGlobal.recordingOn) {
+                seq[sId].saveAt();
+            }
         } else {
             log.error("no such sId:" + sId);
         }
