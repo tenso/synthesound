@@ -140,7 +140,7 @@ function workbar() {
         return that;
     };
 
-    that.abs().z(10000).bg("#fff");
+    that.abs().bg("#fff");
     that.w("100%").bottom(0);
 
     //callbacks:

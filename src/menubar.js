@@ -11,7 +11,7 @@
 /*global log*/
 
 function menubar(contentContainer) {
-    var that = gContainer().abs().z(10000).w("100%").h(app.screen.minY).bg("#fff"),
+    var that = gContainer().abs().z(100000).w("100%").h(app.screen.minY).bg("#fff"),
         file,
         about,
         audio,
