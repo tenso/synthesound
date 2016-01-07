@@ -222,7 +222,7 @@ function workbar() {
     };
 
     that.iMousePressAndMove = function (e, mouse) {
-        that.setTopOfBar(e.pageY);
+        that.setTopOfBar(e.pageY - mouse.captureOffsetInElement.y);
     };
 
     document.addEventListener("keydown", function (e) {

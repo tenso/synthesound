@@ -16,6 +16,7 @@ function wTimeBar() {
         quant = 0,
         bpm = 0,
         pixelsPerMs = 0,
+        selection = {startMs: 0, endMs: 0},
         renderOver;
 
     function drawBg() {
@@ -57,6 +58,20 @@ function wTimeBar() {
         return that;
     }
 
+    function drawSelection() {
+        var start,
+            end;
+
+        if (selection.startMs !== selection.endMs) {
+            start = selection.startMs * canvas.width / totalMs;
+            end = selection.endMs * canvas.width / totalMs;
+            ctx.fillStyle = "rgba(0, 255, 0, 0.25)";
+            ctx.fillRect(start, 0, end - start, canvas.height);
+        }
+
+        return that;
+    }
+
     that.draw = function () {
         pixelsPerMs = canvas.width / totalMs;
         drawBg();
@@ -64,6 +79,7 @@ function wTimeBar() {
             renderOver(canvas, ctx, currentMs, totalMs, pixelsPerMs);
         }
         drawFg();
+        drawSelection();
         return that;
     };
 
@@ -103,15 +119,31 @@ function wTimeBar() {
     };
 
     canvas.iMouseCaptured = function (e) {
-        if (typeof that.changeCurrentMs === "function") {
-            that.changeCurrentMs(totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width);
+        selection.startMs = totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width;
+        selection.endMs = selection.startMs;
+        if (e.button === 2) {
+
+        } else {
+            if (typeof that.changeCurrentMs === "function") {
+                that.changeCurrentMs(selection.startMs);
+            }
         }
     };
 
     canvas.iMousePressAndMove = function (e) {
-        if (typeof that.changeCurrentMs === "function") {
-            that.changeCurrentMs(totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width);
+        var ms;
+        if (e.button === 2) {
+            selection.endMs = totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width;
+            that.draw();
+        } else {
+            ms = totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width;
+            if (typeof that.changeCurrentMs === "function") {
+                that.changeCurrentMs(ms);
+            }
         }
+    };
+
+    canvas.iMouseUpAfterCapture = function (e) {
     };
 
     window.addEventListener("resize", that.resizeCanvas);
