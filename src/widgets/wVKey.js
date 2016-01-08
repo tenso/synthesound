@@ -34,7 +34,7 @@ function wVKey(keyDown, keyUp) {
         };
         key.iMouseUpAfterCapture = function (e) {
             util.unused(e);
-            keyUp();
+            keyUp(note);
             isDown = false;
         };
 
@@ -62,8 +62,8 @@ function wVKey(keyDown, keyUp) {
         key.left(keyX).top(0);
         return key;
     }
-
-    that.iKeyDown = function (key, shift) {
+    
+    function noteFromKey(key, shift) {
         var noteMap = {a: "C",  w: "C#", s: "D",
                        e: "D#", d: "E",  f: "F",
                        t: "F#", g: "G",  y: "G#",
@@ -74,17 +74,15 @@ function wVKey(keyDown, keyUp) {
         cNote = noteMap[key] || 1;
         cNote += octave;
         cNote = note.noteFromName(cNote);
-        if (cNote === -1) {
-            return;
-        }
-        keyDown(cNote);
+        return cNote;
+    }
+    
+    that.iKeyDown = function (key, shift) {
+        keyDown(noteFromKey(key, shift));
     };
 
     that.iKeyUp = function (key, shift) {
-        util.unused(key);
-        util.unused(shift);
-
-        keyUp();
+        keyUp(noteFromKey(key, shift));
     };
 
     for (i = 0; i < keys; i += 1) {

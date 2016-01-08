@@ -28,19 +28,20 @@ function sCVKey(container, uid) {
         };
 
 
-    that.keyDown = function (notePressed) {
-        var hz = note.hz(notePressed);
-
+    that.keyDown = function (noteKey) {
+        var hz = note.hz(noteKey);
         isDown = true;
         that.setAndSaveArgs("freq", {value: hz});
         that.setAndSaveArgs("gate", {active: isDown});
         noteDisplay.setValue(hz);
     };
 
-    that.keyUp = function () {
+    that.keyUp = function (noteKey) {
+        var hz = note.hz(noteKey);
         isDown = false;
+        that.setAndSaveArgs("freq", {value: hz});
         that.setAndSaveArgs("gate", {active: isDown});
-        noteDisplay.setValue(0);
+        noteDisplay.setValue(hz);
     };
 
     that.addOut("gate").addOut("freq");

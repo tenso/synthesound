@@ -13,6 +13,7 @@
 /*global gui*/
 /*global window*/
 /*global gSlider*/
+/*global note*/
 
 function workbar() {
     var that = gContainer(),
@@ -34,6 +35,8 @@ function workbar() {
         zoomY,
         recordOn,
         time,
+        minNote = 1,
+        maxNote = 88,
         buttonGroup = gContainer().paddingRight(25),
         timeGroup = gContainer().paddingRight(25),
         quantGroup = gContainer().paddingRight(25);
@@ -50,23 +53,45 @@ function workbar() {
             colors = ["#000", "#f00", "#00f"],
             currentColor = 0,
             i,
-            timeX;
+            timeX,
+            lenX,
+            noteY,
+            noteNum,
+            freqY,
+            pixelsPerNote = canvas.height / (maxNote - minNote);
 
-        for (type in sArgs) {
-            if (sArgs.hasOwnProperty(type)) {
-                ctx.beginPath();
-                ctx.strokeStyle = colors[currentColor];
-
-                for (i = 0; i < sArgs[type].length; i += 1) {
-                    timeX = sArgs[type][i].ms * pixelsPerMs;
-                    ctx.moveTo(timeX,  0);
-                    ctx.lineTo(timeX, canvas.height);
+        if (sArgs.hasOwnProperty("gate") && sArgs.hasOwnProperty("freq")) {
+            ctx.fillStyle = "#0f0";
+            if (sArgs.gate.length !== sArgs.freq.length) {
+                log.error("workbar:renderEvents: gate and freq need to be same length");
+                return;
+            }
+            for (i = 0; i < sArgs.gate.length - 1; i += 1) {
+                if (sArgs.gate[i].args.active) {
+                    timeX = sArgs.gate[i].ms * pixelsPerMs;
+                    lenX = sArgs.gate[i + 1].ms * pixelsPerMs - timeX;
+                    noteNum = note.note(sArgs.freq[i].args.value);
+                    noteY = canvas.height - (noteNum * pixelsPerNote);
+                    ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
                 }
+            }
+        } else {
+            for (type in sArgs) {
+                if (sArgs.hasOwnProperty(type)) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = colors[currentColor];
 
-                ctx.stroke();
+                    for (i = 0; i < sArgs[type].length; i += 1) {
+                        timeX = sArgs[type][i].ms * pixelsPerMs;
+                        ctx.moveTo(timeX,  0);
+                        ctx.lineTo(timeX, canvas.height);
+                    }
 
-                currentColor += 1;
-                currentColor %= colors.length;
+                    ctx.stroke();
+
+                    currentColor += 1;
+                    currentColor %= colors.length;
+                }
             }
         }
         return that;
@@ -184,7 +209,7 @@ function workbar() {
     that.addTabled(quantGroup);
 
     //zoom
-    zoomX.addTo(that).abs().right(marginX *2 + 10).top(marginY * 2);
+    zoomX.addTo(that).abs().right(marginX * 2 + 10).top(marginY * 2);
     zoomY.addTo(that).abs().right(marginX).top(marginY + 24);
 
 
