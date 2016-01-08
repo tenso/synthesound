@@ -235,6 +235,16 @@ function workspace() {
         log.info("load tracker");
         if (data.tracker) {
             timeTracker.load(data.tracker);
+            if (typeof that.totalTimeUpdated === "function") {
+                that.totalTimeUpdated(timeTracker.totalMs());
+            }
+            if (typeof that.timeParamsUpdated === "function") {
+                that.timeParamsUpdated(timeTracker.bpm(), timeTracker.quantization(),
+                                       timeTracker.measureMs(), timeTracker.quantizationOn());
+            }
+            if (typeof that.timeUpdated === "function") {
+                that.timeUpdated(timeTracker.currentStepMs());
+            }
         } else {
             log.error("file is missing tracker data");
         }
@@ -269,7 +279,7 @@ function workspace() {
         timeTracker.setQuantizationOn(quantOn);
 
         if (typeof that.timeParamsUpdated === "function") {
-            that.timeParamsUpdated(bpm, quant, timeTracker.measureMs());
+            that.timeParamsUpdated(bpm, quant, timeTracker.measureMs(), quantOn);
         }
     };
 
@@ -279,6 +289,10 @@ function workspace() {
 
     that.setPlayback = function (play) {
         timeTracker.setPlayback(play);
+        
+        if (typeof that.playbackUpdated === "function") {
+            that.playbackUpdated(play);
+        }
     };
 
     that.setRecord = function (record) {

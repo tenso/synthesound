@@ -101,6 +101,7 @@ window.onload = function () {
     audioWork.currentSCompUpdated = audioBar.setCurrentSComp;
     audioWork.timeParamsUpdated = audioBar.setTimeParams;
     audioWork.totalTimeUpdated = audioBar.setTotalTime;
+    audioWork.playbackUpdated = audioBar.setPlayback;
 
     gIO = sCIO();
     topMenu = menubar(audioWork).move(0, 0);

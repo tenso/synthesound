@@ -19,15 +19,17 @@ function tracker(sampleRate) {
             bpm: bpm,
             totalMs: totalMs,
             quantization: quantization,
+            quantizeOn: quantizeOn,
             currentMs: currentMs
         };
     };
 
     that.load = function (data) {
-        bpm = data.bpm;
-        totalMs = data.totalMs;
-        quantization = data.quantization;
-        currentMs = data.currentMs;
+        that.setBpm(data.bpm);
+        that.setTotalMs(data.totalMs);
+        that.setQuantization(data.quantization);
+        that.setQuantizationOn(data.quantizeOn);
+        that.setCurrentMs(data.currentMs);
     };
 
     that.setBpm = function (value) {
@@ -53,8 +55,16 @@ function tracker(sampleRate) {
         quantization = value;
     };
 
+    that.quantization = function () {
+        return quantization;
+    };
+    
     that.setQuantizationOn = function (value) {
         quantizeOn = value;
+    };
+    
+    that.quantizationOn = function (value) {
+        return quantizeOn;
     };
 
     that.setFrames = function (frames) {

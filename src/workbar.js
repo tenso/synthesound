@@ -148,12 +148,17 @@ function workbar() {
         return that;
     };
 
-    that.setTimeParams = function (bpm, quant, measureMs) {
+    that.setTimeParams = function (bpm, quant, measureMs, qOn) {
         bpmInput.setValue(bpm, true);
         quantInput.setValue(1 / quant, true);
+        quantOn.setValue(qOn, true);
         timeBar.setTimeParams(bpm, quant, measureMs);
     };
-
+    
+    that.setPlayback = function (isOn) {
+        play.setValue(isOn, true);
+    };
+    
     that.setCurrentSComp = function (comp) {
         sComp = comp;
 
