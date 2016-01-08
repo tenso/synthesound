@@ -4,6 +4,7 @@
 /*global window*/
 /*global log*/
 /*global gui*/
+/*global document*/
 
 function wTimeBar() {
     var that = gBase().bg("#888"),
@@ -22,7 +23,8 @@ function wTimeBar() {
             endMs: 0,
             endH: 0
         },
-        renderOver;
+        renderOver,
+        ctrlOn = false;
 
     function drawBg() {
         var ms = 0,
@@ -123,6 +125,10 @@ function wTimeBar() {
         return that.draw();
     };
 
+    that.getSelection = function () {
+        return selection;
+    };
+    that.selectionMoved = undefined;
     that.changeCurrentMs = undefined;
 
     canvas.onmousedown = function (e) {
@@ -131,15 +137,20 @@ function wTimeBar() {
 
     //FIXME: dont use that.parentNode here: move scroll to this comp!
     canvas.iMouseCaptured = function (e) {
-        var pos = gui.getEventOffsetInElement(that.parentNode, e);
-        selection.startMs = totalMs * pos.x / canvas.width;
-        selection.startH = pos.y / canvas.height;
-        selection.endMs = selection.startMs;
-        selection.endH = selection.startH;
+        var pos = gui.getEventOffsetInElement(that.parentNode, e),
+            ms;
 
-        if (e.button !== 2) {
+        if (e.button === 2) {
+            selection.startMs = totalMs * pos.x / canvas.width;
+            selection.startH = pos.y / canvas.height;
+            selection.endMs = selection.startMs;
+            selection.endH = selection.startH;
+
+            that.draw();
+        } else if (ctrlOn && e.button === 0) {
             if (typeof that.changeCurrentMs === "function") {
-                that.changeCurrentMs(selection.startMs);
+                ms = totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width;
+                that.changeCurrentMs(ms);
             }
         }
     };
@@ -147,20 +158,39 @@ function wTimeBar() {
     canvas.iMousePressAndMove = function (e) {
         var ms,
             pos = gui.getEventOffsetInElement(that.parentNode, e);
+
         if (e.button === 2) {
             selection.endMs = totalMs * pos.x / canvas.width;
             selection.endH = pos.y / canvas.height;
             that.draw();
-        } else {
+        } else if (ctrlOn && e.button === 0) {
             ms = totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width;
             if (typeof that.changeCurrentMs === "function") {
                 that.changeCurrentMs(ms);
+            }
+        } else if (e.button === 0) {
+            selection.startMs += e.movementX / pixelsPerMs;
+            selection.endMs += e.movementX / pixelsPerMs;
+
+            selection.startH += e.movementY / canvas.height;
+            selection.endH += e.movementY / canvas.height;
+
+            that.draw();
+            if (typeof that.selectionMoved === "function") {
+                that.selectionMoved(selection);
             }
         }
     };
 
     canvas.iMouseUpAfterCapture = function (e) {
     };
+
+    document.addEventListener("keydown", function (e) {
+        ctrlOn = e.ctrlKey;
+    }, false);
+    document.addEventListener("keyup", function (e) {
+        ctrlOn = e.ctrlKey;
+    }, false);
 
     window.addEventListener("resize", that.resizeCanvas);
     that.typeIs = "wTimeBar";

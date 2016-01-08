@@ -38,7 +38,8 @@ function initLanguage() {
         sCNotePitch: "Note Pitch",
         sCOut: "Output",
         sCScope: "Scope",
-        helpText: "Space: play/pause",
+        helpText: "Space: play/pause\n" +
+                "Ctrl-left-click to move current time (in tracker)\n",
         save: "Save",
         load: "Load",
         help: "Help",
