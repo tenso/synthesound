@@ -4,6 +4,7 @@
 /*global gui*/
 /*global document*/
 
+//NOTE: mouse is relative to container, dont use for nodes not in container.
 function guiInput(container, sizeOfContainerChanged) {
     var that = {},
         keyIsDown = 0,
@@ -14,8 +15,8 @@ function guiInput(container, sizeOfContainerChanged) {
         oldSize = {w: 0, h: 0};
 
     function setMouseFromEvent(e) {
-        mouse.x = gui.getEventOffsetInElement(container,  e).x + container.scrollLeft;
-        mouse.y = gui.getEventOffsetInElement(container,  e).y + container.scrollTop;
+        mouse.x = gui.getEventOffsetInElement(container,  e).x;
+        mouse.y = gui.getEventOffsetInElement(container,  e).y;
         mouse.relativeX = mouse.x - mouse.captureOffsetInElement.x;
         mouse.relativeY = mouse.y - mouse.captureOffsetInElement.y;
     }
@@ -39,8 +40,8 @@ function guiInput(container, sizeOfContainerChanged) {
         mouse.captureOffsetInElement = gui.getEventOffsetInElement(target, e);
         mouse.captureOffsetInElement.x += container.scrollLeft;
         mouse.captureOffsetInElement.y += container.scrollTop;
-        mouse.captureX = gui.getEventOffsetInElement(container, e).x + container.scrollLeft;
-        mouse.captureY = gui.getEventOffsetInElement(container, e).y + container.scrollTop;
+        mouse.captureX = gui.getEventOffsetInElement(container, e).x;
+        mouse.captureY = gui.getEventOffsetInElement(container, e).y;
     }
 
     function checkSize(container) {

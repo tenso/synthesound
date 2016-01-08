@@ -16,7 +16,12 @@ function wTimeBar() {
         quant = 0,
         bpm = 0,
         pixelsPerMs = 0,
-        selection = {startMs: 0, endMs: 0},
+        selection = {
+            startMs: 0,
+            startH: 0,
+            endMs: 0,
+            endH: 0
+        },
         renderOver;
 
     function drawBg() {
@@ -60,13 +65,19 @@ function wTimeBar() {
 
     function drawSelection() {
         var start,
-            end;
+            startY,
+            end,
+            endY;
 
         if (selection.startMs !== selection.endMs) {
             start = selection.startMs * canvas.width / totalMs;
             end = selection.endMs * canvas.width / totalMs;
+
+            startY = selection.startH * canvas.height;
+            endY = selection.endH * canvas.height;
+
             ctx.fillStyle = "rgba(0, 255, 0, 0.25)";
-            ctx.fillRect(start, 0, end - start, canvas.height);
+            ctx.fillRect(start, startY, end - start, endY - startY);
         }
 
         return that;
@@ -118,12 +129,15 @@ function wTimeBar() {
         gui.captureMouse(e);
     };
 
+    //FIXME: dont use that.parentNode here: move scroll to this comp!
     canvas.iMouseCaptured = function (e) {
-        selection.startMs = totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width;
+        var pos = gui.getEventOffsetInElement(that.parentNode, e);
+        selection.startMs = totalMs * pos.x / canvas.width;
+        selection.startH = pos.y / canvas.height;
         selection.endMs = selection.startMs;
-        if (e.button === 2) {
+        selection.endH = selection.startH;
 
-        } else {
+        if (e.button !== 2) {
             if (typeof that.changeCurrentMs === "function") {
                 that.changeCurrentMs(selection.startMs);
             }
@@ -131,9 +145,11 @@ function wTimeBar() {
     };
 
     canvas.iMousePressAndMove = function (e) {
-        var ms;
+        var ms,
+            pos = gui.getEventOffsetInElement(that.parentNode, e);
         if (e.button === 2) {
-            selection.endMs = totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width;
+            selection.endMs = totalMs * pos.x / canvas.width;
+            selection.endH = pos.y / canvas.height;
             that.draw();
         } else {
             ms = totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width;

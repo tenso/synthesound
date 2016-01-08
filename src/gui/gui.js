@@ -29,6 +29,14 @@ var gui = {
     getEventOffsetInElement: function (element, event) {
         var pos = gui.getPos(element);
         return {
+            x: event.pageX - pos.x + element.scrollLeft,
+            y: event.pageY - pos.y + element.scrollTop
+        };
+    },
+
+    getEventPageOffsetInElement: function (element, event) {
+        var pos = gui.getPos(element);
+        return {
             x: event.pageX - pos.x,
             y: event.pageY - pos.y
         };
