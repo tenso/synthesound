@@ -15,7 +15,7 @@ function sBase(sId) {
         inputs = [],
         specialInput = {},
         chanUpdated;
-
+        
     that.typeId = function () {
         return sId;
     };
@@ -37,31 +37,11 @@ function sBase(sId) {
         return frameSize;
     };
 
-    that.getInputs = function () {
-        var ret = [],
-            i,
-            key;
-
-        for (i = 0; i < inputs.length; i += 1) {
-            ret.push({
-                type: ""
-            });
-        }
-        for (key in specialInput) {
-            if (specialInput.hasOwnProperty(key)) {
-                ret.push({
-                    type: key
-                });
-            }
-        }
-        return ret;
-    };
-
     that.addInput = function (input, type) {
         if (!type) {
             inputs.push(input);
         } else {
-            that.setSpecialInput(input, type);
+            specialInput[type] = input;
         }
         return that;
     };
@@ -73,18 +53,8 @@ function sBase(sId) {
                 inputs.splice(index, 1);
             }
         } else {
-            that.delSpecialInput(type);
+            delete specialInput[type];
         }
-        return that;
-    };
-
-    that.setSpecialInput = function (input, type) {
-        specialInput[type] = input;
-        return that;
-    };
-
-    that.delSpecialInput = function (type) {
-        delete specialInput[type];
         return that;
     };
 
@@ -109,6 +79,7 @@ function sBase(sId) {
         if (fSize > maxFrameSize) {
             maxFrameSize = fSize;
 
+            //FIXME: not all need or want this
             that.genData = new Float32Array(maxFrameSize);
 
             for (chan = 0; chan < channels; chan += 1) {
