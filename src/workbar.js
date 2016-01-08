@@ -61,19 +61,22 @@ function workbar() {
             pixelsPerNote = canvas.height / (maxNote - minNote);
 
         if (sArgs.hasOwnProperty("gate") && sArgs.hasOwnProperty("freq")) {
-            ctx.fillStyle = "#0f0";
             if (sArgs.gate.length !== sArgs.freq.length) {
                 log.error("workbar:renderEvents: gate and freq need to be same length");
                 return;
             }
             for (i = 0; i < sArgs.gate.length - 1; i += 1) {
+                timeX = sArgs.gate[i].ms * pixelsPerMs;
+                lenX = sArgs.gate[i + 1].ms * pixelsPerMs - timeX;
+                noteNum = note.note(sArgs.freq[i].args.value);
+                noteY = canvas.height - (noteNum * pixelsPerNote);
+                
                 if (sArgs.gate[i].args.active) {
-                    timeX = sArgs.gate[i].ms * pixelsPerMs;
-                    lenX = sArgs.gate[i + 1].ms * pixelsPerMs - timeX;
-                    noteNum = note.note(sArgs.freq[i].args.value);
-                    noteY = canvas.height - (noteNum * pixelsPerNote);
-                    ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
+                    ctx.fillStyle = "#0f0";
+                } else {
+                    ctx.fillStyle = "#444";
                 }
+                ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
             }
         } else {
             for (type in sArgs) {
@@ -179,6 +182,7 @@ function workbar() {
     that.changeTimeParams = undefined;
     that.changePlayback = undefined;
     that.changeSize = undefined;
+    that.changeSCompState = undefined;
 
     play = gButton(">", updatePlayback, true).w(40).h(buttonH);
     record = gButton(lang.tr("rec"), updateRecord, true).bg("#f00").w(40).h(buttonH);
@@ -263,11 +267,22 @@ function workbar() {
     };
 
     document.addEventListener("keydown", function (e) {
-        var key = String.fromCharCode(e.keyCode).toLowerCase();
-
+        var key = String.fromCharCode(e.keyCode).toLowerCase(),
+            select = timeBar.getSelection();
+                                        
         if (key === " ") {
             e.preventDefault();
             play.set();
+        }
+        if (e.keyCode === 46) {
+            e.preventDefault();
+            if (typeof that.changeSCompState === "function") {
+                if (sComp) {
+                    select.startNote = parseInt(minNote + (1.0 - select.startH) * (maxNote - minNote), 10);
+                    select.endNote = parseInt(minNote + (1.0 - select.endH) * (maxNote - minNote), 10);
+                    that.changeSCompState(sComp, "delete", select);
+                }
+            }
         }
     }, false);
 

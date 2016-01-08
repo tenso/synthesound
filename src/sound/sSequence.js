@@ -68,6 +68,36 @@ function sSequence(sComp, sId, argUpdateCb) {
     that.data = function () {
         return seqData;
     };
+    
+    that.step = function (index) {
+        if (index < 0 || index >= seqData.length) {
+            log.error("sSequence.step: index oob:" + index);
+            return;
+        }
+        return seqData[index];
+    };
+    
+    that.numSteps = function () {
+        return seqData.length;
+    };
+    
+    that.remove = function (step) {
+        var index = seqData.indexOf(step);
+        if (index >= 0) {
+            seqData.splice(index, 1);
+        } else {
+            log.error("sSequence.remove: no such element:");
+            log.obj(step);
+        }
+    };
+    
+    that.removeIndex = function (index) {
+        if (index >= 0 && index < seqData.length) {
+            seqData.splice(index, 1);
+        } else {
+            log.error("sSequence.removeIndex: no such index:" + index);
+        }
+    };
 
     return that;
 }

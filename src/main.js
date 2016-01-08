@@ -98,12 +98,13 @@ window.onload = function () {
     audioBar.changePlayback = audioWork.setPlayback;
     audioBar.changeRecord = audioWork.setRecord;
     audioBar.changeTopPosition = audioWork.setViewHeight;
+    audioBar.changeSCompState = audioWork.modifySCompState
     audioWork.timeUpdated = audioBar.setTime;
     audioWork.currentSCompUpdated = audioBar.setCurrentSComp;
     audioWork.timeParamsUpdated = audioBar.setTimeParams;
     audioWork.totalTimeUpdated = audioBar.setTotalTime;
     audioWork.playbackUpdated = audioBar.setPlayback;
-
+    
     gIO = sCIO();
     topMenu = menubar(audioWork).move(0, 0);
     input = guiInput(audioWork, gIO.resizeCanvas); //resize is when scrollWidth/scrollHeigth changes

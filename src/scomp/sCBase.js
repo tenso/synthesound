@@ -135,6 +135,17 @@ function sCBase(container, type, sComps, uid) {
         }
         return sArgs;
     };
+    
+    that.getSequencers = function () {
+        var seqs = [],
+            sId;
+        for (sId in seq) {
+            if (seq.hasOwnProperty(sId)) {
+                seqs[sId] = seq[sId];
+            }
+        }
+        return seqs;
+    };
 
     that.clearPorts = function () {
         var sId;

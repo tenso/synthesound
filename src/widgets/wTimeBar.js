@@ -126,8 +126,14 @@ function wTimeBar() {
     };
 
     that.getSelection = function () {
-        return selection;
+        return {
+            startH: Math.min(selection.startH, selection.endH),
+            endH: Math.max(selection.startH, selection.endH),
+            startMs: Math.min(selection.startMs, selection.endMs),
+            endMs: Math.max(selection.startMs, selection.endMs)
+        };
     };
+    
     that.selectionMoved = undefined;
     that.changeCurrentMs = undefined;
 
@@ -177,7 +183,7 @@ function wTimeBar() {
 
             that.draw();
             if (typeof that.selectionMoved === "function") {
-                that.selectionMoved(selection);
+                that.selectionMoved(that.getSelection());
             }
         }
     };
