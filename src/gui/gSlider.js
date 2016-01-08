@@ -2,12 +2,14 @@
 /*global gui*/
 /*global gBase*/
 
+//FIXME: rewrite to use that.getH() and so on, not gui.getStyle...
+
 function gKnob(min, max, callback) {
     var that = gBase(),
         value = 0;
 
     that.setValue = function (val, skipCallback) {
-        var sliderH = gui.getStyleInt(that.parentElement, "height"),
+        var sliderH = gui.getStyleInt(that.parentNode, "height"),
             knobH = gui.getStyleInt(that, "height"),
             maxY;
 
@@ -19,7 +21,7 @@ function gKnob(min, max, callback) {
         }
         maxY = sliderH - knobH;
 
-        that.style.top = (maxY - ((value - min) / (max - min)) * maxY) + "px";
+        that.top((maxY - ((value - min) / (max - min)) * maxY));
 
         if (!skipCallback) {
             callback(value);
@@ -30,14 +32,12 @@ function gKnob(min, max, callback) {
         return value;
     };
 
-    that.setClass("button-class gKnob").pos("relative").top(0).h(25);
-
     that.onmousedown = function (e) {
         gui.captureMouse(e);
     };
 
     that.iMousePressAndMove = function (e) {
-        var maxY = that.parentElement.offsetHeight - that.offsetHeight,
+        var maxY = that.parentNode.offsetHeight - that.offsetHeight,
             newY = gui.getStyleInt(that, "top") + e.movementY;
 
         if (newY < 0) {
@@ -51,6 +51,7 @@ function gKnob(min, max, callback) {
     };
 
     that.typeIs = "gKnob";
+    that.setClass("button-class gKnob").rel().top(0).h(20);
     return that;
 }
 
@@ -67,15 +68,14 @@ function gSlider(val, min, max, callback) {
         return knob.getValue();
     };
 
-    that.className = "gSlider";
-    that.style.height = "100px";
-
     that.onmousedown = function (e) {
         that.setValue(max - (max - min) * (e.offsetY / that.offsetHeight));
     };
 
+    that.setClass("gSlider").h(100).w(10);
+    that.typeIs = "gSlider";
     that.add(knob);
     that.setValue(val, true);
-    that.typeIs = "gSlider";
+
     return that;
 }
