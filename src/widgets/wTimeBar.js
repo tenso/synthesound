@@ -78,7 +78,7 @@ function wTimeBar() {
             startY = selection.startH * canvas.height;
             endY = selection.endH * canvas.height;
 
-            ctx.fillStyle = "rgba(0, 255, 0, 0.25)";
+            ctx.fillStyle = "rgba(0, 255, 255, 0.25)";
             ctx.fillRect(start, startY, end - start, endY - startY);
         }
 
