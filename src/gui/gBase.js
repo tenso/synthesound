@@ -2,7 +2,7 @@
 /*global gui*/
 /*global document*/
 
-/*NOTE: cant use getW/getX etc functions unless element as already in the DOM*/
+/*NOTE: cant use getW/getX etc functions unless element as already in the DOM or has explicit w/h set*/
 
 function gBase(type) {
     var that = document.createElement(type || "div"),
@@ -131,7 +131,7 @@ function gBase(type) {
     };
 
     that.getLeft = function () {
-        return that.offsetLeft;
+        return that.offsetLeft || gui.getStyleInt(that, "left");
     };
 
     that.x = function (value) {
@@ -155,7 +155,7 @@ function gBase(type) {
     };
 
     that.getTop = function () {
-        return that.offsetTop;
+        return that.offsetTop || gui.getStyleInt(that, "top");
     };
 
     that.y = function (value) {
@@ -179,7 +179,13 @@ function gBase(type) {
     };
 
     that.getW = function () {
-        return that.offsetWidth;
+        return that.offsetWidth || that.getOffsetW();
+    };
+
+    that.getOffsetW = function () {
+        return gui.getStyleInt(that, "width")
+            + gui.getStyleInt(that, "paddingLeft") + gui.getStyleInt(that, "paddingRight")
+            + gui.getStyleInt(that, "borderLeft") + gui.getStyleInt(that, "borderRight");
     };
 
     that.h = function (value) {
@@ -187,7 +193,13 @@ function gBase(type) {
     };
 
     that.getH = function () {
-        return that.offsetHeight;
+        return that.offsetHeight || that.getOffsetH();
+    };
+
+    that.getOffsetH = function () {
+        return gui.getStyleInt(that, "height")
+            + gui.getStyleInt(that, "paddingTop") + gui.getStyleInt(that, "paddingBottom")
+            + gui.getStyleInt(that, "borderTop") + gui.getStyleInt(that, "borderBottom");
     };
 
     that.minWidth = function (value) {

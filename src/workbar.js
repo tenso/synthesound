@@ -12,6 +12,7 @@
 /*global document*/
 /*global gui*/
 /*global window*/
+/*global gSlider*/
 
 function workbar() {
     var that = gContainer(),
@@ -35,8 +36,7 @@ function workbar() {
         time,
         buttonGroup = gContainer().paddingRight(25),
         timeGroup = gContainer().paddingRight(25),
-        quantGroup = gContainer().paddingRight(25),
-        zoomGroup = gContainer().paddingRight(25);
+        quantGroup = gContainer().paddingRight(25);
 
     /*FIXME: render sArgs, move*/
 
@@ -161,8 +161,15 @@ function workbar() {
     quantInput = gInput("", updateBpmAndQuantification, "/", 30).labelPos("left");
     quantOn = gButton("1", updateBpmAndQuantification, true).w(20).h(buttonH);
 
-    zoomX = gInput("100", zoomTimeBar, "%", 30).labelPos("left");
-    zoomY = gInput("100", zoomTimeBar, " x %", 30).labelPos("left");
+    zoomX = gSlider(0, 100, 1200, function (value) {
+        timeBar.w(value + "%");
+        timeBar.resizeCanvas();
+    }, true);
+
+    zoomY = gSlider(0, 100, 400, function (value) {
+        timeBar.h(value + "%");
+        timeBar.resizeCanvas();
+    });
 
     //buttons
     buttonGroup.addTabled(record);
@@ -177,12 +184,12 @@ function workbar() {
     that.addTabled(quantGroup);
 
     //zoom
-    zoomGroup.addTabled(zoomX).addTabled(zoomY);
-    that.add(zoomGroup.abs().right(marginX).y(2));
+    zoomX.addTo(that).abs().right(marginX *2 + 10).top(marginY * 2);
+    zoomY.addTo(that).abs().right(marginX).top(marginY + 24);
 
 
     //timeBar
-    timeScroll.addTo(that).abs().left(marginX).right(marginX).top(buttonH + 2 * marginY).bottom(0);
+    timeScroll.addTo(that).abs().left(marginX).right(marginX * 2 + 10).top(buttonH + 2 * marginY).bottom(0);
     timeScroll.overflow("scroll");
 
     timeBar.addTo(timeScroll).abs().left(0).top(0).w("100%").h("100%");

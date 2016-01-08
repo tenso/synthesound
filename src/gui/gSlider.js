@@ -1,17 +1,14 @@
 "use strict";
 /*global gui*/
 /*global gBase*/
+/*global gui*/
 
-//FIXME: rewrite to use that.getH() and so on, not gui.getStyle...
-
-function gKnob(min, max, callback) {
+function gKnob(min, max, callback, horizontal) {
     var that = gBase(),
         value = 0;
 
     that.setValue = function (val, skipCallback) {
-        var sliderH = gui.getStyleInt(that.parentNode, "height"),
-            knobH = gui.getStyleInt(that, "height"),
-            maxY;
+        var maxCoord;
 
         value = val;
         if (value > max) {
@@ -19,13 +16,18 @@ function gKnob(min, max, callback) {
         } else if (value < min) {
             value = min;
         }
-        maxY = sliderH - knobH;
-
-        that.top((maxY - ((value - min) / (max - min)) * maxY));
-
-        if (!skipCallback) {
+        if (horizontal) {
+            maxCoord = that.parentNode.getW() - that.getW() - 1;
+            that.left((value - min) / (max - min) * maxCoord);
+        } else {
+            maxCoord = that.parentNode.getH() - that.getH() - 1;
+            that.top((maxCoord - ((value - min) / (max - min)) * maxCoord));
+        }
+        
+        if (!skipCallback && typeof callback === "function") {
             callback(value);
         }
+        return that;
     };
 
     that.getValue = function () {
@@ -36,32 +38,49 @@ function gKnob(min, max, callback) {
         gui.captureMouse(e);
     };
 
-    that.iMousePressAndMove = function (e) {
-        var maxY = that.parentNode.offsetHeight - that.offsetHeight,
-            newY = gui.getStyleInt(that, "top") + e.movementY;
+    that.iMousePressAndMove = function (e, mouse) {
+        var maxCoord,
+            newCoord;
 
-        if (newY < 0) {
-            newY = 0;
-        } else if (newY > maxY) {
-            newY = maxY;
+        if (horizontal) {
+            maxCoord = that.parentNode.getW() - that.getW();
+            newCoord = gui.getEventOffsetInElement(that.parentNode, e).x - mouse.captureOffsetInElement.x;
+        } else {
+            maxCoord = that.parentNode.getH() - that.getH();
+            newCoord = gui.getEventOffsetInElement(that.parentNode, e).y - mouse.captureOffsetInElement.y;
         }
-        that.style.top = newY + "px";
-        value = min + (max - min) * (1.0 - newY / maxY);
-        callback(value);
+        
+        if (newCoord < 0) {
+            newCoord = 0;
+        } else if (newCoord > maxCoord) {
+            newCoord = maxCoord;
+        }
+        
+        if (horizontal) {
+            that.setValue(min + (max - min) * (newCoord / maxCoord));
+        } else {
+            that.setValue(min + (max - min) * (1.0 - newCoord / maxCoord));
+        }
     };
 
     that.typeIs = "gKnob";
-    that.setClass("button-class gKnob").rel().top(0).h(20);
+    that.setClass("button-class").rel().top(0).border("1px solid #000");
+
+    if (horizontal) {
+        that.w(20).h(9);
+    } else {
+        that.h(20);
+    }
+
     return that;
 }
 
-function gSlider(val, min, max, callback) {
+function gSlider(val, min, max, callback, horizontal) {
     var that = gBase(),
-        knob = gKnob(min, max, callback);
+        knob = gKnob(min, max, callback, horizontal);
 
     that.setValue = function (value, skipCallback) {
-        knob.setValue(value, skipCallback);
-        return that;
+        return knob.setValue(value, skipCallback);
     };
 
     that.getValue = function () {
@@ -69,10 +88,20 @@ function gSlider(val, min, max, callback) {
     };
 
     that.onmousedown = function (e) {
-        that.setValue(max - (max - min) * (e.offsetY / that.offsetHeight));
+        var coord = horizontal ? (e.offsetX / that.offsetWidth) : (e.offsetY / that.offsetHeight);
+        if (horizontal) {
+            that.setValue(max - (max - min) * (1.0 - coord));
+        } else {
+            that.setValue(max - (max - min) * coord);
+        }
     };
 
-    that.setClass("gSlider").h(100).w(10);
+    if (horizontal) {
+        that.h(10).w(100);
+    } else {
+        that.h(100).w(10);
+    }
+    that.bg("#aaa").border("1px solid #000").radius(4);
     that.typeIs = "gSlider";
     that.add(knob);
     that.setValue(val, true);

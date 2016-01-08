@@ -16,7 +16,11 @@ var mUtil = {
     log: function (x, base) {
         return Math.log(x) / Math.log(base);
     },
-
+    
+    sign: function (value) {
+        return value >= 0 ? 1 : -1;
+    },
+    
     tests: {
         test_mod: function () {
             test.verify(mUtil.mod(-1, 4), 3);
