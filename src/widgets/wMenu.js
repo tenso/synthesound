@@ -13,7 +13,7 @@ function wMenu() {
         if (that.contentCount() > 0) {
             that.nextRow();
         }
-        entry = gLabel(string).textAlign("left").color("#000").w(100);
+        entry = gLabel(string).textAlign("left").color("#000").minWidth(100);
         if (callback) {
             entry.onmousedown = callback;
         }

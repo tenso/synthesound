@@ -4,14 +4,16 @@
 function sConst(args) {
     var that = sBase("const"),
         valueChanged = true,
-        value = 1.0;
+        value = 1.0,
+        outData;
 
     that.makeAudio = function () {
         var chan = 0;
 
         if (valueChanged) {
             for (chan = 0; chan < that.numChannels(); chan += 1) {
-                that.data[chan].fill(value);
+                outData = that.getChannelData(chan);
+                outData.fill(value);
             }
             valueChanged = false;
         }

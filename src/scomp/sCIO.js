@@ -128,7 +128,7 @@ function sCIO() {
             con = ioCon(to, from);
             connections.push(con);
 
-            to.sComp.addInput(from.sComp, to.portType);
+            to.sComp.addInput(from.sComp, from.portType, to.portType);
             that.drawConnections();
             return true;
         }
@@ -150,7 +150,7 @@ function sCIO() {
             to = p1;
         }
 
-        to.sComp.delInput(from.sComp, to.portType);
+        to.sComp.delInput(from.sComp, from.portType, to.portType);
 
         for (i = 0; i < connections.length; i += 1) {
             if (connections[i].from() === from && connections[i].to() === to) {
@@ -221,7 +221,7 @@ function sCIO() {
             }
 
             if (targetConnections.length) {
-                menu = wMenu().move(mouse.x - 20, mouse.y - 20);
+                menu = wMenu().move(mouse.x - 20, mouse.y - 20).z(200000);
                 that.parentNode.add(menu);
 
                 for (i = 0; i < targetConnections.length; i += 1) {

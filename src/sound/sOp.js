@@ -13,7 +13,7 @@ function sOp(args) {
             inputIndex;
 
         for (chan = 0; chan < that.numChannels(); chan += 1) {
-            chanData = that.data[chan];
+            chanData = that.getChannelData(chan);
             for (inputIndex = 0; inputIndex < that.numInputs(); inputIndex += 1) {
                 inputData = that.getInputChannelData(inputIndex, chan);
                 for (i = 0; i < chanData.length; i += 1) {

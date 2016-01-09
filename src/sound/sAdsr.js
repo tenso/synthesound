@@ -39,12 +39,12 @@ function sAdsr(args) {
         that.setChannelDataZero();
 
         for (chan = 0; chan < that.numChannels(); chan += 1) {
-            chanData = that.data[chan];
+            chanData = that.getChannelData(chan);
 
             for (i = 0; i < that.wantedSamples(); i += 1) {
 
-                if (that.haveSpecialInput("gate") && chan === 0) {
-                    nextActive = that.getSpecialChannelData("gate", chan)[i];
+                if (that.numInputs("gate") && chan === 0) {
+                    nextActive = that.getInputChannelData(0, chan, "gate")[i];
                     if (nextActive !== active) {
                         setActive(nextActive);
                     }

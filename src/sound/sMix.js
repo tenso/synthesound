@@ -13,7 +13,7 @@ function sMix(args) {
             inputIndex;
 
         for (chan = 0; chan < that.numChannels(); chan += 1) {
-            chanData = that.data[chan];
+            chanData = that.getChannelData(chan);
             chanData.fill(0);
             for (inputIndex = 0; inputIndex < that.numInputs(); inputIndex += 1) {
                 inputData = that.getInputChannelData(inputIndex, chan);

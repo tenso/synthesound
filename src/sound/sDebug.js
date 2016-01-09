@@ -15,7 +15,7 @@ function sDebug(args) {
             newVal;
 
         for (chan = 0; chan < that.numChannels(); chan += 1) {
-            chanData = that.data[chan];
+            chanData = that.getChannelData(chan);
 
             for (inputIndex = 0; inputIndex < that.numInputs(); inputIndex += 1) {
                 if (!lastValues[inputIndex]) {

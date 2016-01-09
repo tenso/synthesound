@@ -15,11 +15,11 @@ function sStep(args) {
                 needRefill = false;
             }
             for (chan = 0; chan < that.numChannels(); chan += 1) {
-                that.data[chan].fill(wantStep ? 1.0 : 0.0);
+                that.getChannelData(chan).fill(wantStep ? 1.0 : 0.0);
             }
             if (!stepDone) {
                 for (chan = 0; chan < that.numChannels(); chan += 1) {
-                    that.data[chan][0] = 0.0;
+                    that.getChannelData(chan)[0] = 0.0;
                 }
                 stepDone = true;
             }

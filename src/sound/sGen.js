@@ -19,14 +19,15 @@ function sGen(args) {
             hPeriod = period / 2.0,
             phaseStep,
             newFreq = freq,
-            inPeriod;
+            inPeriod,
+            outData;
 
 
         phaseStep = freq / sRate;
         for (i = 0; i < that.wantedSamples(); i += 1) {
 
-            if (that.haveSpecialInput("freq")) {
-                newFreq = that.getSpecialChannelData("freq", 0)[i];
+            if (that.numInputs("freq")) {
+                newFreq = that.getInputChannelData(0, 0, "freq")[i];
             }
 
             if (newFreq !== freq) {
@@ -59,7 +60,10 @@ function sGen(args) {
         }
 
         for (chan = 0; chan < that.numChannels(); chan += 1) {
-            that.data[chan] = that.genData.slice();
+            outData = that.getChannelData(chan);
+            for (i = 0; i < that.wantedSamples(); i += 1) {
+                outData[i] = that.genData[i];
+            }
         }
     };
 
