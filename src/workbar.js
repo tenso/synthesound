@@ -71,6 +71,9 @@ function workbar() {
                                 lenX = current[i + 1].ms * pixelsPerMs - timeX;
                             } else {
                                 lenX = currentMs * pixelsPerMs - timeX;
+                                if (lenX < 0) {
+                                    lenX = 0;
+                                }
                             }
                             noteNum = note.note(current[i].args.freq);
                             noteY = canvas.height - (noteNum * pixelsPerNote);
@@ -249,13 +252,13 @@ function workbar() {
     };
 
     //keyboard and mouse
-
+    //FIXME: should really not use captureMouse and iMouse... routines here as that is not in workspace container.
     that.onmousedown = function (e) {
         gui.captureMouse(e);
     };
 
     that.iMousePressAndMove = function (e, mouse) {
-        that.setTopOfBar(e.pageY - mouse.captureOffsetInElement.y);
+        that.setTopOfBar(e.pageY - mouse.pageCaptureOffsetInElement.y);
     };
 
     document.addEventListener("keydown", function (e) {

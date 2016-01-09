@@ -45,6 +45,7 @@ function guiInput(container, sizeOfContainerChanged) {
     }
 
     function setMouseCaptureFromEvent(e, target) {
+        mouse.pageCaptureOffsetInElement = gui.getEventOffsetInElement(target, e);
         mouse.captureOffsetInElement = gui.getEventOffsetInElement(target, e);
         mouse.captureOffsetInElement.x += container.scrollLeft;
         mouse.captureOffsetInElement.y += container.scrollTop;
