@@ -168,6 +168,13 @@ function workspace() {
         }
     }
 
+    function isWithinSelection(step, valueType, selection) {
+        return (step.ms >= selection.startMs
+            && step.ms <= selection.endMs
+            && step.args[valueType] >= selection.startValue
+            && step.args[valueType] <= selection.endValue);
+    }
+    
     that.setCurrentMs = function (ms) {
         if (timeTracker.setCurrentMs(ms)) {
             updateTime();
@@ -205,18 +212,17 @@ function workspace() {
 
         return data;
     };
-
+    
     that.modifySCompState = function (comp, operation, selection) {
         var seqs = comp.getSequencers(),
             type,
             i;
 
-        //FIXME: if delete start: remove end and vice versa
         if (operation === "delete") {
             for (type in seqs) {
                 if (seqs.hasOwnProperty(type)) {
                     for (i = 0; i < seqs[type].numSteps(); i += 0) {
-                        if (seqs[type].step(i).ms >= selection.startMs && seqs[type].step(i).ms <= selection.endMs) {
+                        if (isWithinSelection(seqs[type].step(i), selection.valueType, selection)) {
                             seqs[type].removeIndex(i);
                         } else {
                             i += 1;

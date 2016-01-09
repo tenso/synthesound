@@ -91,9 +91,35 @@ function sSequence(sComp, sId, argUpdateCb) {
         }
     };
     
+    //FIXME: "duration" param is hardcoded to "gate".
     that.removeIndex = function (index) {
+        var removeAt = index,
+            removeNum = 1;
+        
         if (index >= 0 && index < seqData.length) {
-            seqData.splice(index, 1);
+            if (seqData[index].args.hasOwnProperty("gate")) {
+                if (seqData[index].args.gate) {
+                    if (index < seqData.length - 1) {
+                        if (seqData[index + 1].args.hasOwnProperty("gate")) {
+                            if (!seqData[index + 1].args.gate) {
+                                log.d("also remove next event");
+                                removeNum = 2;
+                            }
+                        }
+                    }
+                } else {
+                    if (index > 0) {
+                        if (seqData[index - 1].args.hasOwnProperty("gate")) {
+                            if (seqData[index - 1].args.gate) {
+                                log.d("also remove prev event");
+                                removeAt = index - 1;
+                                removeNum = 2;
+                            }
+                        }
+                    }
+                }
+            }
+            seqData.splice(removeAt, removeNum);
         } else {
             log.error("sSequence.removeIndex: no such index:" + index);
         }

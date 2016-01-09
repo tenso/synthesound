@@ -58,7 +58,6 @@ function workbar() {
             freqY,
             current,
             pixelsPerNote = canvas.height / (maxNote - minNote);
-
                 
         for (type in sArgs) {
             if (sArgs.hasOwnProperty(type)) {
@@ -273,8 +272,10 @@ function workbar() {
             e.preventDefault();
             if (typeof that.changeSCompState === "function") {
                 if (sComp) {
-                    select.startNote = parseInt(minNote + (1.0 - select.startH) * (maxNote - minNote), 10);
-                    select.endNote = parseInt(minNote + (1.0 - select.endH) * (maxNote - minNote), 10);
+                    select.startValue = note.hz(parseInt(minNote + (1.0 - select.endH) * (maxNote - minNote), 10));
+                    select.endValue = note.hz(parseInt(minNote + (1.0 - select.startH) * (maxNote - minNote), 10));
+                    //FIXME: should not be hardcoded
+                    select.valueType = "freq";
                     that.changeSCompState(sComp, "delete", select);
                 }
             }
