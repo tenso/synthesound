@@ -150,7 +150,7 @@ function sBase(sId) {
         var typeOut = outType || "output";
         
         if (!data.hasOwnProperty(typeOut)) {
-            log.error("no such outType:" + typeOut);
+            log.error("sBase.getChannelData: no such outType:" + typeOut);
             return data.output[chan];
         }
         return data[typeOut][chan];

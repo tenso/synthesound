@@ -71,18 +71,26 @@ function wVKey(keyDown, keyUp) {
             cNote,
             octave = shift ? 2 : 3;
 
-        cNote = noteMap[key] || 1;
-        cNote += octave;
-        cNote = note.noteFromName(cNote);
+        cNote = noteMap[key] || -1;
+        if (cNote !== -1) {
+            cNote += octave;
+            cNote = note.noteFromName(cNote);
+        }
         return cNote;
     }
     
     that.iKeyDown = function (key, shift) {
-        keyDown(noteFromKey(key, shift));
+        var keyNote = noteFromKey(key, shift);
+        if (keyNote > 0) {
+            keyDown(keyNote);
+        }
     };
 
     that.iKeyUp = function (key, shift) {
-        keyUp(noteFromKey(key, shift));
+        var keyNote = noteFromKey(key, shift);
+        if (keyNote > 0) {
+            keyUp(keyNote);
+        }
     };
 
     for (i = 0; i < keys; i += 1) {

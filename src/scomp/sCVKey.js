@@ -1,6 +1,5 @@
 "use strict";
-/*global sConst*/
-/*global sStep*/
+/*global sNote*/
 /*global gui*/
 /*global note*/
 /*global wVKey*/
@@ -9,17 +8,16 @@
 /*global gButton*/
 
 function sCVKey(container, uid) {
-    var gate = sStep(),
-        hz = sConst(),
-        that = sCBase(container, "sCVKey", {gate: gate, freq: hz}, uid),
+    var output = sNote(),
+        that = sCBase(container, "sCVKey", {output: output}, uid),
         currentNote = gLabel("--").abs().move(12, 50).setSize(40, 20).bg("#888").color("#000").border("2px solid #888").radius(4),
         isDown = false,
         keyboard,
         noteDisplay = {
             setValue: function () {
-                currentNote.setValue(note.name(note.note(hz.getArgs().value)));
+                currentNote.setValue(note.name(note.note(output.getArgs().freq)));
 
-                if (gate.getArgs().active) {
+                if (output.getArgs().gate) {
                     currentNote.borderColor("#f00");
                 } else {
                     currentNote.borderColor("#888");
@@ -27,24 +25,22 @@ function sCVKey(container, uid) {
             }
         };
 
-
-    that.keyDown = function (noteKey) {
+    function saveKey(noteKey, down) {
         var hz = note.hz(noteKey);
-        isDown = true;
-        that.setAndSaveArgs("freq", {value: hz});
-        that.setAndSaveArgs("gate", {active: isDown});
+        isDown = down;
+        that.setAndSaveArgs("output", {gate: isDown, freq: hz});
         noteDisplay.setValue(hz);
+    }
+    
+    that.keyDown = function (noteKey) {
+        saveKey(noteKey, true);
     };
 
     that.keyUp = function (noteKey) {
-        var hz = note.hz(noteKey);
-        isDown = false;
-        that.setAndSaveArgs("freq", {value: hz});
-        that.setAndSaveArgs("gate", {active: isDown});
-        noteDisplay.setValue(hz);
+        saveKey(noteKey, false);
     };
 
-    that.addOut("gate").addOut("freq");
+    that.addOut("output", "gate").addOut("output", "freq");
 
     that.addTabled(gButton("capture", function () {
         gui.captureKey(keyboard);
@@ -52,17 +48,13 @@ function sCVKey(container, uid) {
 
     that.addTabled(currentNote);
 
-    gate.setArgs({value: isDown ? 1.0 : 0.0});
-
     keyboard = wVKey(that.keyDown, that.keyUp);
     that.addTabled(keyboard);
 
     that.setGuiControls({
-        freq: {
-            value: noteDisplay
-        },
-        gate: {
-            active: noteDisplay
+        output: {
+            gate: noteDisplay,
+            freq: noteDisplay
         }
     });
 
