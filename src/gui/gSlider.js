@@ -44,10 +44,10 @@ function gKnob(min, max, callback, horizontal) {
 
         if (horizontal) {
             maxCoord = that.parentNode.getW() - that.getW();
-            newCoord = gui.getEventOffsetInElement(that.parentNode, e).x - mouse.captureOffsetInElement.x;
+            newCoord = mouse.offsetInParent.x - mouse.captureOffsetInElement.x;
         } else {
             maxCoord = that.parentNode.getH() - that.getH();
-            newCoord = gui.getEventOffsetInElement(that.parentNode, e).y - mouse.captureOffsetInElement.y;
+            newCoord = mouse.offsetInParent.y - mouse.captureOffsetInElement.y;
         }
         
         if (newCoord < 0) {

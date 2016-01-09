@@ -14,17 +14,25 @@ function guiInput(container, sizeOfContainerChanged) {
         mouse = {},
         oldSize = {w: 0, h: 0};
 
-    function setMouseFromEvent(e) {
+    function setMouseFromEvent(e, target) {
         mouse.x = gui.getEventOffsetInElement(container,  e).x;
         mouse.y = gui.getEventOffsetInElement(container,  e).y;
         mouse.relativeX = mouse.x - mouse.captureOffsetInElement.x;
         mouse.relativeY = mouse.y - mouse.captureOffsetInElement.y;
+        
+        if (target) {
+            mouse.offsetInElement = gui.getEventOffsetInElement(target, e);
+            mouse.offsetInElement.x += container.scrollLeft;
+            mouse.offsetInElement.y += container.scrollTop;
+            mouse.offsetInParent = gui.getEventOffsetInElement(target.parentNode, e);
+            mouse.offsetInParent.x += container.scrollLeft;
+            mouse.offsetInParent.y += container.scrollTop;
+        }
     }
 
     function runCaptureCBIfExist(name, e) {
-        setMouseFromEvent(e);
-
         if (mouseCapturer && mouseCapturer.hasOwnProperty(name)) {
+            setMouseFromEvent(e, mouseCapturer);
             e.mouseCapturer = mouseCapturer;
             mouseCapturer[name](e, mouse);
         }
@@ -126,7 +134,7 @@ function guiInput(container, sizeOfContainerChanged) {
         e.preventDefault();
         //NOTE: dont set  captured here: will send all sorts of events...
         setMouseCaptureFromEvent(e, e.target);
-        setMouseFromEvent(e);
+        setMouseFromEvent(e, e.target);
         runCBIfExist("iOpenContextMenu", e);
     });
 
