@@ -50,50 +50,42 @@ function workbar() {
         }
         var sArgs = sComp.getArgs(),
             type,
-            colors = ["#000", "#f00", "#00f"],
-            currentColor = 0,
             i,
             timeX,
             lenX,
             noteY,
             noteNum,
             freqY,
+            current,
             pixelsPerNote = canvas.height / (maxNote - minNote);
 
-        if (sArgs.hasOwnProperty("gate") && sArgs.hasOwnProperty("freq")) {
-            if (sArgs.gate.length !== sArgs.freq.length) {
-                log.error("workbar:renderEvents: gate and freq need to be same length");
-                return;
-            }
-            for (i = 0; i < sArgs.gate.length - 1; i += 1) {
-                timeX = sArgs.gate[i].ms * pixelsPerMs;
-                lenX = sArgs.gate[i + 1].ms * pixelsPerMs - timeX;
-                noteNum = note.note(sArgs.freq[i].args.value);
-                noteY = canvas.height - (noteNum * pixelsPerNote);
                 
-                if (sArgs.gate[i].args.active) {
-                    ctx.fillStyle = "#0f0";
-                } else {
-                    ctx.fillStyle = "#444";
-                }
-                ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
-            }
-        } else {
-            for (type in sArgs) {
-                if (sArgs.hasOwnProperty(type)) {
-                    ctx.beginPath();
-                    ctx.strokeStyle = colors[currentColor];
+        for (type in sArgs) {
+            if (sArgs.hasOwnProperty(type)) {
+                current = sArgs[type];
+                for (i = 0; i < current.length; i += 1) {
+                    if (current[i].args.hasOwnProperty("gate") && current[i].args.hasOwnProperty("freq")) {
+                        if (current[i].args.gate) {
+                            timeX = current[i].ms * pixelsPerMs;
+                            if (i < current.length - 1) {
+                                lenX = current[i + 1].ms * pixelsPerMs - timeX;
+                            } else {
+                                lenX = currentMs * pixelsPerMs - timeX;
+                            }
+                            noteNum = note.note(current[i].args.freq);
+                            noteY = canvas.height - (noteNum * pixelsPerNote);
 
-                    for (i = 0; i < sArgs[type].length; i += 1) {
-                        timeX = sArgs[type][i].ms * pixelsPerMs;
+                            ctx.fillStyle = "#0f0";
+                            ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
+                        }
+                    } else {
+                        ctx.beginPath();
+                        ctx.strokeStyle = "#000";
+                        timeX = current[i].ms * pixelsPerMs;
                         ctx.moveTo(timeX,  0);
                         ctx.lineTo(timeX, canvas.height);
+                        ctx.stroke();
                     }
-
-                    ctx.stroke();
-
-                    currentColor += 1;
-                    currentColor %= colors.length;
                 }
             }
         }

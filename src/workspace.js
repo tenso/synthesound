@@ -210,7 +210,8 @@ function workspace() {
         var seqs = comp.getSequencers(),
             type,
             i;
-        
+
+        //FIXME: if delete start: remove end and vice versa
         if (operation === "delete") {
             for (type in seqs) {
                 if (seqs.hasOwnProperty(type)) {

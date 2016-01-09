@@ -9,6 +9,8 @@
 /*global sSequence*/
 /*global util*/
 
+//FIXME: probably very good refactoring: remove multiple sComp support (make args single array not map)
+
 //FIXME: rename all sC to sG
 //FIXME: rename all sId to portName?
 
