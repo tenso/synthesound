@@ -29,6 +29,7 @@ function workbar() {
         initialHeight = 200,
         totalTime,
         sComp,
+        newNoteSeqStep,
         bpmInput,
         quantInput,
         quantOn,
@@ -43,6 +44,38 @@ function workbar() {
         timeGroup = gContainer().paddingRight(25),
         quantGroup = gContainer().paddingRight(25);
 
+    //FIXME: this logic should move to workspace (or move logic from there to here)
+    function drawNoteFromDraw(selection) {
+        var noteFreq,
+            seq;
+        if (sComp) {
+            if (sComp.stateMode() === "notes") {
+                if (sComp && !newNoteSeqStep) {
+                    seq = sComp.getSequencer();
+                    noteFreq = note.hz(parseInt(minNote + (1.0 - selection.endH) * (maxNote - minNote), 10));
+                    newNoteSeqStep = seq.openAt(selection.startMs, {gate: true, freq: noteFreq});
+                    newNoteSeqStep.msOff = selection.endMs;
+                } else {
+                    newNoteSeqStep.msOff = selection.endMs;
+                }
+            }
+        }
+    }
+    
+    //FIXME: this logic should move to workspace (or move logic from there to here)
+    function finishNoteFromDraw(selection) {
+        var seq;
+        if (sComp) {
+            if (sComp.stateMode() === "notes") {
+                if (sComp && newNoteSeqStep) {
+                    seq = sComp.getSequencer();
+                    seq.closeAt(newNoteSeqStep, selection.endMs);
+                    newNoteSeqStep = undefined;
+                }
+            }
+        }
+    }
+    
     /*FIXME: render sArgs, move*/
 
     function renderPlain(canvas, ctx, currentMs, totalMs, pixelsPerMs, current) {
@@ -84,7 +117,6 @@ function workbar() {
             ctx.lineTo(canvas.width, y);
             ctx.stroke();
         }
-        
         //draw notes:
         for (i = 0; i < current.length; i += 1) {
             if (!current[i].hasOwnProperty("msOff")) {
@@ -93,7 +125,6 @@ function workbar() {
             } else if (!current[i].args.hasOwnProperty("gate")) {
                 log.error("no gate for note");
             } else {
-
                 timeX = current[i].ms * pixelsPerMs;
                 if (current[i].msOff === -1) {
                     lenX = currentMs * pixelsPerMs - timeX;
@@ -107,7 +138,7 @@ function workbar() {
                 noteNum = note.note(current[i].args.freq);
                 noteY = canvas.height - (noteNum * pixelsPerNote);
 
-                ctx.fillStyle = "#0f0";
+                ctx.fillStyle = "#f88";
                 ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
             }
         }
@@ -280,6 +311,15 @@ function workbar() {
         }
     };
 
+    timeBar.userDraw = function (selection, done) {
+        if (done) {
+            finishNoteFromDraw(selection);
+        } else {
+            drawNoteFromDraw(selection);
+        }
+        timeBar.draw();
+    };
+    
     that.setTopOfBar = function (y) {
         var newY = y;
         that.top(newY);

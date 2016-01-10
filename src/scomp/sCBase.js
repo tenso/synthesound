@@ -9,6 +9,7 @@
 /*global sSequence*/
 /*global util*/
 
+//FIXME: remove support for multiple sequencers!! (se below)
 //FIXME: probably very good refactoring: remove multiple sComp support (make args single array not map)
 
 //FIXME: rename all sC to sG
@@ -26,9 +27,10 @@ function sCBase(container, type, sComps, uid) {
     var that = gWidget(),
         ports = {},
         myUID,
-        seq = {},
+        seq = {}, //FIXME: remove support for multiple sequencers!!
         guiControls,
-        stateMode = "";
+        stateMode = "",
+        openStep;
 
     function makeRemoveAllConnections() {
         return function () {
@@ -103,9 +105,15 @@ function sCBase(container, type, sComps, uid) {
             if (sCGlobal.recordingOn) {
                 if (isDuration) {
                     if (open) {
-                        seq[sId].openAt();
+                        openStep = seq[sId].openAt();
                     } else {
-                        seq[sId].closePrev();
+                        if (openStep) {
+                            seq[sId].closeAt(openStep);
+                            openStep = undefined;
+                        } else {
+                            log.error("sCBase.setAndSaveArgs: no open step");
+                        }
+                            
                     }
                 } else {
                     seq[sId].saveAt();
@@ -155,7 +163,7 @@ function sCBase(container, type, sComps, uid) {
         }
         return sArgs;
     };
-    
+    //FIXME: remove support for multiple sequencers!!
     that.getSequencers = function () {
         var seqs = [],
             sId;
@@ -165,6 +173,16 @@ function sCBase(container, type, sComps, uid) {
             }
         }
         return seqs;
+    };
+    
+    that.getSequencer = function () {
+        var seqs = [],
+            sId;
+        for (sId in seq) {
+            if (seq.hasOwnProperty(sId)) {
+                return seq[sId];
+            }
+        }
     };
 
     that.clearPorts = function () {

@@ -24,7 +24,8 @@ function wTimeBar() {
             endH: 0
         },
         renderOver,
-        ctrlOn = false;
+        ctrlOn = false,
+        selectionMode = "";
 
     function drawBg() {
         var ms = 0,
@@ -62,13 +63,22 @@ function wTimeBar() {
         return that;
     }
 
+    function haveSelectionArea(mode) {
+        return (selection.startMs !== selection.endMs
+               && selection.startH !== selection.endH);
+    }
+    
+    function haveSelection(mode) {
+        return (haveSelectionArea() && selectionMode === mode);
+    }
+    
     function drawSelection() {
         var start,
             startY,
             end,
             endY;
 
-        if (selection.startMs !== selection.endMs) {
+        if (haveSelection("select")) {
             start = selection.startMs * canvas.width / totalMs;
             end = selection.endMs * canvas.width / totalMs;
 
@@ -148,6 +158,7 @@ function wTimeBar() {
         pos.y -= that.getTop();
         
         if (e.button === 2) {
+            selectionMode = "select";
             selection.startMs = totalMs * pos.x / canvas.width;
             selection.startH = pos.y / canvas.height;
             selection.endMs = selection.startMs;
@@ -159,6 +170,11 @@ function wTimeBar() {
                 ms = totalMs * (that.parentNode.scrollLeft + e.pageX - that.getLeft()) / canvas.width;
                 that.changeCurrentMs(ms);
             }
+        } else if (e.button === 0) {
+            selection.startMs = totalMs * pos.x / canvas.width;
+            selection.startH = pos.y / canvas.height;
+            selection.endMs = selection.startMs;
+            selection.endH = selection.startH;
         }
     };
 
@@ -183,20 +199,39 @@ function wTimeBar() {
                 that.changeCurrentMs(ms);
             }
         } else if (e.button === 0) {
-            selection.startMs += e.movementX / pixelsPerMs;
-            selection.endMs += e.movementX / pixelsPerMs;
+            if (haveSelection("select")) {
+                selection.startMs += e.movementX / pixelsPerMs;
+                selection.endMs += e.movementX / pixelsPerMs;
 
-            selection.startH += e.movementY / canvas.height;
-            selection.endH += e.movementY / canvas.height;
+                selection.startH += e.movementY / canvas.height;
+                selection.endH += e.movementY / canvas.height;
 
-            that.draw();
-            if (typeof that.selectionMoved === "function") {
-                that.selectionMoved(that.getSelection());
+                that.draw();
+                if (typeof that.selectionMoved === "function") {
+                    that.selectionMoved(that.getSelection());
+                }
+            } else {
+                selectionMode = "userDraw";
+                selection.endMs = totalMs * pos.x / canvas.width;
+                selection.endH = pos.y / canvas.height;
+                if (typeof that.userDraw === "function") {
+                    that.userDraw(that.getSelection(), false);
+                }
             }
         }
     };
 
     canvas.iMouseUpAfterCapture = function (e) {
+        if (e.button === 0 && selectionMode === "userDraw") {
+            selectionMode = "";
+            if (typeof that.userDraw === "function") {
+                that.userDraw(that.getSelection(), true);
+            }
+        }
+        
+        if (!haveSelectionArea()) {
+            selectionMode = "";
+        }
     };
 
     document.addEventListener("keydown", function (e) {
