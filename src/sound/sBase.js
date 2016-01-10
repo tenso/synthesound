@@ -173,6 +173,10 @@ function sBase(sId) {
         return {};
     };
 
+    that.getArgsOff = function () {
+        return {};
+    };
+    
     that.setArgs = function (args) {
         util.unused(args);
     };

@@ -14,17 +14,25 @@ function wNoteInfoBar(minNote, maxNote) {
         var i = 0,
             pixelsPerNote = canvas.height / (maxNote - minNote),
             y,
-            cNote;
+            cNote,
+            fontSize = parseInt(pixelsPerNote, 10),
+            textMargin = 2;
 
+        if (fontSize > 20) {
+            fontSize = 20;
+            textMargin = (pixelsPerNote - fontSize) / 2;
+        }
+        
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font =  fontSize + "px sans-serif";
+        
         for (i = 0; i < numNotes; i += 1) {
             cNote = minNote + i;
             y = canvas.height - (i + 1) * pixelsPerNote;
             ctx.fillStyle = note.isFlat(cNote) ? "#fff" : "#000";
             ctx.fillRect(0, y, canvas.width, pixelsPerNote);
             ctx.fillStyle = "#888";
-            ctx.font = parseInt(pixelsPerNote) + "px sans-serif";
-            ctx.fillText(note.name(cNote), 2, y + pixelsPerNote - 2);
+            ctx.fillText(note.name(cNote), 2, y + pixelsPerNote - textMargin);
         }
 
         return that;

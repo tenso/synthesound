@@ -35,6 +35,12 @@ function sNote(args) {
         };
     };
 
+    that.getArgsOff = function () {
+        return {
+            gate: false
+        };
+    };
+    
     that.setArgs = function (args) {
         if (args) {
             wantStep = typeof args.gate === "boolean" ? args.gate : wantStep;

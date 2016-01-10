@@ -105,7 +105,7 @@ function sCBase(container, type, sComps, uid) {
                     if (open) {
                         seq[sId].openAt();
                     } else {
-                        seq[sId].closePrevOpen();
+                        seq[sId].closePrev();
                     }
                 } else {
                     seq[sId].saveAt();

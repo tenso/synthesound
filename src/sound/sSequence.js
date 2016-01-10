@@ -47,7 +47,7 @@ function sSequence(sComp, sId, argUpdateCb) {
         for (i = 0; i < seqData.length; i += 1) {
             //enable states
             if (seqData[i].ms > atMs && seqData[i].ms <= ms) {
-                
+                that.closePrev(seqData[i].ms);
                 sComp.setArgs(seqData[i].args);
                 if (argUpdateCb) {
                     argUpdateCb(sId, seqData[i].args);
@@ -96,18 +96,22 @@ function sSequence(sComp, sId, argUpdateCb) {
             at = typeof ms === "number" ? ms : atMs,
             data;
         
-        that.closePrevOpen();
+        that.closePrev();
         data = sSequanceData(sComp.getArgs(), at);
         sOpenSequanceData(data);
         return that.saveAt(at, data);
     };
     
-    that.closePrevOpen = function (ms) {
-        var at = typeof ms === "number" ? ms : atMs;
+    that.closePrev = function (ms) {
+        var at = typeof ms === "number" ? ms : atMs,
+            i;
         
-        if (seqData.length > 0) {
-            if (seqData[seqData.length - 1].hasOwnProperty("msOff") && seqData[seqData.length - 1].msOff === -1) {
-                sCloseSequanceData(seqData[seqData.length - 1], sComp.getArgs(), at);
+        for (i = 0; i < seqData.length; i += 1) {
+            if (seqData[i].hasOwnProperty("msOff")) {
+                if ((seqData[i].msOff > atMs && seqData[i].ms <= atMs)
+                        || seqData[i].msOff === -1) {
+                    sCloseSequanceData(seqData[i], sComp.getArgsOff(), at);
+                }
             }
         }
         return that;
@@ -183,6 +187,10 @@ function stubScomp() {
         returnedArgs.push("saved" + saveCount);
         saveCount += 1;
         return returnedArgs[returnedArgs.length - 1];
+    };
+    
+    that.getArgsOff = function () {
+        return "saved" + saveCount + "-off";
     };
 
     //introspect:
@@ -286,11 +294,11 @@ function test_sSequenceOpenClose() {
     seq.moveToMs(1250);
     test.verify(sComp.argSeqLength(), 0);
     
-    seq.closePrevOpen();
+    seq.closePrev();
     test.verify(seq.numSteps(), 1);
     test.verify(seq.step(0).args, "saved0");
     test.verify(seq.step(0).ms, 1000);
-    test.verify(seq.step(0).argsOff, "saved1");
+    test.verify(seq.step(0).argsOff, "saved1-off");
     test.verify(seq.step(0).msOff, 1250);
     
     seq.moveToMs(1250);
@@ -298,13 +306,12 @@ function test_sSequenceOpenClose() {
     
     seq.openAt();
     test.verify(seq.numSteps(), 2);
-    test.verify(seq.step(1).args, "saved2");
+    test.verify(seq.step(1).args, "saved1");
     test.verify(seq.step(1).ms, 1250);
     
-    //open on same ms should overwrite, it will however first close the open (saved4 not 3)
     seq.openAt();
     test.verify(seq.numSteps(), 2);
-    test.verify(seq.step(1).args, "saved4");
+    test.verify(seq.step(1).args, "saved2");
     test.verify(seq.step(1).ms, 1250);
     test.verify(seq.step(1).msOff, -1);
 
@@ -312,28 +319,28 @@ function test_sSequenceOpenClose() {
     seq.moveToMs(2000);
     seq.openAt();
     test.verify(seq.numSteps(), 3);
-    test.verify(seq.step(1).args, "saved4");
+    test.verify(seq.step(1).args, "saved2");
     test.verify(seq.step(1).ms, 1250);
-    test.verify(seq.step(1).argsOff, "saved5");
+    test.verify(seq.step(1).argsOff, "saved3-off");
     test.verify(seq.step(1).msOff, 2000);
-    test.verify(seq.step(2).args, "saved6");
+    test.verify(seq.step(2).args, "saved3");
     test.verify(seq.step(2).ms, 2000);
     test.verify(seq.step(2).msOff, -1);
     
     seq.moveToMs(3000);
-    seq.closePrevOpen();
+    seq.closePrev();
     test.verify(seq.step(0).args, "saved0");
     test.verify(seq.step(0).ms, 1000);
-    test.verify(seq.step(0).argsOff, "saved1");
+    test.verify(seq.step(0).argsOff, "saved1-off");
     test.verify(seq.step(0).msOff, 1250);
-    test.verify(seq.step(1).args, "saved4");
+    test.verify(seq.step(1).args, "saved2");
     test.verify(seq.step(1).ms, 1250);
-    test.verify(seq.step(1).argsOff, "saved5");
+    test.verify(seq.step(1).argsOff, "saved3-off");
     test.verify(seq.step(1).msOff, 2000);
-    test.verify(seq.step(2).args, "saved6");
+    test.verify(seq.step(2).args, "saved3");
     test.verify(seq.step(2).ms, 2000);
     test.verify(seq.step(2).msOff, 3000);
-    test.verify(seq.step(2).argsOff, "saved7");
+    test.verify(seq.step(2).argsOff, "saved4-off");
     
     
     //reply recording and make sure states are enabled/disabled correctly
@@ -346,18 +353,73 @@ function test_sSequenceOpenClose() {
     
     seq.moveToMs(1250);
     test.verify(sComp.argSeqLength(), 3);
-    test.verify(sComp.argSeq(1), "saved1");
-    test.verify(sComp.argSeq(2), "saved4");
+    test.verify(sComp.argSeq(1), "saved1-off");
+    test.verify(sComp.argSeq(2), "saved2");
     
     seq.moveToMs(2000);
     test.verify(sComp.argSeqLength(), 5);
-    test.verify(sComp.argSeq(3), "saved5");
-    test.verify(sComp.argSeq(4), "saved6");
+    test.verify(sComp.argSeq(3), "saved3-off");
+    test.verify(sComp.argSeq(4), "saved3");
     
     seq.moveToMs(4000);
     test.verify(sComp.argSeqLength(), 6);
-    test.verify(sComp.argSeq(5), "saved7");
+    test.verify(sComp.argSeq(5), "saved4-off");
+}
+
+function test_sSequenceOpenCloseAndLoad() {
+    var sComp = stubScomp(),
+        seq = sSequence(sComp, 0),
+        loadData = [
+            {
+                ms: 0,
+                args: "loaded0",
+                msOff: 500,
+                argsOff: "loaded0-off"
+            },
+            {
+                ms: 1000,
+                args: "loaded1",
+                msOff: 1500,
+                argsOff: "loaded1-off"
+            }
+        ];
+
+    seq.load(loadData);
+    seq.moveToMs(0);
+    test.verify(sComp.argSeqLength(), 1);
+    test.verify(sComp.argSeq(0), "loaded0");
+    
+    seq.moveToMs(100);
+    seq.openAt();
+    test.verify(sComp.argSeqLength(), 1);
+    test.verify(sComp.argSeq(0), "loaded0");
+    test.verify(seq.step(0).args, "loaded0");
+    test.verify(seq.step(0).ms, 0);
+    test.verify(seq.step(0).msOff, 100);
+    test.verify(seq.step(0).argsOff, "saved0-off");
+    test.verify(seq.step(1).args, "saved0");
+    test.verify(seq.step(1).ms, 100);
+
+    
+    seq.moveToMs(1000);
+    test.verify(seq.step(0).args, "loaded0");
+    test.verify(seq.step(0).ms, 0);
+    test.verify(seq.step(0).msOff, 100);
+    test.verify(seq.step(0).argsOff, "saved0-off");
+    test.verify(seq.step(1).args, "saved0");
+    test.verify(seq.step(1).ms, 100);
+    test.verify(seq.step(1).msOff, 1000);
+    test.verify(seq.step(1).argsOff, "saved1-off");
+    test.verify(seq.step(2).args, "loaded1");
+    test.verify(seq.step(2).ms, 1000);
+    test.verify(seq.step(2).msOff, 1500);
+    test.verify(seq.step(2).argsOff, "loaded1-off");
+    
+    test.verify(sComp.argSeqLength(), 2);
+    test.verify(sComp.argSeq(0), "loaded0");
+    test.verify(sComp.argSeq(1), "loaded1");
 }
 
 test.addTest(test_sSequence, "sSequence load-save");
 test.addTest(test_sSequenceOpenClose, "sSequence open-close");
+test.addTest(test_sSequenceOpenCloseAndLoad, "sSequence open-close and load");
