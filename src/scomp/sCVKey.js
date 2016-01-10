@@ -28,7 +28,11 @@ function sCVKey(container, uid) {
     function saveKey(noteKey, down) {
         var hz = note.hz(noteKey);
         isDown = down;
-        that.setAndSaveArgs("output", {gate: isDown, freq: hz});
+        if (isDown) {
+            that.setAndSaveArgs("output", {gate: isDown, freq: hz}, true, isDown);
+        } else {
+            that.setAndSaveArgs("output", {gate: isDown}, true, isDown);
+        }
         noteDisplay.setValue(hz);
     }
     
@@ -57,6 +61,8 @@ function sCVKey(container, uid) {
             freq: noteDisplay
         }
     });
+    
+    that.setStateMode("notes");
 
     return that;
 }

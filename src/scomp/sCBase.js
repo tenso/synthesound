@@ -27,7 +27,8 @@ function sCBase(container, type, sComps, uid) {
         ports = {},
         myUID,
         seq = {},
-        guiControls;
+        guiControls,
+        stateMode = "";
 
     function makeRemoveAllConnections() {
         return function () {
@@ -95,11 +96,20 @@ function sCBase(container, type, sComps, uid) {
         that.border("2px solid #000");
     };
 
-    that.setAndSaveArgs = function (sId, args) {
+    that.setAndSaveArgs = function (sId, args, isDuration, open) {
         if (sComps.hasOwnProperty(sId)) {
+            //FIXME: should not seq.saveAt() trigger update of states?
             seq[sId].setArgs(args);
             if (sCGlobal.recordingOn) {
-                seq[sId].saveAt();
+                if (isDuration) {
+                    if (open) {
+                        seq[sId].openAt();
+                    } else {
+                        seq[sId].closePrevOpen();
+                    }
+                } else {
+                    seq[sId].saveAt();
+                }
             }
         } else {
             log.error("no such sId:" + sId);
@@ -127,6 +137,14 @@ function sCBase(container, type, sComps, uid) {
         }
     };
 
+    that.stateMode = function () {
+        return stateMode;
+    };
+    
+    that.setStateMode = function (mode) {
+        stateMode = mode;
+    };
+    
     that.getArgs = function () {
         var sArgs = [],
             sId;

@@ -169,6 +169,10 @@ function workspace() {
     }
 
     function isWithinSelection(step, valueType, selection) {
+        if (valueType === "") {
+            return (step.ms >= selection.startMs
+                && step.ms <= selection.endMs);
+        }
         return (step.ms >= selection.startMs
             && step.ms <= selection.endMs
             && step.args[valueType] >= selection.startValue
@@ -236,7 +240,6 @@ function workspace() {
         
         if (typeof sCGlobal.currentUpdated === "function") {
             if (sCGlobal.current === comp) {
-                log.d("current modified, update");
                 sCGlobal.currentUpdated(comp);
             }
         }

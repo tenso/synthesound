@@ -42,6 +42,56 @@ function workbar() {
         quantGroup = gContainer().paddingRight(25);
 
     /*FIXME: render sArgs, move*/
+    
+    function renderPlain(canvas, ctx, currentMs, totalMs, pixelsPerMs, current) {
+        var i,
+            timeX;
+        
+        for (i = 0; i < current.length; i += 1) {
+            ctx.beginPath();
+            ctx.strokeStyle = "#000";
+            timeX = current[i].ms * pixelsPerMs;
+            ctx.moveTo(timeX,  0);
+            ctx.lineTo(timeX, canvas.height);
+            ctx.stroke();
+        }
+    }
+    
+    function renderNotes(canvas, ctx, currentMs, totalMs, pixelsPerMs, current) {
+        var i,
+            timeX,
+            lenX,
+            noteY,
+            noteNum,
+            pixelsPerNote = canvas.height / (maxNote - minNote);
+        
+        
+        for (i = 0; i < current.length; i += 1) {
+            if (!current[i].hasOwnProperty("msOff")) {
+                //log.error("no msOff for note");
+                //FIXME: sCVkey adds state with gate off with no offMs (change sCKey or here?)
+            } else if (!current[i].args.hasOwnProperty("gate")) {
+                log.error("no gate for note");
+            } else {
+
+                timeX = current[i].ms * pixelsPerMs;
+                if (current[i].msOff === -1) {
+                    lenX = currentMs * pixelsPerMs - timeX;
+                    if (lenX < 0) {
+                        lenX = 0;
+                    }
+                } else {
+                    lenX = current[i].msOff * pixelsPerMs - timeX;
+                }
+
+                noteNum = note.note(current[i].args.freq);
+                noteY = canvas.height - (noteNum * pixelsPerNote);
+
+                ctx.fillStyle = "#0f0";
+                ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
+            }
+        }
+    }
 
     function renderEvents(canvas, ctx, currentMs, totalMs, pixelsPerMs) {
         if (!sComp) {
@@ -51,43 +101,14 @@ function workbar() {
         var sArgs = sComp.getArgs(),
             type,
             i,
-            timeX,
-            lenX,
-            noteY,
-            noteNum,
-            freqY,
-            current,
-            pixelsPerNote = canvas.height / (maxNote - minNote);
+            timeX;
                 
         for (type in sArgs) {
             if (sArgs.hasOwnProperty(type)) {
-                current = sArgs[type];
-                for (i = 0; i < current.length; i += 1) {
-                    if (current[i].args.hasOwnProperty("gate") && current[i].args.hasOwnProperty("freq")) {
-                        if (current[i].args.gate) {
-                            timeX = current[i].ms * pixelsPerMs;
-                            if (i < current.length - 1) {
-                                lenX = current[i + 1].ms * pixelsPerMs - timeX;
-                            } else {
-                                lenX = currentMs * pixelsPerMs - timeX;
-                                if (lenX < 0) {
-                                    lenX = 0;
-                                }
-                            }
-                            noteNum = note.note(current[i].args.freq);
-                            noteY = canvas.height - (noteNum * pixelsPerNote);
-
-                            ctx.fillStyle = "#0f0";
-                            ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
-                        }
-                    } else {
-                        ctx.beginPath();
-                        ctx.strokeStyle = "#000";
-                        timeX = current[i].ms * pixelsPerMs;
-                        ctx.moveTo(timeX,  0);
-                        ctx.lineTo(timeX, canvas.height);
-                        ctx.stroke();
-                    }
+                if (sComp.stateMode() === "notes") {
+                    renderNotes(canvas, ctx, currentMs, totalMs, pixelsPerMs, sArgs[type]);
+                } else {
+                    renderPlain(canvas, ctx, currentMs, totalMs, pixelsPerMs, sArgs[type]);
                 }
             }
         }
@@ -272,10 +293,15 @@ function workbar() {
             e.preventDefault();
             if (typeof that.changeSCompState === "function") {
                 if (sComp) {
-                    select.startValue = note.hz(parseInt(minNote + (1.0 - select.endH) * (maxNote - minNote), 10));
-                    select.endValue = note.hz(parseInt(minNote + (1.0 - select.startH) * (maxNote - minNote), 10));
-                    //FIXME: should not be hardcoded
-                    select.valueType = "freq";
+                    if (sComp.stateMode() === "notes") {
+                        select.startValue = note.hz(parseInt(minNote + (1.0 - select.endH) * (maxNote - minNote), 10));
+                        select.endValue = note.hz(parseInt(minNote + (1.0 - select.startH) * (maxNote - minNote), 10));
+                        select.valueType = "freq";
+                    } else {
+                        select.startValue = select.startH;
+                        select.endValue = select.endH;
+                        select.valueType = "";
+                    }
                     that.changeSCompState(sComp, "delete", select);
                 }
             }

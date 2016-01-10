@@ -11,7 +11,8 @@ function wVKey(keyDown, keyUp) {
         keys = 60,
         startKey = 16,
         nextX = 0,
-        isDown = false;
+        isDown = false,
+        lastNote;
 
     function addKey(note) {
         var key = gBase(),
@@ -24,17 +25,19 @@ function wVKey(keyDown, keyUp) {
         key.onmouseover = function (e) {
             util.unused(e);
             if (isDown) {
+                lastNote = note;
                 keyDown(note);
             }
         };
         key.iMouseCaptured = function (e) {
             util.unused(e);
             isDown = true;
-            keyDown(note);
+            lastNote = note;
+            keyDown(lastNote);
         };
         key.iMouseUpAfterCapture = function (e) {
             util.unused(e);
-            keyUp(note);
+            keyUp(lastNote);
             isDown = false;
         };
 

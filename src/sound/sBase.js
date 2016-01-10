@@ -57,8 +57,6 @@ function sBase(sId) {
         var typeOut = outType || "output",
             typeIn = inType || "inputs";
         
-        log.d("add from type " + typeOut + " to " + typeIn);
-        
         if (!inputs.hasOwnProperty(typeIn)) {
             inputs[typeIn] = [];
         }
