@@ -86,7 +86,7 @@ function wTimeBar() {
         pixelsPerMs = canvas.width / totalMs;
         drawBg();
         if (typeof renderOver === "function") {
-            renderOver(canvas, ctx, currentMs, totalMs, pixelsPerMs);
+            renderOver(canvas, currentMs, totalMs, pixelsPerMs);
         }
         drawFg();
         drawSelection();
@@ -143,6 +143,10 @@ function wTimeBar() {
         var pos = gui.getEventOffsetInElement(that.parentNode, e),
             ms;
 
+        //FIXME:
+        pos.x -= that.getLeft();
+        pos.y -= that.getTop();
+        
         if (e.button === 2) {
             selection.startMs = totalMs * pos.x / canvas.width;
             selection.startH = pos.y / canvas.height;
@@ -152,7 +156,7 @@ function wTimeBar() {
             that.draw();
         } else if (ctrlOn && e.button === 0) {
             if (typeof that.changeCurrentMs === "function") {
-                ms = totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width;
+                ms = totalMs * (that.parentNode.scrollLeft + e.pageX - that.getLeft()) / canvas.width;
                 that.changeCurrentMs(ms);
             }
         }
@@ -162,12 +166,19 @@ function wTimeBar() {
         var ms,
             pos = gui.getEventOffsetInElement(that.parentNode, e);
 
+        //FIXME:
+        pos.x -= that.getLeft();
+        pos.y -= that.getTop();
+        
         if (e.button === 2) {
             selection.endMs = totalMs * pos.x / canvas.width;
             selection.endH = pos.y / canvas.height;
             that.draw();
         } else if (ctrlOn && e.button === 0) {
-            ms = totalMs * (that.parentNode.scrollLeft + e.pageX) / canvas.width;
+            ms = totalMs * (that.parentNode.scrollLeft + e.pageX - that.getLeft()) / canvas.width;
+            if (ms < 0) {
+                ms = 0;
+            }
             if (typeof that.changeCurrentMs === "function") {
                 that.changeCurrentMs(ms);
             }

@@ -14,6 +14,7 @@
 /*global window*/
 /*global gSlider*/
 /*global note*/
+/*global wNoteInfoBar*/
 
 function workbar() {
     var that = gContainer(),
@@ -35,8 +36,9 @@ function workbar() {
         zoomY,
         recordOn,
         time,
-        minNote = 1,
+        minNote = 1, //FIXME move to infoBar?
         maxNote = 88,
+        infoBar = wNoteInfoBar(minNote, maxNote),
         buttonGroup = gContainer().paddingRight(25),
         timeGroup = gContainer().paddingRight(25),
         quantGroup = gContainer().paddingRight(25);
@@ -111,15 +113,17 @@ function workbar() {
         }
     }
 
-    function renderEvents(canvas, ctx, currentMs, totalMs, pixelsPerMs) {
+    function renderEvents(canvas, currentMs, totalMs, pixelsPerMs) {
+        var sArgs = sComp.getArgs(),
+            type,
+            i,
+            timeX,
+            ctx = canvas.getContext("2d");
+        
         if (!sComp) {
             log.error("workbar.renderEvents: no sComp");
             return that;
         }
-        var sArgs = sComp.getArgs(),
-            type,
-            i,
-            timeX;
                 
         for (type in sArgs) {
             if (sArgs.hasOwnProperty(type)) {
@@ -150,8 +154,10 @@ function workbar() {
     }
 
     function zoomTimeBar() {
-        timeBar.w(zoomX.getValueInt() + "%").h(zoomY.getValueInt() + "%");
+        timeBar.w("calc(" + zoomX.getValueInt() + "% - 40px)").h(zoomY.getValueInt() + "%");
+        infoBar.h(zoomY.getValueInt() + "%");
         timeBar.resizeCanvas();
+        infoBar.resizeCanvas();
     }
 
     function updatePlayback() {
@@ -229,13 +235,15 @@ function workbar() {
     quantOn = gButton("1", updateBpmAndQuantification, true).w(20).h(buttonH);
 
     zoomX = gSlider(0, 100, 1200, function (value) {
-        timeBar.w(value + "%");
+        timeBar.w("calc(" + value + "% - 40px)");
         timeBar.resizeCanvas();
     }, true);
 
     zoomY = gSlider(0, 100, 400, function (value) {
         timeBar.h(value + "%");
         timeBar.resizeCanvas();
+        infoBar.h(value + "%");
+        infoBar.resizeCanvas();
     });
 
     //buttons
@@ -259,8 +267,13 @@ function workbar() {
     timeScroll.addTo(that).abs().left(marginX).right(marginX * 2 + 10).top(buttonH + 2 * marginY).bottom(0);
     timeScroll.overflow("scroll");
 
-    timeBar.addTo(timeScroll).abs().left(0).top(0).w("100%").h("100%");
-
+    timeBar.addTo(timeScroll).abs().left(40).top(0).w("calc(100% - 40px)").h("100%");
+    
+    infoBar.addTo(timeScroll).abs().left(0).top(0).w(40).h("100%");
+    timeScroll.onscroll = function () {
+        infoBar.left(timeScroll.scrollLeft);
+    };
+    
     timeBar.changeCurrentMs = function (ms) {
         if (typeof that.changeCurrentMs === "function") {
             that.changeCurrentMs(ms);
@@ -285,6 +298,7 @@ function workbar() {
             that.changeTopPosition(newY);
         }
         timeBar.resizeCanvas();
+        infoBar.resizeCanvas();
         return that;
     };
 

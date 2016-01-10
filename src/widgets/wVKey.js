@@ -14,9 +14,9 @@ function wVKey(keyDown, keyUp) {
         isDown = false,
         lastNote;
 
-    function addKey(note) {
+    function addKey(keyNote) {
         var key = gBase(),
-            flat = true,
+            flat = note.isFlat(keyNote),
             keyX = 0;
 
         key.onmousedown = function (e) {
@@ -25,14 +25,14 @@ function wVKey(keyDown, keyUp) {
         key.onmouseover = function (e) {
             util.unused(e);
             if (isDown) {
-                lastNote = note;
-                keyDown(note);
+                lastNote = keyNote;
+                keyDown(keyNote);
             }
         };
         key.iMouseCaptured = function (e) {
             util.unused(e);
             isDown = true;
-            lastNote = note;
+            lastNote = keyNote;
             keyDown(lastNote);
         };
         key.iMouseUpAfterCapture = function (e) {
@@ -42,12 +42,7 @@ function wVKey(keyDown, keyUp) {
         };
 
         that.add(key);
-
-        if (note % 12 === 2 || note % 12 === 5 || note % 12 === 7
-                || note % 12 === 10 || note % 12 === 0) {
-            flat = false;
-        }
-
+        
         if (flat) {
             key.className = "vkey-key-flat";
             key.w(32).h(160);

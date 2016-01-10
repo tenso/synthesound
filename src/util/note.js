@@ -60,6 +60,14 @@ var note = {
         return pos;
     },
 
+    isFlat: function (note) {
+        if (note % 12 === 2 || note % 12 === 5 || note % 12 === 7
+                || note % 12 === 10 || note % 12 === 0) {
+            return false;
+        }
+        return true;
+    },
+    
     tests: {
         test_hz: function () {
             test.verifyFloat(note.hz(-1), 24.5, 3);
