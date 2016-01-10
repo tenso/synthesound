@@ -35,10 +35,6 @@ function wTimeBar() {
         ctx.lineWidth = 1;
 
         ctx.beginPath();
-        ctx.moveTo(0,  halfH);
-        ctx.lineTo(canvas.width, halfH);
-
-
         if (measureMs > 0) {
             while (ms < totalMs) {
                 ms += measureMs;
@@ -47,7 +43,6 @@ function wTimeBar() {
                 ctx.lineTo(timeX, canvas.height);
             }
         }
-
         ctx.stroke();
 
         return that;
@@ -55,12 +50,14 @@ function wTimeBar() {
 
     function drawFg() {
         var timeX = currentMs * pixelsPerMs;
-
-        ctx.beginPath();
+        
+        ctx.lineWidth = 2;
         ctx.strokeStyle = "#8f8";
+        ctx.beginPath();
         ctx.moveTo(timeX,  0);
         ctx.lineTo(timeX, canvas.height);
         ctx.stroke();
+        ctx.lineWidth = 1;
 
         return that;
     }

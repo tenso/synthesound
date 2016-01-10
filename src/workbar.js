@@ -42,19 +42,25 @@ function workbar() {
         quantGroup = gContainer().paddingRight(25);
 
     /*FIXME: render sArgs, move*/
-    
+
     function renderPlain(canvas, ctx, currentMs, totalMs, pixelsPerMs, current) {
         var i,
             timeX;
         
+        ctx.strokeStyle = "#aaa";
+        ctx.beginPath();
+        ctx.moveTo(0,  canvas.height / 2);
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+        
+        ctx.strokeStyle = "#000";
+        ctx.beginPath();
         for (i = 0; i < current.length; i += 1) {
-            ctx.beginPath();
-            ctx.strokeStyle = "#000";
             timeX = current[i].ms * pixelsPerMs;
             ctx.moveTo(timeX,  0);
             ctx.lineTo(timeX, canvas.height);
-            ctx.stroke();
         }
+        ctx.stroke();
     }
     
     function renderNotes(canvas, ctx, currentMs, totalMs, pixelsPerMs, current) {
@@ -63,9 +69,21 @@ function workbar() {
             lenX,
             noteY,
             noteNum,
+            y,
             pixelsPerNote = canvas.height / (maxNote - minNote);
         
         
+        //draw note grid:
+        for (i = 0; i < maxNote - minNote; i += 1) {
+            ctx.beginPath();
+            ctx.strokeStyle = "#aaa";
+            y = i * pixelsPerNote;
+            ctx.moveTo(0,  y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+        }
+        
+        //draw notes:
         for (i = 0; i < current.length; i += 1) {
             if (!current[i].hasOwnProperty("msOff")) {
                 //log.error("no msOff for note");
@@ -267,7 +285,6 @@ function workbar() {
             that.changeTopPosition(newY);
         }
         timeBar.resizeCanvas();
-
         return that;
     };
 
