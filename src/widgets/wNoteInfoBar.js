@@ -22,10 +22,10 @@ function wNoteInfoBar(minNote, maxNote) {
             fontSize = 20;
             textMargin = (pixelsPerNote - fontSize) / 2;
         }
-        
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font =  fontSize + "px sans-serif";
-        
+
         for (i = 0; i < numNotes; i += 1) {
             cNote = minNote + i;
             y = canvas.height - (i + 1) * pixelsPerNote;
@@ -51,7 +51,7 @@ function wNoteInfoBar(minNote, maxNote) {
     that.maxNote = function () {
         return maxNote;
     };
-    
+
     window.addEventListener("resize", that.resizeCanvas);
     that.typeIs = "wNoteInfoBar";
     that.draw();

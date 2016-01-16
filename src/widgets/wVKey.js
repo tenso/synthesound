@@ -42,7 +42,7 @@ function wVKey(keyDown, keyUp) {
         };
 
         that.add(key);
-        
+
         if (flat) {
             key.className = "vkey-key-flat";
             key.w(32).h(160);
@@ -60,7 +60,7 @@ function wVKey(keyDown, keyUp) {
         key.left(keyX).top(0);
         return key;
     }
-    
+
     function noteFromKey(key, shift) {
         var noteMap = {a: "C",  w: "C#", s: "D",
                        e: "D#", d: "E",  f: "F",
@@ -76,7 +76,7 @@ function wVKey(keyDown, keyUp) {
         }
         return cNote;
     }
-    
+
     that.iKeyDown = function (key, shift) {
         var keyNote = noteFromKey(key, shift);
         if (keyNote > 0) {

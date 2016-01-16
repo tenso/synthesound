@@ -61,7 +61,7 @@ function workbar() {
             }
         }
     }
-    
+
     //FIXME: this logic should move to workspace (or move logic from there to here)
     function finishNoteFromDraw(selection) {
         var seq;
@@ -75,19 +75,22 @@ function workbar() {
             }
         }
     }
-    
+
     /*FIXME: render sArgs, move*/
 
     function renderPlain(canvas, ctx, currentMs, totalMs, pixelsPerMs, current) {
         var i,
             timeX;
-        
+
+        util.unused(currentMs);
+        util.unused(totalMs);
+
         ctx.strokeStyle = "#aaa";
         ctx.beginPath();
         ctx.moveTo(0,  canvas.height / 2);
         ctx.lineTo(canvas.width, canvas.height / 2);
         ctx.stroke();
-        
+
         ctx.strokeStyle = "#000";
         ctx.beginPath();
         for (i = 0; i < current.length; i += 1) {
@@ -97,7 +100,7 @@ function workbar() {
         }
         ctx.stroke();
     }
-    
+
     function renderNotes(canvas, ctx, currentMs, totalMs, pixelsPerMs, current) {
         var i,
             timeX,
@@ -106,8 +109,9 @@ function workbar() {
             noteNum,
             y,
             pixelsPerNote = canvas.height / (maxNote - minNote);
-        
-        
+
+        util.unused(totalMs);
+
         //draw note grid:
         for (i = 0; i < maxNote - minNote; i += 1) {
             ctx.beginPath();
@@ -119,27 +123,26 @@ function workbar() {
         }
         //draw notes:
         for (i = 0; i < current.length; i += 1) {
-            if (!current[i].hasOwnProperty("msOff")) {
-                //log.error("no msOff for note");
-                //FIXME: sCVkey adds state with gate off with no offMs (change sCKey or here?)
-            } else if (!current[i].args.hasOwnProperty("gate")) {
-                log.error("no gate for note");
-            } else {
-                timeX = current[i].ms * pixelsPerMs;
-                if (current[i].msOff === -1) {
-                    lenX = currentMs * pixelsPerMs - timeX;
-                    if (lenX < 0) {
-                        lenX = 0;
-                    }
+            if (current[i].hasOwnProperty("msOff")) {
+                if (!current[i].args.hasOwnProperty("gate")) {
+                    log.error("no gate for note");
                 } else {
-                    lenX = current[i].msOff * pixelsPerMs - timeX;
+                    timeX = current[i].ms * pixelsPerMs;
+                    if (current[i].msOff === -1) {
+                        lenX = currentMs * pixelsPerMs - timeX;
+                        if (lenX < 0) {
+                            lenX = 0;
+                        }
+                    } else {
+                        lenX = current[i].msOff * pixelsPerMs - timeX;
+                    }
+
+                    noteNum = note.note(current[i].args.freq);
+                    noteY = canvas.height - (noteNum * pixelsPerNote);
+
+                    ctx.fillStyle = "#f88";
+                    ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
                 }
-
-                noteNum = note.note(current[i].args.freq);
-                noteY = canvas.height - (noteNum * pixelsPerNote);
-
-                ctx.fillStyle = "#f88";
-                ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
             }
         }
     }
@@ -147,15 +150,13 @@ function workbar() {
     function renderEvents(canvas, currentMs, totalMs, pixelsPerMs) {
         var sArgs = sComp.getArgs(),
             type,
-            i,
-            timeX,
             ctx = canvas.getContext("2d");
-        
+
         if (!sComp) {
             log.error("workbar.renderEvents: no sComp");
             return that;
         }
-                
+
         for (type in sArgs) {
             if (sArgs.hasOwnProperty(type)) {
                 if (sComp.stateMode() === "notes") {
@@ -182,13 +183,6 @@ function workbar() {
             that.changeTotalMs(total);
         }
         return that;
-    }
-
-    function zoomTimeBar() {
-        timeBar.w("calc(" + zoomX.getValueInt() + "% - 40px)").h(zoomY.getValueInt() + "%");
-        infoBar.h(zoomY.getValueInt() + "%");
-        timeBar.resizeCanvas();
-        infoBar.resizeCanvas();
     }
 
     function updatePlayback() {
@@ -227,11 +221,11 @@ function workbar() {
         quantOn.setValue(qOn, true);
         timeBar.setTimeParams(bpm, quant, measureMs);
     };
-    
+
     that.setPlayback = function (isOn) {
         play.setValue(isOn, true);
     };
-    
+
     that.setCurrentSComp = function (comp) {
         sComp = comp;
 
@@ -299,12 +293,12 @@ function workbar() {
     timeScroll.overflow("scroll");
 
     timeBar.addTo(timeScroll).abs().left(40).top(0).w("calc(100% - 40px)").h("100%");
-    
+
     infoBar.addTo(timeScroll).abs().left(0).top(0).w(40).h("100%");
     timeScroll.onscroll = function () {
         infoBar.left(timeScroll.scrollLeft);
     };
-    
+
     timeBar.changeCurrentMs = function (ms) {
         if (typeof that.changeCurrentMs === "function") {
             that.changeCurrentMs(ms);
@@ -319,7 +313,7 @@ function workbar() {
         }
         timeBar.draw();
     };
-    
+
     that.setTopOfBar = function (y) {
         var newY = y;
         that.top(newY);
@@ -355,7 +349,7 @@ function workbar() {
     document.addEventListener("keydown", function (e) {
         var key = String.fromCharCode(e.keyCode).toLowerCase(),
             select = timeBar.getSelection();
-                                        
+
         if (key === " ") {
             e.preventDefault();
             play.set();
@@ -379,7 +373,7 @@ function workbar() {
         }
     }, false);
 
-    window.addEventListener("resize", function (e) {
+    window.addEventListener("resize", function () {
         that.resizeCanvas();
     }, false);
 

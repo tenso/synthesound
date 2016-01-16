@@ -17,12 +17,12 @@ function sBase(sId) {
 
         chanUpdated,
         data = {};
-        
+
     function findInputIndex(comp, outType, inType) {
         var i,
             typeIn = inType || "inputs",
             typeOut = outType || "output";
-        
+
         for (i = 0; i < inputs[typeIn].length; i += 1) {
             if (inputs[typeIn][i].comp === comp && inputs[typeIn][i].outType === typeOut) {
                 return i;
@@ -31,7 +31,7 @@ function sBase(sId) {
         log.error("sBase:findInputIndex: did not find comp out:" + typeOut + " in:" + typeIn);
         return -1;
     }
-    
+
     that.typeId = function () {
         return sId;
     };
@@ -56,11 +56,11 @@ function sBase(sId) {
     that.addInput = function (comp, outType, inType) {
         var typeOut = outType || "output",
             typeIn = inType || "inputs";
-        
+
         if (!inputs.hasOwnProperty(typeIn)) {
             inputs[typeIn] = [];
         }
-        
+
         inputs[typeIn].push({comp: comp, outType: typeOut});
         return that;
     };
@@ -69,7 +69,7 @@ function sBase(sId) {
         var typeIn = inType || "inputs",
             typeOut = outType || "output",
             index = findInputIndex(comp, typeOut, typeIn);
-        
+
         if (index >= 0) {
             inputs[typeIn].splice(index, 1);
             if (inputs[typeIn].length === 0) {
@@ -78,7 +78,7 @@ function sBase(sId) {
         }
         return that;
     };
-    
+
     that.generate = function (sampleRate, fSize, rIndex) {
         var chan,
             outType;
@@ -130,7 +130,7 @@ function sBase(sId) {
                 }
             }
         }
-                
+
         return that;
     };
 
@@ -146,7 +146,7 @@ function sBase(sId) {
 
     that.getChannelData = function (chan, outType) {
         var typeOut = outType || "output";
-        
+
         if (!data.hasOwnProperty(typeOut)) {
             log.error("sBase.getChannelData: no such outType:" + typeOut);
             return data.output[chan];
@@ -165,7 +165,7 @@ function sBase(sId) {
     that.getInputChannelData = function (index, chan, inType) {
         var typeIn = inType || "inputs",
             input = inputs[typeIn][index];
-        
+
         return input.comp.getChannelData(chan, input.outType);
     };
 
@@ -176,14 +176,14 @@ function sBase(sId) {
     that.getArgsOff = function () {
         return {};
     };
-    
+
     that.setArgs = function (args) {
         util.unused(args);
     };
 
     that.addOutput = function (outType) {
         var typeOut = outType || "output";
-        
+
         if (data.hasOwnProperty(typeOut)) {
             log.error("sBase.addOutput: already have output:" + typeOut);
         } else {
@@ -191,11 +191,11 @@ function sBase(sId) {
         }
         return that;
     };
-    
+
     that.typeClass = "sBase";
     that.typeIs = sId || "sBase";
     that.addOutput();
-    
+
     //FIXME: make private or move to needed
     that.genData = undefined;
 

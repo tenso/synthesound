@@ -19,7 +19,7 @@ function guiInput(container, sizeOfContainerChanged) {
         mouse.y = gui.getEventOffsetInElement(container,  e).y;
         mouse.relativeX = mouse.x - mouse.captureOffsetInElement.x;
         mouse.relativeY = mouse.y - mouse.captureOffsetInElement.y;
-        
+
         if (target) {
             mouse.offsetInElement = gui.getEventOffsetInElement(target, e);
             mouse.offsetInElement.x += container.scrollLeft;

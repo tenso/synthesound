@@ -2,6 +2,7 @@
 /*global gui*/
 /*global gBase*/
 /*global gui*/
+/*global util*/
 
 function gKnob(min, max, callback, horizontal) {
     var that = gBase(),
@@ -23,7 +24,7 @@ function gKnob(min, max, callback, horizontal) {
             maxCoord = that.parentNode.getH() - that.getH() - 1;
             that.top((maxCoord - ((value - min) / (max - min)) * maxCoord));
         }
-        
+
         if (!skipCallback && typeof callback === "function") {
             callback(value);
         }
@@ -42,6 +43,8 @@ function gKnob(min, max, callback, horizontal) {
         var maxCoord,
             newCoord;
 
+        util.unused(e);
+
         if (horizontal) {
             maxCoord = that.parentNode.getW() - that.getW();
             newCoord = mouse.offsetInParent.x - mouse.captureOffsetInElement.x;
@@ -49,13 +52,13 @@ function gKnob(min, max, callback, horizontal) {
             maxCoord = that.parentNode.getH() - that.getH();
             newCoord = mouse.offsetInParent.y - mouse.captureOffsetInElement.y;
         }
-        
+
         if (newCoord < 0) {
             newCoord = 0;
         } else if (newCoord > maxCoord) {
             newCoord = maxCoord;
         }
-        
+
         if (horizontal) {
             that.setValue(min + (max - min) * (newCoord / maxCoord));
         } else {

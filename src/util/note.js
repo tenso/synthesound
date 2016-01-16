@@ -67,7 +67,7 @@ var note = {
         }
         return true;
     },
-    
+
     tests: {
         test_hz: function () {
             test.verifyFloat(note.hz(-1), 24.5, 3);

@@ -40,7 +40,7 @@ function sNote(args) {
             gate: false
         };
     };
-    
+
     that.setArgs = function (args) {
         if (args) {
             wantStep = typeof args.gate === "boolean" ? args.gate : wantStep;

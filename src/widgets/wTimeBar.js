@@ -10,12 +10,9 @@ function wTimeBar() {
     var that = gBase().bg("#888"),
         canvas = gBase("canvas").addTo(that).w("100%").h("100%"),
         ctx = canvas.getContext("2d"),
-        halfH = that.height / 2.0,
         totalMs = 1000,
         currentMs = 0,
         measureMs = 500,
-        quant = 0,
-        bpm = 0,
         pixelsPerMs = 0,
         selection = {
             startMs: 0,
@@ -51,7 +48,7 @@ function wTimeBar() {
 
     function drawFg() {
         var timeX = currentMs * pixelsPerMs;
-        
+
         ctx.lineWidth = 2;
         ctx.strokeStyle = "#8f8";
         ctx.beginPath();
@@ -63,15 +60,15 @@ function wTimeBar() {
         return that;
     }
 
-    function haveSelectionArea(mode) {
+    function haveSelectionArea() {
         return (selection.startMs !== selection.endMs
                && selection.startH !== selection.endH);
     }
-    
+
     function haveSelection(mode) {
         return (haveSelectionArea() && selectionMode === mode);
     }
-    
+
     function drawSelection() {
         var start,
             startY,
@@ -106,7 +103,6 @@ function wTimeBar() {
     that.resizeCanvas = function () {
         canvas.width = that.offsetWidth;
         canvas.height = that.offsetHeight;
-        halfH = canvas.height / 2.0;
         return that.draw();
     };
 
@@ -126,8 +122,9 @@ function wTimeBar() {
     };
 
     that.setTimeParams = function (bpmValue, quantValue, measureMsValue) {
-        bpm = bpmValue;
-        quant = quantValue;
+        util.unused(bpmValue);
+        util.unused(quantValue);
+
         measureMs = measureMsValue;
         return that.draw();
     };
@@ -140,7 +137,7 @@ function wTimeBar() {
             endMs: Math.max(selection.startMs, selection.endMs)
         };
     };
-    
+
     that.selectionMoved = undefined;
     that.changeCurrentMs = undefined;
 
@@ -156,7 +153,7 @@ function wTimeBar() {
         //FIXME:
         pos.x -= that.getLeft();
         pos.y -= that.getTop();
-        
+
         if (e.button === 2) {
             selectionMode = "select";
             selection.startMs = totalMs * pos.x / canvas.width;
@@ -185,7 +182,7 @@ function wTimeBar() {
         //FIXME:
         pos.x -= that.getLeft();
         pos.y -= that.getTop();
-        
+
         if (e.button === 2) {
             selection.endMs = totalMs * pos.x / canvas.width;
             selection.endH = pos.y / canvas.height;
@@ -228,7 +225,7 @@ function wTimeBar() {
                 that.userDraw(that.getSelection(), true);
             }
         }
-        
+
         if (!haveSelectionArea()) {
             selectionMode = "";
         }

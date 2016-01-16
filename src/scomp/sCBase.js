@@ -113,7 +113,7 @@ function sCBase(container, type, sComps, uid) {
                         } else {
                             log.error("sCBase.setAndSaveArgs: no open step");
                         }
-                            
+
                     }
                 } else {
                     seq[sId].saveAt();
@@ -148,11 +148,11 @@ function sCBase(container, type, sComps, uid) {
     that.stateMode = function () {
         return stateMode;
     };
-    
+
     that.setStateMode = function (mode) {
         stateMode = mode;
     };
-    
+
     that.getArgs = function () {
         var sArgs = [],
             sId;
@@ -174,10 +174,9 @@ function sCBase(container, type, sComps, uid) {
         }
         return seqs;
     };
-    
+
     that.getSequencer = function () {
-        var seqs = [],
-            sId;
+        var sId;
         for (sId in seq) {
             if (seq.hasOwnProperty(sId)) {
                 return seq[sId];

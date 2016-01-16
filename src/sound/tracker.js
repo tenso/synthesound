@@ -9,7 +9,6 @@ function tracker(sampleRate) {
         currentMs = 0,
         quantization = 1,
         currentFrame = 0,
-        currentStepMs = 0,
         totalMs = 60000,
         quantizeOn = false,
         play = false;
@@ -58,12 +57,12 @@ function tracker(sampleRate) {
     that.quantization = function () {
         return quantization;
     };
-    
+
     that.setQuantizationOn = function (value) {
         quantizeOn = value;
     };
-    
-    that.quantizationOn = function (value) {
+
+    that.quantizationOn = function () {
         return quantizeOn;
     };
 

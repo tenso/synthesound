@@ -178,7 +178,7 @@ function workspace() {
             && step.args[valueType] >= selection.startValue
             && step.args[valueType] <= selection.endValue);
     }
-    
+
     that.setCurrentMs = function (ms) {
         if (timeTracker.setCurrentMs(ms)) {
             updateTime();
@@ -216,7 +216,7 @@ function workspace() {
 
         return data;
     };
-    
+
     that.modifySCompState = function (comp, operation, selection) {
         var seqs = comp.getSequencers(),
             type,
@@ -237,14 +237,14 @@ function workspace() {
         }
         //re-apply state:
         comp.setCurrentMs(timeTracker.currentStepMs());
-        
+
         if (typeof sCGlobal.currentUpdated === "function") {
             if (sCGlobal.current === comp) {
                 sCGlobal.currentUpdated(comp);
             }
         }
     };
-    
+
     that.loadWorkspace = function (data) {
         var i,
             uidOffset = 0;

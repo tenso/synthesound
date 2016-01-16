@@ -35,7 +35,7 @@ function sCVKey(container, uid) {
         }
         noteDisplay.setValue(hz);
     }
-    
+
     that.keyDown = function (noteKey) {
         saveKey(noteKey, true);
     };
@@ -61,7 +61,7 @@ function sCVKey(container, uid) {
             freq: noteDisplay
         }
     });
-    
+
     that.setStateMode("notes");
 
     return that;
