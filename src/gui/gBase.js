@@ -316,8 +316,14 @@ function gBase(type) {
         return that;
     };
 
+    that.cursor = function (value) {
+        that.style.cursor = value;
+        return that;
+    };
+
     that.typeIs = "gBase";
     that.typeClass = "gBase";
+    that.cursor("auto");
 
     return that;
 }

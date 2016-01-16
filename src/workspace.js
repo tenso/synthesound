@@ -23,6 +23,7 @@
 /*global scBaseUID*/
 /*global gBase*/
 /*global window*/
+/*global note*/
 
 function workspace() {
     var that = gBase().setClass("workspace").top(app.screen.minY).h("100%"),
@@ -241,6 +242,47 @@ function workspace() {
         if (typeof sCGlobal.currentUpdated === "function") {
             if (sCGlobal.current === comp) {
                 sCGlobal.currentUpdated(comp);
+            }
+        }
+    };
+
+    that.addSCompNote = function (sComp, selection, minNote, maxNote) {
+        var noteFreq,
+            seq;
+
+        selection.startMs = timeTracker.quantizeValue(selection.startMs);
+        selection.endMs = timeTracker.quantizeValue(selection.endMs);
+
+        if (sComp) {
+            if (sComp.stateMode() === "notes") {
+                seq = sComp.getSequencer();
+                if (sComp && !seq.openStep()) {
+                    noteFreq = note.hz(parseInt(minNote + (1.0 - selection.endH) * (maxNote - minNote), 10));
+                    seq.openAt(selection.startMs, {gate: true, freq: noteFreq});
+                    seq.openStep().msOff = selection.endMs;
+                } else {
+                    seq.openStep().msOff = selection.endMs;
+                }
+            } else {
+                log.error("workspace.addSCompNote: comp is not note-based");
+            }
+        }
+    };
+
+    that.finishSCompNote = function (sComp, selection) {
+        var seq;
+
+        selection.startMs = timeTracker.quantizeValue(selection.startMs);
+        selection.endMs = timeTracker.quantizeValue(selection.endMs);
+
+        if (sComp) {
+            if (sComp.stateMode() === "notes") {
+                seq = sComp.getSequencer();
+                if (seq.openStep()) {
+                    seq.closeAt(selection.endMs);
+                }
+            } else {
+                log.error("workspace.finishSCompNote: comp is not note-based");
             }
         }
     };

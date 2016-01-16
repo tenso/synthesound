@@ -29,8 +29,7 @@ function sCBase(container, type, sComps, uid) {
         myUID,
         seq = {}, //FIXME: remove support for multiple sequencers!!
         guiControls,
-        stateMode = "",
-        openStep;
+        stateMode = "";
 
     function makeRemoveAllConnections() {
         return function () {
@@ -105,11 +104,10 @@ function sCBase(container, type, sComps, uid) {
             if (sCGlobal.recordingOn) {
                 if (isDuration) {
                     if (open) {
-                        openStep = seq[sId].openAt();
+                        seq[sId].openAt();
                     } else {
-                        if (openStep) {
-                            seq[sId].closeAt(openStep);
-                            openStep = undefined;
+                        if (seq[sId].openStep()) {
+                            seq[sId].closeAt();
                         } else {
                             log.error("sCBase.setAndSaveArgs: no open step");
                         }

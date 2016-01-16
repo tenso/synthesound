@@ -96,7 +96,7 @@ function sSequence(sComp, sId, argUpdateCb) {
             data;
 
         if (openStep) {
-            that.closeAt(openStep);
+            that.closeAt();
         }
 
         data = sSequanceData(args || sComp.getArgs(), at);
@@ -105,7 +105,7 @@ function sSequence(sComp, sId, argUpdateCb) {
         return openStep;
     };
 
-    that.closeAt = function (step, ms) {
+    that.closeAt = function (ms) {
         var at = typeof ms === "number" ? ms : atMs;
 
         if (!openStep) {
@@ -113,9 +113,13 @@ function sSequence(sComp, sId, argUpdateCb) {
             return that;
         }
 
-        sCloseSequanceData(step, sComp.getArgsOff(), at);
+        sCloseSequanceData(openStep, sComp.getArgsOff(), at);
         openStep = undefined;
         return that;
+    };
+
+    that.openStep = function () {
+        return openStep;
     };
 
     that.setArgs = function (args) {
@@ -279,15 +283,14 @@ function test_sSequence() {
 
 function test_sSequenceOpenClose() {
     var sComp = stubScomp(),
-        seq = sSequence(sComp, 0),
-        step;
+        seq = sSequence(sComp, 0);
 
     //NOTE: this test will not apply any states to sComp automatically
 
     seq.moveToMs(1000);
     test.verify(sComp.argSeqLength(), 0);
 
-    step = seq.openAt();
+    seq.openAt();
     test.verify(seq.numSteps(), 1);
     test.verify(seq.step(0).args, "saved0");
     test.verify(seq.step(0).ms, 1000);
@@ -296,7 +299,7 @@ function test_sSequenceOpenClose() {
     seq.moveToMs(1250);
     test.verify(sComp.argSeqLength(), 0);
 
-    seq.closeAt(step);
+    seq.closeAt();
     test.verify(seq.numSteps(), 1);
     test.verify(seq.step(0).args, "saved0");
     test.verify(seq.step(0).ms, 1000);
@@ -306,19 +309,19 @@ function test_sSequenceOpenClose() {
     seq.moveToMs(1250);
     test.verify(sComp.argSeqLength(), 0);
 
-    step = seq.openAt();
+    seq.openAt();
     test.verify(seq.numSteps(), 2);
     test.verify(seq.step(1).args, "saved1");
     test.verify(seq.step(1).ms, 1250);
 
-    step = seq.openAt();
+    seq.openAt();
     test.verify(seq.numSteps(), 2);
     test.verify(seq.step(1).args, "saved2");
     test.verify(seq.step(1).ms, 1250);
     test.verify(seq.step(1).msOff, -1);
 
     seq.moveToMs(2000);
-    step = seq.openAt();
+    seq.openAt();
     test.verify(seq.numSteps(), 3);
     test.verify(seq.step(1).args, "saved2");
     test.verify(seq.step(1).ms, 1250);
@@ -329,7 +332,7 @@ function test_sSequenceOpenClose() {
     test.verify(seq.step(2).msOff, -1);
 
     seq.moveToMs(3000);
-    seq.closeAt(step);
+    seq.closeAt();
     test.verify(seq.step(0).args, "saved0");
     test.verify(seq.step(0).ms, 1000);
     test.verify(seq.step(0).argsOff, "saved1-off");
@@ -392,7 +395,7 @@ function test_sSequenceOpenCloseAndLoad() {
     test.verify(sComp.argSeq(0), "loaded0");
 
     seq.moveToMs(100);
-    step = seq.openAt();
+    seq.openAt();
     test.verify(sComp.argSeqLength(), 1);
     test.verify(sComp.argSeq(0), "loaded0");
     test.verify(seq.step(0).args, "loaded0");
@@ -416,7 +419,7 @@ function test_sSequenceOpenCloseAndLoad() {
     test.verify(seq.step(2).msOff, 1500);
     test.verify(seq.step(2).argsOff, "loaded1-off");
 
-    seq.closeAt(step);
+    seq.closeAt();
     test.verify(seq.step(1).msOff, 1000);
 
 

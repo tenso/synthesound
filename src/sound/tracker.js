@@ -115,6 +115,15 @@ function tracker(sampleRate) {
         return that.currentMeasure() * that.measureMs();
     };
 
+    that.quantizeValue = function (ms) {
+        if (quantizeOn) {
+            var measure = parseInt(ms / that.measureMs(), 10);
+            return measure * that.measureMs();
+        } else {
+            return ms;
+        }
+    };
+
     that.setPlayback = function (playValue) {
         play = playValue;
     };

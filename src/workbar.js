@@ -18,6 +18,7 @@
 
 function workbar() {
     var that = gContainer(),
+        topBar = gContainer(),
         timeScroll = gBase(),
         timeBar = wTimeBar(),
         play,
@@ -29,7 +30,6 @@ function workbar() {
         initialHeight = 200,
         totalTime,
         sComp,
-        newNoteSeqStep,
         bpmInput,
         quantInput,
         quantOn,
@@ -44,37 +44,7 @@ function workbar() {
         timeGroup = gContainer().paddingRight(25),
         quantGroup = gContainer().paddingRight(25);
 
-    //FIXME: this logic should move to workspace (or move logic from there to here)
-    function drawNoteFromDraw(selection) {
-        var noteFreq,
-            seq;
-        if (sComp) {
-            if (sComp.stateMode() === "notes") {
-                if (sComp && !newNoteSeqStep) {
-                    seq = sComp.getSequencer();
-                    noteFreq = note.hz(parseInt(minNote + (1.0 - selection.endH) * (maxNote - minNote), 10));
-                    newNoteSeqStep = seq.openAt(selection.startMs, {gate: true, freq: noteFreq});
-                    newNoteSeqStep.msOff = selection.endMs;
-                } else {
-                    newNoteSeqStep.msOff = selection.endMs;
-                }
-            }
-        }
-    }
 
-    //FIXME: this logic should move to workspace (or move logic from there to here)
-    function finishNoteFromDraw(selection) {
-        var seq;
-        if (sComp) {
-            if (sComp.stateMode() === "notes") {
-                if (sComp && newNoteSeqStep) {
-                    seq = sComp.getSequencer();
-                    seq.closeAt(newNoteSeqStep, selection.endMs);
-                    newNoteSeqStep = undefined;
-                }
-            }
-        }
-    }
 
     /*FIXME: render sArgs, move*/
 
@@ -247,6 +217,8 @@ function workbar() {
     that.changePlayback = undefined;
     that.changeSize = undefined;
     that.changeSCompState = undefined;
+    that.addSCompNote = undefined;
+    that.finishSCompNote = undefined;
 
     play = gButton(">", updatePlayback, true).w(40).h(buttonH);
     record = gButton(lang.tr("rec"), updateRecord, true).bg("#f00").w(40).h(buttonH);
@@ -271,21 +243,23 @@ function workbar() {
         infoBar.resizeCanvas();
     });
 
+    topBar.abs().cursor("ns-resize").left(0).right(0).top(0).h(buttonH + 2 * marginY);
+    that.add(topBar);
     //buttons
     buttonGroup.addTabled(record);
     buttonGroup.addTabled(play);
-    that.addTabled(buttonGroup);
+    topBar.addTabled(buttonGroup);
 
     //time
     timeGroup.addTabled(time).addTabled(totalTime);
-    that.addTabled(timeGroup);
+    topBar.addTabled(timeGroup);
 
     quantGroup.addTabled(bpmInput.paddingRight(10)).addTabled(quantOn).addTabled(quantInput);
-    that.addTabled(quantGroup);
+    topBar.addTabled(quantGroup);
 
     //zoom
-    zoomX.addTo(that).abs().right(marginX * 2 + 10).top(marginY * 2);
-    zoomY.addTo(that).abs().right(marginX).top(marginY + 24);
+    zoomX.addTo(topBar).abs().right(marginX * 2 + 10).top(marginY * 2);
+    zoomY.addTo(topBar).abs().right(marginX).top(marginY + 24);
 
 
     //timeBar
@@ -306,10 +280,10 @@ function workbar() {
     };
 
     timeBar.userDraw = function (selection, done) {
-        if (done) {
-            finishNoteFromDraw(selection);
-        } else {
-            drawNoteFromDraw(selection);
+        if (!done && that.addSCompNote) {
+            that.addSCompNote(sComp, selection, minNote, maxNote);
+        } else if (that.finishSCompNote) {
+            that.finishSCompNote(sComp, selection);
         }
         timeBar.draw();
     };
@@ -338,11 +312,11 @@ function workbar() {
 
     //keyboard and mouse
     //FIXME: should really not use captureMouse and iMouse... routines here as that is not in workspace container.
-    that.onmousedown = function (e) {
+    topBar.onmousedown = function (e) {
         gui.captureMouse(e);
     };
 
-    that.iMousePressAndMove = function (e, mouse) {
+    topBar.iMousePressAndMove = function (e, mouse) {
         that.setTopOfBar(e.pageY - mouse.pageCaptureOffsetInElement.y);
     };
 

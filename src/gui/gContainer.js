@@ -50,11 +50,6 @@ function gContainer() {
         return that;
     };
 
-    /*that.padding = function (value) {
-        that.table.style.padding = value;
-        return that;
-    };*/
-
     that.typeIs = "gContainer";
     that.typeClass = "gContainer";
     that.setClass("gContainer");
