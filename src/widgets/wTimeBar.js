@@ -99,6 +99,7 @@ function wTimeBar() {
         return selection.get();
     };
 
+    that.newSelection = undefined;
     that.selectionMoved = undefined;
     that.changeCurrentMs = undefined;
 
@@ -126,21 +127,8 @@ function wTimeBar() {
                 that.changeCurrentMs(ms);
             }
         } else if (e.button === 0) {
-            if (selection.modeActive("select") || selection.modeActive("moveSelect")) {
-                selection.pressOffsetInSelection = {
-                    ms: totalMs * pos.x / canvas.width - selection.startMs,
-                    h: pos.y / canvas.height - selection.startH
-                };
-                if (selection.pressOffsetInSelection.ms >= 0 && selection.pressOffsetInSelection.ms <= selection.lenMs()
-                        && selection.pressOffsetInSelection.h >= 0 && selection.pressOffsetInSelection.h <= selection.lenH()) {
-                    selection.setMode("moveSelect");
-                } else {
-                    selection.setMode("");
-                }
-            }
-
             if (selection.modeActive("")) {
-                selection.setMode("userDraw");
+                selection.setMode("selectionUpdated");
                 selection.start(totalMs * pos.x / canvas.width, pos.y / canvas.height);
             }
         }
@@ -166,35 +154,26 @@ function wTimeBar() {
             if (typeof that.changeCurrentMs === "function") {
                 that.changeCurrentMs(ms);
             }
-        } else if (selection.modeActive("moveSelect")) {
-            selection.move(mouse.offsetInParent.x / pixelsPerMs - selection.pressOffsetInSelection.ms,
-                           totalMs,
-                           mouse.offsetInParent.y / canvas.height - selection.pressOffsetInSelection.h,
-                           1.0);
-
-            that.draw();
-            if (typeof that.selectionMoved === "function") {
-                that.selectionMoved(selection.get());
-            }
-        } else if (selection.modeActive("userDraw")) {
+        } else if (selection.modeActive("selectionUpdated")) {
             selection.end(totalMs * pos.x / canvas.width, pos.y / canvas.height);
-            if (typeof that.userDraw === "function") {
-                that.userDraw(selection.get(), false);
+            if (typeof that.selectionUpdated === "function") {
+                that.selectionUpdated(selection.get(), false);
             }
         }
     };
 
     canvas.iMouseUpAfterCapture = function (e) {
-        if (e.button === 0 && selection.modeActive("userDraw")) {
-            selection.setMode("");
-            if (typeof that.userDraw === "function") {
-                that.userDraw(selection.get(), true);
+        if (selection.modeActive("selectionUpdated")) {
+            if (typeof that.selectionUpdated === "function") {
+                that.selectionUpdated(selection.get(), true);
+            }
+        } else if (!selection.modeActive("setMs")) {
+            if (typeof that.newSelection === "function") {
+                that.newSelection(selection.get());
             }
         }
-
-        if (!selection.haveArea()) {
-            selection.setMode("");
-        }
+        selection.setMode("");
+        that.draw();
     };
 
     document.addEventListener("keydown", function (e) {

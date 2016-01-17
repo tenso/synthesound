@@ -21,6 +21,7 @@ function workbar() {
         topBar = gContainer(),
         timeScroll = gBase(),
         timeBar = wTimeBar(),
+        selectedStates = [],
         play,
         record,
         marginX = 4,
@@ -29,6 +30,7 @@ function workbar() {
         minHeight = 46,
         initialHeight = 200,
         totalTime,
+        moveActive = false,
         sComp,
         bpmInput,
         quantInput,
@@ -44,7 +46,84 @@ function workbar() {
         timeGroup = gContainer().paddingRight(25),
         quantGroup = gContainer().paddingRight(25);
 
+    function isWithinSelection(step, valueType, selection) {
+        if (valueType === "") {
+            return (step.ms >= selection.minMs
+                && step.ms <= selection.maxMs);
+        }
 
+        return (((step.ms >= selection.minMs && step.ms <= selection.maxMs)
+                || (step.msOff >= selection.minMs && step.msOff <= selection.maxMs))
+            && step.args[valueType] >= selection.startValue
+            && step.args[valueType] <= selection.endValue);
+    }
+
+    function isSelectedState(state) {
+        var i;
+        for (i = 0; i < selectedStates.length; i += 1) {
+            if (selectedStates[i] === state) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function selectStates(selection) {
+        if (!sComp) {
+            return;
+        }
+        var seq = sComp.getSequencer(),
+            i;
+
+        selectedStates = [];
+        for (i = 0; i < seq.numSteps(); i += 1) {
+            if (isWithinSelection(seq.step(i), selection.valueType, selection)) {
+                selectedStates.push(seq.step(i));
+            }
+        }
+        timeBar.draw();
+    }
+
+    function valueToNote(value) {
+        return parseInt(minNote + (1.0 - value) * (maxNote - minNote), 10);
+    }
+
+    function scaleSelection(selection) {
+        if (sComp && sComp.stateMode() === "notes") {
+            selection.startValue = note.hz(valueToNote(selection.maxH));
+            selection.endValue = note.hz(valueToNote(selection.minH));
+            selection.lenMs = selection.endMs - selection.startMs;
+            selection.lenValue = selection.startValue - selection.endValue;
+            selection.numNotes = valueToNote(selection.endH) - valueToNote(selection.startH);
+            selection.valueType = "freq";
+        } else {
+            selection.startValue = selection.startH;
+            selection.endValue = selection.endH;
+            selection.movedValue = selection.movedH;
+            selection.valueType = "";
+        }
+        return selection;
+    }
+
+    function editSComp(operation) {
+        var op = operation;
+        if (operation === "move") {
+            if (!moveActive) {
+                moveActive = true;
+                op = "moveStart";
+            } else {
+                op = "move";
+            }
+        } else if (operation === "moveEnd") {
+            moveActive = false;
+            return;
+        }
+        if (typeof that.changeSCompState === "function") {
+            if (sComp) {
+                that.changeSCompState(sComp, op, scaleSelection(timeBar.getSelection()), selectedStates);
+            }
+        }
+    }
 
     /*FIXME: render sArgs, move*/
 
@@ -110,7 +189,11 @@ function workbar() {
                     noteNum = note.note(current[i].args.freq);
                     noteY = canvas.height - (noteNum * pixelsPerNote);
 
-                    ctx.fillStyle = "#f88";
+                    if (isSelectedState(current[i])) {
+                        ctx.fillStyle = "#8f8";
+                    } else {
+                        ctx.fillStyle = "#f88";
+                    }
                     ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
                 }
             }
@@ -217,8 +300,6 @@ function workbar() {
     that.changePlayback = undefined;
     that.changeSize = undefined;
     that.changeSCompState = undefined;
-    that.addSCompNote = undefined;
-    that.finishSCompNote = undefined;
 
     play = gButton(">", updatePlayback, true).w(40).h(buttonH);
     record = gButton(lang.tr("rec"), updateRecord, true).bg("#f00").w(40).h(buttonH);
@@ -279,19 +360,21 @@ function workbar() {
         }
     };
 
-    timeBar.userDraw = function (selection, done) {
-        if (sComp && sComp.stateMode() === "notes") {
-            if (!done && that.addSCompNote) {
-                that.addSCompNote(sComp, selection, minNote, maxNote);
-            } else if (that.finishSCompNote) {
-                that.finishSCompNote(sComp, selection);
+    timeBar.selectionUpdated = function (selection, done) {
+        if (sComp) {
+            if (selectedStates.length) {
+                editSComp(done ? "moveEnd" : "move");
+            } else {
+                editSComp(done ? "endNew" : "beginNew");
             }
             timeBar.draw();
         }
     };
 
-    timeBar.selectionMoved = function (selection) {
-        console.log("moved: " + selection.movedMs + " " + selection.movedH);
+    timeBar.newSelection = function (selection) {
+        if (sComp) {
+            selectStates(scaleSelection(selection));
+        }
     };
 
     that.setTopOfBar = function (y) {
@@ -327,8 +410,7 @@ function workbar() {
     };
 
     document.addEventListener("keydown", function (e) {
-        var key = String.fromCharCode(e.keyCode).toLowerCase(),
-            select = timeBar.getSelection();
+        var key = String.fromCharCode(e.keyCode).toLowerCase();
 
         if (key === " ") {
             e.preventDefault();
@@ -336,20 +418,8 @@ function workbar() {
         }
         if (e.keyCode === 46) {
             e.preventDefault();
-            if (typeof that.changeSCompState === "function") {
-                if (sComp) {
-                    if (sComp.stateMode() === "notes") {
-                        select.startValue = note.hz(parseInt(minNote + (1.0 - select.endH) * (maxNote - minNote), 10));
-                        select.endValue = note.hz(parseInt(minNote + (1.0 - select.startH) * (maxNote - minNote), 10));
-                        select.valueType = "freq";
-                    } else {
-                        select.startValue = select.startH;
-                        select.endValue = select.endH;
-                        select.valueType = "";
-                    }
-                    that.changeSCompState(sComp, "delete", select);
-                }
-            }
+            editSComp("delete");
+            selectedStates = [];
         }
     }, false);
 

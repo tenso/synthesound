@@ -2,6 +2,7 @@
 /*global test*/
 /*global util*/
 /*global log*/
+/*global note*/
 
 function sCloseSequanceData(seqData, sArgsOff, msOff) {
     seqData.msOff = msOff;
@@ -15,16 +16,48 @@ function sOpenSequanceData(seqData) {
 }
 
 function sSequanceData(sArgs, msTime, sArgsOff, msTimeOff) {
-    var data = {
-        ms: msTime,
-        args: sArgs
-    };
+    var that = {
+            ms: msTime,
+            args: sArgs
+        },
+        moveStartData = {};
+
 
     if (sArgsOff) {
-        sCloseSequanceData(data, sArgsOff, msTimeOff);
+        sCloseSequanceData(that, sArgsOff, msTimeOff);
     }
 
-    return data;
+    that.moveStart = function () {
+        moveStartData.ms = that.ms;
+        moveStartData.msOff = that.msOff;
+        if (that.args.hasOwnProperty("freq")) {
+            moveStartData.note = note.note(that.args.freq);
+        } else {
+            moveStartData.note = 0;
+        }
+        if (that.argsOff.hasOwnProperty("freq")) {
+            moveStartData.noteOff = note.note(that.argsOff.freq);
+        } else {
+            moveStartData.noteOff = 0;
+        }
+    };
+
+    //FIXME: notes vs values: hardcoded to take numNotes!!
+    that.move = function (movedMs, numNotes) {
+        var arg;
+
+        that.ms = moveStartData.ms + movedMs;
+        that.msOff = moveStartData.msOff + movedMs;
+
+        if (that.args.hasOwnProperty("freq")) {
+            that.args.freq = note.hz(moveStartData.note + numNotes);
+        }
+        if (that.argsOff.hasOwnProperty("freq")) {
+            that.argsOff.freq = note.hz(moveStartData.noteOff + numNotes);
+        }
+    };
+
+    return that;
 }
 
 function sSequence(sComp, sId, argUpdateCb) {
@@ -55,15 +88,15 @@ function sSequence(sComp, sId, argUpdateCb) {
             }
             //disable states
             if (seqData[i].hasOwnProperty("msOff") && seqData[i].msOff >= 0) {
-                if (seqData[i].hasOwnProperty("argsOff")) {
-                    if (seqData[i].msOff > atMs && seqData[i].msOff <= ms) {
-                        sComp.setArgs(seqData[i].argsOff);
-                        if (argUpdateCb) {
-                            argUpdateCb(sId, seqData[i].argsOff);
-                        }
+                if (seqData[i].msOff > atMs && seqData[i].msOff <= ms) {
+                    if (!seqData[i].hasOwnProperty("argsOff")) {
+                        log.warn("sSequence.moveToMs: state has msOff but no argsOff, fetching argsOff from sComp");
+                        seqData[i].argsOff = sComp.getArgsOff();
                     }
-                } else {
-                    log.error("sSequence.moveToMs: state has msOff but no argsOff");
+                    sComp.setArgs(seqData[i].argsOff);
+                    if (argUpdateCb) {
+                        argUpdateCb(sId, seqData[i].argsOff);
+                    }
                 }
             }
         }
@@ -89,6 +122,17 @@ function sSequence(sComp, sId, argUpdateCb) {
         }
         seqData.splice(seqData.length, 0, data);
         return data;
+    };
+
+    that.hasArgAt = function (ms) {
+        var i;
+
+        for (i = 0; i < seqData.length; i += 1) {
+            if (ms === seqData[i].ms) {
+                return true;
+            }
+        }
+        return false;
     };
 
     that.openAt = function (ms, args) {

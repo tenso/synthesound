@@ -68,6 +68,18 @@ var util = {
             test.verify(util.stringToMs("60:10"), 3610000);
             test.verify(util.stringToMs("a:b"), 0);
         }
+    },
+
+    copyOwnProperties: function (obj) {
+        var that = {},
+            key;
+
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                that[key] = obj[key];
+            }
+        }
+        return that;
     }
 };
 

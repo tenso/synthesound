@@ -69,7 +69,7 @@ function workspace() {
             comp = constructorMap[data.type](that, data.uid);
             comp.setArgs(data.sArgs);
             comp.setCurrentMs(timeTracker.currentStepMs());
-            comp.saveArgs(0); //add inital state as ms=0
+            comp.saveInitialArgs();
             comp.move(data.x, data.y);
         } else {
             log.error("workspace: dont know sId:" + data.type);
@@ -169,17 +169,6 @@ function workspace() {
         }
     }
 
-    function isWithinSelection(step, valueType, selection) {
-        if (valueType === "") {
-            return (step.ms >= selection.startMs
-                && step.ms <= selection.endMs);
-        }
-        return (step.ms >= selection.startMs
-            && step.ms <= selection.endMs
-            && step.args[valueType] >= selection.startValue
-            && step.args[valueType] <= selection.endValue);
-    }
-
     that.setCurrentMs = function (ms) {
         if (timeTracker.setCurrentMs(ms)) {
             updateTime();
@@ -218,22 +207,45 @@ function workspace() {
         return data;
     };
 
-    that.modifySCompState = function (comp, operation, selection) {
-        var seqs = comp.getSequencers(),
-            type,
-            i;
+    that.modifySCompState = function (comp, operation, selection, states) {
+        var seq = comp.getSequencer(),
+            i,
+            stepForOpen;
+
+        if (!comp) {
+            log.error("workspace.modifySCompState: no comp");
+            return;
+        }
+
+        selection.startMs = timeTracker.quantizeValue(selection.startMs);
+        selection.endMs = timeTracker.quantizeValue(selection.endMs);
+
+        if (comp.stateMode() === "notes") {
+            stepForOpen = {gate: true, freq: selection.startValue};
+        }
 
         if (operation === "delete") {
-            for (type in seqs) {
-                if (seqs.hasOwnProperty(type)) {
-                    for (i = 0; i < seqs[type].numSteps(); i += 0) {
-                        if (isWithinSelection(seqs[type].step(i), selection.valueType, selection)) {
-                            seqs[type].removeIndex(i);
-                        } else {
-                            i += 1;
-                        }
-                    }
-                }
+            for (i = 0; i < states.length; i += 1) {
+                seq.remove(states[i]);
+            }
+        } else if (operation === "moveStart") { //FIXME: notes vs values
+            for (i = 0; i < states.length; i += 1) {
+                states[i].moveStart();
+            }
+        } else if (operation === "move") { //FIXME: notes vs values
+            for (i = 0; i < states.length; i += 1) {
+                states[i].move(selection.lenMs, selection.numNotes);
+            }
+        } else if (operation === "beginNew") {
+            if (!seq.openStep()) {
+                seq.openAt(selection.startMs, stepForOpen);
+                seq.openStep().msOff = selection.endMs;
+            } else {
+                seq.openStep().msOff = selection.endMs;
+            }
+        } else if (operation === "endNew") {
+            if (seq.openStep()) {
+                seq.closeAt(selection.endMs);
             }
         }
         //re-apply state:
@@ -242,47 +254,6 @@ function workspace() {
         if (typeof sCGlobal.currentUpdated === "function") {
             if (sCGlobal.current === comp) {
                 sCGlobal.currentUpdated(comp);
-            }
-        }
-    };
-
-    that.addSCompNote = function (sComp, selection, minNote, maxNote) {
-        var noteFreq,
-            seq;
-
-        selection.startMs = timeTracker.quantizeValue(selection.startMs);
-        selection.endMs = timeTracker.quantizeValue(selection.endMs);
-
-        if (sComp) {
-            if (sComp.stateMode() === "notes") {
-                seq = sComp.getSequencer();
-                if (sComp && !seq.openStep()) {
-                    noteFreq = note.hz(parseInt(minNote + (1.0 - selection.endH) * (maxNote - minNote), 10));
-                    seq.openAt(selection.startMs, {gate: true, freq: noteFreq});
-                    seq.openStep().msOff = selection.endMs;
-                } else {
-                    seq.openStep().msOff = selection.endMs;
-                }
-            } else {
-                log.error("workspace.addSCompNote: comp is not note-based");
-            }
-        }
-    };
-
-    that.finishSCompNote = function (sComp, selection) {
-        var seq;
-
-        selection.startMs = timeTracker.quantizeValue(selection.startMs);
-        selection.endMs = timeTracker.quantizeValue(selection.endMs);
-
-        if (sComp) {
-            if (sComp.stateMode() === "notes") {
-                seq = sComp.getSequencer();
-                if (seq.openStep()) {
-                    seq.closeAt(selection.endMs);
-                }
-            } else {
-                log.error("workspace.finishSCompNote: comp is not note-based");
             }
         }
     };

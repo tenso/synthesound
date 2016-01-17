@@ -285,6 +285,18 @@ function sCBase(container, type, sComps, uid) {
         return that;
     };
 
+    that.saveInitialArgs =  function () {
+        var sId;
+        for (sId in seq) {
+            if (seq.hasOwnProperty(sId)) {
+                if (!seq[sId].hasArgAt(0)) {
+                    seq[sId].saveAt(0);
+                }
+            }
+        }
+        return that;
+    };
+
     that.setTitle(lang.tr(type));
     that.addRemove(makeRemoveAllConnections());
     container.add(that);
