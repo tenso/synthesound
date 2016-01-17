@@ -5,6 +5,7 @@
 /*global log*/
 /*global gui*/
 /*global document*/
+/*global timeSelection*/
 
 function wTimeBar() {
     var that = gBase().bg("#888"),
@@ -14,15 +15,9 @@ function wTimeBar() {
         currentMs = 0,
         measureMs = 500,
         pixelsPerMs = 0,
-        selection = {
-            startMs: 0,
-            startH: 0,
-            endMs: 0,
-            endH: 0
-        },
+        selection = timeSelection(),
         renderOver,
-        ctrlOn = false,
-        selectionMode = "";
+        ctrlOn = false;
 
     function drawBg() {
         var ms = 0,
@@ -60,35 +55,6 @@ function wTimeBar() {
         return that;
     }
 
-    function haveSelectionArea() {
-        return (selection.startMs !== selection.endMs
-               && selection.startH !== selection.endH);
-    }
-
-    function haveSelection(mode) {
-        return (haveSelectionArea() && selectionMode === mode);
-    }
-
-    function drawSelection() {
-        var start,
-            startY,
-            end,
-            endY;
-
-        if (haveSelection("select")) {
-            start = selection.startMs * canvas.width / totalMs;
-            end = selection.endMs * canvas.width / totalMs;
-
-            startY = selection.startH * canvas.height;
-            endY = selection.endH * canvas.height;
-
-            ctx.fillStyle = "rgba(0, 255, 255, 0.25)";
-            ctx.fillRect(start, startY, end - start, endY - startY);
-        }
-
-        return that;
-    }
-
     that.draw = function () {
         pixelsPerMs = canvas.width / totalMs;
         drawBg();
@@ -96,7 +62,7 @@ function wTimeBar() {
             renderOver(canvas, currentMs, totalMs, pixelsPerMs);
         }
         drawFg();
-        drawSelection();
+        selection.draw(canvas, totalMs);
         return that;
     };
 
@@ -130,12 +96,7 @@ function wTimeBar() {
     };
 
     that.getSelection = function () {
-        return {
-            startH: Math.min(selection.startH, selection.endH),
-            endH: Math.max(selection.startH, selection.endH),
-            startMs: Math.min(selection.startMs, selection.endMs),
-            endMs: Math.max(selection.startMs, selection.endMs)
-        };
+        return selection.get();
     };
 
     that.selectionMoved = undefined;
@@ -155,27 +116,38 @@ function wTimeBar() {
         pos.y -= that.getTop();
 
         if (e.button === 2) {
-            selectionMode = "select";
-            selection.startMs = totalMs * pos.x / canvas.width;
-            selection.startH = pos.y / canvas.height;
-            selection.endMs = selection.startMs;
-            selection.endH = selection.startH;
-
+            selection.setMode("select");
+            selection.start(totalMs * pos.x / canvas.width, pos.y / canvas.height);
             that.draw();
         } else if (ctrlOn && e.button === 0) {
+            selection.setMode("setMs");
             if (typeof that.changeCurrentMs === "function") {
                 ms = totalMs * (that.parentNode.scrollLeft + e.pageX - that.getLeft()) / canvas.width;
                 that.changeCurrentMs(ms);
             }
         } else if (e.button === 0) {
-            selection.startMs = totalMs * pos.x / canvas.width;
-            selection.startH = pos.y / canvas.height;
-            selection.endMs = selection.startMs;
-            selection.endH = selection.startH;
+            if (selection.modeActive("select") || selection.modeActive("moveSelect")) {
+                selection.pressOffsetInSelection = {
+                    ms: totalMs * pos.x / canvas.width - selection.startMs,
+                    h: pos.y / canvas.height - selection.startH
+                };
+                if (selection.pressOffsetInSelection.ms >= 0 && selection.pressOffsetInSelection.ms <= selection.lenMs()
+                        && selection.pressOffsetInSelection.h >= 0 && selection.pressOffsetInSelection.h <= selection.lenH()) {
+                    selection.setMode("moveSelect");
+                } else {
+                    selection.setMode("");
+                }
+            }
+
+            if (selection.modeActive("")) {
+                selection.setMode("userDraw");
+                selection.start(totalMs * pos.x / canvas.width, pos.y / canvas.height);
+            }
         }
+        that.draw();
     };
 
-    canvas.iMousePressAndMove = function (e) {
+    canvas.iMousePressAndMove = function (e, mouse) {
         var ms,
             pos = gui.getEventOffsetInElement(that.parentNode, e);
 
@@ -183,51 +155,45 @@ function wTimeBar() {
         pos.x -= that.getLeft();
         pos.y -= that.getTop();
 
-        if (e.button === 2) {
-            selection.endMs = totalMs * pos.x / canvas.width;
-            selection.endH = pos.y / canvas.height;
+        if (selection.modeActive("select")) {
+            selection.end(totalMs * pos.x / canvas.width, pos.y / canvas.height);
             that.draw();
-        } else if (ctrlOn && e.button === 0) {
-            ms = totalMs * (that.parentNode.scrollLeft + e.pageX - that.getLeft()) / canvas.width;
+        } else if (selection.modeActive("setMs")) {
+            ms = totalMs * gui.getEventOffsetInElement(this, e).x / canvas.width;
             if (ms < 0) {
                 ms = 0;
             }
             if (typeof that.changeCurrentMs === "function") {
                 that.changeCurrentMs(ms);
             }
-        } else if (e.button === 0) {
-            if (haveSelection("select")) {
-                selection.startMs += e.movementX / pixelsPerMs;
-                selection.endMs += e.movementX / pixelsPerMs;
+        } else if (selection.modeActive("moveSelect")) {
+            selection.move(mouse.offsetInParent.x / pixelsPerMs - selection.pressOffsetInSelection.ms,
+                           totalMs,
+                           mouse.offsetInParent.y / canvas.height - selection.pressOffsetInSelection.h,
+                           1.0);
 
-                selection.startH += e.movementY / canvas.height;
-                selection.endH += e.movementY / canvas.height;
-
-                that.draw();
-                if (typeof that.selectionMoved === "function") {
-                    that.selectionMoved(that.getSelection());
-                }
-            } else {
-                selectionMode = "userDraw";
-                selection.endMs = totalMs * pos.x / canvas.width;
-                selection.endH = pos.y / canvas.height;
-                if (typeof that.userDraw === "function") {
-                    that.userDraw(that.getSelection(), false);
-                }
+            that.draw();
+            if (typeof that.selectionMoved === "function") {
+                that.selectionMoved(selection.get());
+            }
+        } else if (selection.modeActive("userDraw")) {
+            selection.end(totalMs * pos.x / canvas.width, pos.y / canvas.height);
+            if (typeof that.userDraw === "function") {
+                that.userDraw(selection.get(), false);
             }
         }
     };
 
     canvas.iMouseUpAfterCapture = function (e) {
-        if (e.button === 0 && selectionMode === "userDraw") {
-            selectionMode = "";
+        if (e.button === 0 && selection.modeActive("userDraw")) {
+            selection.setMode("");
             if (typeof that.userDraw === "function") {
-                that.userDraw(that.getSelection(), true);
+                that.userDraw(selection.get(), true);
             }
         }
 
-        if (!haveSelectionArea()) {
-            selectionMode = "";
+        if (!selection.haveArea()) {
+            selection.setMode("");
         }
     };
 

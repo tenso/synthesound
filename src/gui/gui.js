@@ -26,16 +26,21 @@ var gui = {
         return {x: x, y: y};
     },
 
-    getEventOffsetInElement: function (element, event) {
-        var pos = gui.getPos(element);
-        return {
-            x: event.pageX - pos.x + element.scrollLeft,
-            y: event.pageY - pos.y + element.scrollTop
-        };
+    getPagePos: function (element) {
+        var x = element.offsetLeft - element.scrollLeft,
+            y = element.offsetTop - element.scrollTop;
+
+        while (element.offsetParent) {
+            element = element.offsetParent;
+            x += element.offsetLeft - element.scrollLeft;
+            y += element.offsetTop - element.scrollTop;
+        }
+
+        return {x: x, y: y};
     },
 
-    getEventPageOffsetInElement: function (element, event) {
-        var pos = gui.getPos(element);
+    getEventOffsetInElement: function (element, event) {
+        var pos = gui.getPagePos(element);
         return {
             x: event.pageX - pos.x,
             y: event.pageY - pos.y
@@ -43,8 +48,8 @@ var gui = {
     },
 
     getOffsetInElement: function (element, parent) {
-        var pos = gui.getPos(element),
-            parentPos = gui.getPos(parent);
+        var pos = gui.getPagePos(element),
+            parentPos = gui.getPagePos(parent);
 
         return {
             x: pos.x - parentPos.x,

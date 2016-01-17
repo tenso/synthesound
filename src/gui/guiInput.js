@@ -22,11 +22,9 @@ function guiInput(container, sizeOfContainerChanged) {
 
         if (target) {
             mouse.offsetInElement = gui.getEventOffsetInElement(target, e);
-            mouse.offsetInElement.x += container.scrollLeft;
-            mouse.offsetInElement.y += container.scrollTop;
             mouse.offsetInParent = gui.getEventOffsetInElement(target.parentNode, e);
-            mouse.offsetInParent.x += container.scrollLeft;
-            mouse.offsetInParent.y += container.scrollTop;
+            mouse.relativeParentX = mouse.offsetInParent.x - mouse.captureOffsetInElement.x;
+            mouse.relativeParentY = mouse.offsetInParent.y - mouse.captureOffsetInElement.y;
         }
     }
 
@@ -45,10 +43,7 @@ function guiInput(container, sizeOfContainerChanged) {
     }
 
     function setMouseCaptureFromEvent(e, target) {
-        mouse.pageCaptureOffsetInElement = gui.getEventOffsetInElement(target, e);
         mouse.captureOffsetInElement = gui.getEventOffsetInElement(target, e);
-        mouse.captureOffsetInElement.x += container.scrollLeft;
-        mouse.captureOffsetInElement.y += container.scrollTop;
         mouse.captureX = gui.getEventOffsetInElement(container, e).x;
         mouse.captureY = gui.getEventOffsetInElement(container, e).y;
     }

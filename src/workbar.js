@@ -280,12 +280,18 @@ function workbar() {
     };
 
     timeBar.userDraw = function (selection, done) {
-        if (!done && that.addSCompNote) {
-            that.addSCompNote(sComp, selection, minNote, maxNote);
-        } else if (that.finishSCompNote) {
-            that.finishSCompNote(sComp, selection);
+        if (sComp && sComp.stateMode() === "notes") {
+            if (!done && that.addSCompNote) {
+                that.addSCompNote(sComp, selection, minNote, maxNote);
+            } else if (that.finishSCompNote) {
+                that.finishSCompNote(sComp, selection);
+            }
+            timeBar.draw();
         }
-        timeBar.draw();
+    };
+
+    timeBar.selectionMoved = function (selection) {
+        console.log("moved: " + selection.movedMs + " " + selection.movedH);
     };
 
     that.setTopOfBar = function (y) {
@@ -317,7 +323,7 @@ function workbar() {
     };
 
     topBar.iMousePressAndMove = function (e, mouse) {
-        that.setTopOfBar(e.pageY - mouse.pageCaptureOffsetInElement.y);
+        that.setTopOfBar(e.pageY - mouse.captureOffsetInElement.y);
     };
 
     document.addEventListener("keydown", function (e) {
