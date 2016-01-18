@@ -67,28 +67,28 @@ function tracker(sampleRate) {
     };
 
     that.setFrames = function (frames) {
-        var stepBefore = that.currentStepMs();
+        var stepBefore = that.currentMs();
         currentFrame = frames;
         currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
-        return that.currentStepMs() !== stepBefore;
+        return that.currentMs() !== stepBefore;
     };
 
     that.stepFrames = function (frames) {
-        var stepBefore = that.currentStepMs();
+        var stepBefore = that.currentMs();
         if (play) {
             currentFrame += frames;
             currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
         }
-        return that.currentStepMs() !== stepBefore;
+        return that.currentMs() !== stepBefore;
     };
 
     that.setCurrentMs = function (ms) {
-        var stepBefore = that.currentStepMs();
+        var stepBefore = that.currentMs();
 
         currentMs = ms;
         currentFrame = parseInt(currentMs * sampleRate / 1000, 10);
 
-        return that.currentStepMs() !== stepBefore;
+        return that.currentMs() !== stepBefore;
     };
 
     that.currentStepMs = function () {
@@ -115,10 +115,17 @@ function tracker(sampleRate) {
         return that.currentMeasure() * that.measureMs();
     };
 
-    that.quantizeValue = function (ms) {
+    that.quantizeValue = function (ms, maximize) {
         if (quantizeOn) {
-            var measure = parseInt(ms / that.measureMs(), 10);
-            return measure * that.measureMs();
+            var measures = ms / that.measureMs();
+
+            if (maximize) {
+                measures = Math.ceil(measures);
+            } else {
+                measures = Math.round(measures);
+            }
+
+            return measures * that.measureMs();
         } else {
             return ms;
         }

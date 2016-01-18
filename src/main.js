@@ -39,7 +39,8 @@ function initLanguage() {
         sCOut: "Output",
         sCScope: "Scope",
         helpText: "Space: play/pause\n" +
-                "Ctrl-left-click to move current time (in tracker)\n",
+                "Ctrl-left-click to move current time (in tracker)\n" +
+                "Ctrl-a to select all states in tracker\n",
         save: "Save",
         load: "Load",
         help: "Help",

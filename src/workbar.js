@@ -29,7 +29,7 @@ function workbar() {
         marginY = 6,
         buttonH = 16,
         minHeight = 46,
-        initialHeight = 200,
+        initialHeight = 400,
         totalTime,
         moveActive = false,
         sComp,
@@ -78,11 +78,18 @@ function workbar() {
 
         selectedStates = [];
         for (i = 0; i < seq.numSteps(); i += 1) {
-            if (isWithinSelection(seq.step(i), selection.valueType, selection)) {
+            if (!selection) {
+                selectedStates.push(seq.step(i));
+            } else if (isWithinSelection(seq.step(i), selection.valueType, selection)) {
                 selectedStates.push(seq.step(i));
             }
         }
         timeBar.draw();
+    }
+
+    function selectAllStates() {
+        timeBar.selectAll();
+        selectStates(scaleSelection(timeBar.getSelection()));
     }
 
     function valueToNote(value) {
@@ -424,6 +431,11 @@ function workbar() {
         }
         keys.ctrl = e.ctrlKey;
         keys.shift = e.shiftKey;
+
+        if (keys.ctrl && key === "a") {
+            selectAllStates();
+        }
+
     }, false);
 
     document.addEventListener("keyup", function (e) {
@@ -445,6 +457,9 @@ function workbar() {
     window.addEventListener("resize", function () {
         that.resizeCanvas();
     }, false);
+
+    zoomX.setValue(400);
+    zoomY.setValue(400);
 
     return that;
 }

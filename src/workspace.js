@@ -68,7 +68,7 @@ function workspace() {
         if (constructorMap.hasOwnProperty(data.type)) {
             comp = constructorMap[data.type](that, data.uid);
             comp.setArgs(data.sArgs);
-            comp.setCurrentMs(timeTracker.currentStepMs());
+            comp.setCurrentMs(timeTracker.currentMs(), timeTracker.currentStepMs());
             comp.saveInitialArgs();
             comp.move(data.x, data.y);
         } else {
@@ -143,16 +143,16 @@ function workspace() {
 
         for (i = 0; i < nodes.length; i += 1) {
             if (typeof nodes[i].setCurrentMs === "function") {
-                nodes[i].setCurrentMs(timeTracker.currentStepMs());
+                nodes[i].setCurrentMs(timeTracker.currentMs(), timeTracker.currentStepMs());
             }
         }
 
         if (typeof that.timeUpdated === "function") {
-            that.timeUpdated(timeTracker.currentStepMs());
+            that.timeUpdated(timeTracker.currentMs());
         }
 
-        if (timeTracker.currentStepMs() >= timeTracker.totalMs()) {
-            that.setCurrentMs(0);
+        if (timeTracker.currentMs() >= timeTracker.totalMs()) {
+            that.setCurrentMs(0, 0);
             that.setPlayback(false);
         }
     }
@@ -218,7 +218,8 @@ function workspace() {
         }
 
         selection.startMs = timeTracker.quantizeValue(selection.startMs);
-        selection.endMs = timeTracker.quantizeValue(selection.endMs);
+        selection.endMs = timeTracker.quantizeValue(selection.endMs, true);
+        selection.lenMs = timeTracker.quantizeValue(selection.lenMs, true);
 
         if (comp.stateMode() === "notes") {
             stepForOpen = {gate: true, freq: selection.startValue};
@@ -249,7 +250,7 @@ function workspace() {
             }
         }
         //re-apply state:
-        comp.setCurrentMs(timeTracker.currentStepMs());
+        comp.setCurrentMs(timeTracker.currentMs(), timeTracker.currentStepMs());
 
         if (typeof sCGlobal.currentUpdated === "function") {
             if (sCGlobal.current === comp) {

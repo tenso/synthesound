@@ -27,6 +27,7 @@ function sCBase(container, type, sComps, uid) {
     var that = gWidget(),
         ports = {},
         myUID,
+        saveAtMs = 0,
         seq = {}, //FIXME: remove support for multiple sequencers!!
         guiControls,
         stateMode = "";
@@ -104,7 +105,7 @@ function sCBase(container, type, sComps, uid) {
             if (sCGlobal.recordingOn) {
                 if (isDuration) {
                     if (open) {
-                        seq[sId].openAt();
+                        seq[sId].openAt(saveAtMs);
                     } else {
                         if (seq[sId].openStep()) {
                             seq[sId].closeAt();
@@ -114,7 +115,7 @@ function sCBase(container, type, sComps, uid) {
 
                     }
                 } else {
-                    seq[sId].saveAt();
+                    seq[sId].saveAt(saveAtMs);
                 }
             }
         } else {
@@ -262,7 +263,7 @@ function sCBase(container, type, sComps, uid) {
         return undefined;
     };
 
-    that.setCurrentMs = function (ms) {
+    that.setCurrentMs = function (ms, saveMs) {
         if (typeof ms !== "number" || isNaN(ms)) {
             log.error("scBase.setCurrentMs: ms not a number");
             return;
@@ -273,6 +274,7 @@ function sCBase(container, type, sComps, uid) {
                 seq[sId].moveToMs(ms);
             }
         }
+        saveAtMs = saveMs;
     };
 
     that.saveArgs =  function (ms) {

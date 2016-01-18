@@ -99,6 +99,12 @@ function wTimeBar() {
         return selection.get();
     };
 
+    that.selectAll = function () {
+        selection.start(0, 0.0);
+        selection.end(totalMs, 1.0);
+        return that;
+    };
+
     that.newSelection = undefined;
     that.selectionMoved = undefined;
     that.changeCurrentMs = undefined;
