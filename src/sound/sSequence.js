@@ -4,28 +4,8 @@
 /*global log*/
 /*global note*/
 
-function sCloseSequanceData(seqData, sArgsOff, msOff) {
-    seqData.msOff = msOff;
-    seqData.argsOff = sArgsOff;
-    return seqData;
-}
-
-function sOpenSequanceData(seqData) {
-    seqData.msOff = -1;
-    return seqData;
-}
-
-function sSequanceData(sArgs, msTime, sArgsOff, msTimeOff) {
-    var that = {
-            ms: msTime,
-            args: sArgs
-        },
-        moveStartData = {};
-
-
-    if (sArgsOff) {
-        sCloseSequanceData(that, sArgsOff, msTimeOff);
-    }
+function addSequenceDataFunctions(that) {
+    var moveStartData = {};
 
     that.moveStart = function () {
         moveStartData.ms = that.ms;
@@ -56,8 +36,30 @@ function sSequanceData(sArgs, msTime, sArgsOff, msTimeOff) {
             that.argsOff.freq = note.hz(moveStartData.noteOff + numNotes);
         }
     };
-
     return that;
+}
+
+function sCloseSequanceData(seqData, sArgsOff, msOff) {
+    seqData.msOff = msOff;
+    seqData.argsOff = sArgsOff;
+    return seqData;
+}
+
+function sOpenSequanceData(seqData) {
+    seqData.msOff = -1;
+    return seqData;
+}
+
+function sSequanceData(sArgs, msTime, sArgsOff, msTimeOff) {
+    var that = {
+            ms: msTime,
+            args: sArgs
+        };
+
+    if (sArgsOff) {
+        sCloseSequanceData(that, sArgsOff, msTimeOff);
+    }
+    return addSequenceDataFunctions(that);
 }
 
 function sSequence(sComp, sId, argUpdateCb) {
@@ -171,11 +173,18 @@ function sSequence(sComp, sId, argUpdateCb) {
     };
 
     that.load = function (data) {
+        var i;
         if (!util.isArray(data)) {
             log.warn("sSequence.load: non array data wont load");
             seqData = [];
         } else {
             seqData = data;
+
+            for (i = 0; i < seqData.length; i += 1) {
+                if (!seqData[i].move) {
+                    addSequenceDataFunctions(seqData[i]);
+                }
+            }
         }
         return that;
     };

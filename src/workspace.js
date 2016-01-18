@@ -311,7 +311,7 @@ function workspace() {
         that.mixerOut = sMix();
 
         //create actual output node:
-        out = sOutNode(audioCtx, 2, 4096);
+        out = sOutNode(audioCtx, 2, 1024);
         out.setInput(that.mixerOut);
         log.info("init audio, sample rate:" + out.sampleRate + " channels " + out.channels);
 
