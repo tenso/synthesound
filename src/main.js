@@ -26,6 +26,10 @@ var app = {
     }
 };
 
+var globalDebug = {
+    setNote: undefined
+};
+
 function initLanguage() {
     lang.addLanguage("en", {
         sCAdsr: "Adsr",
@@ -117,6 +121,8 @@ window.onload = function () {
     guiApp.add(audioBar);
 
     audioBar.resizeCanvas();
+
+    globalDebug.setNote = topMenu.setNote;
 
     //DEBUG:
     /*input.mouseOver = function (e, mouseCapturer) {

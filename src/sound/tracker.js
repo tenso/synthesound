@@ -2,6 +2,7 @@
 
 /*global test*/
 /*global util*/
+/*global globalDebug*/
 
 function tracker(sampleRate) {
     var that = {},
@@ -11,7 +12,8 @@ function tracker(sampleRate) {
         currentFrame = 0,
         totalMs = 60000,
         quantizeOn = false,
-        play = false;
+        play = false,
+        time = (new Date()).getTime();
 
     that.data = function () {
         return {
@@ -74,7 +76,15 @@ function tracker(sampleRate) {
     };
 
     that.stepFrames = function (frames) {
-        var stepBefore = that.currentMs();
+        var stepBefore = that.currentMs(),
+            newTime = (new Date()).getTime(),
+            dt = newTime - time;
+
+        if (globalDebug.setNote && dt !== 0) {
+            globalDebug.setNote((1000 / dt).toFixed(1) + " steps/sec " + dt + "ms/step");
+        }
+        time = newTime;
+
         if (play) {
             currentFrame += frames;
             currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
