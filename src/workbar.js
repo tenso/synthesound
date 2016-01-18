@@ -21,6 +21,7 @@ function workbar() {
         topBar = gContainer(),
         timeScroll = gBase(),
         timeBar = wTimeBar(),
+        keys = {ctrl: false, shift: false},
         selectedStates = [],
         play,
         record,
@@ -324,23 +325,23 @@ function workbar() {
         infoBar.resizeCanvas();
     });
 
-    topBar.abs().cursor("ns-resize").left(0).right(0).top(0).h(buttonH + 2 * marginY);
+    topBar.abs().cursor("ns-resize").left(0).right(0).top(0).h(3).bg("#888");
     that.add(topBar);
     //buttons
     buttonGroup.addTabled(record);
     buttonGroup.addTabled(play);
-    topBar.addTabled(buttonGroup);
+    that.addTabled(buttonGroup);
 
     //time
     timeGroup.addTabled(time).addTabled(totalTime);
-    topBar.addTabled(timeGroup);
+    that.addTabled(timeGroup);
 
     quantGroup.addTabled(bpmInput.paddingRight(10)).addTabled(quantOn).addTabled(quantInput);
-    topBar.addTabled(quantGroup);
+    that.addTabled(quantGroup);
 
     //zoom
-    zoomX.addTo(topBar).abs().right(marginX * 2 + 10).top(marginY * 2);
-    zoomY.addTo(topBar).abs().right(marginX).top(marginY + 24);
+    zoomX.addTo(that).abs().right(marginX * 2 + 10).top(marginY * 2);
+    zoomY.addTo(that).abs().right(marginX).top(marginY + 24);
 
 
     //timeBar
@@ -420,6 +421,24 @@ function workbar() {
             e.preventDefault();
             editSComp("delete");
             selectedStates = [];
+        }
+        keys.ctrl = e.ctrlKey;
+        keys.shift = e.shiftKey;
+    }, false);
+
+    document.addEventListener("keyup", function (e) {
+        keys.ctrl = e.ctrlKey;
+        keys.shift = e.shiftKey;
+    }, false);
+
+    that.addEventListener("wheel", function (e) {
+        if (keys.ctrl) {
+            e.preventDefault();
+            if (keys.shift) {
+                zoomX.setValue(zoomX.getValue() - e.deltaX / 2);
+            } else {
+                zoomY.setValue(zoomY.getValue() - e.deltaY / 2);
+            }
         }
     }, false);
 
