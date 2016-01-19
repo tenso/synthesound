@@ -1,35 +1,43 @@
 "use strict";
 
 function sOutNode(audioCtx, channels, frameSize) {
-    var that = audioCtx.createScriptProcessor(frameSize, 1, channels);
+    var that = audioCtx.createScriptProcessor(frameSize, 1, channels),
+        runIndex = 0,
+        genSize = 512,
+        input;
 
-    that.setInput = function (input) {
-        that.input = input;
+    that.setInput = function (inputComp) {
+        input = inputComp;
     };
 
-    that.frameSize = frameSize;
-    that.runIndex = 0;
-    that.input = null;
-    that.sampleRate = audioCtx.sampleRate;
-    that.channels = channels;
+    that.sampleRate = function () {
+        return audioCtx.sampleRate;
+    };
+
+    that.numChannels = function () {
+        return channels;
+    };
+
     that.runIndexUpdated = undefined;
 
     that.onaudioprocess = function (audioEvent) {
         var chan = 0,
-            inData,
-            buffer = audioEvent.outputBuffer;
+            generated,
+            output = audioEvent.outputBuffer,
+            genPhase = 0;
 
-        buffer.normalize = false;
+        output.normalize = false;
 
-        for (chan = 0; chan < buffer.numberOfChannels; chan += 1) {
-            that.input.generate(audioCtx.sampleRate, that.frameSize, that.runIndex);
-            inData = that.input.getChannelData(chan);
-            buffer.copyToChannel(inData, chan);
-        }
-        that.runIndex += that.frameSize;
-
-        if (that.runIndexUpdated) {
-            that.runIndexUpdated(that.frameSize);
+        for (genPhase = 0; genPhase < frameSize; genPhase += genSize) {
+            for (chan = 0; chan < output.numberOfChannels; chan += 1) {
+                input.generate(audioCtx.sampleRate, genSize, runIndex);
+                generated = input.getChannelData(chan);
+                output.copyToChannel(generated, chan, genPhase);
+            }
+            runIndex += genSize;
+            if (that.runIndexUpdated) {
+                that.runIndexUpdated(genSize);
+            }
         }
     };
 
