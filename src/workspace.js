@@ -152,8 +152,9 @@ function workspace() {
         }
 
         if (timeTracker.currentMs() >= timeTracker.totalMs()) {
+            timeTracker.setCurrentMs(timeTracker.totalMs());
+            that.setPlayback(false); //triggers some close events, hence ms "hopping"
             that.setCurrentMs(0, 0);
-            that.setPlayback(false);
         }
     }
 

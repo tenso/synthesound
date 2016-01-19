@@ -284,7 +284,16 @@ function workbar() {
     };
 
     that.setPlayback = function (isOn) {
+        var seq;
         play.setValue(isOn, true);
+
+        if (sComp) {
+            seq = sComp.getSequencer();
+            if (seq.openStep()) {
+                log.d("closing open step");
+                seq.closeAt();
+            }
+        }
     };
 
     that.setCurrentSComp = function (comp) {
