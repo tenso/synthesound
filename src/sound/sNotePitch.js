@@ -3,7 +3,7 @@
 /*global note*/
 
 function sNotePitch(args) {
-    var that = sBase("op"),
+    var that = sBase("notePitch"),
         octaves = 0,
         notes = 0,
         cents = 0,

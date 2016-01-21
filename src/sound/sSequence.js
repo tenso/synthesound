@@ -34,6 +34,11 @@ function addSequenceDataFunctions(that) {
             that.argsOff.freq = note.hz(moveStartData.noteOff + numNotes);
         }
     };
+
+    that.copy = function () {
+        return sSequanceData(util.copyOwnProperties(that.args), that.ms,
+                             util.copyOwnProperties(that.argsOff), that.msOff);
+    };
     return that;
 }
 
@@ -226,6 +231,17 @@ function sSequence(sComp, argUpdateCb) {
             seqData.splice(index, 1);
         } else {
             log.error("sSequence.removeIndex: no such index:" + index);
+        }
+        return that;
+    };
+
+    that.duplicate = function (step) {
+        var index = seqData.indexOf(step);
+        if (index >= 0) {
+            seqData.splice(index, 0, step.copy());
+        } else {
+            log.error("sSequence.remove: no such element:");
+            log.obj(step);
         }
         return that;
     };
@@ -492,3 +508,4 @@ function test_sSequenceOpenCloseAndLoad() {
 test.addTest(test_sSequence, "sSequence load-save");
 test.addTest(test_sSequenceOpenClose, "sSequence open-close");
 test.addTest(test_sSequenceOpenCloseAndLoad, "sSequence open-close and load");
+

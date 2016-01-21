@@ -133,6 +133,10 @@ function workbar() {
         }
     }
 
+    function copySelectedStates() {
+        editSComp("duplicate");
+    }
+
     /*FIXME: render sArgs, move*/
 
     function renderPlain(canvas, ctx, currentMs, totalMs, pixelsPerMs, current) {
@@ -441,6 +445,9 @@ function workbar() {
 
         if (keys.ctrl && key === "a") {
             selectAllStates();
+        }
+       if (keys.ctrl && key === "c") {
+            copySelectedStates();
         }
 
     }, false);

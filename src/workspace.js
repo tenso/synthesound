@@ -218,6 +218,11 @@ function workspace() {
             return;
         }
 
+        if (operation !== "delete" && comp.stateMode() !== "notes") {
+            log.d("not implemented");
+            return;
+        }
+
         selection.startMs = timeTracker.quantizeValue(selection.startMs);
         selection.endMs = timeTracker.quantizeValue(selection.endMs, true);
         selection.lenMs = timeTracker.quantizeValue(selection.lenMs, true);
@@ -229,6 +234,10 @@ function workspace() {
         if (operation === "delete") {
             for (i = 0; i < states.length; i += 1) {
                 seq.remove(states[i]);
+            }
+        } else if (operation === "duplicate") {
+            for (i = 0; i < states.length; i += 1) {
+                seq.duplicate(states[i]);
             }
         } else if (operation === "moveStart") { //FIXME: notes vs values
             for (i = 0; i < states.length; i += 1) {

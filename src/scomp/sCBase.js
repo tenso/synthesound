@@ -88,7 +88,7 @@ function sCBase(container, type, sComp, uid) {
     };
 
     that.setAndSaveArgs = function (args, isDuration, open) {
-            //FIXME: should not seq.saveAt() trigger update of states?
+        //FIXME: should not seq.saveAt() trigger update of states?
         seq.setArgs(args);
         if (sCGlobal.recordingOn) {
             if (isDuration) {
