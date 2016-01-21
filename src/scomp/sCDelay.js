@@ -5,16 +5,16 @@
 
 function sCDelay(container, uid) {
     var delay = sDelay({gain: 0.1, delay: 0.15}),
-        that = sCBase(container, "sCDelay", {delay: delay}, uid),
-        controls = {delay: {}};
+        that = sCBase(container, "sCDelay", delay, uid),
+        controls = {};
 
-    controls.delay.gain = gSlider(delay.getArgs().gain, 0.0, 0.99, function (value) {that.setAndSaveArgs("delay", {gain: value}); });
-    controls.delay.delay = gSlider(delay.getArgs().delay, 0.0, 1.0, function (value) {that.setAndSaveArgs("delay", {delay: value}); });
+    controls.gain = gSlider(delay.getArgs().gain, 0.0, 0.99, function (value) {that.setAndSaveArgs({gain: value}); });
+    controls.delay = gSlider(delay.getArgs().delay, 0.0, 1.0, function (value) {that.setAndSaveArgs({delay: value}); });
 
-    that.addIn("delay").addOut("delay");
+    that.addIn().addOut();
     that.nextRow();
-    that.addTabled(controls.delay.gain, "G");
-    that.addTabled(controls.delay.delay, "D");
+    that.addTabled(controls.gain, "G");
+    that.addTabled(controls.delay, "D");
 
     that.setGuiControls(controls);
 

@@ -5,29 +5,29 @@
 
 function sCAdsr(container, uid) {
     var adsr = sAdsr({a: 0.01, d: 0.15, s: 0.5, r: 0.01}),
-        controls = {adsr: {}},
-        that = sCBase(container, "sCAdsr", {adsr: adsr}, uid);
+        controls = {},
+        that = sCBase(container, "sCAdsr", adsr, uid);
 
     function makeSet(param) {
         return function (value) {
             var args = {};
             args[param] = value;
-            that.setAndSaveArgs("adsr", args);
+            that.setAndSaveArgs(args);
         };
     }
 
-    that.addIn("adsr").addIn("adsr", "gate").addOut("adsr");
+    that.addIn().addIn("gate").addOut();
 
-    controls.adsr.a = gSlider(adsr.getArgs().a, 0.01, 1.0, makeSet("a"));
-    controls.adsr.d = gSlider(adsr.getArgs().d, 0.01, 1.0, makeSet("d"));
-    controls.adsr.s = gSlider(adsr.getArgs().s, 0.00, 1.0, makeSet("s"));
-    controls.adsr.r = gSlider(adsr.getArgs().r, 0.01, 1.0, makeSet("r"));
+    controls.a = gSlider(adsr.getArgs().a, 0.01, 1.0, makeSet("a"));
+    controls.d = gSlider(adsr.getArgs().d, 0.01, 1.0, makeSet("d"));
+    controls.s = gSlider(adsr.getArgs().s, 0.00, 1.0, makeSet("s"));
+    controls.r = gSlider(adsr.getArgs().r, 0.01, 1.0, makeSet("r"));
 
     that.nextRow();
-    that.addTabled(controls.adsr.a, "A");
-    that.addTabled(controls.adsr.d, "D");
-    that.addTabled(controls.adsr.s, "S");
-    that.addTabled(controls.adsr.r, "R");
+    that.addTabled(controls.a, "A");
+    that.addTabled(controls.d, "D");
+    that.addTabled(controls.s, "S");
+    that.addTabled(controls.r, "R");
 
     that.setGuiControls(controls);
     return that;

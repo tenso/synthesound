@@ -2,14 +2,13 @@
 /*global gIO*/
 /*global gBase*/
 
-function ioPort(uid, sComp, isOut, portName, portType) {
+function ioPort(uid, sComp, isOut, portType) {
     var that = gBase();
 
     that.data = function () {
         return {
             uid: that.uid,
             isOut: that.isOut,
-            portName: that.portName,
             portType: that.portType
         };
     };
@@ -25,7 +24,6 @@ function ioPort(uid, sComp, isOut, portName, portType) {
     that.uid = uid;
     that.sComp = sComp;
     that.isOut = isOut;
-    that.portName = portName;
     that.portType = portType || "";
     that.isIOPort = true;
 
@@ -33,10 +31,10 @@ function ioPort(uid, sComp, isOut, portName, portType) {
     return that;
 }
 
-function inPort(uid, sComp, portName, portType) {
-    return ioPort(uid, sComp, false, portName, portType);
+function inPort(uid, sComp, portType) {
+    return ioPort(uid, sComp, false, portType);
 }
 
-function outPort(uid, sComp, portName, portType) {
-    return ioPort(uid, sComp, true, portName, portType);
+function outPort(uid, sComp, portType) {
+    return ioPort(uid, sComp, true, portType);
 }

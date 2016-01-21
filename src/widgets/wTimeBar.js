@@ -145,6 +145,7 @@ function wTimeBar() {
         var ms,
             pos = gui.getEventOffsetInElement(that.parentNode, e);
 
+        util.unused(mouse);
         //FIXME:
         pos.x -= that.getLeft();
         pos.y -= that.getTop();
@@ -154,8 +155,8 @@ function wTimeBar() {
             that.draw();
         } else if (selection.modeActive("setMs")) {
             ms = totalMs * gui.getEventOffsetInElement(this, e).x / canvas.width;
-            if (ms < 0) {
-                ms = 0;
+            if (ms < -1) {
+                ms = -1;
             }
             if (typeof that.changeCurrentMs === "function") {
                 that.changeCurrentMs(ms);
@@ -169,6 +170,7 @@ function wTimeBar() {
     };
 
     canvas.iMouseUpAfterCapture = function (e) {
+        util.unused(e);
         if (selection.modeActive("selectionUpdated")) {
             if (typeof that.selectionUpdated === "function") {
                 that.selectionUpdated(selection.get(), true);

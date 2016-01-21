@@ -24,8 +24,6 @@ function addSequenceDataFunctions(that) {
 
     //FIXME: notes vs values: hardcoded to take numNotes!!
     that.move = function (movedMs, numNotes) {
-        var arg;
-
         that.ms = moveStartData.ms + movedMs;
         that.msOff = moveStartData.msOff + movedMs;
 
@@ -62,7 +60,7 @@ function sSequanceData(sArgs, msTime, sArgsOff, msTimeOff) {
     return addSequenceDataFunctions(that);
 }
 
-function sSequence(sComp, sId, argUpdateCb) {
+function sSequence(sComp, argUpdateCb) {
     var that = {},
         seqData = [],
         atMs = -1,
@@ -73,6 +71,13 @@ function sSequence(sComp, sId, argUpdateCb) {
     //FIXME: optimize!
     that.moveToMs = function (ms) {
         var i;
+
+        if (ms === -1) {
+            sComp.setArgs(sComp.getArgsOff());
+            if (argUpdateCb) {
+                argUpdateCb(sComp.getArgsOff());
+            }
+        }
 
         if (ms < atMs) {
             //jump back in time, activate prev. state
@@ -85,7 +90,7 @@ function sSequence(sComp, sId, argUpdateCb) {
             if (seqData[i].ms > atMs && seqData[i].ms <= ms) {
                 sComp.setArgs(seqData[i].args);
                 if (argUpdateCb) {
-                    argUpdateCb(sId, seqData[i].args);
+                    argUpdateCb(seqData[i].args);
                 }
             }
             //disable states
@@ -97,7 +102,7 @@ function sSequence(sComp, sId, argUpdateCb) {
                     }
                     sComp.setArgs(seqData[i].argsOff);
                     if (argUpdateCb) {
-                        argUpdateCb(sId, seqData[i].argsOff);
+                        argUpdateCb(seqData[i].argsOff);
                     }
                 }
             }
@@ -426,7 +431,6 @@ function test_sSequenceOpenClose() {
 function test_sSequenceOpenCloseAndLoad() {
     var sComp = stubScomp(),
         seq = sSequence(sComp, 0),
-        step,
         loadData = [
             {
                 ms: 0,

@@ -6,18 +6,18 @@
 
 function sCOp(container, uid) {
     var out = sOp(),
-        that = sCBase(container, "sCOp", {op: out}, uid),
+        that = sCBase(container, "sCOp", out, uid),
         buttonGroup = gButtonGroup();
 
     function addOp(op) {
-        var button = gButton(op, function () {that.setAndSaveArgs("op", {op: op}); }, true, buttonGroup).w(32);
+        var button = gButton(op, function () {that.setAndSaveArgs({op: op}); }, true, buttonGroup).w(32);
         if (out.getArgs().op === op) {
             button.set();
         }
         that.addTabled(button);
     }
 
-    that.addIn("op").addOut("op");
+    that.addIn().addOut();
 
     that.nextRow();
     addOp("*");
@@ -27,9 +27,7 @@ function sCOp(container, uid) {
     addOp("%");
 
     that.setGuiControls({
-        op: {
-            op: buttonGroup
-        }
+        op: buttonGroup
     });
 
     return that;

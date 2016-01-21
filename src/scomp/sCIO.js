@@ -127,7 +127,6 @@ function sCIO() {
 
             con = ioCon(to, from);
             connections.push(con);
-
             to.sComp.addInput(from.sComp, from.portType, to.portType);
             that.drawConnections();
             return true;

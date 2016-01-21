@@ -87,11 +87,6 @@ function workbar() {
         timeBar.draw();
     }
 
-    function selectAllStates() {
-        timeBar.selectAll();
-        selectStates(scaleSelection(timeBar.getSelection()));
-    }
-
     function valueToNote(value) {
         return parseInt(minNote + (1.0 - value) * (maxNote - minNote), 10);
     }
@@ -111,6 +106,11 @@ function workbar() {
             selection.valueType = "";
         }
         return selection;
+    }
+
+    function selectAllStates() {
+        timeBar.selectAll();
+        selectStates(scaleSelection(timeBar.getSelection()));
     }
 
     function editSComp(operation) {
@@ -208,9 +208,9 @@ function workbar() {
         }
     }
 
+
     function renderEvents(canvas, currentMs, totalMs, pixelsPerMs) {
         var sArgs = sComp.getArgs(),
-            type,
             ctx = canvas.getContext("2d");
 
         if (!sComp) {
@@ -218,14 +218,11 @@ function workbar() {
             return that;
         }
 
-        for (type in sArgs) {
-            if (sArgs.hasOwnProperty(type)) {
-                if (sComp.stateMode() === "notes") {
-                    renderNotes(canvas, ctx, currentMs, totalMs, pixelsPerMs, sArgs[type]);
-                } else {
-                    renderPlain(canvas, ctx, currentMs, totalMs, pixelsPerMs, sArgs[type]);
-                }
-            }
+
+        if (sComp.stateMode() === "notes") {
+            renderNotes(canvas, ctx, currentMs, totalMs, pixelsPerMs, sArgs);
+        } else {
+            renderPlain(canvas, ctx, currentMs, totalMs, pixelsPerMs, sArgs);
         }
         return that;
     }
@@ -378,6 +375,7 @@ function workbar() {
     };
 
     timeBar.selectionUpdated = function (selection, done) {
+        util.unused(selection);
         if (sComp) {
             if (selectedStates.length) {
                 editSComp(done ? "moveEnd" : "move");

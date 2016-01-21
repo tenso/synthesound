@@ -9,11 +9,7 @@
 /*global sSequence*/
 /*global util*/
 
-//FIXME: remove support for multiple sequencers!! (se below)
-//FIXME: probably very good refactoring: remove multiple sComp support (make args single array not map)
-
 //FIXME: rename all sC to sG
-//FIXME: rename all sId to portName?
 
 var scBaseUID = uidGen();
 
@@ -23,12 +19,12 @@ var sCGlobal = {
     recordingOn: false
 };
 
-function sCBase(container, type, sComps, uid) {
+function sCBase(container, type, sComp, uid) {
     var that = gWidget(),
-        ports = {},
+        ports = [],
         myUID,
         saveAtMs = 0,
-        seq = {}, //FIXME: remove support for multiple sequencers!!
+        seq,
         guiControls,
         stateMode = "";
 
@@ -44,16 +40,14 @@ function sCBase(container, type, sComps, uid) {
         };
     }
 
-    function setGuiControlAfterArg(sId, args) {
+    function setGuiControlAfterArg(args) {
         var arg;
 
         if (guiControls) {
-            if (guiControls.hasOwnProperty(sId)) {
-                for (arg in args) {
-                    if (args.hasOwnProperty(arg)) {
-                        if (guiControls[sId].hasOwnProperty(arg)) {
-                            guiControls[sId][arg].setValue(args[arg], true);
-                        }
+            for (arg in args) {
+                if (args.hasOwnProperty(arg)) {
+                    if (guiControls.hasOwnProperty(arg)) {
+                        guiControls[arg].setValue(args[arg], true);
                     }
                 }
             }
@@ -61,12 +55,7 @@ function sCBase(container, type, sComps, uid) {
     }
 
     function initStates() {
-        var sId;
-        for (sId in sComps) {
-            if (sComps.hasOwnProperty(sId)) {
-                seq[sId] = sSequence(sComps[sId], sId, setGuiControlAfterArg);
-            }
-        }
+        seq = sSequence(sComp, setGuiControlAfterArg);
     }
 
     that.iWasSelected = function () {
@@ -98,28 +87,24 @@ function sCBase(container, type, sComps, uid) {
         that.border("2px solid #000");
     };
 
-    that.setAndSaveArgs = function (sId, args, isDuration, open) {
-        if (sComps.hasOwnProperty(sId)) {
+    that.setAndSaveArgs = function (args, isDuration, open) {
             //FIXME: should not seq.saveAt() trigger update of states?
-            seq[sId].setArgs(args);
-            if (sCGlobal.recordingOn) {
-                if (isDuration) {
-                    if (open) {
-                        seq[sId].openAt(saveAtMs);
-                    } else {
-                        if (seq[sId].openStep()) {
-                            seq[sId].closeAt();
-                        } else {
-                            log.error("sCBase.setAndSaveArgs: no open step");
-                        }
-
-                    }
+        seq.setArgs(args);
+        if (sCGlobal.recordingOn) {
+            if (isDuration) {
+                if (open) {
+                    seq.openAt(saveAtMs);
                 } else {
-                    seq[sId].saveAt(saveAtMs);
+                    if (seq.openStep()) {
+                        seq.closeAt();
+                    } else {
+                        log.error("sCBase.setAndSaveArgs: no open step");
+                    }
+
                 }
+            } else {
+                seq.saveAt(saveAtMs);
             }
-        } else {
-            log.error("no such sId:" + sId);
         }
     };
 
@@ -133,14 +118,9 @@ function sCBase(container, type, sComps, uid) {
     };
 
     that.setArgs = function (sArgs) {
-        var sId;
-        for (sId in seq) {
-            if (seq.hasOwnProperty(sId)) {
-                if (sArgs && sArgs.hasOwnProperty(sId)) {
-                    seq[sId].load(sArgs[sId]);
-                    setGuiControlAfterArg(sId, sArgs[sId].args);
-                }
-            }
+        if (sArgs) {
+            seq.load(sArgs);
+            setGuiControlAfterArg(sArgs.args);
         }
     };
 
@@ -153,110 +133,46 @@ function sCBase(container, type, sComps, uid) {
     };
 
     that.getArgs = function () {
-        var sArgs = [],
-            sId;
-        for (sId in seq) {
-            if (seq.hasOwnProperty(sId)) {
-                sArgs[sId] = seq[sId].data();
-            }
-        }
-        return sArgs;
-    };
-    //FIXME: remove support for multiple sequencers!!
-    that.getSequencers = function () {
-        var seqs = [],
-            sId;
-        for (sId in seq) {
-            if (seq.hasOwnProperty(sId)) {
-                seqs[sId] = seq[sId];
-            }
-        }
-        return seqs;
+        return seq.data();
     };
 
     that.getSequencer = function () {
-        var sId;
-        for (sId in seq) {
-            if (seq.hasOwnProperty(sId)) {
-                return seq[sId];
-            }
-        }
+        return seq;
     };
 
-    that.clearPorts = function () {
-        var sId;
-        for (sId in sComps) {
-            if (sComps.hasOwnProperty(sId)) {
-                ports[sId] = [];
-            }
-        }
-    };
-
-    that.addIn = function (sId, type) {
-        if (!sComps.hasOwnProperty(sId)) {
-            log.error("sCBase.addIn: dont have:" + sId);
-            return;
-        }
-
-        var port = inPort(that.uid(), sComps[sId], sId, type);
+    that.addIn = function (type) {
+        var port = inPort(that.uid(), sComp, type);
         that.addTabled(port, type || "in");
-        ports[sId].push(port);
+        ports.push(port);
         return that;
     };
 
-    that.addOut = function (sId, type) {
-        if (!sComps.hasOwnProperty(sId)) {
-            log.error("sCBase.addOut dont have:" + sId);
-            return;
-        }
-
-        var port = outPort(that.uid(), sComps[sId], sId, type);
-        that.addTabled(port, type || sId || "out");
-        ports[sId].push(port);
+    that.addOut = function (type) {
+        var port = outPort(that.uid(), sComp, type);
+        that.addTabled(port, type || "out");
+        ports.push(port);
         return that;
     };
 
     that.data = function () {
-        var sId,
-            data = {
-                type: type,
-                uid: that.uid(),
-                x: that.getX(),
-                y: that.getY(),
-                sComps: [],
-                sArgs: {}
-            };
-
-        for (sId in sComps) {
-            if (sComps.hasOwnProperty(sId)) {
-                data.sComps.push({
-                    type: sComps[sId].typeId(),
-                    sId: sId
-                });
-            }
-        }
-
-        for (sId in seq) {
-            if (seq.hasOwnProperty(sId)) {
-                data.sArgs[sId] = seq[sId].data();
-            }
-        }
-
-        return data;
+        return {
+            type: type,
+            uid: that.uid(),
+            x: that.getX(),
+            y: that.getY(),
+            sComp: {
+                type: sComp.typeId()
+            },
+            sArgs: seq.data()
+        };
     };
 
-    that.getPort = function (sId, isOut, type) {
+    that.getPort = function (isOut, type) {
         var i;
 
-        if (!sComps.hasOwnProperty(sId)) {
-            log.error(that.uid() + ".getPort: dont have:" + sId);
-            log.obj(sComps);
-            return;
-        }
-
-        for (i = 0; i < ports[sId].length; i += 1) {
-            if (ports[sId][i].isOut === isOut && ports[sId][i].portType === type) {
-                return ports[sId][i];
+        for (i = 0; i < ports.length; i += 1) {
+            if (ports[i].isOut === isOut && ports[i].portType === type) {
+                return ports[i];
             }
         }
         log.error("could not find port");
@@ -268,33 +184,18 @@ function sCBase(container, type, sComps, uid) {
             log.error("scBase.setCurrentMs: ms not a number");
             return;
         }
-        var sId;
-        for (sId in seq) {
-            if (seq.hasOwnProperty(sId)) {
-                seq[sId].moveToMs(ms);
-            }
-        }
+        seq.moveToMs(ms);
         saveAtMs = saveMs;
     };
 
     that.saveArgs =  function (ms) {
-        var sId;
-        for (sId in seq) {
-            if (seq.hasOwnProperty(sId)) {
-                seq[sId].saveAt(ms);
-            }
-        }
+        seq.saveAt(ms);
         return that;
     };
 
     that.saveInitialArgs =  function () {
-        var sId;
-        for (sId in seq) {
-            if (seq.hasOwnProperty(sId)) {
-                if (!seq[sId].hasArgAt(0)) {
-                    seq[sId].saveAt(0);
-                }
-            }
+        if (!seq.hasArgAt(0)) {
+            seq.saveAt(0);
         }
         return that;
     };
@@ -312,7 +213,6 @@ function sCBase(container, type, sComps, uid) {
     initStates();
     that.typeClass = "sCBase";
     that.typeIs = type || "sCBase";
-    that.clearPorts();
 
     return that;
 }

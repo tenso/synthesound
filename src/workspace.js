@@ -72,7 +72,7 @@ function workspace() {
             comp.saveInitialArgs();
             comp.move(data.x, data.y);
         } else {
-            log.error("workspace: dont know sId:" + data.type);
+            log.error("workspace.createSComp: dont know type:" + data.type);
         }
         return undefined;
     }
@@ -110,8 +110,8 @@ function workspace() {
         fromSCComp = findSCComp(con.from.uid);
 
         if (toSCComp && fromSCComp) {
-            toPort = toSCComp.getPort(con.to.portName, con.to.isOut, con.to.portType);
-            fromPort = fromSCComp.getPort(con.from.portName, con.from.isOut, con.from.portType);
+            toPort = toSCComp.getPort(con.to.isOut, con.to.portType);
+            fromPort = fromSCComp.getPort(con.from.isOut, con.from.portType);
 
             if (toPort && fromPort) {
                 gIO.connectPorts(fromPort, toPort);

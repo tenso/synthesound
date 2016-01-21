@@ -9,7 +9,7 @@
 
 function sCVKey(container, uid) {
     var output = sNote(),
-        that = sCBase(container, "sCVKey", {output: output}, uid),
+        that = sCBase(container, "sCVKey", output, uid),
         currentNote = gLabel("--").abs().move(12, 50).setSize(40, 20).bg("#888").color("#000").border("2px solid #888").radius(4),
         isDown = false,
         keyboard,
@@ -29,9 +29,9 @@ function sCVKey(container, uid) {
         var hz = note.hz(noteKey);
         isDown = down;
         if (isDown) {
-            that.setAndSaveArgs("output", {gate: isDown, freq: hz}, true, isDown);
+            that.setAndSaveArgs({gate: isDown, freq: hz}, true, isDown);
         } else {
-            that.setAndSaveArgs("output", {gate: isDown}, true, isDown);
+            that.setAndSaveArgs({gate: isDown}, true, isDown);
         }
         noteDisplay.setValue(hz);
     }
@@ -44,7 +44,7 @@ function sCVKey(container, uid) {
         saveKey(noteKey, false);
     };
 
-    that.addOut("output", "gate").addOut("output", "freq");
+    that.addOut("gate").addOut("freq");
 
     that.addTabled(gButton("capture", function () {
         gui.captureKey(keyboard);
@@ -56,10 +56,8 @@ function sCVKey(container, uid) {
     that.addTabled(keyboard);
 
     that.setGuiControls({
-        output: {
-            gate: noteDisplay,
-            freq: noteDisplay
-        }
+        gate: noteDisplay,
+        freq: noteDisplay
     });
 
     that.setStateMode("notes");

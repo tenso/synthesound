@@ -25,7 +25,6 @@ function sGen(args) {
 
         phaseStep = freq / sRate;
         for (i = 0; i < that.wantedSamples(); i += 1) {
-
             if (that.numInputs("freq")) {
                 newFreq = that.getInputChannelData(0, 0, "freq")[i];
             }

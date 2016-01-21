@@ -6,24 +6,24 @@
 
 function sCOut(container, uid) {
     var mix = sMix(),
-        that = sCBase(container, "sCOut", {mix: mix}, uid),
-        controls = {mix: {}};
+        that = sCBase(container, "sCOut", mix, uid),
+        controls = {};
 
     function setGainL(value) {
-        that.setAndSaveArgs("mix", {gainL: value});
+        that.setAndSaveArgs({gainL: value});
     }
 
     function setGainR(value) {
-        that.setAndSaveArgs("mix", {gainR: value});
+        that.setAndSaveArgs({gainR: value});
     }
 
-    controls.mix.gainL = gSlider(mix.getArgs().gainL, 0.0, 1.0, setGainL);
-    controls.mix.gainR = gSlider(mix.getArgs().gainR, 0.0, 1.0, setGainR);
+    controls.gainL = gSlider(mix.getArgs().gainL, 0.0, 1.0, setGainL);
+    controls.gainR = gSlider(mix.getArgs().gainR, 0.0, 1.0, setGainR);
 
-    that.addIn("mix");
+    that.addIn();
     that.nextRow();
-    that.addTabled(controls.mix.gainL, "L");
-    that.addTabled(controls.mix.gainR, "R");
+    that.addTabled(controls.gainL, "L");
+    that.addTabled(controls.gainR, "R");
 
     that.setGuiControls(controls);
 

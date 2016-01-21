@@ -4,9 +4,9 @@
 
 function sCMix(container, uid) {
     var mix = sMix(),
-        that = sCBase(container, "sCMix", {mix: mix}, uid);
+        that = sCBase(container, "sCMix", mix, uid);
 
-    that.addIn("mix").addOut("mix");
+    that.addIn().addOut();
 
     return that;
 }

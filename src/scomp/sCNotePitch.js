@@ -6,30 +6,30 @@
 
 function sCNotePitch(container, uid) {
     var out = sNotePitch(),
-        that = sCBase(container, "sCNotePitch", {hz: out}, uid),
+        that = sCBase(container, "sCNotePitch", out, uid),
         labelIn,
         labelOut,
-        controls = {hz: {}};
+        controls = {};
 
     function addControl(type) {
         var args;
 
-        controls.hz[type] = gInput(out.getArgs()[type], function (value) {
+        controls[type] = gInput(out.getArgs()[type], function (value) {
             args = {};
             args[type] = parseInt(value, 10);
-            that.setAndSaveArgs("hz", args);
+            that.setAndSaveArgs(args);
         }, type, 30);
 
-        that.addTabled(controls.hz[type]);
+        that.addTabled(controls[type]);
     }
 
     labelIn = gLabel("--").w(60).fontSize(12);
     that.addTabled(labelIn);
-    that.addIn("hz");
+    that.addIn();
 
     labelOut = gLabel("--").w(60).fontSize(12);
     that.addTabled(labelOut);
-    that.addOut("hz");
+    that.addOut();
 
     that.nextRow();
     addControl("octaves");

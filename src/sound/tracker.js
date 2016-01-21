@@ -127,9 +127,8 @@ function tracker(sampleRate) {
             }
 
             return measures * that.measureMs();
-        } else {
-            return ms;
         }
+        return ms;
     };
 
     that.setPlayback = function (playValue) {
