@@ -247,6 +247,7 @@ function workspace() {
             for (i = 0; i < states.length; i += 1) {
                 states[i].move(selection.lenMs, selection.numNotes);
             }
+            seq.sortSteps();
         } else if (operation === "beginNew") {
             if (!seq.openStep()) {
                 seq.openAt(selection.startMs, stepForOpen);

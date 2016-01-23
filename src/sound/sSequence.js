@@ -35,10 +35,6 @@ function addSequenceDataFunctions(that) {
         }
     };
 
-    that.copy = function () {
-        return sSequanceData(util.copyOwnProperties(that.args), that.ms,
-                             util.copyOwnProperties(that.argsOff), that.msOff);
-    };
     return that;
 }
 
@@ -58,6 +54,11 @@ function sSequanceData(sArgs, msTime, sArgsOff, msTimeOff) {
             ms: msTime,
             args: sArgs
         };
+
+    that.copy = function () {
+        return sSequanceData(util.copyOwnProperties(that.args), that.ms,
+                             util.copyOwnProperties(that.argsOff), that.msOff);
+    };
 
     if (sArgsOff) {
         sCloseSequanceData(that, sArgsOff, msTimeOff);
@@ -244,6 +245,34 @@ function sSequence(sComp, argUpdateCb) {
             log.obj(step);
         }
         return that;
+    };
+
+    //FIXME: bubble-sort...
+    that.sortSteps = function () {
+        var sorted = [],
+            i,
+            j,
+            inserted;
+
+        if (!seqData.length) {
+            return;
+        }
+        sorted[0] = seqData[0];
+
+        for (i = 1; i < seqData.length; i += 1) {
+            inserted = false;
+            for (j = 0; j < sorted.length; j += 1) {
+                if (seqData[i].ms <= sorted[j].ms) {
+                    sorted.splice(j, 0, seqData[i]);
+                    inserted = true;
+                    break;
+                }
+            }
+            if (!inserted) {
+                sorted.push(seqData[i]);
+            }
+        }
+        seqData = sorted;
     };
 
     return that;
@@ -505,7 +534,38 @@ function test_sSequenceOpenCloseAndLoad() {
     test.verify(sComp.argSeq(3), "loaded1-off");
 }
 
+function test_sSequenceSort() {
+    var sComp = stubScomp(),
+        seq = sSequence(sComp, 0),
+        loadData = [
+            {
+                ms: 500,
+                args: "loaded0"
+            },
+            {
+                ms: 2000,
+                args: "loaded1"
+            },
+            {
+                ms: 1000,
+                args: "loaded2"
+            },
+            {
+                ms: 0,
+                args: "loaded3"
+            }
+        ];
+
+    seq.load(loadData);
+    seq.sortSteps();
+    test.verify(seq.step(0).ms, 0);
+    test.verify(seq.step(1).ms, 500);
+    test.verify(seq.step(2).ms, 1000);
+    test.verify(seq.step(3).ms, 2000);
+}
+
 test.addTest(test_sSequence, "sSequence load-save");
 test.addTest(test_sSequenceOpenClose, "sSequence open-close");
 test.addTest(test_sSequenceOpenCloseAndLoad, "sSequence open-close and load");
+test.addTest(test_sSequenceSort, "sSequence sort-steps");
 

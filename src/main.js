@@ -119,8 +119,8 @@ window.onload = function () {
     guiApp.add(audioWork);
     audioWork.add(gIO);
     guiApp.add(audioBar);
-
     audioBar.resizeCanvas();
+    audioBar.setDefaults();
 
     globalDebug.setNote = topMenu.setNote;
 

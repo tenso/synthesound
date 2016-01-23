@@ -446,7 +446,7 @@ function workbar() {
         if (keys.ctrl && key === "a") {
             selectAllStates();
         }
-       if (keys.ctrl && key === "c") {
+        if (keys.ctrl && key === "c") {
             copySelectedStates();
         }
 
@@ -472,8 +472,10 @@ function workbar() {
         that.resizeCanvas();
     }, false);
 
-    zoomX.setValue(400);
-    zoomY.setValue(400);
-
+    that.setDefaults = function () {
+        zoomX.setValue(400);
+        zoomY.setValue(400);
+        timeScroll.scrollTop = timeBar.getH() / 2;
+    };
     return that;
 }
