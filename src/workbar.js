@@ -115,12 +115,10 @@ function workbar() {
 
     function editSComp(operation) {
         var op = operation;
-        if (operation === "move") {
+        if (operation === "move" || operation === "moveOff") {
             if (!moveActive) {
                 moveActive = true;
                 op = "moveStart";
-            } else {
-                op = "move";
             }
         } else if (operation === "moveEnd") {
             moveActive = false;
@@ -382,7 +380,7 @@ function workbar() {
         util.unused(selection);
         if (sComp) {
             if (selectedStates.length) {
-                editSComp(done ? "moveEnd" : "move");
+                editSComp(done ? "moveEnd" : (keys.shift ? "moveOff" : "move"));
             } else {
                 editSComp(done ? "endNew" : "beginNew");
             }

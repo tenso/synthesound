@@ -248,7 +248,12 @@ function workspace() {
                 states[i].move(selection.lenMs, selection.numNotes);
             }
             seq.sortSteps();
-        } else if (operation === "beginNew") {
+        } else if (operation === "moveOff") { //FIXME: notes vs values
+            for (i = 0; i < states.length; i += 1) {
+                states[i].moveOff(selection.lenMs);
+            }
+            seq.sortSteps();
+        }else if (operation === "beginNew") {
             if (!seq.openStep()) {
                 seq.openAt(selection.startMs, stepForOpen);
                 seq.openStep().msOff = selection.endMs;

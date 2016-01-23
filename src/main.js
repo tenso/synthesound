@@ -42,9 +42,16 @@ function initLanguage() {
         sCNotePitch: "Note Pitch",
         sCOut: "Output",
         sCScope: "Scope",
-        helpText: "Space: play/pause\n" +
-                "Ctrl-left-click to move current time (in tracker)\n" +
-                "Ctrl-a to select all states in tracker\n",
+        helpText: "Global:\n" +
+                "Space: play/pause\n" +
+                "\n" +
+                "Tracker:\n" +
+                "Ctrl-left-click to move current time n\n" +
+                "Ctrl-a to select all states\n" +
+                "Ctrl-c to copy selected states\n" +
+                "right-drag to select states\n" +
+                "left-drag to move selected states\n" +
+                "Shift-left-drag to move end positions\n",
         save: "Save",
         load: "Load",
         help: "Help",
