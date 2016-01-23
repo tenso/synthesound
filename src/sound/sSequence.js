@@ -163,14 +163,23 @@ function sSequence(sComp, argUpdateCb) {
     };
 
     that.closeAt = function (ms) {
-        var at = typeof ms === "number" ? ms : atMs;
+        var at = typeof ms === "number" ? ms : atMs,
+            off = at;
 
         if (!openStep) {
             log.error("no open step");
             return that;
         }
 
-        sCloseSequanceData(openStep, sComp.getArgsOff(), at);
+        if (openStep.ms === at) {
+            that.remove(openStep);
+        } else {
+            if (openStep.ms > at) {
+                off = openStep.ms;
+                openStep.ms = at;
+            }
+            sCloseSequanceData(openStep, sComp.getArgsOff(), off);
+        }
         openStep = undefined;
         return that;
     };
