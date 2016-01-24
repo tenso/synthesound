@@ -1,6 +1,7 @@
 "use strict";
 /*global log*/
 /*global gBase*/
+/*global gui*/
 
 function gButtonGroup() {
     var that = [];
@@ -87,9 +88,13 @@ function gButton(name, callback, isRadio, buttonGroup) {
     }
 
     that.onmousedown = function (e) {
-        e.stopPropagation();
+        gui.captureMouse(e);
+    };
+
+    that.iMouseCaptured = function (e) {
         that.set();
     };
+
     that.typeIs = "gButton";
     return that;
 }

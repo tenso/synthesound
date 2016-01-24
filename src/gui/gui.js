@@ -103,9 +103,14 @@ var gui = {
     },
 
     captureMouse: function (e, wantedTarget) {
+        var target = wantedTarget || e.target;
         if (!gui.input) {
             log.error("gui.js: no inputhandler set");
             return false;
+        }
+
+        if (target && target.gParent) {
+            target.gParent().selectParent();
         }
         gui.input.setMouseCapturer(e, wantedTarget);
     },

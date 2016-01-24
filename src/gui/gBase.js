@@ -1,16 +1,17 @@
 "use strict";
-/*global gui*/
+/*global gStyle*/
 /*global document*/
 
 /*NOTE: cant use getW/getX etc functions unless element as already in the DOM or has explicit w/h set*/
 
 function gBase(type) {
-    var that = document.createElement(type || "div"),
+    var that = gStyle(type),
         originalColor,
         hoverColor,
         pressColor,
+        pressBg,
         originalPressColor,
-        oldDisplay;
+        originalPressBg;
 
     function mouseEnterCallback() {
         originalColor = that.style.color;
@@ -23,239 +24,21 @@ function gBase(type) {
 
     function mouseDownCallback() {
         originalPressColor = that.style.color;
-        that.style.color = pressColor || "#888";
+        originalPressBg = that.style.background;
+
+        if (pressColor) {
+            that.style.color = pressColor;
+        }
+        if (pressBg) {
+            that.style.background = pressBg;
+        }
     }
 
     function mouseUpCallback() {
         that.style.color = originalPressColor;
+        that.style.background = originalPressBg;
     }
 
-    that.show = function (value) {
-        if (!value && that.style.display !== "none") {
-            oldDisplay = that.style.display;
-            that.style.display = "none";
-        } else if (value && that.style.display === "none") {
-            that.style.display = oldDisplay;
-        }
-
-        return that;
-    };
-
-    that.text = function (label) {
-        that.textContent = label;
-        return that;
-    };
-
-    that.display = function (value) {
-        that.style.display = value;
-        oldDisplay = that.style.display;
-
-        return that;
-    };
-
-    that.padding = function (value) {
-        return gui.stylePxIfInt(that, "padding", value);
-    };
-
-    that.paddingLeft = function (value) {
-        return gui.stylePxIfInt(that, "paddingLeft", value);
-    };
-
-    that.paddingRight = function (value) {
-        return gui.stylePxIfInt(that, "paddingRight", value);
-    };
-
-    that.margin = function (value) {
-        return gui.stylePxIfInt(that, "margin", value);
-    };
-
-    that.marginLeft = function (value) {
-        return gui.stylePxIfInt(that, "marginLeft", value);
-    };
-
-    that.marginRight = function (value) {
-        return gui.stylePxIfInt(that, "marginRight", value);
-    };
-
-    that.lineHeight = function (value) {
-        return gui.stylePxIfInt(that, "lineHeight", value);
-    };
-
-    //normal, nowrap, pre-line, ...
-    that.whiteSpace = function (value) {
-        that.style.whiteSpace = value;
-        return that;
-    };
-
-    that.move = function (x, y) {
-        gui.stylePxIfInt(that, "left", x);
-        gui.stylePxIfInt(that, "top", y);
-        return that;
-    };
-
-    that.z = function (value) {
-        that.style.zIndex = value;
-        return that;
-    };
-
-    that.overflow = function (value) {
-        that.style.overflow = value;
-        return that;
-    };
-
-    that.overflowX = function (value) {
-        that.style.overflowX = value;
-        return that;
-    };
-
-    that.overflowY = function (value) {
-        that.style.overflowY = value;
-        return that;
-    };
-
-    that.abs = function () {
-        return that.pos("absolute");
-    };
-
-    that.rel = function () {
-        return that.pos("relative");
-    };
-
-    that.pos = function (pos) {
-        that.style.position = pos;
-        return that;
-    };
-
-    that.left = function (value) {
-        return gui.stylePxIfInt(that, "left", value);
-    };
-
-    that.getLeft = function () {
-        return that.offsetLeft || gui.getStyleInt(that, "left");
-    };
-
-    that.x = function (value) {
-        return that.left(value);
-    };
-
-    that.getX = function () {
-        return that.getLeft();
-    };
-
-    that.right = function (value) {
-        return gui.stylePxIfInt(that, "right", value);
-    };
-
-    that.getRight = function () {
-        return gui.getStyleInt(that, "right") || that.getX() + that.getW();
-    };
-
-    that.top = function (value) {
-        return gui.stylePxIfInt(that, "top", value);
-    };
-
-    that.getTop = function () {
-        return that.offsetTop || gui.getStyleInt(that, "top");
-    };
-
-    that.y = function (value) {
-        return that.top(value);
-    };
-
-    that.getY = function () {
-        return that.getTop();
-    };
-
-    that.bottom = function (value) {
-        return gui.stylePxIfInt(that, "bottom", value);
-    };
-
-    that.getBottom = function () {
-        return gui.getStyleInt(that, "bottom") || that.getY() + that.getH();
-    };
-
-    that.w = function (value) {
-        return gui.stylePxIfInt(that, "width", value);
-    };
-
-    that.getW = function () {
-        return that.offsetWidth || that.getOffsetW();
-    };
-
-    that.getOffsetW = function () {
-        return gui.getStyleInt(that, "width")
-            + gui.getStyleInt(that, "paddingLeft") + gui.getStyleInt(that, "paddingRight")
-            + gui.getStyleInt(that, "borderLeft") + gui.getStyleInt(that, "borderRight");
-    };
-
-    that.h = function (value) {
-        return gui.stylePxIfInt(that, "height", value);
-    };
-
-    that.getH = function () {
-        return that.offsetHeight || that.getOffsetH();
-    };
-
-    that.getOffsetH = function () {
-        return gui.getStyleInt(that, "height")
-            + gui.getStyleInt(that, "paddingTop") + gui.getStyleInt(that, "paddingBottom")
-            + gui.getStyleInt(that, "borderTop") + gui.getStyleInt(that, "borderBottom");
-    };
-
-    that.minWidth = function (value) {
-        return gui.stylePxIfInt(that, "minWidth", value);
-    };
-
-    that.minHeight = function (value) {
-        return gui.stylePxIfInt(that, "minHeight", value);
-    };
-
-    that.setClass = function (className) {
-        that.className = className;
-        return that;
-    };
-    that.bg = function (value) {
-        that.style.background = value;
-        return that;
-    };
-    that.border = function (value) {
-        that.style.border = value;
-        return that;
-    };
-    that.borderColor = function (value) {
-        that.style.borderColor = value;
-        return that;
-    };
-
-    that.radius = function (value) {
-        that.style.borderRadius = value + "px";
-        return that;
-    };
-
-    that.color = function (value) {
-        that.style.color = value;
-        return that;
-    };
-
-    that.setSize = function (w, h) {
-        gui.stylePxIfInt(that, "width", w);
-        gui.stylePxIfInt(that, "height", h);
-        return that;
-    };
-
-    that.fontSize = function (value) {
-        return gui.stylePxIfInt(that, "fontSize", value);
-    };
-
-    that.fontFamily = function (value) {
-        that.style.fontFamily = value;
-        return that;
-    };
-
-    that.opacity = function (value) {
-        that.style.opacity = value;
-        return that;
-    };
 
     that.hoverEffect = function (value, color) {
         hoverColor = color;
@@ -270,8 +53,9 @@ function gBase(type) {
         return that;
     };
 
-    that.pressEffect = function (value, color) {
+    that.pressEffect = function (value, color, bg) {
         pressColor = color;
+        pressBg = bg;
         if (value) {
             that.addEventListener("mousedown", mouseDownCallback);
             that.addEventListener("mouseup", mouseUpCallback);
@@ -282,11 +66,6 @@ function gBase(type) {
             that.removeEventListener("mouseleave", mouseUpCallback);
         }
 
-        return that;
-    };
-
-    that.float = function (value) {
-        that.style.float = value;
         return that;
     };
 
@@ -306,18 +85,26 @@ function gBase(type) {
         return that;
     };
 
-    that.textAlign = function (value) {
-        that.style.textAlign = value;
-        return that;
-    };
-
     that.remove = function () {
         that.parentNode.removeChild(that);
         return that;
     };
 
-    that.cursor = function (value) {
-        that.style.cursor = value;
+    that.gParent = function () {
+        if (that.parentNode) {
+            if (that.parentNode.gParent) {
+                return that.parentNode.gParent();
+            }
+        }
+        return that;
+    };
+
+    that.selectParent = function () {
+        if (that.gParent) {
+            if (that.gParent().iWasSelected) {
+                that.gParent().iWasSelected();
+            }
+        }
         return that;
     };
 

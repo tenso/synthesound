@@ -1,5 +1,6 @@
 "use strict";
 /*global test*/
+/*global log*/
 
 var util = {
     isArray: function (obj) {
@@ -80,6 +81,15 @@ var util = {
             }
         }
         return that;
+    },
+
+    addMethod: function (obj, name, func) {
+        if (obj[name]) {
+            log.error("already have:" + name);
+        } else {
+            obj[name] = func;
+        }
+        return obj;
     }
 };
 

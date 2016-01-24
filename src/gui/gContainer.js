@@ -21,7 +21,7 @@ function gContainer() {
 
     that.nextRow = function () {
         that.content = gBase("tr").setClass("gContainerRow");
-        that.table.appendChild(that.content); //FIXME: not a gBase
+        that.table.add(that.content);
         return that;
     };
 
@@ -53,8 +53,7 @@ function gContainer() {
     that.typeIs = "gContainer";
     that.typeClass = "gContainer";
     that.setClass("gContainer");
-    //that.table = gBase("table"); //FIXME: gives borders!!
-    that.table = document.createElement("table");
+    that.table = gBase("table");
     that.table.className = "gContainerTable";
 
     that.add(that.table);

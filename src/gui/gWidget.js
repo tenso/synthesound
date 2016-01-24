@@ -57,6 +57,9 @@ function gWidget() {
         return that;
     };
 
+    that.gParent = function () {
+        return that;
+    };
 
     that.typeIs = "gWidget";
     that.typeClass = "gWidget";

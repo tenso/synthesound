@@ -1,6 +1,7 @@
 .vkey-container {
     position: relative;
 }
+
 .vkey-key-flat {
     position: absolute;
     background: #fff;
@@ -9,18 +10,10 @@
     z-index: 0;
 }
 
-.vkey-key-flat:active {
-    background: #999;
-}
-
 .vkey-key-sharp {
     position: absolute;
     background: #000;
     border: 1px solid #fff;
     border-radius: 4px;
     z-index: 1;
-}
-
-.vkey-key-sharp:active {
-    background: #999;
 }

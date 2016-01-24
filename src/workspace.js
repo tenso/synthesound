@@ -73,8 +73,9 @@ function workspace() {
             comp.move(data.x, data.y);
         } else {
             log.error("workspace.createSComp: dont know type:" + data.type);
+            return undefined;
         }
-        return undefined;
+        return comp;
     }
 
     function initSComp() {
@@ -85,7 +86,8 @@ function workspace() {
 
             function menuEntry(id, xPos, yPos) {
                 return function () {
-                    createSComp({type: id, x: xPos, y: yPos});
+                    var comp = createSComp({type: id, x: xPos, y: yPos});
+                    comp.iWasSelected();
                     menu.remove();
                 };
             }
@@ -253,7 +255,7 @@ function workspace() {
                 states[i].moveOff(selection.lenMs);
             }
             seq.sortSteps();
-        }else if (operation === "beginNew") {
+        } else if (operation === "beginNew") {
             if (!seq.openStep()) {
                 seq.openAt(selection.startMs, stepForOpen);
                 seq.openStep().msOff = selection.endMs;
