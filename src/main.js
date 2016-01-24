@@ -50,6 +50,7 @@ function buildHelpText() {
     addCommand("Ctrl-a", "select all states");
     addCommand("Ctrl-c", "copy selected states");
     addCommand("right-drag", "select states");
+    addCommand("Shift-right-drag", "modify selection");
     addCommand("left-drag", "move selected states");
     addCommand("Shift-left-drag", "move end positions");
 

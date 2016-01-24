@@ -69,20 +69,41 @@ function workbar() {
         return false;
     }
 
-    function selectStates(selection) {
+    function selectStates(selection, modify) {
         if (!sComp) {
             return;
         }
         var seq = sComp.getSequencer(),
-            i;
+            i,
+            j,
+            found,
+            modifySet = [];
 
-        selectedStates = [];
         for (i = 0; i < seq.numSteps(); i += 1) {
-            if (!selection) {
-                selectedStates.push(seq.step(i));
-            } else if (isWithinSelection(seq.step(i), selection.valueType, selection)) {
-                selectedStates.push(seq.step(i));
+            if (isWithinSelection(seq.step(i), selection.valueType, selection)) {
+                modifySet.push(seq.step(i));
             }
+        }
+
+        if (!modify) {
+            selectedStates = modifySet;
+        } else {
+            for (i = 0; i < selectedStates.length; i += 0) {
+                found = false;
+                for (j = 0; j < modifySet.length; j += 1) {
+                    //if found: remove, otherwise add
+                    if (selectedStates[i] === modifySet[j]) {
+                        selectedStates.splice(i, 1);
+                        modifySet.splice(j, 1);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    i += 1;
+                }
+            }
+            selectedStates = selectedStates.concat(modifySet);
         }
         timeBar.draw();
     }
@@ -390,7 +411,7 @@ function workbar() {
 
     timeBar.newSelection = function (selection) {
         if (sComp) {
-            selectStates(scaleSelection(selection));
+            selectStates(scaleSelection(selection), keys.shift);
         }
     };
 
