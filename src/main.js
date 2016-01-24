@@ -30,6 +30,48 @@ var globalDebug = {
     setNote: undefined
 };
 
+//FIXME: make keymap json with user-bindings
+//FIXME: move text
+function buildHelpText() {
+    var helpText = "<table style='min-width:400px;'>";
+
+    function addTitle(title) {
+        helpText += "<tr colspan=100><td class=helpTitle>" + title + "</td></tr>";
+    }
+    function addCommand(cmd, text) {
+        helpText += "<tr><td class=helpCmd>" + cmd + "</td><td class=helpText>" + text + "</td></tr>";
+    }
+
+    addTitle("Global");
+    addCommand("Space", "play/pause");
+    addTitle("\n");
+    addTitle("Tracker");
+    addCommand("Ctrl-left-click", "move current time");
+    addCommand("Ctrl-a", "select all states");
+    addCommand("Ctrl-c", "copy selected states");
+    addCommand("right-drag", "select states");
+    addCommand("left-drag", "move selected states");
+    addCommand("Shift-left-drag", "move end positions");
+
+    return helpText + "</table>";
+}
+function buildLicenseText() {
+    return "Copyright 2015 Anton Olofsson\n" +
+            "\n" +
+            "This program is free software: you can redistribute it and/or modify\n" +
+            "it under the terms of the GNU General Public License as published by\n" +
+            "the Free Software Foundation, either version 3 of the License, or\n" +
+            "(at your option) any later version.\n" +
+            "\n" +
+            "This program is distributed in the hope that it will be useful,\n" +
+            "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
+            "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
+            "GNU General Public License for more details.\n" +
+            "\n" +
+            "You should have received a copy of the GNU General Public License\n" +
+            "along with this program.  If not, see <http://www.gnu.org/licenses/>.\n";
+}
+
 function initLanguage() {
     lang.addLanguage("en", {
         sCAdsr: "Adsr",
@@ -42,16 +84,7 @@ function initLanguage() {
         sCNotePitch: "Note Pitch",
         sCOut: "Output",
         sCScope: "Scope",
-        helpText: "Global:\n" +
-                "Space: play/pause\n" +
-                "\n" +
-                "Tracker:\n" +
-                "Ctrl-left-click to move current time n\n" +
-                "Ctrl-a to select all states\n" +
-                "Ctrl-c to copy selected states\n" +
-                "right-drag to select states\n" +
-                "left-drag to move selected states\n" +
-                "Shift-left-drag to move end positions\n",
+        helpText: buildHelpText(),
         save: "Save",
         load: "Load",
         help: "Help",
@@ -65,20 +98,7 @@ function initLanguage() {
         processOn: "Process on",
         processOff: "Process off",
         detectedErrors: "Detected Errors",
-        license: "Copyright 2015 Anton Olofsson\n" +
-                "\n" +
-                "This program is free software: you can redistribute it and/or modify\n" +
-                "it under the terms of the GNU General Public License as published by\n" +
-                "the Free Software Foundation, either version 3 of the License, or\n" +
-                "(at your option) any later version.\n" +
-                "\n" +
-                "This program is distributed in the hope that it will be useful,\n" +
-                "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-                "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-                "GNU General Public License for more details.\n" +
-                "\n" +
-                "You should have received a copy of the GNU General Public License\n" +
-                "along with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
+        license: buildLicenseText()
     });
     lang.setLanguage("en");
 }

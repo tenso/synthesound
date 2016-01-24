@@ -1,16 +1,20 @@
 "use strict";
 /*global gBase*/
 
-function gLabel(label) {
+function gLabel(label, type) {
     var that = gBase();
 
     that.setValue = function (str) {
-        that.textContent = str;
+        if (type === "html") {
+            that.innerHTML = str;
+        } else {
+            that.textContent = str;
+        }
         return that;
     };
 
     that.className = "gLabel";
     that.typeIs = "gLabel";
-    that.textContent = label;
+    that.setValue(label);
     return that;
 }

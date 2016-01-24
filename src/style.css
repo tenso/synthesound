@@ -15,39 +15,17 @@ body {
     height: 100%;
 }
 
-hr {
-    visibility: hidden;
-    height: 0px;
-    margin: -1px;
-    padding: 0px;
+.helpCmd {
+    color: #f00;
+    font-size: 16px;
 }
 
-.currentNote {
-    width: 32px;
-    height: 32px;
-    line-height: 32px;
+.helpText {
+    color: #000;
+    font-size: 16px;
 }
 
-.input-number {
-    font-size: 32px;
-    width: 40px;
-}
-
-.vkey {
-    padding: 2px;
-    display: inline-block;
-}
-
-.panicButton {
-    color: #fff;
-    background: #f00;
-    float: right;
-}
-
-.saveButton {
-    float: right;
-}
-
-.panicButton:active {
-    background: #a00;
+.helpTitle {
+    font-weight: bold;
+    font-size: 18px;
 }

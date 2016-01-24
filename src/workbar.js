@@ -411,6 +411,7 @@ function workbar() {
         if (typeof that.changeTopPosition === "function") {
             that.changeTopPosition(newY);
         }
+        initialHeight = that.getH();
         timeBar.resizeCanvas();
         infoBar.resizeCanvas();
         return that;
