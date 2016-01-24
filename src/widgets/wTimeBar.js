@@ -15,28 +15,36 @@ function wTimeBar() {
         currentMs = 0,
         measureMs = 500,
         pixelsPerMs = 0,
+        quantization = 1,
         selection = timeSelection(),
         renderOver,
         ctrlOn = false;
 
     function drawBg() {
         var ms = 0,
-            timeX = 0;
+            timeX = 0,
+            measure = 0,
+            measurePerBeat = Math.round(1 / quantization);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = "#aaa";
         ctx.lineWidth = 1;
 
-        ctx.beginPath();
         if (measureMs > 0) {
             while (ms < totalMs) {
+                measure += 1;
                 ms += measureMs;
                 timeX = ms * pixelsPerMs;
+                if ((measure % measurePerBeat) === 0) {
+                    ctx.strokeStyle = "#ddd";
+                } else {
+                    ctx.strokeStyle = "#999";
+                }
+                ctx.beginPath();
                 ctx.moveTo(timeX,  0);
                 ctx.lineTo(timeX, canvas.height);
+                ctx.stroke();
             }
         }
-        ctx.stroke();
 
         return that;
     }
@@ -89,8 +97,7 @@ function wTimeBar() {
 
     that.setTimeParams = function (bpmValue, quantValue, measureMsValue) {
         util.unused(bpmValue);
-        util.unused(quantValue);
-
+        quantization = quantValue;
         measureMs = measureMsValue;
         return that.draw();
     };
