@@ -33,7 +33,7 @@ var globalDebug = {
 //FIXME: make keymap json with user-bindings
 //FIXME: move text
 function buildHelpText() {
-    var helpText = "<table style='min-width:400px;'>";
+    var helpText = "<table style='min-width:100%;'>";
 
     function addTitle(title) {
         helpText += "<tr colspan=100><td class=helpTitle>" + title + "</td></tr>";
@@ -43,16 +43,18 @@ function buildHelpText() {
     }
 
     addTitle("Global");
-    addCommand("Space", "play/pause");
+    addCommand("space", "play/pause");
     addTitle("\n");
     addTitle("Tracker");
-    addCommand("Ctrl-left-click", "move current time");
-    addCommand("Ctrl-a", "select all states");
-    addCommand("Ctrl-c", "copy selected states");
-    addCommand("right-drag", "select states");
-    addCommand("Shift-right-drag", "modify selection");
-    addCommand("left-drag", "move selected states");
-    addCommand("Shift-left-drag", "move end positions");
+    addCommand("ctrl-leftclick", "move current time");
+    addCommand("ctrl-a", "select all states");
+    addCommand("ctrl-c", "copy selected states");
+    addCommand("rightdrag", "select states");
+    addCommand("shift-rightdrag", "modify selection");
+    addCommand("leftdrag", "move selected states");
+    addCommand("shift-left-drag", "move end positions");
+    addCommand("ctrl-scrollwheel", "zoom y");
+    addCommand("ctrl-shift-scrollwheel", "zoom x");
 
     return helpText + "</table>";
 }
