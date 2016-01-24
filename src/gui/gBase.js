@@ -86,7 +86,9 @@ function gBase(type) {
     };
 
     that.remove = function () {
-        that.parentNode.removeChild(that);
+        if (that.parentNode) {
+            that.parentNode.removeChild(that);
+        }
         return that;
     };
 
