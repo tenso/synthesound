@@ -55,6 +55,8 @@ function buildHelpText() {
     addCommand("shift-left-drag", "move end positions");
     addCommand("ctrl-scrollwheel", "zoom y");
     addCommand("ctrl-shift-scrollwheel", "zoom x");
+    addCommand("ctrl-shift-leftdrag", "move loop start");
+    addCommand("ctrl-shift-rightdrag", "move loop end");
 
     return helpText + "</table>";
 }
