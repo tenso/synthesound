@@ -1,6 +1,7 @@
 "use strict";
 /*global gui*/
 /*global util*/
+/*global document*/
 
 function gStyle(type) {
     var that = document.createElement(type || "div"),

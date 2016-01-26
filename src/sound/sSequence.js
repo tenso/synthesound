@@ -36,10 +36,9 @@ function addSequenceDataFunctions(that) {
     };
 
     that.moveOff = function (movedMs) {
-        var start;
         that.msOff = moveStartData.msOff + movedMs;
         if (that.msOff < that.ms) {
-            that.msOff = that.ms + 10;
+            that.msOff = that.ms + 10; //FIXME: min 10 ok ?
         }
     };
 

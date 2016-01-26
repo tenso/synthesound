@@ -1,6 +1,5 @@
 "use strict";
 /*global gStyle*/
-/*global document*/
 
 /*NOTE: cant use getW/getX etc functions unless element as already in the DOM or has explicit w/h set*/
 

@@ -2,6 +2,7 @@
 /*global log*/
 /*global gBase*/
 /*global gui*/
+/*global util*/
 
 function gButtonGroup() {
     var that = [];
@@ -92,6 +93,7 @@ function gButton(name, callback, isRadio, buttonGroup) {
     };
 
     that.iMouseCaptured = function (e) {
+        util.unused(e);
         that.set();
     };
 
