@@ -152,12 +152,6 @@ function workspace() {
         if (typeof that.timeUpdated === "function") {
             that.timeUpdated(timeTracker.currentMs());
         }
-
-        if (timeTracker.currentMs() >= timeTracker.totalMs()) {
-            timeTracker.setCurrentMs(timeTracker.totalMs());
-            that.setPlayback(false); //triggers some close events, hence ms "hopping"
-            that.setCurrentMs(0, 0);
-        }
     }
 
     function stepFrame(frames) {
@@ -334,9 +328,14 @@ function workspace() {
         log.info("init audio, sample rate:" + out.sampleRate() + " channels " + out.numChannels());
 
         timeTracker = tracker(that.sampleRate());
+        timeTracker.playbackFinished = function () {
+            that.setPlayback(false); //triggers some close events, hence ms "hopping"
+            that.setCurrentMs(0, 0);
+        };
         out.runIndexUpdated = stepFrame;
         that.setTotalMs(60000);
         that.setTimeParams(120, 1 / 4, false);
+
         setFrames(0);
         that.startAudio();
         return true;
@@ -365,6 +364,10 @@ function workspace() {
 
     that.setRecord = function (record) {
         sCGlobal.recordingOn = record;
+    };
+
+    that.setLoop = function (isOn, ms0, ms1) {
+        timeTracker.setLoop(isOn, ms0, ms1);
     };
 
     that.startAudio = function () {

@@ -8,10 +8,33 @@ function tracker(sampleRate) {
         bpm = 60,
         currentMs = 0,
         quantization = 1,
-        currentFrame = 0,
+        currentFrame = 0, //FIXME: needed?
         totalMs = 60000,
         quantizeOn = false,
-        play = false;
+        play = false,
+        loop = {
+            on: false,
+            ms0: 0,
+            ms1: 0
+        };
+
+    function checkPlayback() {
+        if (loop.on) {
+            if (loop.ms1 > totalMs) {
+                loop.ms1 = totalMs; //FIXME: send signal that this happened
+            }
+            if (currentMs >= loop.ms1) {
+                currentMs = loop.ms0;
+                currentFrame = parseInt(currentMs * sampleRate / 1000, 10);
+            }
+        } else if (currentMs > totalMs) {
+            currentMs = totalMs;
+            currentFrame = parseInt(currentMs * sampleRate / 1000, 10);
+            if (typeof that.playbackFinished === "function") {
+                that.playbackFinished();
+            }
+        }
+    }
 
     that.data = function () {
         return {
@@ -70,6 +93,7 @@ function tracker(sampleRate) {
         var stepBefore = that.currentMs();
         currentFrame = frames;
         currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
+        checkPlayback();
         return that.currentMs() !== stepBefore;
     };
 
@@ -80,6 +104,7 @@ function tracker(sampleRate) {
             currentFrame += frames;
             currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
         }
+        checkPlayback();
         return that.currentMs() !== stepBefore;
     };
 
@@ -88,7 +113,7 @@ function tracker(sampleRate) {
 
         currentMs = ms;
         currentFrame = parseInt(currentMs * sampleRate / 1000, 10);
-
+        checkPlayback();
         return that.currentMs() !== stepBefore;
     };
 
@@ -135,6 +160,14 @@ function tracker(sampleRate) {
         play = playValue;
     };
 
+    that.setLoop = function (on, start, stop) {
+        loop.on = on;
+        loop.ms0 = start;
+        loop.ms1 = stop;
+    };
+
+    that.playbackFinished = undefined;
+
     return that;
 }
 
@@ -148,6 +181,7 @@ function test_tracker() {
     track.setBpm(120);
     track.setPlayback(true);
     track.setQuantization(false);
+    track.setTotalMs(36000000);
 
     track.setQuantization(1 / 2);
     test.verify(track.measureMs(), 250);

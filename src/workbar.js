@@ -21,10 +21,19 @@ function workbar() {
         topBar = gContainer(),
         timeScroll = gBase(),
         timeBar = wTimeBar(),
-        keys = {ctrl: false, shift: false},
+        keys = {
+            ctrl: false,
+            shift: false
+        },
         selectedStates = [],
         play,
         record,
+        loop,
+        loopParams = {
+            isOn: false,
+            ms0: 0,
+            ms1: 0
+        },
         marginX = 4,
         marginY = 6,
         buttonH = 16,
@@ -272,6 +281,11 @@ function workbar() {
         }
     }
 
+    function updateLoop() {
+        loopParams.isOn = loop.getValue();
+        util.cb(that, "changeLoop", loopParams.isOn, loopParams.ms0, loopParams.ms1);
+    }
+
     function updateRecord() {
         recordOn = record.getValue();
         if (typeof that.changeRecord === "function") {
@@ -316,6 +330,14 @@ function workbar() {
         }
     };
 
+    that.setLoop = function (isOn, ms0, ms1) {
+        loop.setValue(isOn, true);
+        loopParams.isOn = isOn;
+        loopParams.ms0 = ms0;
+        loopParams.ms1 = ms1;
+        timeBar.setLoop(ms0, ms1);
+    };
+
     that.setCurrentSComp = function (comp) {
         sComp = comp;
 
@@ -337,10 +359,12 @@ function workbar() {
     that.changePlayback = undefined;
     that.changeSize = undefined;
     that.changeSCompState = undefined;
+    that.changeLoop = undefined;
 
     play = gButton(">", updatePlayback, true).w(40).h(buttonH);
     record = gButton(lang.tr("rec"), updateRecord, true).bg("#f00").w(40).h(buttonH);
     record.setColor("#000", "#fff");
+    loop = gButton("loop", updateLoop, true).w(40).h(buttonH);
 
     time = gLabel("--:--:--").fontFamily("monospace");
     totalTime = gInput("--:--:--", updateTotalTime, "").fontFamily("monospace");
@@ -366,6 +390,7 @@ function workbar() {
     //buttons
     buttonGroup.addTabled(record);
     buttonGroup.addTabled(play);
+    buttonGroup.addTabled(loop);
     that.addTabled(buttonGroup);
 
     //time
@@ -413,6 +438,12 @@ function workbar() {
         if (sComp) {
             selectStates(scaleSelection(selection), keys.shift);
         }
+    };
+
+    timeBar.loopUpdated = function (ms0, ms1) {
+        loopParams.ms0 = ms0;
+        loopParams.ms1 = ms1;
+        util.cb(that, "changeLoop", loopParams.isOn, loopParams.ms0, loopParams.ms1);
     };
 
     that.setTopOfBar = function (y) {

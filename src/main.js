@@ -127,6 +127,7 @@ window.onload = function () {
     audioWork = workspace();
     audioBar = workbar();
 
+    //FIXME: this signal coupling must stop!
     audioBar.changeCurrentMs = audioWork.setCurrentMs;
     audioBar.changeTotalMs = audioWork.setTotalMs;
     audioBar.changeTimeParams = audioWork.setTimeParams;
@@ -134,11 +135,13 @@ window.onload = function () {
     audioBar.changeRecord = audioWork.setRecord;
     audioBar.changeTopPosition = audioWork.setViewHeight;
     audioBar.changeSCompState = audioWork.modifySCompState;
+    audioBar.changeLoop = audioWork.setLoop;
     audioWork.timeUpdated = audioBar.setTime;
     audioWork.currentSCompUpdated = audioBar.setCurrentSComp;
     audioWork.timeParamsUpdated = audioBar.setTimeParams;
     audioWork.totalTimeUpdated = audioBar.setTotalTime;
     audioWork.playbackUpdated = audioBar.setPlayback;
+    audioWork.loopUpdated = audioBar.setLoop;
 
     gIO = sCIO();
     topMenu = menubar(audioWork).move(0, 0);

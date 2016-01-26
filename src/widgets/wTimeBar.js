@@ -13,12 +13,34 @@ function wTimeBar() {
         ctx = canvas.getContext("2d"),
         totalMs = 1000,
         currentMs = 0,
+        loopMs = {
+            ms0: 0,
+            ms1: 0
+        },
         measureMs = 500,
         pixelsPerMs = 0,
         quantization = 1,
         selection = timeSelection(),
         renderOver,
-        ctrlOn = false;
+        keys = {
+            ctrl: false,
+            shift: false
+        };
+
+    function calcMouse(e) {
+        var pos = gui.getEventOffsetInElement(that.parentNode, e);
+        pos.x -= that.getLeft();
+        pos.x *= totalMs / canvas.width;
+        if (pos.x < -1) {
+            pos.x = -1;
+        }
+        pos.y -= that.getTop();
+        pos.y /= canvas.height;
+        return {
+            ms: pos.x,
+            h: pos.y
+        };
+    }
 
     function drawBg() {
         var ms = 0,
@@ -49,17 +71,21 @@ function wTimeBar() {
         return that;
     }
 
-    function drawFg() {
-        var timeX = currentMs * pixelsPerMs;
-
+    function drawMarker(ms, style) {
+        var timeX = ms * pixelsPerMs;
         ctx.lineWidth = 2;
-        ctx.strokeStyle = "#8f8";
+        ctx.strokeStyle = style;
         ctx.beginPath();
         ctx.moveTo(timeX,  0);
         ctx.lineTo(timeX, canvas.height);
         ctx.stroke();
         ctx.lineWidth = 1;
+    }
 
+    function drawFg() {
+        drawMarker(currentMs, "#8f8");
+        drawMarker(loopMs.ms0, "#8ff");
+        drawMarker(loopMs.ms1, "#f8f");
         return that;
     }
 
@@ -112,6 +138,12 @@ function wTimeBar() {
         return that;
     };
 
+    that.setLoop = function (ms0, ms1) {
+        loopMs.ms0 = ms0;
+        loopMs.ms1 = ms1;
+        that.draw();
+    };
+
     that.newSelection = undefined;
     that.selectionMoved = undefined;
     that.changeCurrentMs = undefined;
@@ -122,58 +154,55 @@ function wTimeBar() {
 
     //FIXME: dont use that.parentNode here: move scroll to this comp!
     canvas.iMouseCaptured = function (e) {
-        var pos = gui.getEventOffsetInElement(that.parentNode, e),
-            ms;
+        var pos = calcMouse(e);
 
-        //FIXME:
-        pos.x -= that.getLeft();
-        pos.y -= that.getTop();
-
-        if (e.button === 2) {
+        if (keys.ctrl && keys.shift) {
+            if (e.button === 0) {
+                selection.setMode("moveLoop0");
+                loopMs.ms0 = pos.ms;
+            } else if (e.button === 2) {
+                selection.setMode("moveLoop1");
+                loopMs.ms1 = pos.ms;
+            }
+        } else if (e.button === 2) {
             selection.setMode("select");
-            selection.start(totalMs * pos.x / canvas.width, pos.y / canvas.height);
+            selection.start(pos.ms, pos.h);
             that.draw();
-        } else if (ctrlOn && e.button === 0) {
+        } else if (keys.ctrl && e.button === 0) {
             selection.setMode("setMs");
             if (typeof that.changeCurrentMs === "function") {
-                ms = totalMs * (that.parentNode.scrollLeft + e.pageX - that.getLeft()) / canvas.width;
-                that.changeCurrentMs(ms);
+                that.changeCurrentMs(pos.ms);
             }
         } else if (e.button === 0) {
             if (selection.modeActive("")) {
                 selection.setMode("selectionUpdated");
-                selection.start(totalMs * pos.x / canvas.width, pos.y / canvas.height);
+                selection.start(pos.ms, pos.h);
             }
         }
         that.draw();
     };
 
     canvas.iMousePressAndMove = function (e, mouse) {
-        var ms,
-            pos = gui.getEventOffsetInElement(that.parentNode, e);
-
+        var pos = calcMouse(e);
         util.unused(mouse);
-        //FIXME:
-        pos.x -= that.getLeft();
-        pos.y -= that.getTop();
 
         if (selection.modeActive("select")) {
-            selection.end(totalMs * pos.x / canvas.width, pos.y / canvas.height);
-            that.draw();
+            selection.end(pos.ms, pos.h);
         } else if (selection.modeActive("setMs")) {
-            ms = totalMs * gui.getEventOffsetInElement(this, e).x / canvas.width;
-            if (ms < -1) {
-                ms = -1;
-            }
             if (typeof that.changeCurrentMs === "function") {
-                that.changeCurrentMs(ms);
+                that.changeCurrentMs(pos.ms);
             }
         } else if (selection.modeActive("selectionUpdated")) {
-            selection.end(totalMs * pos.x / canvas.width, pos.y / canvas.height);
+            selection.end(pos.ms, pos.h);
             if (typeof that.selectionUpdated === "function") {
                 that.selectionUpdated(selection.get(), false);
             }
+        } else if (selection.modeActive("moveLoop0")) {
+            loopMs.ms0 = pos.ms;
+        } else if (selection.modeActive("moveLoop1")) {
+            loopMs.ms1 = pos.ms;
         }
+        that.draw();
     };
 
     canvas.iMouseUpAfterCapture = function (e) {
@@ -182,9 +211,13 @@ function wTimeBar() {
             if (typeof that.selectionUpdated === "function") {
                 that.selectionUpdated(selection.get(), true);
             }
-        } else if (!selection.modeActive("setMs")) {
+        } else if (selection.modeActive("selectionUpdated") || selection.modeActive("select")) {
             if (typeof that.newSelection === "function") {
                 that.newSelection(selection.get());
+            }
+        } else if (selection.modeActive("moveLoop0") || selection.modeActive("moveLoop1")) {
+            if (typeof that.loopUpdated === "function") {
+                that.loopUpdated(Math.min(loopMs.ms0, loopMs.ms1), Math.max(loopMs.ms0, loopMs.ms1));
             }
         }
         selection.setMode("");
@@ -192,10 +225,12 @@ function wTimeBar() {
     };
 
     document.addEventListener("keydown", function (e) {
-        ctrlOn = e.ctrlKey;
+        keys.ctrl = e.ctrlKey;
+        keys.shift = e.shiftKey;
     }, false);
     document.addEventListener("keyup", function (e) {
-        ctrlOn = e.ctrlKey;
+        keys.ctrl = e.ctrlKey;
+        keys.shift = e.shiftKey;
     }, false);
 
     window.addEventListener("resize", that.resizeCanvas);
