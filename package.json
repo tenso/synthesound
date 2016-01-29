@@ -1,0 +1,16 @@
+{
+  "name": "Synthe Sound",
+  "version": "1.0.0",
+  "description": "Web DAW",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tenso/websynth.git"
+  },
+  "author": "Anton Olofsson",
+  "license": "GPL v.3",
+  "homepage": "https://github.com/tenso/websynth"
+}
