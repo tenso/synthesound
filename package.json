@@ -1,16 +1,19 @@
 {
-  "name": "Synthe Sound",
+  "name": "synthesound",
   "version": "1.0.0",
   "description": "Web DAW",
   "main": "index.js",
   "scripts": {
-    "start": "electron index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tenso/websynth.git"
+    "url": "git+https://github.com/tenso/synthesound.git"
   },
   "author": "Anton Olofsson",
-  "license": "GPL v.3",
-  "homepage": "https://github.com/tenso/websynth"
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/tenso/synthesound/issues"
+  },
+  "homepage": "https://github.com/tenso/synthesound#readme"
 }
