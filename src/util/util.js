@@ -51,12 +51,6 @@ var util = {
         return arg;
     },
 
-    cb: function (obj, funcName, ...args) {
-        if (typeof obj[funcName] === "function") {
-            obj[funcName].apply(obj, args);
-        }
-    },
-
     tests: {
         test_msToString: function () {
             test.verify(util.msToString(1000), "00:01:00");

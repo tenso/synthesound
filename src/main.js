@@ -129,21 +129,21 @@ window.onload = function () {
     audioWork = workspace();
     audioBar = workbar();
 
-    //FIXME: this signal coupling must stop!
-    audioBar.changeCurrentMs = audioWork.setCurrentMs;
-    audioBar.changeTotalMs = audioWork.setTotalMs;
-    audioBar.changeTimeParams = audioWork.setTimeParams;
-    audioBar.changePlayback = audioWork.setPlayback;
-    audioBar.changeRecord = audioWork.setRecord;
-    audioBar.changeTopPosition = audioWork.setViewHeight;
-    audioBar.changeSCompState = audioWork.modifySCompState;
-    audioBar.changeLoop = audioWork.setLoop;
-    audioWork.timeUpdated = audioBar.setTime;
-    audioWork.currentSCompUpdated = audioBar.setCurrentSComp;
-    audioWork.timeParamsUpdated = audioBar.setTimeParams;
-    audioWork.totalTimeUpdated = audioBar.setTotalTime;
-    audioWork.playbackUpdated = audioBar.setPlayback;
-    audioWork.loopUpdated = audioBar.setLoop;
+    audioBar.on("changeCurrentMs", audioWork.setCurrentMs);
+    audioBar.on("changeTotalMs", audioWork.setTotalMs);
+    audioBar.on("changeTimeParams", audioWork.setTimeParams);
+    audioBar.on("changePlayback", audioWork.setPlayback);
+    audioBar.on("changeRecord", audioWork.setRecord);
+    audioBar.on("changeTopPosition", audioWork.setViewHeight);
+    audioBar.on("changeSCompState", audioWork.modifySCompState);
+    audioBar.on("changeLoop", audioWork.setLoop);
+
+    audioWork.on("timeUpdated", audioBar.setTime);
+    audioWork.on("currentSCompUpdated", audioBar.setCurrentSComp);
+    audioWork.on("timeParamsUpdated", audioBar.setTimeParams);
+    audioWork.on("totalTimeUpdated", audioBar.setTotalTime);
+    audioWork.on("playbackUpdated", audioBar.setPlayback);
+    audioWork.on("loopUpdated", audioBar.setLoop);
 
     gIO = sCIO();
     topMenu = menubar(audioWork).move(0, 0);

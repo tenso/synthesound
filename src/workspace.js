@@ -24,9 +24,10 @@
 /*global gBase*/
 /*global window*/
 /*global note*/
+/*global event*/
 
 function workspace() {
-    var that = gBase().setClass("workspace").top(app.screen.minY).h("100%"),
+    var that = event(gBase()),
         out,
         audioCtx,
         AudioContext = window.AudioContext || window.webkitAudioContext,
@@ -44,7 +45,6 @@ function workspace() {
             sCOp: sCOp,
             sCNotePitch: sCNotePitch
         };
-
 
     function findSCComp(uid) {
         var nodes =  that.childNodes,
@@ -149,9 +149,7 @@ function workspace() {
             }
         }
 
-        if (typeof that.timeUpdated === "function") {
-            that.timeUpdated(timeTracker.currentMs());
-        }
+        that.emit("timeUpdated", timeTracker.currentMs());
     }
 
     function stepFrame(frames) {
@@ -176,9 +174,7 @@ function workspace() {
     that.setTotalMs = function (ms) {
         timeTracker.setTotalMs(ms);
         updateTime();
-        if (typeof that.totalTimeUpdated === "function") {
-            that.totalTimeUpdated(timeTracker.totalMs());
-        }
+        that.emit("totalTimeUpdated", timeTracker.totalMs());
         return that;
     };
 
@@ -219,6 +215,7 @@ function workspace() {
             return;
         }
 
+        //FIXME: cant do it like this when moving (relative!)
         selection.startMs = timeTracker.quantizeValue(selection.startMs);
         selection.endMs = timeTracker.quantizeValue(selection.endMs, true);
         selection.lenMs = timeTracker.quantizeValue(selection.lenMs, true);
@@ -300,13 +297,11 @@ function workspace() {
         log.info("load tracker");
         if (data.tracker) {
             timeTracker.load(data.tracker);
-            if (typeof that.totalTimeUpdated === "function") {
-                that.totalTimeUpdated(timeTracker.totalMs());
-            }
-            if (typeof that.timeParamsUpdated === "function") {
-                that.timeParamsUpdated(timeTracker.bpm(), timeTracker.quantization(),
-                                       timeTracker.measureMs(), timeTracker.quantizationOn());
-            }
+            that.emit("totalTimeUpdated", timeTracker.totalMs());
+            //FIXME: make object args
+            that.emit("timeParamsUpdated",
+                      timeTracker.bpm(), timeTracker.quantization(),
+                      timeTracker.measureMs(), timeTracker.quantizationOn());
             updateTime();
         } else {
             log.error("file is missing tracker data");
@@ -335,7 +330,7 @@ function workspace() {
         out.runIndexUpdated = stepFrame;
         that.setTotalMs(60000);
         that.setTimeParams(120, 1 / 4, false);
-
+        that.setLoop(false, 0, 0);
         setFrames(0);
         that.startAudio();
         return true;
@@ -346,9 +341,7 @@ function workspace() {
         timeTracker.setQuantization(quant);
         timeTracker.setQuantizationOn(quantOn);
 
-        if (typeof that.timeParamsUpdated === "function") {
-            that.timeParamsUpdated(bpm, quant, timeTracker.measureMs(), quantOn);
-        }
+        that.emit("timeParamsUpdated", bpm, quant, timeTracker.measureMs(), quantOn);
     };
 
     that.sampleRate = function () {
@@ -357,17 +350,17 @@ function workspace() {
 
     that.setPlayback = function (play) {
         timeTracker.setPlayback(play);
-        if (typeof that.playbackUpdated === "function") {
-            that.playbackUpdated(play);
-        }
+        that.emit("playbackUpdated", play);
     };
 
     that.setRecord = function (record) {
         sCGlobal.recordingOn = record;
     };
 
+    //FIXME: make obj arg
     that.setLoop = function (isOn, ms0, ms1) {
         timeTracker.setLoop(isOn, ms0, ms1);
+        that.emit("loopUpdated", isOn, ms0, ms1);
     };
 
     that.startAudio = function () {
@@ -401,17 +394,12 @@ function workspace() {
 
     //callbacks
     that.onworkspacechanged = undefined;
-    that.timeUpdated = undefined;
-    that.totalTimeUpdated = undefined;
-    that.timeParamsUpdated = undefined;
-    that.currentSCompUpdated = undefined;
 
     sCGlobal.currentUpdated = function (comp) {
-        if (typeof that.currentSCompUpdated === "function") {
-            that.currentSCompUpdated(comp);
-        }
+        that.emit("currentSCompUpdated", comp);
     };
 
+    that.setClass("workspace").top(app.screen.minY).h("100%");
     that.typeIs = "workspace";
 
     return that;

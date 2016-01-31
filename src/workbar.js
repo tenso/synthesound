@@ -15,9 +15,10 @@
 /*global gSlider*/
 /*global note*/
 /*global wNoteInfoBar*/
+/*global event*/
 
 function workbar() {
-    var that = gContainer(),
+    var that = event(gContainer()),
         topBar = gContainer(),
         timeScroll = gBase(),
         timeBar = wTimeBar(),
@@ -154,10 +155,8 @@ function workbar() {
             moveActive = false;
             return;
         }
-        if (typeof that.changeSCompState === "function") {
-            if (sComp) {
-                that.changeSCompState(sComp, op, scaleSelection(timeBar.getSelection()), selectedStates);
-            }
+        if (sComp) {
+            that.emit("changeSCompState", sComp, op, scaleSelection(timeBar.getSelection()), selectedStates);
         }
     }
 
@@ -242,6 +241,9 @@ function workbar() {
 
 
     function renderEvents(canvas, currentMs, totalMs, pixelsPerMs) {
+        if (!sComp) {
+            return;
+        }
         var sArgs = sComp.getArgs(),
             ctx = canvas.getContext("2d");
 
@@ -262,35 +264,27 @@ function workbar() {
     /**/
 
     function updateBpmAndQuantification() {
-        if (typeof that.changeTimeParams === "function") {
-            that.changeTimeParams(bpmInput.getValueInt(), 1 / quantInput.getValue(), quantOn.getValue());
-        }
+        that.emit("changeTimeParams", bpmInput.getValueInt(), 1 / quantInput.getValue(), quantOn.getValue());
     }
 
     function updateTotalTime() {
         var total = util.stringToMs(totalTime.getValue());
-        if (typeof that.changeTotalMs === "function") {
-            that.changeTotalMs(total);
-        }
+        that.emit("changeTotalMs", total);
         return that;
     }
 
     function updatePlayback() {
-        if (typeof that.changePlayback === "function") {
-            that.changePlayback(play.getValue());
-        }
+        that.emit("changePlayback", play.getValue());
     }
 
     function updateLoop() {
         loopParams.isOn = loop.getValue();
-        util.cb(that, "changeLoop", loopParams.isOn, loopParams.ms0, loopParams.ms1);
+        that.emit("changeLoop", loopParams.isOn, loopParams.ms0, loopParams.ms1);
     }
 
     function updateRecord() {
         recordOn = record.getValue();
-        if (typeof that.changeRecord === "function") {
-            that.changeRecord(recordOn);
-        }
+        that.emit("changeRecord", recordOn);
     }
 
     that.resizeCanvas = function () {
@@ -340,26 +334,12 @@ function workbar() {
 
     that.setCurrentSComp = function (comp) {
         sComp = comp;
-
-        if (!comp) {
-            timeBar.setRenderer(undefined);
-        } else {
-            timeBar.setRenderer(renderEvents);
-        }
+        timeBar.draw();
         return that;
     };
 
     that.abs().bg("#fff");
     that.w("100%").bottom(0);
-
-    //callbacks:
-    that.changeCurrentMs = undefined;
-    that.changeTotalMs = undefined;
-    that.changeTimeParams = undefined;
-    that.changePlayback = undefined;
-    that.changeSize = undefined;
-    that.changeSCompState = undefined;
-    that.changeLoop = undefined;
 
     play = gButton(">", updatePlayback, true).w(40).h(buttonH);
     record = gButton(lang.tr("rec"), updateRecord, true).bg("#f00").w(40).h(buttonH);
@@ -416,13 +396,11 @@ function workbar() {
         infoBar.left(timeScroll.scrollLeft);
     };
 
-    timeBar.changeCurrentMs = function (ms) {
-        if (typeof that.changeCurrentMs === "function") {
-            that.changeCurrentMs(ms);
-        }
-    };
+    timeBar.on("changeCurrentMs", function (ms) {
+        that.emit("changeCurrentMs", ms);
+    });
 
-    timeBar.selectionUpdated = function (selection, done) {
+    timeBar.on("selectionUpdated", function (selection, done) {
         util.unused(selection);
         if (sComp) {
             if (selectedStates.length) {
@@ -432,19 +410,21 @@ function workbar() {
             }
             timeBar.draw();
         }
-    };
+    });
 
-    timeBar.newSelection = function (selection) {
+    timeBar.on("newSelection", function (selection) {
         if (sComp) {
             selectStates(scaleSelection(selection), keys.shift);
         }
-    };
+    });
 
-    timeBar.loopUpdated = function (ms0, ms1) {
+    timeBar.on("renderOver", renderEvents);
+
+    timeBar.on("loopUpdated", function (ms0, ms1) {
         loopParams.ms0 = ms0;
         loopParams.ms1 = ms1;
-        util.cb(that, "changeLoop", loopParams.isOn, loopParams.ms0, loopParams.ms1);
-    };
+        that.emit("changeLoop", loopParams.isOn, loopParams.ms0, loopParams.ms1);
+    });
 
     that.setTopOfBar = function (y) {
         var newY = y;
@@ -460,9 +440,7 @@ function workbar() {
             that.top(newY);
         }
 
-        if (typeof that.changeTopPosition === "function") {
-            that.changeTopPosition(newY);
-        }
+        that.emit("changeTopPosition", newY);
         initialHeight = that.getH();
         timeBar.resizeCanvas();
         infoBar.resizeCanvas();

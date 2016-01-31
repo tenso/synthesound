@@ -6,9 +6,10 @@
 /*global gui*/
 /*global document*/
 /*global timeSelection*/
+/*global event*/
 
 function wTimeBar() {
-    var that = gBase().bg("#888"),
+    var that = event(gBase().bg("#888")),
         canvas = gBase("canvas").addTo(that).w("100%").h("100%"),
         ctx = canvas.getContext("2d"),
         totalMs = 1000,
@@ -21,7 +22,6 @@ function wTimeBar() {
         pixelsPerMs = 0,
         quantization = 1,
         selection = timeSelection(),
-        renderOver,
         keys = {
             ctrl: false,
             shift: false
@@ -92,9 +92,7 @@ function wTimeBar() {
     that.draw = function () {
         pixelsPerMs = canvas.width / totalMs;
         drawBg();
-        if (typeof renderOver === "function") {
-            renderOver(canvas, currentMs, totalMs, pixelsPerMs);
-        }
+        that.emit("renderOver", canvas, currentMs, totalMs, pixelsPerMs);
         drawFg();
         selection.draw(canvas, totalMs);
         return that;
@@ -103,11 +101,6 @@ function wTimeBar() {
     that.resizeCanvas = function () {
         canvas.width = that.offsetWidth;
         canvas.height = that.offsetHeight;
-        return that.draw();
-    };
-
-    that.setRenderer = function (render) {
-        renderOver = render;
         return that.draw();
     };
 
@@ -144,10 +137,6 @@ function wTimeBar() {
         that.draw();
     };
 
-    that.newSelection = undefined;
-    that.selectionMoved = undefined;
-    that.changeCurrentMs = undefined;
-
     canvas.onmousedown = function (e) {
         gui.captureMouse(e);
     };
@@ -170,9 +159,7 @@ function wTimeBar() {
             that.draw();
         } else if (keys.ctrl && e.button === 0) {
             selection.setMode("setMs");
-            if (typeof that.changeCurrentMs === "function") {
-                that.changeCurrentMs(pos.ms);
-            }
+            that.emit("changeCurrentMs", pos.ms);
         } else if (e.button === 0) {
             if (selection.modeActive("")) {
                 selection.setMode("selectionUpdated");
@@ -189,14 +176,10 @@ function wTimeBar() {
         if (selection.modeActive("select")) {
             selection.end(pos.ms, pos.h);
         } else if (selection.modeActive("setMs")) {
-            if (typeof that.changeCurrentMs === "function") {
-                that.changeCurrentMs(pos.ms);
-            }
+            that.emit("changeCurrentMs", pos.ms);
         } else if (selection.modeActive("selectionUpdated")) {
             selection.end(pos.ms, pos.h);
-            if (typeof that.selectionUpdated === "function") {
-                that.selectionUpdated(selection.get(), false);
-            }
+            that.emit("selectionUpdated", selection.get(), false);
         } else if (selection.modeActive("moveLoop0")) {
             loopMs.ms0 = pos.ms;
         } else if (selection.modeActive("moveLoop1")) {
@@ -208,17 +191,12 @@ function wTimeBar() {
     canvas.iMouseUpAfterCapture = function (e) {
         util.unused(e);
         if (selection.modeActive("selectionUpdated")) {
-            if (typeof that.selectionUpdated === "function") {
-                that.selectionUpdated(selection.get(), true);
-            }
+            that.emit("selectionUpdated", selection.get(), true);
         } else if (selection.modeActive("selectionUpdated") || selection.modeActive("select")) {
-            if (typeof that.newSelection === "function") {
-                that.newSelection(selection.get());
-            }
+            that.emit("newSelection", selection.get());
         } else if (selection.modeActive("moveLoop0") || selection.modeActive("moveLoop1")) {
-            if (typeof that.loopUpdated === "function") {
-                that.loopUpdated(Math.min(loopMs.ms0, loopMs.ms1), Math.max(loopMs.ms0, loopMs.ms1));
-            }
+            //FIXME: make obj arg
+            that.emit("loopUpdated", Math.min(loopMs.ms0, loopMs.ms1), Math.max(loopMs.ms0, loopMs.ms1));
         }
         selection.setMode("");
         that.draw();

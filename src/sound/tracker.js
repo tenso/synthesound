@@ -63,7 +63,7 @@ function tracker(sampleRate) {
     };
 
     that.setTotalMs = function (value) {
-        totalMs = value;
+        totalMs = parseInt(value, 10);
     };
 
     that.totalMs = function () {
@@ -111,7 +111,7 @@ function tracker(sampleRate) {
     that.setCurrentMs = function (ms) {
         var stepBefore = that.currentMs();
 
-        currentMs = ms;
+        currentMs = parseInt(ms, 10);
         currentFrame = parseInt(currentMs * sampleRate / 1000, 10);
         checkPlayback();
         return that.currentMs() !== stepBefore;
