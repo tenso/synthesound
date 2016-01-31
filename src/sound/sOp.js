@@ -2,8 +2,7 @@
 /*global sBase*/
 
 function sOp(args) {
-    var that = sBase("op"),
-        op = "*";
+    var that = sBase("op");
 
     that.makeAudio = function () {
         var i = 0,
@@ -19,13 +18,13 @@ function sOp(args) {
                 for (i = 0; i < chanData.length; i += 1) {
                     if (inputIndex === 0) {
                         chanData[i] = inputData[i];
-                    } else if (op === "+") {
+                    } else if (that.args.op === "+") {
                         chanData[i] += inputData[i];
-                    } else if (op === "*") {
+                    } else if (that.args.op === "*") {
                         chanData[i] *= inputData[i];
-                    } else if (op === "-") {
+                    } else if (that.args.op === "-") {
                         chanData[i] -= inputData[i];
-                    } else if (op === "%") {
+                    } else if (that.args.op === "%") {
                         chanData[i] %= inputData[i];
                     }
                 }
@@ -33,17 +32,9 @@ function sOp(args) {
         }
     };
 
-    that.getArgs = function () {
-        return {op: op};
-    };
-
-    that.setArgs = function (args) {
-        if (args) {
-            op = typeof args.op === "string" ? args.op : op;
-        }
-    };
-
-    that.setArgs(args);
+    that.initArgs({
+        op: "*"
+    }, args);
 
     return that;
 }

@@ -330,7 +330,7 @@ function workspace() {
         out.runIndexUpdated = stepFrame;
         that.setTotalMs(60000);
         that.setTimeParams(120, 1 / 4, false);
-        that.setLoop(false, 0, 0);
+        that.setLoop({isOn: false, ms0: 0, ms1: 0});
         setFrames(0);
         that.startAudio();
         return true;
@@ -357,10 +357,9 @@ function workspace() {
         sCGlobal.recordingOn = record;
     };
 
-    //FIXME: make obj arg
-    that.setLoop = function (isOn, ms0, ms1) {
-        timeTracker.setLoop(isOn, ms0, ms1);
-        that.emit("loopUpdated", isOn, ms0, ms1);
+    that.setLoop = function (args) {
+        timeTracker.setLoop(args);
+        that.emit("loopUpdated", timeTracker.getLoop());
     };
 
     that.startAudio = function () {

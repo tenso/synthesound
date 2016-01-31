@@ -1,54 +1,27 @@
 "use strict";
 /*global sBase*/
+/*global util*/
 
 function sNote(args) {
-    var that = sBase("note"),
-        wantStep = false,
-        stepDone = true,
-        freq = 1,
-        needRefill = true;
+    var that = sBase("note");
 
     that.makeAudio = function () {
         var chan = 0;
 
-        if (needRefill) {
-            if (stepDone) {
-                needRefill = false;
-            }
+        if (that.argsUpdated()) {
             for (chan = 0; chan < that.numChannels(); chan += 1) {
-                that.getChannelData(chan, "gate").fill(wantStep ? 1.0 : 0.0);
-                that.getChannelData(chan, "freq").fill(freq);
-            }
-            if (!stepDone) {
-                for (chan = 0; chan < that.numChannels(); chan += 1) {
-                    that.getChannelData(chan, "gate")[0] = 0.0;
-                }
-                stepDone = true;
+                that.getChannelData(chan, "gate").fill(that.args.gate ? 1.0 : 0.0);
+                that.getChannelData(chan, "freq").fill(that.args.freq);
             }
         }
     };
 
-    that.getArgs = function () {
-        return {
-            gate: wantStep,
-            freq: freq
-        };
-    };
-
-    that.getArgsOff = function () {
-        return {
-            gate: false
-        };
-    };
-
-    that.setArgs = function (args) {
-        if (args) {
-            wantStep = typeof args.gate === "boolean" ? args.gate : wantStep;
-            freq = typeof args.freq === "number" ? args.freq : freq;
-            stepDone = !wantStep;
-            needRefill = true;
-        }
-    };
+    that.initArgs({
+        gate: false,
+        freq: 1
+    }, args, {
+        gate: false
+    });
 
     that.addOutput("gate");
     that.addOutput("freq");

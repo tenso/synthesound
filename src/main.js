@@ -103,6 +103,7 @@ function initLanguage() {
         processOn: "Process on",
         processOff: "Process off",
         detectedErrors: "Detected Errors",
+        quit: "Quit",
         license: buildLicenseText()
     });
     lang.setLanguage("en");

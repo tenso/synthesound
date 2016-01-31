@@ -1,5 +1,6 @@
 "use strict";
 /*global sBase*/
+/*global util*/
 
 function sAdsr(args) {
     var that = sBase("adsr"),
@@ -8,15 +9,11 @@ function sAdsr(args) {
         releaseIndex = 0,
         gainAtRelease = 0.0,
         tick = 0,
-        lastGain = 0.0,
-        a = 0.1, /*seconds*/
-        d = 0.1, /*seconds*/
-        s = 0.3, /*0-1*/
-        r = 1.0; /*seconds*/
+        lastGain = 0.0;
 
     function setActive(value) {
         if (!active && value) {
-            activeIndex = tick - (lastGain * a * that.sampleRate());
+            activeIndex = tick - (lastGain * that.args.a * that.sampleRate());
         } else if (active && !value) {
             gainAtRelease = lastGain;
             releaseIndex = tick;
@@ -32,9 +29,9 @@ function sAdsr(args) {
             inputIndex,
             inputData,
             nextActive = false,
-            aLen = a * that.sampleRate(),
-            dLen = d * that.sampleRate(),
-            rLen = r * that.sampleRate();
+            aLen = that.args.a * that.sampleRate(),
+            dLen = that.args.d * that.sampleRate(),
+            rLen = that.args.r * that.sampleRate();
 
         that.setChannelDataZero();
 
@@ -57,9 +54,9 @@ function sAdsr(args) {
                         lastGain = index / aLen;
                     } else if (index < aLen + dLen) {
                         index -= aLen;
-                        lastGain = 1.0 - ((1.0 - s) * (index / dLen));
+                        lastGain = 1.0 - ((1.0 - that.args.s) * (index / dLen));
                     } else {
-                        lastGain = s;
+                        lastGain = that.args.s;
                     }
                 } else {
                     index = tick - releaseIndex + i;
@@ -79,24 +76,13 @@ function sAdsr(args) {
         tick += that.wantedSamples();
     };
 
-    that.getArgs = function () {
-        return {a: a, d: d, s: s, r: r/*, active: active*/};
-    };
+    that.initArgs({
+        a: 0.1, /*seconds*/
+        d: 0.1, /*seconds*/
+        s: 0.3, /*0-1*/
+        r: 1.0  /*seconds*/
+    }, args);
 
-    that.setArgs = function (args) {
-        if (args) {
-            a = typeof args.a === "number" ? args.a : a;
-            d = typeof args.d === "number" ? args.d : d;
-            s = typeof args.s === "number" ? args.s : s;
-            r = typeof args.r === "number" ? args.r : r;
-
-            if (typeof args.active === "boolean") {
-                setActive(args.active);
-            }
-        }
-    };
-
-    that.setArgs(args);
     return that;
 }
 

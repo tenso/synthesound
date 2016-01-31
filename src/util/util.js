@@ -51,6 +51,27 @@ var util = {
         return arg;
     },
 
+    setArgs: function (obj, args) {
+        var key,
+            mod = false;
+
+        if (obj && args) {
+            for (key in args) {
+                if (args.hasOwnProperty(key) && obj.hasOwnProperty(key)) {
+                    if (typeof obj[key] === typeof args[key] && typeof obj[key] !== "function") {
+                        obj[key] = args[key];
+                        mod = true;
+                    } else {
+                        log.error("uncompatible arguments:" + key + " " + typeof obj[key] + " vs " + typeof args[key]);
+                        log.obj(obj);
+                        log.obj(args);
+                    }
+                }
+            }
+        }
+        return mod;
+    },
+
     tests: {
         test_msToString: function () {
             test.verify(util.msToString(1000), "00:01:00");
@@ -71,12 +92,11 @@ var util = {
         }
     },
 
-    copyOwnProperties: function (obj) {
+    copyData: function (obj) {
         var that = {},
             key;
-
         for (key in obj) {
-            if (obj.hasOwnProperty(key)) {
+            if (obj.hasOwnProperty(key) && typeof obj[key] !== "function") {
                 that[key] = obj[key];
             }
         }

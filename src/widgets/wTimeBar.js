@@ -14,7 +14,8 @@ function wTimeBar() {
         ctx = canvas.getContext("2d"),
         totalMs = 1000,
         currentMs = 0,
-        loopMs = {
+        loop = {
+            isOn: false,
             ms0: 0,
             ms1: 0
         },
@@ -84,8 +85,8 @@ function wTimeBar() {
 
     function drawFg() {
         drawMarker(currentMs, "#8f8");
-        drawMarker(loopMs.ms0, "#8ff");
-        drawMarker(loopMs.ms1, "#f8f");
+        drawMarker(loop.ms0, "#8ff");
+        drawMarker(loop.ms1, "#f8f");
         return that;
     }
 
@@ -131,9 +132,8 @@ function wTimeBar() {
         return that;
     };
 
-    that.setLoop = function (ms0, ms1) {
-        loopMs.ms0 = ms0;
-        loopMs.ms1 = ms1;
+    that.setLoop = function (args) {
+        util.setArgs(loop, args);
         that.draw();
     };
 
@@ -148,10 +148,10 @@ function wTimeBar() {
         if (keys.ctrl && keys.shift) {
             if (e.button === 0) {
                 selection.setMode("moveLoop0");
-                loopMs.ms0 = pos.ms;
+                loop.ms0 = pos.ms;
             } else if (e.button === 2) {
                 selection.setMode("moveLoop1");
-                loopMs.ms1 = pos.ms;
+                loop.ms1 = pos.ms;
             }
         } else if (e.button === 2) {
             selection.setMode("select");
@@ -181,9 +181,9 @@ function wTimeBar() {
             selection.end(pos.ms, pos.h);
             that.emit("selectionUpdated", selection.get(), false);
         } else if (selection.modeActive("moveLoop0")) {
-            loopMs.ms0 = pos.ms;
+            loop.ms0 = pos.ms;
         } else if (selection.modeActive("moveLoop1")) {
-            loopMs.ms1 = pos.ms;
+            loop.ms1 = pos.ms;
         }
         that.draw();
     };
@@ -195,8 +195,7 @@ function wTimeBar() {
         } else if (selection.modeActive("selectionUpdated") || selection.modeActive("select")) {
             that.emit("newSelection", selection.get());
         } else if (selection.modeActive("moveLoop0") || selection.modeActive("moveLoop1")) {
-            //FIXME: make obj arg
-            that.emit("loopUpdated", Math.min(loopMs.ms0, loopMs.ms1), Math.max(loopMs.ms0, loopMs.ms1));
+            that.emit("loopUpdated", util.copyData(loop));
         }
         selection.setMode("");
         that.draw();

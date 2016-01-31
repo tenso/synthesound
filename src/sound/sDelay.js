@@ -5,9 +5,7 @@
 function sDelay(args) {
     var that = sBase("delay"),
         maxDelay = 480000, //10s at 48khz
-        buffer = [],
-        gain = 0.5,
-        delay = 0.5;
+        buffer = [];
 
     that.makeAudio = function () {
         var i = 0,
@@ -36,24 +34,16 @@ function sDelay(args) {
                 for (i = 0; i < chanData.length; i += 1) {
                     buffer[chan][inputIndex].set(inputData[i]);
                     //FIXME: cant get value like this, need  similar solution to continous-phase for generators.
-                    chanData[i] += gain * buffer[chan][inputIndex].get(parseInt(delay * that.sampleRate(), 10));
+                    chanData[i] += that.args.gain * buffer[chan][inputIndex].get(parseInt(that.args.delay * that.sampleRate(), 10));
                 }
             }
         }
     };
 
-    that.getArgs = function () {
-        return {gain: gain, delay: delay};
-    };
-
-    that.setArgs = function (args) {
-        if (args) {
-            gain = typeof args.gain === "number" ? args.gain : gain;
-            delay = typeof args.delay === "number" ? args.delay : delay;
-        }
-    };
-
-    that.setArgs(args);
+    that.initArgs({
+        gain: 0.5,
+        delay: 0.5
+    }, args);
 
     return that;
 }

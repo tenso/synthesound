@@ -14,8 +14,8 @@ function sBase(sId) {
         inputs = {
             inputs: []
         },
-
         chanUpdated,
+        argsUpdated = false,
         data = {};
 
     function findInputIndex(comp, outType, inType) {
@@ -108,6 +108,7 @@ function sBase(sId) {
 
         that.generateInputs();
         that.makeAudio();
+        argsUpdated = false;
 
         if (chanUpdated) {
             for (chan = 0; chan < channels; chan += 1) {
@@ -169,16 +170,32 @@ function sBase(sId) {
         return input.comp.getChannelData(chan, input.outType);
     };
 
+    that.argsUpdated = function () {
+        return argsUpdated;
+    };
+
+    that.initArgs = function (args, userArgs, argsOff) {
+        if (args) {
+            that.args = args;
+            that.setArgs(userArgs);
+        }
+        if (argsOff) {
+            that.argsOff = argsOff;
+        }
+        return that;
+    };
+
     that.getArgs = function () {
-        return {};
+        return util.copyData(that.args);
     };
 
     that.getArgsOff = function () {
-        return {};
+        return util.copyData(that.argsOff);
     };
 
     that.setArgs = function (args) {
-        util.unused(args);
+        argsUpdated = util.setArgs(that.args, args);
+        return that;
     };
 
     that.addOutput = function (outType) {
@@ -197,6 +214,8 @@ function sBase(sId) {
     that.addOutput();
 
     //FIXME: make private or move to needed
+    that.args = {};
+    that.argsOff = {};
     that.genData = undefined;
 
     return that;

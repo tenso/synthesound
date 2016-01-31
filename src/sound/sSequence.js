@@ -63,8 +63,8 @@ function sSequanceData(sArgs, msTime, sArgsOff, msTimeOff) {
         };
 
     that.copy = function () {
-        return sSequanceData(util.copyOwnProperties(that.args), that.ms,
-                             util.copyOwnProperties(that.argsOff), that.msOff);
+        return sSequanceData(util.copyData(that.args), that.ms,
+                             util.copyData(that.argsOff), that.msOff);
     };
 
     if (sArgsOff) {

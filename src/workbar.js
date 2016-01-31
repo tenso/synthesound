@@ -279,7 +279,7 @@ function workbar() {
 
     function updateLoop() {
         loopParams.isOn = loop.getValue();
-        that.emit("changeLoop", loopParams.isOn, loopParams.ms0, loopParams.ms1);
+        that.emit("changeLoop", loopParams);
     }
 
     function updateRecord() {
@@ -324,12 +324,10 @@ function workbar() {
         }
     };
 
-    that.setLoop = function (isOn, ms0, ms1) {
-        loop.setValue(isOn, true);
-        loopParams.isOn = isOn;
-        loopParams.ms0 = ms0;
-        loopParams.ms1 = ms1;
-        timeBar.setLoop(ms0, ms1);
+    that.setLoop = function (args) {
+        loopParams = args;
+        loop.setValue(loopParams.isOn, true);
+        timeBar.setLoop(args);
     };
 
     that.setCurrentSComp = function (comp) {
@@ -420,10 +418,9 @@ function workbar() {
 
     timeBar.on("renderOver", renderEvents);
 
-    timeBar.on("loopUpdated", function (ms0, ms1) {
-        loopParams.ms0 = ms0;
-        loopParams.ms1 = ms1;
-        that.emit("changeLoop", loopParams.isOn, loopParams.ms0, loopParams.ms1);
+    timeBar.on("loopUpdated", function (args) {
+        util.setArgs(loopParams, args);
+        that.emit("changeLoop", util.copyData(loopParams));
     });
 
     that.setTopOfBar = function (y) {

@@ -13,13 +13,13 @@ function tracker(sampleRate) {
         quantizeOn = false,
         play = false,
         loop = {
-            on: false,
+            isOn: false,
             ms0: 0,
             ms1: 0
         };
 
     function checkPlayback() {
-        if (loop.on) {
+        if (loop.isOn) {
             if (loop.ms1 > totalMs) {
                 loop.ms1 = totalMs; //FIXME: send signal that this happened
             }
@@ -160,10 +160,14 @@ function tracker(sampleRate) {
         play = playValue;
     };
 
-    that.setLoop = function (on, start, stop) {
-        loop.on = on;
-        loop.ms0 = start;
-        loop.ms1 = stop;
+    that.setLoop = function (args) {
+        loop.isOn = args.isOn;
+        loop.ms0 = Math.min(args.ms0, args.ms1);
+        loop.ms1 = Math.max(args.ms0, args.ms1);
+    };
+
+    that.getLoop = function () {
+        return util.copyData(loop);
     };
 
     that.playbackFinished = undefined;

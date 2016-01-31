@@ -2,7 +2,7 @@
 /*global sBase*/
 /*global window*/
 
-function sDebug(args) {
+function sDebug() {
     var that = sBase("debug"),
         lastValues = {};
 
@@ -36,8 +36,6 @@ function sDebug(args) {
             }
         }
     };
-
-    that.setArgs(args);
 
     return that;
 }

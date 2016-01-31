@@ -4,11 +4,6 @@
 function sGen(args) {
     var that = sBase("gen"),
         phaseRun = 0,
-        amp = 0.1,
-        phase = 0,
-        freq = 220,
-        type = "sine",
-        isOn = true,
         TwoPi = 2 * Math.PI;
 
     that.makeAudio = function () {
@@ -18,44 +13,44 @@ function sGen(args) {
             period = sRate,
             hPeriod = period / 2.0,
             phaseStep,
-            newFreq = freq,
+            newFreq = that.args.freq,
             inPeriod,
             outData;
 
 
-        phaseStep = freq / sRate;
+        phaseStep = that.args.freq / sRate;
         for (i = 0; i < that.wantedSamples(); i += 1) {
             if (that.numInputs("freq")) {
                 newFreq = that.getInputChannelData(0, 0, "freq")[i];
             }
 
-            if (newFreq !== freq) {
-                freq = newFreq;
-                phaseStep = freq / sRate;
+            if (newFreq !== that.args.freq) {
+                that.args.freq = newFreq;
+                phaseStep = that.args.freq / sRate;
             }
             phaseRun += phaseStep;
-            inPeriod = (phaseRun + phase) * sRate;
+            inPeriod = (phaseRun + that.args.phase) * sRate;
             inPeriod %= sRate;
 
-            if (!isOn) {
+            if (!that.args.isOn) {
                 that.genData[i] = 0;
-            } else if (type === "sine") {
-                that.genData[i] = Math.sin(TwoPi * (phaseRun + phase));
-            } else if (type === "square") {
+            } else if (that.args.type === "sine") {
+                that.genData[i] = Math.sin(TwoPi * (phaseRun + that.args.phase));
+            } else if (that.args.type === "square") {
                 that.genData[i] = inPeriod < hPeriod ? 1.0 : -1.0;
-            } else if (type === "triangle") {
+            } else if (that.args.type === "triangle") {
                 if (inPeriod <  hPeriod) {
                     that.genData[i] = -1.0 + (2.0 * (inPeriod  / hPeriod));
                 } else {
                     that.genData[i] = 1.0 - (2.0 * (inPeriod - hPeriod)  / hPeriod);
                 }
-            } else if (type === "saw") {
+            } else if (that.args.type === "saw") {
                 that.genData[i] = -1.0 + (2.0 * (inPeriod  / period));
-            } else if (type === "noise") {
+            } else if (that.args.type === "noise") {
                 that.genData[i] = -1.0 + 2.0 * Math.random();
             }
 
-            that.genData[i] *= amp;
+            that.genData[i] *= that.args.amp;
         }
 
         for (chan = 0; chan < that.numChannels(); chan += 1) {
@@ -66,21 +61,13 @@ function sGen(args) {
         }
     };
 
-    that.getArgs = function () {
-        return {amp: amp, phase: phase, type: type, isOn: isOn};
-    };
-
-    that.setArgs = function (args) {
-        if (args) {
-            amp = typeof args.amp === "number" ? args.amp : amp;
-            freq = typeof args.freq === "number" ? args.freq : freq;
-            phase = typeof args.phase === "number" ? args.phase : phase;
-            type = typeof args.type === "string" ? args.type : type;
-            isOn = typeof args.isOn === "boolean" ? args.type : isOn;
-        }
-    };
-
-    that.setArgs(args);
+    that.initArgs({
+        amp: 0.1,
+        phase: 0,
+        freq: 220,
+        type: "sine",
+        isOn: true
+    }, args);
 
     return that;
 }

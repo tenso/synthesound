@@ -9,6 +9,7 @@
 /*global files*/
 /*global lang*/
 /*global log*/
+/*global window*/
 
 function menubar(contentContainer) {
     var that = gContainer().abs().z(100000).w("100%").h(app.screen.minY).bg("#fff"),
@@ -40,6 +41,9 @@ function menubar(contentContainer) {
     file.addRow(lang.tr("save"), function () {
         var data = contentContainer.data();
         files.saveData("synthdata.json", data);
+    });
+    file.addRow(lang.tr("quit"), function () {
+        window.close();
     });
     that.addTabled(file);
 
