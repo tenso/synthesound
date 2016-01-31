@@ -18,7 +18,7 @@ function sCVKey(container, uid) {
                 currentNote.setValue(note.name(note.note(output.getArgs().freq)));
 
                 if (output.getArgs().gate) {
-                    currentNote.borderColor("#f00");
+                    currentNote.borderColor("#f44");
                 } else {
                     currentNote.borderColor("#888");
                 }

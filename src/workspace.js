@@ -69,7 +69,7 @@ function workspace() {
             comp = constructorMap[data.type](that, data.uid);
             comp.setArgs(data.sArgs);
             comp.setCurrentMs(timeTracker.currentMs(), timeTracker.currentStepMs());
-            comp.saveInitialArgs();
+            //comp.saveInitialArgs();
             comp.move(data.x, data.y);
         } else {
             log.error("workspace.createSComp: dont know type:" + data.type);
@@ -210,9 +210,11 @@ function workspace() {
             return;
         }
 
-        if (operation !== "delete" && comp.stateMode() !== "notes") {
-            log.d("not implemented");
-            return;
+        if (comp.stateMode() !== "notes") {
+            if (operation === "beginNew" || operation === "endNew") {
+                log.d("not implemented");
+                return;
+            }
         }
 
         //FIXME: cant do it like this when moving (relative!)
@@ -232,28 +234,28 @@ function workspace() {
             for (i = 0; i < states.length; i += 1) {
                 seq.duplicate(states[i]);
             }
-        } else if (operation === "moveStart") { //FIXME: notes vs values
+        } else if (operation === "moveStart") {
             for (i = 0; i < states.length; i += 1) {
                 states[i].moveStart();
             }
-        } else if (operation === "move") { //FIXME: notes vs values
+        } else if (operation === "move") {
             for (i = 0; i < states.length; i += 1) {
                 states[i].move(selection.lenMs, selection.numNotes);
             }
             seq.sortSteps();
-        } else if (operation === "moveOff") { //FIXME: notes vs values
+        } else if (operation === "moveOff") {
             for (i = 0; i < states.length; i += 1) {
                 states[i].moveOff(selection.lenMs);
             }
             seq.sortSteps();
-        } else if (operation === "beginNew") {
+        } else if (operation === "beginNew") {  //FIXME: notes vs values
             if (!seq.openStep()) {
                 seq.openAt(selection.startMs, stepForOpen);
                 seq.openStep().msOff = selection.endMs;
             } else {
                 seq.openStep().msOff = selection.endMs;
             }
-        } else if (operation === "endNew") {
+        } else if (operation === "endNew") {  //FIXME: notes vs values
             if (seq.openStep()) {
                 seq.closeAt(selection.endMs);
             }

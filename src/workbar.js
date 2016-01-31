@@ -50,6 +50,10 @@ function workbar() {
         zoomY,
         recordOn,
         time,
+        colors = {
+            selected: "#4c4",
+            normal: "#8f8"
+        },
         minNote = 1, //FIXME move to infoBar?
         maxNote = 88,
         infoBar = wNoteInfoBar(minNote, maxNote),
@@ -126,16 +130,15 @@ function workbar() {
         if (sComp && sComp.stateMode() === "notes") {
             selection.startValue = note.hz(valueToNote(selection.maxH));
             selection.endValue = note.hz(valueToNote(selection.minH));
-            selection.lenMs = selection.endMs - selection.startMs;
-            selection.lenValue = selection.startValue - selection.endValue;
             selection.numNotes = valueToNote(selection.endH) - valueToNote(selection.startH);
             selection.valueType = "freq";
         } else {
             selection.startValue = selection.startH;
             selection.endValue = selection.endH;
-            selection.movedValue = selection.movedH;
             selection.valueType = "";
         }
+        selection.lenMs = selection.endMs - selection.startMs;
+        selection.lenValue = selection.startValue - selection.endValue;
         return selection;
     }
 
@@ -179,14 +182,19 @@ function workbar() {
         ctx.lineTo(canvas.width, canvas.height / 2);
         ctx.stroke();
 
-        ctx.strokeStyle = "#000";
-        ctx.beginPath();
+        ctx.lineWidth = 2;
         for (i = 0; i < current.length; i += 1) {
+            if (isSelectedState(current[i])) {
+                ctx.strokeStyle = colors.selected;
+            } else {
+                ctx.strokeStyle = colors.normal;
+            }
+            ctx.beginPath();
             timeX = current[i].ms * pixelsPerMs;
             ctx.moveTo(timeX,  0);
             ctx.lineTo(timeX, canvas.height);
+            ctx.stroke();
         }
-        ctx.stroke();
     }
 
     function renderNotes(canvas, ctx, currentMs, totalMs, pixelsPerMs, current) {
@@ -229,9 +237,9 @@ function workbar() {
                     noteY = canvas.height - (noteNum * pixelsPerNote);
 
                     if (isSelectedState(current[i])) {
-                        ctx.fillStyle = "#8f8";
+                        ctx.fillStyle = colors.selected;
                     } else {
-                        ctx.fillStyle = "#f88";
+                        ctx.fillStyle = colors.normal;
                     }
                     ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
                 }
@@ -340,7 +348,7 @@ function workbar() {
     that.w("100%").bottom(0);
 
     play = gButton(">", updatePlayback, true).w(40).h(buttonH);
-    record = gButton(lang.tr("rec"), updateRecord, true).bg("#f00").w(40).h(buttonH);
+    record = gButton(lang.tr("rec"), updateRecord, true).bg("#f44").w(40).h(buttonH);
     record.setColor("#000", "#fff");
     loop = gButton("loop", updateLoop, true).w(40).h(buttonH);
 

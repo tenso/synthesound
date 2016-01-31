@@ -24,11 +24,11 @@ function menubar(contentContainer) {
         note;
 
     that.logError = function (error) {
-        errorLog.bg("#f00").show(true);
+        errorLog.bg("#f44").show(true);
         errorLog.addRow("error #" + errorLog.menu.contentCount(), function () {
-            wNote(contentContainer, error).bg("#f00").color("#000");
+            wNote(contentContainer, error).bg("#f44").color("#000");
         });
-        wNote(contentContainer, error).bg("#f00").color("#000");
+        wNote(contentContainer, error).bg("#f44").color("#000");
     };
 
     file = wMenuButton(lang.tr("file"), menus);

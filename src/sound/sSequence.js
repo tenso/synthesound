@@ -9,36 +9,38 @@ function addSequenceDataFunctions(that) {
 
     that.moveStart = function () {
         moveStartData.ms = that.ms;
-        moveStartData.msOff = that.msOff;
-        if (that.args.hasOwnProperty("freq")) {
-            moveStartData.note = note.note(that.args.freq);
-        } else {
-            moveStartData.note = 0;
+
+        if (that.hasOwnProperty("msOff")) {
+            moveStartData.msOff = that.msOff;
         }
-        if (that.argsOff.hasOwnProperty("freq")) {
+        if (that.args && that.args.hasOwnProperty("freq")) {
+            moveStartData.note = note.note(that.args.freq);
+        }
+        if (that.argsOff && that.argsOff.hasOwnProperty("freq")) {
             moveStartData.noteOff = note.note(that.argsOff.freq);
-        } else {
-            moveStartData.noteOff = 0;
         }
     };
 
-    //FIXME: notes vs values: hardcoded to take numNotes!!
     that.move = function (movedMs, numNotes) {
         that.ms = moveStartData.ms + movedMs;
-        that.msOff = moveStartData.msOff + movedMs;
 
-        if (that.args.hasOwnProperty("freq")) {
+        if (that.hasOwnProperty("msOff")) {
+            that.msOff = moveStartData.msOff + movedMs;
+        }
+        if (that.args && that.args.hasOwnProperty("freq")) {
             that.args.freq = note.hz(moveStartData.note + numNotes);
         }
-        if (that.argsOff.hasOwnProperty("freq")) {
+        if (that.argsOff && that.argsOff.hasOwnProperty("freq")) {
             that.argsOff.freq = note.hz(moveStartData.noteOff + numNotes);
         }
     };
 
     that.moveOff = function (movedMs) {
-        that.msOff = moveStartData.msOff + movedMs;
-        if (that.msOff < that.ms) {
-            that.msOff = that.ms + 10; //FIXME: min 10 ok ?
+        if (that.hasOwnProperty("msOff")) {
+            that.msOff = moveStartData.msOff + movedMs;
+            if (that.msOff < that.ms) {
+                that.msOff = that.ms + 10; //FIXME: min 10 ok ?
+            }
         }
     };
 
