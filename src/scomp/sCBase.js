@@ -185,7 +185,7 @@ function sCBase(container, type, sComp, uid) {
             return;
         }
         seq.moveToMs(ms);
-        saveAtMs = saveMs;
+        saveAtMs = saveMs > 0 ? saveMs : 0;
     };
 
     that.saveArgs =  function (ms) {
