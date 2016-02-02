@@ -8,7 +8,7 @@ function wNote(note) {
         textContent = gLabel(note, "html").w(650).h(250);
 
     that.setTitle("Note");
-    textContent.overflow("auto").whiteSpace("pre-line").textAlign("left").fontFamily("Lucida Console").fontSize(16);
+    textContent.overflow("auto").whiteSpace("pre-line").textAlign("left").fontFamily("sans-serif").fontSize(16);
     that.addTabled(textContent);
     that.typeIs = "wNote";
     return that;
