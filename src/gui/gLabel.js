@@ -13,8 +13,9 @@ function gLabel(label, type) {
         return that;
     };
 
-    that.className = "gLabel";
     that.typeIs = "gLabel";
     that.setValue(label);
+    that.whiteSpace("nowrap").textAlign("center").fontFamily("sans-serif").fontSize(16).color("#444");
+    that.cursor("default");
     return that;
 }

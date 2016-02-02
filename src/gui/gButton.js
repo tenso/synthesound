@@ -77,7 +77,7 @@ function gButton(name, callback, isRadio, buttonGroup) {
     that.setClass("button-class");
     that.textContent = name;
     that.callback = callback;
-    that.padding("1px 4px 1px 4px").lineHeight("100%").display("inline-block");
+    that.padding("1px 4px 1px 4px").lineHeight("100%").display("inline-block").cursor("default");
 
     if (that.isRadio) {
         if (buttonGroup) {

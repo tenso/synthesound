@@ -51,7 +51,7 @@ function workbar() {
         recordOn,
         time,
         colors = {
-            selected: "#4c4",
+            selected: "#f88",
             normal: "#8f8"
         },
         minNote = 1, //FIXME move to infoBar?

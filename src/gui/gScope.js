@@ -3,7 +3,7 @@
 /*global gBase*/
 
 function gScope() {
-    var that = gBase("canvas").setClass("gScope"),
+    var that = gBase("canvas"),
         length = 1024,
         graphData = delayBuffer(length),
         ctx = that.getContext("2d"),
@@ -50,6 +50,7 @@ function gScope() {
     };
 
     that.typeIs = "gScope";
+    that.w(320).h(96).bg("#000");
 
     return that;
 }
