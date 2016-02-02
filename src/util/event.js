@@ -1,10 +1,16 @@
 "use strict";
 /*global test*/
+/*global log*/
+
 function event(base) {
     var that = base || {},
         listeners = {};
 
     that.on = function (eventName, func) {
+        if (typeof func !== "function") {
+            log.error("event.on: not a function for eventName:" + eventName);
+            return;
+        }
         if (!listeners.hasOwnProperty(eventName)) {
             listeners[eventName] = [];
         }

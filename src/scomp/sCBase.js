@@ -13,11 +13,10 @@
 
 var scBaseUID = uidGen();
 
-var sCGlobal = {
+var sCGlobal = event({
     current: undefined,
-    currentUpdated: undefined,
     recordingOn: false
-};
+});
 
 function sCBase(container, type, sComp, uid) {
     var that = gWidget(),
@@ -34,9 +33,8 @@ function sCBase(container, type, sComp, uid) {
 
             if (sCGlobal.current === that) {
                 sCGlobal.current = undefined;
-                sCGlobal.currentUpdated(sCGlobal.current);
+                sCGlobal.emit("currentUpdated", sCGlobal.current);
             }
-
         };
     }
 
@@ -69,9 +67,7 @@ function sCBase(container, type, sComp, uid) {
         sCGlobal.current = that;
         sCGlobal.current.select();
 
-        if (typeof sCGlobal.currentUpdated === "function") {
-            sCGlobal.currentUpdated(sCGlobal.current);
-        }
+        sCGlobal.emit("currentUpdated", sCGlobal.current);
     };
 
     that.iWasMoved = function (obj) {
@@ -90,6 +86,9 @@ function sCBase(container, type, sComp, uid) {
     that.setAndSaveArgs = function (args, isDuration, open) {
         //FIXME: should not seq.saveAt() trigger update of states?
         seq.setArgs(args);
+        if (that === sCGlobal.current) {
+            sCGlobal.emit("currentUpdatedState", sCGlobal.current);
+        }
         if (sCGlobal.recordingOn) {
             if (isDuration) {
                 if (open) {
@@ -130,10 +129,6 @@ function sCBase(container, type, sComp, uid) {
 
     that.setStateMode = function (mode) {
         stateMode = mode;
-    };
-
-    that.getArgs = function () {
-        return seq.data();
     };
 
     that.getSequencer = function () {

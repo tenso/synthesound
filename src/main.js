@@ -14,6 +14,7 @@
 /*global window*/
 /*global document*/
 /*global util*/
+/*global sCGlobal*/
 
 var app = {
     ver: "1.0",
@@ -139,6 +140,9 @@ window.onload = function () {
     audioBar.on("changeTopPosition", audioWork.setViewHeight);
     audioBar.on("changeSCompState", audioWork.modifySCompState);
     audioBar.on("changeLoop", audioWork.setLoop);
+
+    sCGlobal.on("currentUpdated", audioBar.setCurrentSComp);
+    sCGlobal.on("currentUpdatedState", audioBar.currentSCompStateChanged);
 
     audioWork.on("timeUpdated", audioBar.setTime);
     audioWork.on("currentSCompUpdated", audioBar.setCurrentSComp);

@@ -23,7 +23,9 @@ function addSequenceDataFunctions(that) {
 
     that.move = function (movedMs, numNotes) {
         that.ms = moveStartData.ms + movedMs;
-
+        if (that.ms < 0) {
+            that.ms = 0;
+        }
         if (that.hasOwnProperty("msOff")) {
             that.msOff = moveStartData.msOff + movedMs;
         }
@@ -67,6 +69,11 @@ function sSequanceData(sArgs, msTime, sArgsOff, msTimeOff) {
     that.copy = function () {
         return sSequanceData(util.copyData(that.args), that.ms,
                              util.copyData(that.argsOff), that.msOff);
+    };
+
+    that.updateArgs = function (newArgs) {
+        that.args = newArgs;
+        return that;
     };
 
     if (sArgsOff) {
@@ -157,7 +164,7 @@ function sSequence(sComp, argUpdateCb) {
         return false;
     };
 
-    that.openAt = function (ms, args) {
+    that.openAt = function (ms, args, instant) {
         var at = typeof ms === "number" ? ms : atMs,
             data;
 
@@ -165,13 +172,19 @@ function sSequence(sComp, argUpdateCb) {
             that.closeAt();
         }
 
+        if (at < 0) {
+            at = 0;
+        }
+
         data = sSequanceData(args || sComp.getArgs(), at);
-        sOpenSequanceData(data);
+        if (!instant) {
+            sOpenSequanceData(data);
+        }
         openStep = that.saveAt(at, data);
         return openStep;
     };
 
-    that.closeAt = function (ms) {
+    that.closeAt = function (ms, instant) {
         var at = typeof ms === "number" ? ms : atMs,
             off = at;
 
@@ -180,14 +193,22 @@ function sSequence(sComp, argUpdateCb) {
             return that;
         }
 
-        if (openStep.ms === at) {
-            that.remove(openStep);
+        if (at < 0) {
+            at = 0;
+        }
+
+        if (instant) {
+            openStep.ms = at;
         } else {
-            if (openStep.ms > at) {
-                off = openStep.ms;
-                openStep.ms = at;
+            if (openStep.ms === at) {
+                that.remove(openStep);
+            } else {
+                if (openStep.ms > at) {
+                    off = openStep.ms;
+                    openStep.ms = at;
+                }
+                sCloseSequanceData(openStep, sComp.getArgsOff(), off);
             }
-            sCloseSequanceData(openStep, sComp.getArgsOff(), off);
         }
         openStep = undefined;
         return that;
@@ -291,6 +312,10 @@ function sSequence(sComp, argUpdateCb) {
             }
         }
         seqData = sorted;
+    };
+
+    that.getSComp = function () {
+        return sComp;
     };
 
     return that;

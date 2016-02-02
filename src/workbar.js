@@ -160,6 +160,7 @@ function workbar() {
         }
         if (sComp) {
             that.emit("changeSCompState", sComp, op, scaleSelection(timeBar.getSelection()), selectedStates);
+            timeBar.draw();
         }
     }
 
@@ -252,7 +253,7 @@ function workbar() {
         if (!sComp) {
             return;
         }
-        var sArgs = sComp.getArgs(),
+        var sArgs = sComp.getSequencer().data(),
             ctx = canvas.getContext("2d");
 
         if (!sComp) {
@@ -339,9 +340,16 @@ function workbar() {
     };
 
     that.setCurrentSComp = function (comp) {
+        selectedStates = [];
         sComp = comp;
         timeBar.draw();
         return that;
+    };
+
+    that.currentSCompStateChanged = function () {
+        if (selectedStates.length === 1 && !play.getValue()) {
+            editSComp("updateStateToCurrent");
+        }
     };
 
     that.abs().bg("#fff");
@@ -414,7 +422,6 @@ function workbar() {
             } else {
                 editSComp(done ? "endNew" : "beginNew");
             }
-            timeBar.draw();
         }
     });
 

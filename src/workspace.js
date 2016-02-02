@@ -203,26 +203,22 @@ function workspace() {
     that.modifySCompState = function (comp, operation, selection, states) {
         var seq = comp.getSequencer(),
             i,
-            stepForOpen;
+            isLengthBased,
+            stepForOpen,
+            currentArgs;
 
         if (!comp) {
             log.error("workspace.modifySCompState: no comp");
             return;
         }
-
-        if (comp.stateMode() !== "notes") {
-            if (operation === "beginNew" || operation === "endNew") {
-                log.d("not implemented");
-                return;
-            }
-        }
+        isLengthBased = comp.stateMode() === "notes";
 
         //FIXME: cant do it like this when moving (relative!)
         selection.startMs = timeTracker.quantizeValue(selection.startMs);
         selection.endMs = timeTracker.quantizeValue(selection.endMs, true);
         selection.lenMs = timeTracker.quantizeValue(selection.lenMs, true);
 
-        if (comp.stateMode() === "notes") {
+        if (isLengthBased) {
             stepForOpen = {gate: true, freq: selection.startValue};
         }
 
@@ -233,6 +229,17 @@ function workspace() {
         } else if (operation === "duplicate") {
             for (i = 0; i < states.length; i += 1) {
                 seq.duplicate(states[i]);
+            }
+        } else if (operation === "updateStateToCurrent") {
+            for (i = 0; i < states.length; i += 1) {
+                currentArgs = seq.getSComp().getArgs();
+                //FIXME: ugly special case:
+                if (comp.stateMode() === "notes") {
+                    if (currentArgs.hasOwnProperty("gate")) {
+                        currentArgs.gate = true;
+                    }
+                }
+                states[i].updateArgs(currentArgs);
             }
         } else if (operation === "moveStart") {
             for (i = 0; i < states.length; i += 1) {
@@ -248,26 +255,26 @@ function workspace() {
                 states[i].moveOff(selection.lenMs);
             }
             seq.sortSteps();
-        } else if (operation === "beginNew") {  //FIXME: notes vs values
+        } else if (operation === "beginNew") {
             if (!seq.openStep()) {
-                seq.openAt(selection.startMs, stepForOpen);
-                seq.openStep().msOff = selection.endMs;
+                seq.openAt(selection.startMs, stepForOpen, !isLengthBased);
+                if (isLengthBased) {
+                    seq.openStep().msOff = selection.endMs;
+                }
             } else {
-                seq.openStep().msOff = selection.endMs;
+                if (isLengthBased) {
+                    seq.openStep().msOff = selection.endMs;
+                } else {
+                    seq.openStep().ms = selection.endMs;
+                }
             }
         } else if (operation === "endNew") {  //FIXME: notes vs values
             if (seq.openStep()) {
-                seq.closeAt(selection.endMs);
+                seq.closeAt(selection.endMs, !isLengthBased);
             }
         }
         //re-apply state:
         comp.setCurrentMs(timeTracker.currentMs(), timeTracker.currentStepMs());
-
-        if (typeof sCGlobal.currentUpdated === "function") {
-            if (sCGlobal.current === comp) {
-                sCGlobal.currentUpdated(comp);
-            }
-        }
     };
 
     that.loadWorkspace = function (data) {
@@ -395,10 +402,6 @@ function workspace() {
 
     //callbacks
     that.onworkspacechanged = undefined;
-
-    sCGlobal.currentUpdated = function (comp) {
-        that.emit("currentSCompUpdated", comp);
-    };
 
     that.setClass("workspace").top(app.screen.minY).h("100%");
     that.typeIs = "workspace";
