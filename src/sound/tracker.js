@@ -93,7 +93,6 @@ function tracker(sampleRate) {
         var stepBefore = that.currentMs();
         currentFrame = frames;
         currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
-        checkPlayback();
         return that.currentMs() !== stepBefore;
     };
 
@@ -103,8 +102,8 @@ function tracker(sampleRate) {
         if (play) {
             currentFrame += frames;
             currentMs = parseInt(1000 * currentFrame / sampleRate, 10);
+            checkPlayback();
         }
-        checkPlayback();
         return that.currentMs() !== stepBefore;
     };
 
@@ -113,7 +112,6 @@ function tracker(sampleRate) {
 
         currentMs = parseInt(ms, 10);
         currentFrame = parseInt(currentMs * sampleRate / 1000, 10);
-        checkPlayback();
         return that.currentMs() !== stepBefore;
     };
 

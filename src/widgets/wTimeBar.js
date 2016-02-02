@@ -85,8 +85,8 @@ function wTimeBar() {
 
     function drawFg() {
         drawMarker(currentMs, "#000");
-        drawMarker(loop.ms0, "#8f8");
-        drawMarker(loop.ms1, "#f44");
+        drawMarker(loop.ms0, "#8ff");
+        drawMarker(loop.ms1, "#44f");
         return that;
     }
 

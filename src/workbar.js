@@ -350,7 +350,7 @@ function workbar() {
     play = gButton(">", updatePlayback, true).w(40).h(buttonH);
     record = gButton(lang.tr("rec"), updateRecord, true).bg("#f44").w(40).h(buttonH);
     record.setColor("#000", "#fff");
-    loop = gButton("loop", updateLoop, true).w(40).h(buttonH);
+    loop = gButton(lang.tr("loop"), updateLoop, true).w(40).h(buttonH);
 
     time = gLabel("--:--:--").fontFamily("monospace");
     totalTime = gInput("--:--:--", updateTotalTime, "").fontFamily("monospace");

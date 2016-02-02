@@ -10,7 +10,7 @@
 
 function gWidget() {
     var that = gContainer(),
-        titleElem = gBase().marginRight(20); //that is close buttons width
+        titleElem = gBase().marginRight(20).cursor("default"); //that is close buttons width
 
     that.setTitle = function (title) {
         titleElem.textContent = title;
