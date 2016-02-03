@@ -2,7 +2,6 @@
 /*global sMix*/
 /*global gSlider*/
 /*global sCBase*/
-/*global audioWork*/
 
 function sCOut(container, uid) {
     var mix = sMix(),
@@ -27,8 +26,7 @@ function sCOut(container, uid) {
 
     that.setGuiControls(controls);
 
-    //FIXME: global coupling!
-    audioWork.mixerOut.addInput(mix);
+    that.toMainOutput = true;
 
     return that;
 }

@@ -31,17 +31,14 @@ var globalDebug = {
     setNote: undefined
 };
 
-
-
-
 /*FIXME: should not be global!!*/
-var audioWork, /*depends on it: sCOut, sCVKey */
-    gIO;       /*depends on it: workspace, ioPort, sCBase*/
+var gIO;       /*depends on it: workspace, ioPort, sCBase*/
 
 window.onload = function () {
     var appBody = document.getElementById("appBody"),
         topMenu,
         input,
+        audioWork,
         audioBar,
         guiApp = gBase().abs().w("100%").h("100%");
 
@@ -106,6 +103,7 @@ window.onload = function () {
     }
 
     //FIXME: does not work! If FileReader is not defined...
+    //FIXME: remove all verifyFunc... use typeof ... !== "undefined"
     if (!test.verifyFunctionality(FileReader, "FileReader")) {
         topMenu.logError("need FileReader");
     }

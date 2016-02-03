@@ -10,7 +10,6 @@
 /*global util*/
 
 //FIXME: rename all sC to sG
-
 var scBaseUID = uidGen();
 
 var sCGlobal = event({
@@ -19,7 +18,7 @@ var sCGlobal = event({
 });
 
 function sCBase(container, type, sComp, uid) {
-    var that = gWidget(),
+    var that = event(gWidget()),
         ports = [],
         myUID,
         saveAtMs = 0,
@@ -30,7 +29,7 @@ function sCBase(container, type, sComp, uid) {
     function makeRemoveAllConnections() {
         return function () {
             gIO.delAllConnectionsToAndFromUID(that.uid());
-
+            that.emit("removeOutput", sComp);
             if (sCGlobal.current === that) {
                 sCGlobal.current = undefined;
                 sCGlobal.emit("currentUpdated", sCGlobal.current);
@@ -114,6 +113,10 @@ function sCBase(container, type, sComp, uid) {
     //FIXME: mixin uid functions?
     that.uid = function () {
         return myUID;
+    };
+
+    that.type = function () {
+        return that.typeIs;
     };
 
     that.setArgs = function (sArgs) {

@@ -67,6 +67,16 @@ function workspace() {
         }
         if (constructorMap.hasOwnProperty(data.type)) {
             comp = constructorMap[data.type](that, data.uid);
+            if (comp.toMainOutput) {
+                log.info("adding output:" + comp.type() + " " + comp.uid());
+                that.mixerOut.addInput(comp.getSequencer().getSComp());
+
+                comp.on("removeOutput", function (sComp) {
+                    log.info("removing output:" + comp.type() + " " + comp.uid());
+                    that.mixerOut.delInput(sComp);
+                });
+            }
+
             comp.setArgs(data.sArgs);
             comp.setCurrentMs(timeTracker.currentMs(), timeTracker.currentStepMs());
             //comp.saveInitialArgs();
