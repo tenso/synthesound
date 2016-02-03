@@ -28,6 +28,7 @@ function wTimeBar() {
             shift: false
         };
 
+    //FIXME: dont use that.parentNode here: move scroll to this comp!
     function calcMouse(e) {
         var pos = gui.getEventOffsetInElement(that.parentNode, e);
         pos.x -= that.getLeft();
@@ -141,7 +142,6 @@ function wTimeBar() {
         gui.captureMouse(e);
     };
 
-    //FIXME: dont use that.parentNode here: move scroll to this comp!
     canvas.iMouseCaptured = function (e) {
         var pos = calcMouse(e);
 

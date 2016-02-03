@@ -8,13 +8,13 @@
 /*global workspace*/
 /*global guiInput*/
 /*global gui*/
-/*global lang*/
 /*global gBase*/
 /*global workbar*/
 /*global window*/
 /*global document*/
 /*global util*/
 /*global sCGlobal*/
+/*global appTexts*/
 
 var app = {
     ver: "1.0",
@@ -31,85 +31,8 @@ var globalDebug = {
     setNote: undefined
 };
 
-//FIXME: make keymap json with user-bindings
-//FIXME: move text
-function buildHelpText() {
-    var helpText = "<table style='min-width:100%;'>";
 
-    function addTitle(title) {
-        helpText += "<tr colspan=100><td class=helpTitle>" + title + "</td></tr>";
-    }
-    function addCommand(cmd, text) {
-        helpText += "<tr><td class=helpCmd>" + cmd + "</td><td class=helpText>" + text + "</td></tr>";
-    }
 
-    addTitle("Global");
-    addCommand("space", "play/pause");
-    addTitle("\n");
-    addTitle("Tracker");
-    addCommand("ctrl-leftclick", "move current time");
-    addCommand("ctrl-a", "select all states");
-    addCommand("ctrl-c", "copy selected states");
-    addCommand("rightdrag", "select states");
-    addCommand("shift-rightdrag", "modify selection");
-    addCommand("leftdrag", "move selected states");
-    addCommand("shift-left-drag", "move end positions");
-    addCommand("ctrl-scrollwheel", "zoom y");
-    addCommand("ctrl-shift-scrollwheel", "zoom x");
-    addCommand("ctrl-shift-leftdrag", "move loop start");
-    addCommand("ctrl-shift-rightdrag", "move loop end");
-
-    return helpText + "</table>";
-}
-function buildLicenseText() {
-    return "Copyright 2015 Anton Olofsson\n" +
-            "\n" +
-            "This program is free software: you can redistribute it and/or modify\n" +
-            "it under the terms of the GNU General Public License as published by\n" +
-            "the Free Software Foundation, either version 3 of the License, or\n" +
-            "(at your option) any later version.\n" +
-            "\n" +
-            "This program is distributed in the hope that it will be useful,\n" +
-            "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-            "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-            "GNU General Public License for more details.\n" +
-            "\n" +
-            "You should have received a copy of the GNU General Public License\n" +
-            "along with this program.  If not, see <http://www.gnu.org/licenses/>.\n";
-}
-
-function initLanguage() {
-    lang.addLanguage("en", {
-        sCAdsr: "Adsr",
-        sCConst: "Value",
-        sCDelay: "Delay",
-        sCGen: "Gen",
-        sCMix: "Mix",
-        sCVKey: "Keyboard",
-        sCOp: "Operator",
-        sCNotePitch: "Note Pitch",
-        sCOut: "Output",
-        sCScope: "Scope",
-        helpText: buildHelpText(),
-        save: "Save",
-        load: "Load",
-        help: "Help",
-        about: "About",
-        file: "File",
-        stop: "Stop",
-        rec: "Rec",
-        log: "Log",
-        info: "Info",
-        process: "Process",
-        processOn: "Process on",
-        processOff: "Process off",
-        detectedErrors: "Detected Errors",
-        quit: "Quit",
-        loop: "Loop",
-        license: buildLicenseText()
-    });
-    lang.setLanguage("en");
-}
 
 /*FIXME: should not be global!!*/
 var audioWork, /*depends on it: sCOut, sCVKey */
@@ -122,7 +45,7 @@ window.onload = function () {
         audioBar,
         guiApp = gBase().abs().w("100%").h("100%");
 
-    initLanguage();
+    appTexts.initLanguage();
 
     appBody.appendChild(guiApp);
 
@@ -131,6 +54,10 @@ window.onload = function () {
 
     audioWork = workspace();
     audioBar = workbar();
+    topMenu = menubar(audioWork).move(0, 0);
+    gIO = sCIO();
+    input = guiInput(audioWork, gIO.resizeCanvas); //resize is when scrollWidth/scrollHeigth changes
+    gui.setInputHandler(input);
 
     audioBar.on("changeCurrentMs", audioWork.setCurrentMs);
     audioBar.on("changeTotalMs", audioWork.setTotalMs);
@@ -151,10 +78,8 @@ window.onload = function () {
     audioWork.on("playbackUpdated", audioBar.setPlayback);
     audioWork.on("loopUpdated", audioBar.setLoop);
 
-    gIO = sCIO();
-    topMenu = menubar(audioWork).move(0, 0);
-    input = guiInput(audioWork, gIO.resizeCanvas); //resize is when scrollWidth/scrollHeigth changes
-    gui.setInputHandler(input);
+    topMenu.on("processOn", audioWork.startAudio);
+    topMenu.on("processOff", audioWork.stopAudio);
 
     guiApp.add(topMenu);
     guiApp.add(audioWork);

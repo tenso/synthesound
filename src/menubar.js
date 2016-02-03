@@ -12,7 +12,7 @@
 /*global window*/
 
 function menubar(contentContainer) {
-    var that = gContainer().abs().z(100000).w("100%").h(app.screen.minY).bg("#fff"),
+    var that = event(gContainer().abs().z(100000).w("100%").h(app.screen.minY).bg("#fff")),
         file,
         about,
         audio,
@@ -64,8 +64,12 @@ function menubar(contentContainer) {
     }
 
     audio = wMenuButton(lang.tr("process"), menus);
-    audio.addRow(lang.tr("processOn"), contentContainer.startAudio); //FIXME: dont do callback like this!
-    audio.addRow(lang.tr("processOff"), contentContainer.stopAudio); //FIXME: dont do callback like this!
+    audio.addRow(lang.tr("processOn"), function() {
+        that.emit("processOn");
+    });
+    audio.addRow(lang.tr("processOff"), function () {
+        that.emit("processOff")
+    });
     that.addTabled(audio);
 
     about = wMenuButton(lang.tr("info"), menus);
