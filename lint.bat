@@ -1,7 +1,7 @@
 @echo off
 set /a done=0
 set /a errors=0
-
+cd /d src
 for /R %%f in (*.js) do call :checkfile "%%f"
 goto :printstats
 
