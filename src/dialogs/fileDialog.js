@@ -36,13 +36,13 @@ function fileDialog() {
     }
 
     load = gButton(lang.tr("load"), function () {
-        net.read("files", {email: user.email(), name: selected}, function (err, result) {
+        net.read("users/" + user.email() + "/files/" + selected, function (err, result) {
             if (err) {
                 status.setValue(err);
                 log.error("files:" + err);
             } else {
                 status.setValue("got file");
-                console.log("please load:" + result.name);
+                console.log("please load:" + JSON.stringify(result));
             }
         });
     }).abs().bottom(10).right(10);

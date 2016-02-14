@@ -58,11 +58,13 @@ function menubar(contentContainer) {
     file = wMenuButton(lang.tr("file"), menus);
 
     loadInput = files.createLoadDataInput(function (data) {
+        //FIXME: make event: contentContainer used badly
         contentContainer.loadWorkspace(data);
     });
     file.addOverlayed(lang.tr("load"), loadInput);
 
     file.addRow(lang.tr("save"), function () {
+        //FIXME: make event: contentContainer used badly
         var data = contentContainer.data();
         files.saveData("synthdata.json", data);
     });
