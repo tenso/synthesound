@@ -39,7 +39,7 @@ function workbar() {
         marginY = 6,
         buttonH = 16,
         minHeight = 46,
-        initialHeight = 0,
+        initialHeight = 400,
         totalTime,
         moveActive = false,
         sComp,
