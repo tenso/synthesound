@@ -44,7 +44,8 @@ window.onload = function () {
         input,
         audioWork,
         audioBar,
-        guiApp = gBase().abs().w("100%").h("100%");
+        guiApp = gBase().abs().w("100%").h("100%"),
+        debugLoginAsAdmin = true;
 
     appTexts.initLanguage();
 
@@ -126,6 +127,16 @@ window.onload = function () {
                 log.info("user is logged in");
             } else {
                 log.info("user is not logged in");
+                if (debugLoginAsAdmin) {
+                    log.warn("debug login as admin:admin");
+                    net.read("login", {email: "admin", password: "admin"}, function (err, result) {
+                        if (err) {
+                            log.error("login:" + err);
+                        } else {
+                            user.update(result);
+                        }
+                    });
+                }
             }
             user.update(result);
         }
