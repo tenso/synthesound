@@ -3,10 +3,12 @@
 /*global gLabel*/
 /*global util*/
 
-function gInput(value, callback, label, width) {
+function gInput(value, callback, label, width, type) {
     var that = gBase().fontFamily("monospace"),
         input = gBase("input").w(width || 60).setClass("gInput").textAlign("center"),
         inLabel = gLabel(label);
+
+    input.type = type || "";
 
     that.setValue = function (value, skipCallback) {
         util.unused(skipCallback);
@@ -38,9 +40,21 @@ function gInput(value, callback, label, width) {
         return that;
     };
 
+    that.disabled = function (value) {
+        input.disabled = value;
+        /*
+        if (value) {
+            input.disabled = true;
+        } else {
+            input.disabled = false;
+        }*/
+    };
+
     input.value = value;
     input.onchange = function () {
-        callback(input.value);
+        if (typeof callback === "function") {
+            callback(input.value);
+        }
     };
     that.add(inLabel);
     that.add(input);

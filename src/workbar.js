@@ -379,7 +379,7 @@ function workbar() {
         infoBar.resizeCanvas();
     });
 
-    topBar.abs().cursor("ns-resize").left(0).right(0).top(0).h(3).bg("#888");
+    topBar.abs().cursor("ns-resize").left(0).right(0).top(0).h(2).bg("#888");
     that.add(topBar);
     //buttons
     buttonGroup.addTabled(record);

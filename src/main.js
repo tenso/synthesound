@@ -15,6 +15,8 @@
 /*global util*/
 /*global sCGlobal*/
 /*global appTexts*/
+/*global net*/
+/*global userData*/
 
 var app = {
     ver: "1.0",
@@ -26,6 +28,8 @@ var app = {
         maxY: undefined
     }
 };
+
+var user = userData();
 
 var globalDebug = {
     setNote: undefined
@@ -113,6 +117,19 @@ window.onload = function () {
     } else {
         topMenu.logError("need AudioContext and Array.fill");
     }
+
+    net.read("self", function (err, result) {
+        if (err) {
+            log.error("unabled to fetch self");
+        } else {
+            if (result.email) {
+                log.info("user is logged in");
+            } else {
+                log.info("user is not logged in");
+            }
+            user.update(result);
+        }
+    });
 
     /*function confirmExit(e) {
         var returnValue = "confirm exit!";

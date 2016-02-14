@@ -10,16 +10,22 @@
 /*global lang*/
 /*global log*/
 /*global window*/
+/*global document*/
+/*global loginDialog*/
+/*global user*/
 
 function menubar(contentContainer) {
     var that = event(gContainer().abs().z(100000).w("100%").h(app.screen.minY).bg("#fff")),
+        online,
         file,
         about,
         audio,
         errorLog,
         menus = [],
         helpString = lang.tr("helpText"),
-        aboutString = "SyntheSound v." + app.ver + "\n\n" + lang.tr("license"),
+        aboutString = "SyntheSound v." + app.ver + "\n" +
+            "<a href='https://github.com/tenso'>Source Link</a>\n\n" +
+            lang.tr("license"),
         loadInput,
         note;
 
@@ -30,6 +36,20 @@ function menubar(contentContainer) {
         });
         wNote(contentContainer, error).bg("#f44").color("#000");
     };
+
+    online = wMenuButton(lang.tr("online"), menus);
+    online.addRow(lang.tr("user"), function () {
+        contentContainer.add(loginDialog());
+    });
+    that.addTabled(online);
+
+    user.on("updated", function (doc) {
+        if (user.loggedIn()) {
+            online.color("#8f8");
+        } else {
+            online.color("#f88");
+        }
+    });
 
     file = wMenuButton(lang.tr("file"), menus);
 
@@ -64,11 +84,11 @@ function menubar(contentContainer) {
     }
 
     audio = wMenuButton(lang.tr("process"), menus);
-    audio.addRow(lang.tr("processOn"), function() {
+    audio.addRow(lang.tr("processOn"), function () {
         that.emit("processOn");
     });
     audio.addRow(lang.tr("processOff"), function () {
-        that.emit("processOff")
+        that.emit("processOff");
     });
     that.addTabled(audio);
 

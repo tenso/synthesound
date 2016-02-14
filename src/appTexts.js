@@ -75,6 +75,12 @@ var appTexts = {
             detectedErrors: "Detected Errors",
             quit: "Quit",
             loop: "Loop",
+            user: "User",
+            email: "E-Mail",
+            password: "Password",
+            cancel: "Cancel",
+            ok: "Ok",
+            online: "Online",
             license: appTexts.buildLicenseText()
         });
         lang.setLanguage("en");
