@@ -9,10 +9,10 @@
 "use strict";
 
 function loginDialog() {
-    var that = gWidget().setTitle(lang.tr("user")).addRemove(),
-        email = gInput("", undefined, lang.tr("email"), 300),
-        password = gInput("", undefined, lang.tr("password"), 300, "password"),
-        status = gLabel(""),
+    var that = gWidget().setTitle(lang.tr("user")).addRemove().w(360).h(160),
+        email = gInput("", undefined, lang.tr("email")).abs().x(10).y(30).w(340),
+        password = gInput("", undefined, lang.tr("password")).abs().x(10).y(80).w(340).type("password"),
+        status = gLabel("").abs().left(10).bottom(10),
         login,
         logout;
 
@@ -37,7 +37,7 @@ function loginDialog() {
                 user.update(result);
             }
         });
-    });
+    }).abs().right(10).bottom(10);
 
     logout = gButton(lang.tr("logout"), function () {
         net.read("logout", function (err, result) {
@@ -49,13 +49,11 @@ function loginDialog() {
                 user.update(result);
             }
         });
-    });
+    }).abs().right(10).bottom(10);
 
-    that.addTabled(email);
-    that.nextRow();
-    that.addTabled(password);
-    that.nextRow();
-    that.addTabled(status).addTabled(logout).addTabled(login);
+    that.add(email);
+    that.add(password);
+    that.add(status).add(logout).add(login);
 
     user.on("updated", function (doc) {
         updateFromUser();

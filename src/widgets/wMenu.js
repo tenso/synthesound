@@ -2,7 +2,8 @@
 /*global gContainer*/
 /*global gLabel*/
 
-function wMenu() {
+//FIXME: make w() and color() func: "problem" need to change all childNodes.
+function wMenu(width, textColor) {
     var that = gContainer().abs().bg("#fff");
 
     //FIXME: buildButton changes that!
@@ -13,7 +14,7 @@ function wMenu() {
         if (that.contentCount() > 0) {
             that.nextRow();
         }
-        entry = gLabel(string).textAlign("left").color("#000").minWidth(100);
+        entry = gLabel(string).textAlign("left").color(textColor || "#000").minWidth(width || 100);
         if (callback) {
             entry.onmousedown = callback;
         }

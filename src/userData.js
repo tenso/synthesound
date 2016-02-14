@@ -9,7 +9,17 @@ function userData() {
 
     that.update = function (doc) {
         userDoc = doc;
+        if (doc.email) {
+            email = doc.email;
+        }
         that.emit("updated", userDoc);
+    };
+
+    that.files = function () {
+        if (userDoc.files) {
+            return userDoc.files;
+        }
+        return [];
     };
 
     that.email = function () {

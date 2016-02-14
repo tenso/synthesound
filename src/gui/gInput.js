@@ -3,12 +3,25 @@
 /*global gLabel*/
 /*global util*/
 
-function gInput(value, callback, label, width, type) {
+function gInput(value, callback, label) {
     var that = gBase().fontFamily("monospace"),
-        input = gBase("input").w(width || 60).setClass("gInput").textAlign("center"),
-        inLabel = gLabel(label);
+        input = gBase("input").w(60).setClass("gInput").textAlign("center"),
+        inLabel = gLabel(label || "");
 
-    input.type = type || "";
+    that.type = function (type) {
+        input.type = type || "";
+        return that;
+    };
+
+    that.w = function (value) {
+        input.w(value);
+        return that;
+    };
+
+    that.autocomplete = function (value) {
+        input.autocomplete = value;
+        return that;
+    };
 
     that.setValue = function (value, skipCallback) {
         util.unused(skipCallback);

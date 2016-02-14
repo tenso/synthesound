@@ -19,6 +19,12 @@ function gContainer() {
         return cont;
     }
 
+    function initTable() {
+        that.table = gBase("table").setClass("gContainerTable");
+        that.add(that.table);
+        that.nextRow();
+    }
+
     that.nextRow = function () {
         that.content = gBase("tr").setClass("gContainerRow");
         that.table.add(that.content);
@@ -50,14 +56,14 @@ function gContainer() {
         return that;
     };
 
+    that.clear = function () {
+        that.removeChild(that.table);
+        initTable();
+    };
+
     that.typeIs = "gContainer";
     that.typeClass = "gContainer";
     that.setClass("gContainer");
-    that.table = gBase("table");
-    that.table.className = "gContainerTable";
-
-    that.add(that.table);
-    that.nextRow();
-
+    initTable();
     return that;
 }

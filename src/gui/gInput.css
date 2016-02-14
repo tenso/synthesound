@@ -1,3 +1,10 @@
+.gInput {
+    background: #ffd;
+}
 .gInput:focus {
     outline-color: #000;
+}
+
+.gInput:disabled {
+    background: #ccc;
 }

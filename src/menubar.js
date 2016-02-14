@@ -13,6 +13,7 @@
 /*global document*/
 /*global loginDialog*/
 /*global user*/
+/*global fileDialog*/
 
 function menubar(contentContainer) {
     var that = event(gContainer().abs().z(100000).w("100%").h(app.screen.minY).bg("#fff")),
@@ -40,6 +41,9 @@ function menubar(contentContainer) {
     online = wMenuButton(lang.tr("online"), menus);
     online.addRow(lang.tr("user"), function () {
         contentContainer.add(loginDialog());
+    });
+    online.addRow(lang.tr("files"), function () {
+        contentContainer.add(fileDialog());
     });
     that.addTabled(online);
 

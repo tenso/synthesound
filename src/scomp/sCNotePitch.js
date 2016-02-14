@@ -18,7 +18,7 @@ function sCNotePitch(container, uid) {
             args = {};
             args[type] = parseInt(value, 10);
             that.setAndSaveArgs(args);
-        }, type, 30);
+        }, type).w(30);
 
         that.addTabled(controls[type]);
     }
