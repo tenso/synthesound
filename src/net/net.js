@@ -20,27 +20,13 @@ var net = {
         }
         return str;
     },
-    create: function (path, args, cb) {
-        if (typeof args === "function") {
-            cb = args;
-            args = {};
-        }
-
-        var req = new Request(path, {
-            method: "POST",
-            credentials: "same-origin",
-            body: JSON.stringify(args),
-            headers: new Headers({
-                "Content-Type": "application/json"
-            })
-        });
-
+    makeRequest: function (req, cb) {
         fetch(req).then(function (response) {
             if (response.ok && response.status === 200) {
                 response.json().then(function (json) {
                     cb(undefined, json);
                 }).catch(function (err) {
-                    cb("parse:" + err, {});
+                    cb("json parse:" + err, {});
                 });
             } else {
                 cb("HTTP " + response.status, {});
@@ -49,29 +35,40 @@ var net = {
             cb("fetch failed", {});
         });
     },
+
+    create: function (path, args, cb) {
+        if (typeof args === "function") {
+            cb = args;
+            args = {};
+        }
+        var req = new Request(path, {
+            method: "POST",
+            credentials: "same-origin",
+            body: JSON.stringify(args),
+            headers: new Headers({
+                "Content-Type": "application/json"
+            })
+        });
+        net.makeRequest(req, cb);
+    },
+
     read: function (path, args, cb) {
         if (typeof args === "function") {
             cb = args;
             args = {};
         }
-
-
         var req = new Request(path + net.packArgs(args), {
             method: "GET",
             credentials: "same-origin"
         });
-        fetch(req).then(function (response) {
-            if (response.ok && response.status === 200) {
-                response.json().then(function (json) {
-                    cb(undefined, json);
-                }).catch(function (err) {
-                    cb("parse:" + err, {});
-                });
-            } else {
-                cb("HTTP " + response.status, {});
-            }
-        }).catch(function (err) {
-            cb("fetch failed", {});
+        net.makeRequest(req, cb);
+    },
+
+    del: function (path, cb) {
+        var req = new Request(path, {
+            method: "DELETE",
+            credentials: "same-origin"
         });
+        net.makeRequest(req, cb);
     }
 };

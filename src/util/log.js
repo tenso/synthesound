@@ -27,8 +27,9 @@ var log = {
     },
 
     update: function (type, message, skipOutput) {
-        if (type && message) {
-            log.logData.push(type + ":" + message);
+        var mess = (typeof message === "string") ? message : JSON.stringify(message, "", 2);
+        if (type && mess) {
+            log.logData.push(type + ":" + mess);
         }
         if (!skipOutput) {
             window.console.log(log.logData[log.logData.length - 1]);

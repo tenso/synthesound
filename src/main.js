@@ -44,8 +44,7 @@ window.onload = function () {
         input,
         audioWork,
         audioBar,
-        guiApp = gBase().abs().w("100%").h("100%"),
-        debugLoginAsAdmin = true;
+        guiApp = gBase().abs().w("100%").h("100%");
 
     appTexts.initLanguage();
 
@@ -119,28 +118,7 @@ window.onload = function () {
         topMenu.logError("need AudioContext and Array.fill");
     }
 
-    net.read("self", function (err, result) {
-        if (err) {
-            log.error("unabled to fetch self");
-        } else {
-            if (result.email) {
-                log.info("user is logged in");
-            } else {
-                log.info("user is not logged in");
-                if (debugLoginAsAdmin) {
-                    log.warn("debug login as admin:admin");
-                    net.read("login", {email: "admin", password: "admin"}, function (err, result) {
-                        if (err) {
-                            log.error("login:" + err);
-                        } else {
-                            user.update(result);
-                        }
-                    });
-                }
-            }
-            user.update(result);
-        }
-    });
+    user.refresh();
 
     /*function confirmExit(e) {
         var returnValue = "confirm exit!";

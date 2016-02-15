@@ -25,7 +25,6 @@ function gWidget() {
             that.remove();
         }).abs().setClass("gWidgetCloseButton").hoverEffect(true, "#444");
 
-
         that.titleRow.add(button);
         return that;
     };

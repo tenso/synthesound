@@ -43,7 +43,7 @@ function menubar(contentContainer) {
         contentContainer.add(loginDialog());
     });
     online.addRow(lang.tr("files"), function () {
-        contentContainer.add(fileDialog());
+        contentContainer.add(fileDialog(contentContainer));
     });
     that.addTabled(online);
 
