@@ -8,6 +8,7 @@
 /*global lang*/
 /*global sSequence*/
 /*global util*/
+/*global event*/
 
 //FIXME: rename all sC to sG
 var scBaseUID = uidGen();
@@ -18,7 +19,7 @@ var sCGlobal = event({
 });
 
 function sCBase(container, type, sComp, uid) {
-    var that = event(gWidget()),
+    var that = gWidget(),
         ports = [],
         myUID,
         saveAtMs = 0,
@@ -199,7 +200,8 @@ function sCBase(container, type, sComp, uid) {
     };
 
     that.setTitle(lang.tr(type));
-    that.addRemove(makeRemoveAllConnections());
+    that.addRemove();
+    that.on("removed", makeRemoveAllConnections());
     container.add(that);
 
     if (typeof uid === "number") {

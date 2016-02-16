@@ -1,12 +1,10 @@
 "use strict";
 /*global gStyle*/
-
+/*global event*/
 /*NOTE: cant use getW/getX etc functions unless element as already in the DOM or has explicit w/h set*/
 
-
-
 function gBase(type) {
-    var that = gStyle(type),
+    var that = event(gStyle(type)),
         hoverStyle,
         pressStyle;
 
@@ -76,12 +74,18 @@ function gBase(type) {
         return that;
     };
 
+    that.undoAdd = function (element) {
+        that.removeChild(element);
+        return that;
+    };
+
     that.addTo = function (element) {
         element.appendChild(that);
         return that;
     };
 
     that.remove = function () {
+        that.emit("removed");
         if (that.parentNode) {
             that.parentNode.removeChild(that);
         }

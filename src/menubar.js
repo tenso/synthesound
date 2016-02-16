@@ -6,6 +6,7 @@
 /*global gLabel*/
 /*global wNote*/
 /*global app*/
+/*global screen*/
 /*global files*/
 /*global lang*/
 /*global log*/
@@ -16,7 +17,7 @@
 /*global fileDialog*/
 
 function menubar(contentContainer) {
-    var that = event(gContainer().abs().z(100000).w("100%").h(app.screen.minY).bg("#fff")),
+    var that = gContainer().abs().z(100000).w("100%").h(screen.minY).bg("#fff"),
         online,
         file,
         about,

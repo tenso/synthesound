@@ -3,7 +3,7 @@
 /*global gLabel*/
 /*global gButton*/
 /*global lang*/
-/*global app*/
+/*global screen*/
 /*global wTimeBar*/
 /*global util*/
 /*global gInput*/
@@ -15,10 +15,9 @@
 /*global gSlider*/
 /*global note*/
 /*global wNoteInfoBar*/
-/*global event*/
 
 function workbar() {
-    var that = event(gContainer()),
+    var that = gContainer(),
         topBar = gContainer(),
         timeScroll = gBase(),
         timeBar = wTimeBar(),
@@ -442,8 +441,8 @@ function workbar() {
         var newY = y;
         that.top(newY);
 
-        if (that.getTop() < app.screen.minY) {
-            newY = app.screen.minY;
+        if (that.getTop() < screen.minY) {
+            newY = screen.minY;
             that.top(newY);
         }
 

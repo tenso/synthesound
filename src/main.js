@@ -20,13 +20,10 @@
 
 var app = {
     ver: "1.0",
+};
 
-    screen: {
-        minX: 0,
-        minY: 24, /*dont allow stuff behind topmenu*/
-        maxX: undefined,
-        maxY: undefined
-    }
+var screen = {
+    minY: 24, /*dont allow stuff behind topmenu*/
 };
 
 var user = userData();

@@ -6,10 +6,9 @@
 /*global gui*/
 /*global document*/
 /*global timeSelection*/
-/*global event*/
 
 function wTimeBar() {
-    var that = event(gBase().bg("#888")),
+    var that = gBase().bg("#888"),
         canvas = gBase("canvas").addTo(that).w("100%").h("100%"),
         ctx = canvas.getContext("2d"),
         totalMs = 1000,

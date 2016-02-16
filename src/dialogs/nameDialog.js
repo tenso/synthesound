@@ -4,13 +4,15 @@
 /*global lang*/
 /*global log*/
 /*global gLabel*/
+/*global gBase*/
 "use strict";
 
 function nameDialog(cb, parent) {
-    var that = gWidget().setTitle(lang.tr("name")).addRemove().w(360).h(100),
+    var that = gWidget().setTitle(lang.tr("name")).w(360).h(100),
         name = gInput("", undefined, lang.tr("name")).abs().x(10).y(30).w(340),
         status = gLabel("").abs().left(10).bottom(10),
-        ok;
+        ok,
+        hider;
 
     ok = gButton(lang.tr("ok"), function () {
         if (typeof cb === "function") {
@@ -29,8 +31,19 @@ function nameDialog(cb, parent) {
             parent.theDialog.remove();
         }
         parent.theDialog = that;
+        hider = gBase().bg("rgba(0, 0, 0, 0.5)").w("100%").h("100%").x(0).y(0).abs();
+        parent.add(hider);
         parent.add(that);
     }
 
+    that.addRemove();
+    that.on("removed", function () {
+        parent.theDialog = undefined;
+        if (parent) {
+            parent.undoAdd(hider);
+        }
+    });
+
+    that.y("calc(50% - 50px)").x("calc(50% - 180px)");
     return that.canMove(false);
 }

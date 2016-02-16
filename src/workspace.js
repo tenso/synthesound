@@ -15,6 +15,7 @@
 /*global sCNotePitch*/
 /*global wMenu*/
 /*global app*/
+/*global screen*/
 /*global gIO*/
 /*global util*/
 /*global lang*/
@@ -24,10 +25,9 @@
 /*global gBase*/
 /*global window*/
 /*global note*/
-/*global event*/
 
 function workspace() {
-    var that = event(gBase()),
+    var that = gBase(),
         out,
         audioCtx,
         AudioContext = window.AudioContext || window.webkitAudioContext,
@@ -413,7 +413,7 @@ function workspace() {
     //callbacks
     that.onworkspacechanged = undefined;
 
-    that.setClass("workspace").top(app.screen.minY).h("100%");
+    that.setClass("workspace").top(screen.minY).h("100%");
     that.typeIs = "workspace";
 
     return that;

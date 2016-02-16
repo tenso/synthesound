@@ -17,11 +17,8 @@ function gWidget() {
         return that;
     };
 
-    that.addRemove = function (callback) {
+    that.addRemove = function () {
         var button = gButton("x", function () {
-            if (callback) {
-                callback();
-            }
             that.remove();
         }).abs().setClass("gWidgetCloseButton").hoverEffect({color: "#444"});
 

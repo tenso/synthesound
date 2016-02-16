@@ -13,7 +13,7 @@
 //FIXME: contentContainer!!!
 function fileDialog(contentContainer) {
     var that = gWidget().setTitle(lang.tr("files")).addRemove().w(500).h(400),
-        fileList = wList(460, "#fff").abs().overflowY("scroll").h(300).w(480).x(10).y(60).bg("#444"),
+        fileList = wList(460, "#fff").abs().overflowY("scroll").overflowX("auto").h(300).w(480).x(10).y(60).bg("#444"),
         load,
         newFile,
         saveFile,
