@@ -10,7 +10,7 @@ function wMenuButton(name, group) {
         that.closeAll(myIndex);
         that.menu.move(0, that.getH());
         that.menu.show(true);
-    }).hoverEffect(true).rel();
+    }).hoverEffect({color: "#888"}).rel();
 
     that.closeAll = function (myIndex) {
         var i;

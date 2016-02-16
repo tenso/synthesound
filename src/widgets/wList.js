@@ -3,8 +3,9 @@
 /*global gLabel*/
 
 //FIXME: make w() and color() func: "problem" need to change all childNodes.
-function wMenu(width, textColor) {
-    var that = gContainer().abs().bg("#fff");
+function wList(width, textColor) {
+    var that = gContainer().abs().bg("#fff"),
+        selected;
 
     //FIXME: buildButton changes that!
     function buildButton(string, callback) {
@@ -15,20 +16,23 @@ function wMenu(width, textColor) {
             that.nextRow();
         }
         entry = gLabel(string).textAlign("left").color(textColor || "#000").minWidth(width || 100);
-        if (callback) {
-            entry.onmousedown = callback;
-        }
-
-        entry.hoverEffect({color: "#fff", background: "#444"});
+        entry.onmousedown = function () {
+            if (selected) {
+                selected.bg("");
+            }
+            selected = entry;
+            selected.bg("#666");
+            if (typeof callback === "function") {
+                callback(string);
+            }
+        };
+        entry.hoverEffect({color: "#aaa"});
         return entry;
     }
 
-    function removeListener() {
-        that.remove();
-    }
-
     that.addRow = function (string, callback) {
-        that.addTabled(buildButton(string, callback));
+        var button = buildButton(string, callback);
+        that.addTabled(button);
         return that;
     };
 
@@ -39,16 +43,21 @@ function wMenu(width, textColor) {
         return that;
     };
 
-    that.removeOnLeave = function (value) {
-        if (value) {
-            that.addEventListener("mouseleave", removeListener);
-        } else {
-            that.removeEventListener("mouseleave", removeListener);
+    that.deselect = function () {
+        if (selected) {
+            selected.bg("#fff");
+            selected = undefined;
         }
         return that;
     };
 
+    that.selected = function () {
+        if (selected) {
+            return selected.getValue();
+        }
+        return "";
+    };
+
     that.typeIs = "wMenu";
-    that.removeOnLeave(true);
     return that;
 }

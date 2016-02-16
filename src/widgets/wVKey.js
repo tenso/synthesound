@@ -51,7 +51,7 @@ function wVKey(keyDown, keyUp) {
             key.w(24).h(96);
         }
         keyX = nextX;
-        key.pressEffect(true, undefined, "#999");
+        key.pressEffect({background: "#999"});
 
         if (flat) {
             nextX += gui.getStyleInt(key, "width");

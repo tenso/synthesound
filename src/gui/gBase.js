@@ -3,45 +3,43 @@
 
 /*NOTE: cant use getW/getX etc functions unless element as already in the DOM or has explicit w/h set*/
 
+
+
 function gBase(type) {
     var that = gStyle(type),
-        originalColor,
-        hoverColor,
-        pressColor,
-        pressBg,
-        originalPressColor,
-        originalPressBg;
+        hoverStyle,
+        pressStyle;
 
     function mouseEnterCallback() {
-        originalColor = that.style.color;
-        that.style.color = hoverColor || "#888";
+        if (hoverStyle) {
+            that.setStyleStateChanges(hoverStyle);
+            that.pushStyle();
+        }
     }
 
     function mouseLeaveCallback() {
-        that.style.color = originalColor;
+        if (hoverStyle) {
+            that.popStyle();
+        }
     }
 
     function mouseDownCallback() {
-        originalPressColor = that.style.color;
-        originalPressBg = that.style.background;
-
-        if (pressColor) {
-            that.style.color = pressColor;
-        }
-        if (pressBg) {
-            that.style.background = pressBg;
+        if (pressStyle) {
+            that.setStyleStateChanges(pressStyle);
+            that.pushStyle();
         }
     }
 
     function mouseUpCallback() {
-        that.style.color = originalPressColor;
-        that.style.background = originalPressBg;
+        if (pressStyle) {
+            that.popStyle();
+        }
     }
 
 
-    that.hoverEffect = function (value, color) {
-        hoverColor = color;
-        if (value) {
+    that.hoverEffect = function (style) {
+        hoverStyle = style;
+        if (style) {
             that.addEventListener("mouseenter", mouseEnterCallback);
             that.addEventListener("mouseleave", mouseLeaveCallback);
         } else {
@@ -52,10 +50,9 @@ function gBase(type) {
         return that;
     };
 
-    that.pressEffect = function (value, color, bg) {
-        pressColor = color;
-        pressBg = bg;
-        if (value) {
+    that.pressEffect = function (style) {
+        pressStyle = style;
+        if (style) {
             that.addEventListener("mousedown", mouseDownCallback);
             that.addEventListener("mouseup", mouseUpCallback);
             that.addEventListener("mouseleave", mouseUpCallback);

@@ -65,6 +65,7 @@ var appTexts = {
             help: "Help",
             about: "About",
             file: "File",
+            export: "Export",
             stop: "Stop",
             rec: "Rec",
             log: "Log",
@@ -81,6 +82,9 @@ var appTexts = {
             cancel: "Cancel",
             ok: "Ok",
             online: "Online",
+            files: "Files",
+            saveNew: "Save New",
+            "delete": "Delete",
             license: appTexts.buildLicenseText()
         });
         lang.setLanguage("en");

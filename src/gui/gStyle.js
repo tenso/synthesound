@@ -2,9 +2,10 @@
 /*global gui*/
 /*global util*/
 /*global document*/
+/*global gStyleState*/
 
 function gStyle(type) {
-    var that = document.createElement(type || "div"),
+    var that = gStyleState(document.createElement(type || "div")),
         oldDisplay;
 
     util.addMethod(that, "show", function (value) {

@@ -13,6 +13,10 @@ function gLabel(label, type) {
         return that;
     };
 
+    that.getValue = function () {
+        return that.textContent;
+    };
+
     that.typeIs = "gLabel";
     that.setValue(label);
     that.whiteSpace("nowrap").textAlign("center").fontFamily("sans-serif").fontSize(16).color("#444");

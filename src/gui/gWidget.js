@@ -23,7 +23,7 @@ function gWidget() {
                 callback();
             }
             that.remove();
-        }).abs().setClass("gWidgetCloseButton").hoverEffect(true, "#444");
+        }).abs().setClass("gWidgetCloseButton").hoverEffect({color: "#444"});
 
         that.titleRow.add(button);
         return that;

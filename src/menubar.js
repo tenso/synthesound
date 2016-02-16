@@ -55,7 +55,7 @@ function menubar(contentContainer) {
         }
     });
 
-    file = wMenuButton(lang.tr("file"), menus);
+    file = wMenuButton(lang.tr("export"), menus);
 
     loadInput = files.createLoadDataInput(function (data) {
         //FIXME: make event: contentContainer used badly

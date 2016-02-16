@@ -5,20 +5,18 @@
 /*global net*/
 /*global user*/
 /*global gLabel*/
-/*global wMenu*/
+/*global wList*/
 /*global nameDialog*/
 "use strict";
 
 //FIXME: contentContainer!!!
 function fileDialog(contentContainer) {
-    var that = gWidget().setTitle(lang.tr("files")).addRemove().w(600).h(400),
-        fileList = wMenu(460, "#fff").abs().overflowY("scroll").removeOnLeave(0).h(300).w(480).x(10).y(60).bg("#444"),
+    var that = gWidget().setTitle(lang.tr("files")).addRemove().w(500).h(400),
+        fileList = wList(460, "#fff").abs().overflowY("scroll").h(300).w(480).x(10).y(60).bg("#444"),
         load,
         newFile,
         deleteFile,
         status = gLabel().abs().top(35).right(10),
-        selectedFile = gLabel().abs().bottom(10).left(10),
-        selected = "",
         dialog;
 
     function updateFromUser() {
@@ -26,10 +24,7 @@ function fileDialog(contentContainer) {
             files = user.files();
 
         function addFile(file) {
-            fileList.addRow(file, function () {
-                selected = file;
-                selectedFile.setValue(selected);
-            });
+            fileList.addRow(file);
         }
 
         fileList.clear();
@@ -58,7 +53,7 @@ function fileDialog(contentContainer) {
     }
 
     load = gButton(lang.tr("load"), function () {
-        net.read("users/" + user.email() + "/files/" + selected, function (err, result) {
+        net.read("users/" + user.email() + "/files/" + fileList.selected(), function (err, result) {
             if (err) {
                 status.setValue(err);
                 log.error("load file:" + err);
@@ -89,6 +84,11 @@ function fileDialog(contentContainer) {
     }).abs().bottom(10).right(100);
 
     deleteFile = gButton(lang.tr("delete"), function () {
+        if (!fileList.selected()) {
+            return;
+        }
+        var selected = fileList.selected();
+        fileList.deselect();
         net.del("users/" + user.email() + "/files/" + selected, function (err, result) {
             if (err) {
                 status.setValue(err);
@@ -103,11 +103,11 @@ function fileDialog(contentContainer) {
             }
             user.refresh();
         });
-    }).abs().bottom(10).right(200);
+    }).abs().bottom(10).left(10);
 
     that.add(fileList);
     that.add(status).add(deleteFile);
-    that.add(selectedFile).add(newFile).add(load);
+    that.add(newFile).add(load);
 
     user.on("updated", function (doc) {
         updateFromUser();
