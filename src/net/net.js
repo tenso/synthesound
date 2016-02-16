@@ -64,6 +64,18 @@ var net = {
         net.makeRequest(req, cb);
     },
 
+    update: function (path, args, cb) {
+        var req = new Request(path, {
+            method: "PATCH",
+            credentials: "same-origin",
+            body: JSON.stringify(args),
+            headers: new Headers({
+                "Content-Type": "application/json"
+            })
+        });
+        net.makeRequest(req, cb);
+    },
+
     del: function (path, cb) {
         var req = new Request(path, {
             method: "DELETE",
