@@ -1,3 +1,5 @@
+/*jslint node: true */
+
 /*global gWidget*/
 /*global gInput*/
 /*global gButton*/
@@ -6,6 +8,7 @@
 /*global net*/
 /*global user*/
 /*global gLabel*/
+
 "use strict";
 
 function loginDialog() {

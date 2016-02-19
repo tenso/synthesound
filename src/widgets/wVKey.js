@@ -1,9 +1,12 @@
-"use strict";
+/*jslint node: true */
+
 /*global gui*/
 /*global note*/
 /*global document*/
 /*global util*/
 /*global gBase*/
+
+"use strict";
 
 function wVKey(keyDown, keyUp) {
     var that = gBase().setClass("vkey-container").h(160),

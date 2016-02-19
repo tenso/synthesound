@@ -1,6 +1,9 @@
-"use strict";
+/*jslint node: true */
+
 /*global sBase*/
 /*global util*/
+
+"use strict";
 
 function sAdsr(args) {
     var that = sBase("adsr"),

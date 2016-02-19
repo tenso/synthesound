@@ -1,6 +1,9 @@
-"use strict";
+/*jslint node: true */
+
 /*global sBase*/
 /*global window*/
+
+"use strict";
 
 function sDebug() {
     var that = sBase("debug"),

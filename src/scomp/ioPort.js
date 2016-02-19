@@ -1,6 +1,9 @@
-"use strict";
+/*jslint node: true */
+
 /*global gIO*/
 /*global gBase*/
+
+"use strict";
 
 function ioPort(uid, sComp, isOut, portType) {
     var that = gBase();

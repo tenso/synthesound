@@ -1,7 +1,10 @@
-"use strict";
+/*jslint node: true */
+
 /*global sAdsr*/
 /*global sCBase*/
 /*global gSlider*/
+
+"use strict";
 
 function sCAdsr(container, uid) {
     var adsr = sAdsr({a: 0.01, d: 0.15, s: 0.5, r: 0.01}),

@@ -1,8 +1,11 @@
-"use strict";
+/*jslint node: true */
+
 /*global sOp*/
 /*global sCBase*/
 /*global gButton*/
 /*global gButtonGroup*/
+
+"use strict";
 
 function sCOp(container, uid) {
     var out = sOp(),

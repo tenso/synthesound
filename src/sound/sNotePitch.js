@@ -1,6 +1,9 @@
-"use strict";
+/*jslint node: true */
+
 /*global sBase*/
 /*global note*/
+
+"use strict";
 
 function sNotePitch(args) {
     var that = sBase("notePitch"),

@@ -1,3 +1,5 @@
+/*jslint node: true */
+
 /*global gWidget*/
 /*global gInput*/
 /*global gButton*/
@@ -5,6 +7,7 @@
 /*global log*/
 /*global gLabel*/
 /*global gBase*/
+
 "use strict";
 
 function nameDialog(cb, parent) {

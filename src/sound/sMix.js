@@ -1,5 +1,8 @@
-"use strict";
+/*jslint node: true */
+
 /*global sBase*/
+
+"use strict";
 
 function sMix(args) {
     var that = sBase("mix");

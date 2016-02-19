@@ -1,9 +1,12 @@
-"use strict";
+/*jslint node: true */
+
 /*global sGen*/
 /*global sCBase*/
 /*global gButton*/
 /*global gButtonGroup*/
 /*global gInput*/
+
+"use strict";
 
 function sCGen(container, uid) {
     var out = sGen({freq: 110, amp: 0.25, type: "sine"}),

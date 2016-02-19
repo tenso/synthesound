@@ -1,7 +1,10 @@
-"use strict";
+/*jslint node: true */
+
 /*global sCBase*/
 /*global gScope*/
 /*global sMix*/
+
+"use strict";
 
 function sCScope(container, uid) {
     var mix = sMix(),

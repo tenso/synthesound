@@ -1,9 +1,13 @@
-"use strict";
+/*jslint node: true */
+
 /*global util*/
 /*global gBase*/
 /*global window*/
 /*global log*/
 /*global note*/
+
+"use strict";
+
 function wNoteInfoBar(minNote, maxNote) {
     var that = gBase().bg("#888"),
         canvas = gBase("canvas").addTo(that).w("100%").h("100%"),

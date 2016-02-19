@@ -1,4 +1,5 @@
-"use strict";
+/*jslint node: true */
+
 /*global log*/
 /*global gui*/
 /*global gBase*/
@@ -7,6 +8,8 @@
 /*global document*/
 /*global util*/
 /*global gContainer*/
+
+"use strict";
 
 function gWidget() {
     var that = gContainer(),

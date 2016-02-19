@@ -1,4 +1,5 @@
-"use strict";
+/*jslint node: true */
+
 /*global gWidget*/
 /*global inPort*/
 /*global outPort*/
@@ -9,6 +10,8 @@
 /*global sSequence*/
 /*global util*/
 /*global event*/
+
+"use strict";
 
 //FIXME: rename all sC to sG
 var scBaseUID = uidGen();

@@ -1,6 +1,10 @@
-"use strict";
+/*jslint node: true */
+
 /*global gStyle*/
 /*global event*/
+
+"use strict";
+
 /*NOTE: cant use getW/getX etc functions unless element as already in the DOM or has explicit w/h set*/
 
 function gBase(type) {

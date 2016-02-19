@@ -1,7 +1,9 @@
-"use strict";
+/*jslint node: true */
 
 /*global gWidget*/
 /*global gLabel*/
+
+"use strict";
 
 function wNote(note) {
     var that = gWidget().addRemove(),

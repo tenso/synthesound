@@ -1,4 +1,5 @@
-"use strict";
+/*jslint node: true */
+
 /*global gContainer*/
 /*global gLabel*/
 /*global gButton*/
@@ -15,6 +16,8 @@
 /*global gSlider*/
 /*global note*/
 /*global wNoteInfoBar*/
+
+"use strict";
 
 function workbar() {
     var that = gContainer(),

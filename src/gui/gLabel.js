@@ -1,5 +1,8 @@
-"use strict";
+/*jslint node: true */
+
 /*global gBase*/
+
+"use strict";
 
 function gLabel(label, type) {
     var that = gBase();

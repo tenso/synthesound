@@ -1,5 +1,8 @@
-"use strict";
+/*jslint node: true */
+
 /*global sBase*/
+
+"use strict";
 
 function sOp(args) {
     var that = sBase("op");

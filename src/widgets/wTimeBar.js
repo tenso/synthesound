@@ -1,4 +1,5 @@
-"use strict";
+/*jslint node: true */
+
 /*global util*/
 /*global gBase*/
 /*global window*/
@@ -6,6 +7,8 @@
 /*global gui*/
 /*global document*/
 /*global timeSelection*/
+
+"use strict";
 
 function wTimeBar() {
     var that = gBase().bg("#888"),

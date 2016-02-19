@@ -1,6 +1,9 @@
-"use strict";
+/*jslint node: true */
+
 /*global gContainer*/
 /*global gLabel*/
+
+"use strict";
 
 //FIXME: make w() and color() func: "problem" need to change all childNodes.
 function wList(width, textColor) {

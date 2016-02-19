@@ -1,7 +1,10 @@
-"use strict";
+/*jslint node: true */
+
 /*global Float32Array*/
 /*global util*/
 /*global log*/
+
+"use strict";
 
 function sBase(sId) {
     var that = {},

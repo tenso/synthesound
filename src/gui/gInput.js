@@ -1,7 +1,10 @@
-"use strict";
+/*jslint node: true */
+
 /*global gBase*/
 /*global gLabel*/
 /*global util*/
+
+"use strict";
 
 function gInput(value, callback, label) {
     var that = gBase().fontFamily("monospace"),

@@ -1,7 +1,10 @@
-"use strict";
+/*jslint node: true */
+
 /*global sMix*/
 /*global gSlider*/
 /*global sCBase*/
+
+"use strict";
 
 function sCOut(container, uid) {
     var mix = sMix(),

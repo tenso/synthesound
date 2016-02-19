@@ -1,7 +1,9 @@
-"use strict";
+/*jslint node: true */
 
 /*global test*/
 /*global util*/
+
+"use strict";
 
 function tracker(sampleRate) {
     var that = {},

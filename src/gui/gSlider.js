@@ -1,8 +1,11 @@
-"use strict";
+/*jslint node: true */
+
 /*global gui*/
 /*global gBase*/
 /*global gui*/
 /*global util*/
+
+"use strict";
 
 function gKnob(min, max, callback, horizontal) {
     var that = gBase(),

@@ -1,6 +1,9 @@
-"use strict";
+/*jslint node: true */
+
 /*global test*/
 /*global log*/
+
+"use strict";
 
 var util = {
     isArray: function (obj) {

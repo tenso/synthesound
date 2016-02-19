@@ -1,4 +1,5 @@
-"use strict";
+/*jslint node: true */
+
 /*global gContainer*/
 /*global gButton*/
 /*global wMenuButton*/
@@ -15,6 +16,8 @@
 /*global loginDialog*/
 /*global user*/
 /*global fileDialog*/
+
+"use strict";
 
 function menubar(contentContainer) {
     var that = gContainer().abs().z(100000).w("100%").h(screen.minY).bg("#fff"),

@@ -1,7 +1,10 @@
-"use strict";
+/*jslint node: true */
+
 /*global sConst*/
 /*global gInput*/
 /*global sCBase*/
+
+"use strict";
 
 function sCConst(container, uid) {
     var out = sConst(),

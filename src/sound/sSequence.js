@@ -1,8 +1,11 @@
-"use strict";
+/*jslint node: true */
+
 /*global test*/
 /*global util*/
 /*global log*/
 /*global note*/
+
+"use strict";
 
 function addSequenceDataFunctions(that) {
     var moveStartData = {};

@@ -1,5 +1,8 @@
-"use strict";
+/*jslint node: true */
+
 /*global event*/
+
+"use strict";
 
 function userData() {
     var that = event(),

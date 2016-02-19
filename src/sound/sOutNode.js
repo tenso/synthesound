@@ -1,3 +1,5 @@
+/*jslint node: true */
+
 "use strict";
 
 function sOutNode(audioCtx, channels, frameSize) {

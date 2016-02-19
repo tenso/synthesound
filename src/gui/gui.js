@@ -1,7 +1,10 @@
-"use strict";
+/*jslint node: true */
+
 /*global log*/
 /*global MouseEvent*/
 /*global window*/
+
+"use strict";
 
 var gui = {
     nextZValue: 1,

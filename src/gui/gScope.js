@@ -1,6 +1,9 @@
-"use strict";
+/*jslint node: true */
+
 /*global delayBuffer*/
 /*global gBase*/
+
+"use strict";
 
 function gScope() {
     var that = gBase("canvas"),

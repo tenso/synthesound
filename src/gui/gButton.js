@@ -1,8 +1,11 @@
-"use strict";
+/*jslint node: true */
+
 /*global log*/
 /*global gBase*/
 /*global gui*/
 /*global util*/
+
+"use strict";
 
 function gButtonGroup() {
     var that = [];

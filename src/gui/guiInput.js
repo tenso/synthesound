@@ -1,8 +1,11 @@
-"use strict";
+/*jslint node: true */
+
 /*global test*/
 /*global log*/
 /*global gui*/
 /*global document*/
+
+"use strict";
 
 //NOTE: mouse is relative to container, dont use for nodes not in container.
 function guiInput(container, sizeOfContainerChanged) {

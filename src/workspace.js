@@ -1,4 +1,5 @@
-"use strict";
+/*jslint node: true */
+
 /*global log*/
 /*global test*/
 /*global sOutNode*/
@@ -25,6 +26,8 @@
 /*global gBase*/
 /*global window*/
 /*global note*/
+
+"use strict";
 
 function workspace() {
     var that = gBase(),

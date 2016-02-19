@@ -1,8 +1,11 @@
-"use strict";
+/*jslint node: true */
+
 /*global gui*/
 /*global util*/
 /*global document*/
 /*global gStyleState*/
+
+"use strict";
 
 function gStyle(type) {
     var that = gStyleState(document.createElement(type || "div")),

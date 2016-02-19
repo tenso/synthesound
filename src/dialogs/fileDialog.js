@@ -1,3 +1,5 @@
+/*jslint node: true */
+
 /*global gWidget*/
 /*global gButton*/
 /*global lang*/
@@ -8,6 +10,7 @@
 /*global wList*/
 /*global nameDialog*/
 /*global okDialog*/
+
 "use strict";
 
 //FIXME: contentContainer!!!

@@ -1,6 +1,8 @@
-"use strict";
+/*jslint node: true */
 
 /*global test*/
+
+"use strict";
 
 var mUtil = {
     mod: function (arg, base) {

@@ -1,5 +1,8 @@
-"use strict";
+/*jslint node: true */
+
 /*global window*/
+
+"use strict";
 
 var log = {
     logData: [],

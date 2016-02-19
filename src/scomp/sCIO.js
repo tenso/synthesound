@@ -1,4 +1,5 @@
-"use strict";
+/*jslint node: true */
+
 /*global log*/
 /*global gui*/
 /*global wMenu*/
@@ -6,6 +7,8 @@
 /*global gBase*/
 /*global util*/
 /*global window*/
+
+"use strict";
 
 function sCIO() {
     var that = gBase("canvas"),

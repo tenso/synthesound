@@ -1,4 +1,7 @@
+/*jslint node: true */
+
 /*global log*/
+
 "use strict";
 
 function gStyleState(that) {

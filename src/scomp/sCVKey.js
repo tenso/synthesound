@@ -1,4 +1,5 @@
-"use strict";
+/*jslint node: true */
+
 /*global sNote*/
 /*global gui*/
 /*global note*/
@@ -6,6 +7,8 @@
 /*global sCBase*/
 /*global gLabel*/
 /*global gButton*/
+
+"use strict";
 
 function sCVKey(container, uid) {
     var output = sNote(),

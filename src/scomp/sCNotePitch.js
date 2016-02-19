@@ -1,8 +1,11 @@
-"use strict";
+/*jslint node: true */
+
 /*global sNotePitch*/
 /*global gInput*/
 /*global gLabel*/
 /*global sCBase*/
+
+"use strict";
 
 function sCNotePitch(container, uid) {
     var out = sNotePitch(),

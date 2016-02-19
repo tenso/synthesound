@@ -1,6 +1,9 @@
-"use strict";
+/*jslint node: true */
+
 /*global gButton*/
 /*global wMenu*/
+
+"use strict";
 
 function wMenuButton(name, group) {
     var that,

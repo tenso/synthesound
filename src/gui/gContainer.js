@@ -1,8 +1,11 @@
-"use strict";
+/*jslint node: true */
+
 /*global gui*/
 /*global gBase*/
 /*global gLabel*/
 /*global document*/
+
+"use strict";
 
 function gContainer() {
     var that = gBase();

@@ -1,7 +1,10 @@
-"use strict";
+/*jslint node: true */
+
 /*global sDelay*/
 /*global sCBase*/
 /*global gSlider*/
+
+"use strict";
 
 function sCDelay(container, uid) {
     var delay = sDelay({gain: 0.1, delay: 0.15}),

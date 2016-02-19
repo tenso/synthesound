@@ -1,9 +1,11 @@
-"use strict";
+/*jslint node: true */
 
 /*global Float32Array*/
 /*global log*/
 /*global mUtil*/
 /*global test*/
+
+"use strict";
 
 function delayBuffer(len) {
     var that = {},

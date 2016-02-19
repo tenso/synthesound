@@ -1,6 +1,9 @@
-"use strict";
+/*jslint node: true */
+
 /*global sBase*/
 /*global delayBuffer*/
+
+"use strict";
 
 function sDelay(args) {
     var that = sBase("delay"),

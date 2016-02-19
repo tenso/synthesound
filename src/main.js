@@ -1,4 +1,5 @@
-"use strict";
+/*jslint node: true */
+
 /*global log*/
 /*global test*/
 /*global sCIO*/
@@ -17,6 +18,8 @@
 /*global appTexts*/
 /*global net*/
 /*global userData*/
+
+"use strict";
 
 var app = {
     ver: "1.0",

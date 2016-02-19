@@ -1,8 +1,11 @@
-"use strict";
+/*jslint node: true */
+
 /*global Request*/
 /*global Headers*/
 /*global fetch*/
 /*global log*/
+
+"use strict";
 
 var net = {
     packArgs: function (args) {

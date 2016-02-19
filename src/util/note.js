@@ -1,6 +1,9 @@
-"use strict";
+/*jslint node: true */
+
 /*global test*/
 /*global mUtil*/
+
+"use strict";
 
 var note = {
     noteBase: Math.pow(2, 1 / 12.0),

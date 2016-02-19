@@ -1,5 +1,8 @@
-"use strict";
+/*jslint node: true */
+
 /*global lang*/
+
+"use strict";
 
 var appTexts = {
     buildHelpText: function () {

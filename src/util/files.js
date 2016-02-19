@@ -1,10 +1,13 @@
-"use strict";
+/*jslint node: true */
+
 /*global URL*/
 /*global Blob*/
 /*global FileReader*/
 /*global gui*/
 /*global gBase*/
 /*global document*/
+
+"use strict";
 
 var files = {
     saveUrl: undefined,
