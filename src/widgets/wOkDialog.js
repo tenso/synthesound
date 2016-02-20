@@ -10,24 +10,20 @@
 
 "use strict";
 
-function nameDialog(cb, parent) {
-    var that = gWidget().setTitle(lang.tr("name")).w(360).h(100),
-        name = gInput("", undefined, lang.tr("name")).abs().x(10).y(30).w(340),
-        status = gLabel("").abs().left(10).bottom(10),
+//FIXME: merge with nameDialog!
+function wOkDialog(cb, title, parent) {
+    var that = gWidget().setTitle(title).w(360).h(60),
         ok,
         hider;
 
     ok = gButton(lang.tr("ok"), function () {
         if (typeof cb === "function") {
-            if (name.getValue() !== "") {
-                cb(name.getValue());
-            }
+            cb();
         }
         that.remove();
     }).abs().right(10).bottom(10);
 
-    that.add(name).add(ok);
-    that.add(status);
+    that.add(ok);
 
     if (parent) {
         if (parent.theDialog) {
@@ -40,6 +36,7 @@ function nameDialog(cb, parent) {
     }
 
     that.addRemove();
+
     that.on("removed", function () {
         parent.theDialog = undefined;
         if (parent) {
@@ -47,6 +44,6 @@ function nameDialog(cb, parent) {
         }
     });
 
-    that.y("calc(50% - 50px)").x("calc(50% - 180px)");
+    that.y("calc(50% - 30px)").x("calc(50% - 180px)");
     return that.canMove(false);
 }

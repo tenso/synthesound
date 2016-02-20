@@ -8,8 +8,8 @@
 /*global user*/
 /*global gLabel*/
 /*global wList*/
-/*global nameDialog*/
-/*global okDialog*/
+/*global wNameDialog*/
+/*global wOkDialog*/
 
 "use strict";
 
@@ -114,14 +114,14 @@ function fileDialog(contentContainer) {
     }).abs().bottom(10).right(10);
 
     newFile = gButton(lang.tr("saveNew"), function () {
-        nameDialog(function (name) {
+        wNameDialog(function (name) {
             createFile(name, contentContainer.data());
         }, that);
     }).abs().bottom(10).right(160);
 
     saveFile = gButton(lang.tr("save"), function () {
         if (fileList.selected()) {
-            okDialog(function () {
+            wOkDialog(function () {
                 updateFile(fileList.selected(), contentContainer.data());
             }, lang.tr("save") + ":" + fileList.selected(), that);
         }
@@ -129,7 +129,7 @@ function fileDialog(contentContainer) {
 
     delFileButton = gButton(lang.tr("delete"), function () {
         if (fileList.selected()) {
-            okDialog(function () {
+            wOkDialog(function () {
                 var selected = fileList.selected();
                 fileList.deselect();
                 deleteFile(selected);
