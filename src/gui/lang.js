@@ -23,6 +23,8 @@ var lang = {
         }
         if (lang.strings[lang.language].hasOwnProperty(id)) {
             return lang.strings[lang.language][id];
+        } else {
+            log.warn("no translation for: " + id);
         }
         return id;
     }

@@ -76,19 +76,25 @@ function fileDialog(contentContainer) {
 
     saveFile = gButton(lang.tr("save"), function () {
         if (fileList.selected()) {
-            wOkDialog(function () {
+            wOkDialog(lang.tr("save") + ":" + fileList.selected(), that, function (dialog) {
                 fileOp("update", fileList.selected(), {data: contentContainer.data()});
-            }, lang.tr("save") + ":" + fileList.selected(), that);
+                dialog.remove();
+            });
+        } else {
+            status.setValue(lang.tr("selectFile"));
         }
     }).abs().bottom(10).right(100);
 
     delFileButton = gButton(lang.tr("delete"), function () {
         if (fileList.selected()) {
-            wOkDialog(function () {
+            wOkDialog(lang.tr("delete") + ":" + fileList.selected(), that, function (dialog) {
                 var selected = fileList.selected();
                 fileList.deselect();
                 fileOp("del", selected);
-            }, lang.tr("delete") + ":" + fileList.selected(), that);
+                dialog.remove();
+            });
+        } else {
+            status.setValue(lang.tr("selectFile"));
         }
     }).abs().bottom(10).left(10);
 

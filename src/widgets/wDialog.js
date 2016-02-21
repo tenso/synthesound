@@ -6,7 +6,7 @@
 
 "use strict";
 
-function wModalDialog(title, parent) {
+function wDialog(title, parent) {
     var that = gWidget().setTitle(title),
         status = gLabel("").abs().left(10).bottom(10),
         hider;
@@ -26,25 +26,27 @@ function wModalDialog(title, parent) {
         hider = gBase().bg("rgba(0, 0, 0, 0.5)").w("100%").h("100%").x(0).y(0).abs();
         parent.add(hider);
         parent.add(that);
+
+        that.canMove(false);
+
+        that.on("wChanged", function (w) {
+            that.x("calc(50% - " + parseInt(w / 2, 10) + "px)");
+        });
+
+        that.on("hChanged", function (h) {
+            that.y("calc(50% - " + parseInt(h / 2, 10) + "px)");
+        });
     }
 
     that.addRemove();
     that.on("removed", function () {
-        parent.theDialog = undefined;
         if (parent) {
+            parent.theDialog = undefined;
             parent.undoAdd(hider);
         }
     });
 
-    that.on("wChanged", function (w) {
-        that.x("calc(50% - " + parseInt(w / 2, 10) + "px)");
-    });
-
-    that.on("hChanged", function (h) {
-        that.y("calc(50% - " + parseInt(h / 2, 10) + "px)");
-    });
-
     that.w(360).h(100);
 
-    return that.canMove(false);
+    return that;
 }

@@ -1,4 +1,5 @@
 /*jslint node: true */
+/*jslint es5: true*/
 
 /*global lang*/
 
@@ -88,6 +89,13 @@ var appTexts = {
             files: "Files",
             saveNew: "Save New",
             "delete": "Delete",
+            registerOk: "Registration Ok, check your e-mail for final step",
+            register: "Registration",
+            passwordRepeat: "Repeast password",
+            logout: "Logout",
+            faultyEmail: "Verify email",
+            passwordToShort: "Password is to short, atleast 8 characters",
+            login: "Login",
             license: appTexts.buildLicenseText()
         });
         lang.setLanguage("en");

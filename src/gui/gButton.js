@@ -88,7 +88,7 @@ function gButton(name, callback, isRadio, buttonGroup) {
         }
         that.color(color);
     } else {
-        that.color(colorActive).pressEffect(true);
+        that.color(colorActive).pressEffect({color: color});
     }
 
     that.onmousedown = function (e) {

@@ -16,9 +16,10 @@
 /*global loginDialog*/
 /*global user*/
 /*global fileDialog*/
+/*global registerDialog*/
 
 "use strict";
-
+//FIXME: contentContainer used as workspace!!
 function menubar(contentContainer) {
     var that = gContainer().abs().z(100000).w("100%").h(screen.minY).bg("#fff"),
         online,
@@ -43,11 +44,14 @@ function menubar(contentContainer) {
     };
 
     online = wMenuButton(lang.tr("online"), menus);
-    online.addRow(lang.tr("user"), function () {
+    online.addRow(lang.tr("login"), function () {
         contentContainer.add(loginDialog());
     });
     online.addRow(lang.tr("files"), function () {
         contentContainer.add(fileDialog(contentContainer));
+    });
+    online.addRow(lang.tr("register"), function () {
+        contentContainer.add(registerDialog());
     });
     that.addTabled(online);
 

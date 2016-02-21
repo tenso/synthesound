@@ -12,7 +12,7 @@
 "use strict";
 
 function loginDialog() {
-    var that = gWidget().setTitle(lang.tr("user")).addRemove().w(360).h(160),
+    var that = gWidget().setTitle(lang.tr("login")).addRemove().w(360).h(160),
         email = gInput("", undefined, lang.tr("email")).abs().x(10).y(30).w(340),
         password = gInput("", undefined, lang.tr("password")).abs().x(10).y(80).w(340).type("password"),
         status = gLabel("").abs().left(10).bottom(10),
@@ -48,7 +48,7 @@ function loginDialog() {
                 status.setValue(err);
                 log.error("logout:" + err);
             } else {
-                status.setValue(lang.tr("logged out"));
+                status.setValue(lang.tr("ok"));
                 user.update(result);
             }
         });
