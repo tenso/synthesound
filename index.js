@@ -1,5 +1,4 @@
 /*jslint node: true */
-
 'use strict';
 
 const electron = require('electron');
@@ -14,7 +13,7 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
-    mainWindow = new BrowserWindow({width: 1920, height: 1080, icon: "synth.ico"});
+    mainWindow = new BrowserWindow({width: 1920, height: 1080, icon: __dirname + "/src/favicon.ico"});
     mainWindow.setMenu(null);
     mainWindow.loadURL('file://' + __dirname + '/src/index.html');
 

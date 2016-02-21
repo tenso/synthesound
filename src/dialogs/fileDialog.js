@@ -40,89 +40,44 @@ function fileDialog(contentContainer) {
         }
     }
 
-    //FIXME: break out and refactor as they are very similar
-    function deleteFile(fileName) {
-        net.del("users/" + user.email() + "/files/" + fileName, function (err, result) {
+    function fileOp(opName, fileName, data, okCb) {
+        net[opName]("users/" + user.email() + "/files/" + fileName, data, function (err, result) {
             if (err) {
                 status.setValue(err);
-                log.error("delete file:" + err);
+                log.error(opName + ": " + err);
             } else {
                 log.d(result);
                 if (result.hasOwnProperty("ok") && !result.ok) {
                     status.setValue(lang.tr(result.error.info));
                 } else {
-                    status.setValue("file deleted");
+                    status.setValue(lang.tr("ok"));
+                    if (typeof okCb === "function") {
+                        okCb(result);
+                    }
                 }
             }
             user.refresh();
-        });
-    }
-
-    function createFile(fileName, data) {
-        net.create("users/" + user.email() + "/files/" + fileName, {data: data}, function (err, result) {
-            if (err) {
-                status.setValue(err);
-                log.error("create file:" + err);
-            } else {
-                log.d(result);
-                if (result.hasOwnProperty("ok") && !result.ok) {
-                    status.setValue(lang.tr(result.error.info));
-                } else {
-                    status.setValue("file created");
-                }
-            }
-            user.refresh();
-        });
-    }
-
-    function loadFile(fileName) {
-        net.read("users/" + user.email() + "/files/" + fileName, function (err, result) {
-            if (err) {
-                status.setValue(err);
-                log.error("load file:" + err);
-            } else {
-                if (result.hasOwnProperty("ok") && !result.ok) {
-                    status.setValue(lang.tr(result.error.info));
-                } else {
-                    status.setValue("got file");
-                    contentContainer.loadWorkspace(JSON.parse(result.data));
-                }
-            }
-        });
-    }
-
-    function updateFile(fileName, data) {
-        net.update("users/" + user.email() + "/files/" + fileName, {data: data}, function (err, result) {
-            if (err) {
-                status.setValue(err);
-                log.error("update file:" + err);
-            } else {
-                log.d(result);
-                if (result.hasOwnProperty("ok") && !result.ok) {
-                    status.setValue(lang.tr(result.error.info));
-                } else {
-                    status.setValue("file updated");
-                }
-            }
         });
     }
 
     load = gButton(lang.tr("load"), function () {
         if (fileList.selected()) {
-            loadFile(fileList.selected());
+            fileOp("read", fileList.selected(), {}, function (result) {
+                contentContainer.loadWorkspace(JSON.parse(result.data));
+            });
         }
     }).abs().bottom(10).right(10);
 
     newFile = gButton(lang.tr("saveNew"), function () {
         wNameDialog(function (name) {
-            createFile(name, contentContainer.data());
+            fileOp("create", name, {data: contentContainer.data()});
         }, that);
     }).abs().bottom(10).right(160);
 
     saveFile = gButton(lang.tr("save"), function () {
         if (fileList.selected()) {
             wOkDialog(function () {
-                updateFile(fileList.selected(), contentContainer.data());
+                fileOp("update", fileList.selected(), {data: contentContainer.data()});
             }, lang.tr("save") + ":" + fileList.selected(), that);
         }
     }).abs().bottom(10).right(100);
@@ -132,7 +87,7 @@ function fileDialog(contentContainer) {
             wOkDialog(function () {
                 var selected = fileList.selected();
                 fileList.deselect();
-                deleteFile(selected);
+                fileOp("del", selected);
             }, lang.tr("delete") + ":" + fileList.selected(), that);
         }
     }).abs().bottom(10).left(10);

@@ -1,4 +1,5 @@
 /*jslint node: true */
+/*jslint es5: true*/
 
 /*global Request*/
 /*global Headers*/
@@ -79,7 +80,11 @@ var net = {
         net.makeRequest(req, cb);
     },
 
-    del: function (path, cb) {
+    del: function (path, args, cb) {
+        if (typeof args === "function") {
+            cb = args;
+            args = {};
+        }
         var req = new Request(path, {
             method: "DELETE",
             credentials: "same-origin"
