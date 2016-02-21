@@ -22,11 +22,11 @@
 "use strict";
 
 var app = {
-    ver: "1.0",
+    ver: "1.0"
 };
 
-var screen = {
-    minY: 24, /*dont allow stuff behind topmenu*/
+var appScreen = {
+    minY: 24 /*dont allow stuff behind topmenu*/
 };
 
 var user = userData();

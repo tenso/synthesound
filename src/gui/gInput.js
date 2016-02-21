@@ -32,6 +32,9 @@ function gInput(value, callback, label) {
     };
 
     that.getValue = function () {
+        if (!input.value) {
+            return "";
+        }
         return input.value;
     };
 

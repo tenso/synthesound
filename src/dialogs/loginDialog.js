@@ -33,10 +33,10 @@ function loginDialog() {
         user.storeEmail(email.getValue());
         net.read("login", {email: email.getValue(), password: password.getValue()}, function (err, result) {
             if (err) {
-                status.setValue(err);
+                status.setValue(lang.tr("error") + " " + err);
                 log.error("login:" + err);
             } else {
-                status.setValue(lang.tr("logged in"));
+                status.setValue(lang.tr("ok"));
                 user.update(result);
             }
         });
@@ -45,7 +45,7 @@ function loginDialog() {
     logout = gButton(lang.tr("logout"), function () {
         net.read("logout", function (err, result) {
             if (err) {
-                status.setValue(err);
+                status.setValue(lang.tr("error") + " " + err);
                 log.error("logout:" + err);
             } else {
                 status.setValue(lang.tr("ok"));

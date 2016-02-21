@@ -13,7 +13,7 @@
 function sCVKey(container, uid) {
     var output = sNote(),
         that = sCBase(container, "sCVKey", output, uid),
-        currentNote = gLabel("--").abs().move(12, 50).setSize(40, 20).bg("#888").color("#000").border("2px solid #888").radius(4),
+        currentNote = gLabel("--").abs().move(12, 50).setSize(40, 20).bg("#888").color("#000").setBorder("2px solid #888").radius(4),
         isDown = false,
         keyboard,
         noteDisplay = {

@@ -16,7 +16,7 @@
 /*global sCNotePitch*/
 /*global wMenu*/
 /*global app*/
-/*global screen*/
+/*global appScreen*/
 /*global gIO*/
 /*global util*/
 /*global lang*/
@@ -416,7 +416,7 @@ function workspace() {
     //callbacks
     that.onworkspacechanged = undefined;
 
-    that.setClass("workspace").top(screen.minY).h("100%");
+    that.setClass("workspace").top(appScreen.minY).h("100%");
     that.typeIs = "workspace";
 
     return that;

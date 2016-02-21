@@ -79,11 +79,11 @@ function sCBase(container, type, sComp, uid) {
     };
 
     that.select = function () {
-        that.border("2px solid #8f8");
+        that.setBorder("2px solid #8f8");
     };
 
     that.unselect = function () {
-        that.border("2px solid #fff");
+        that.setBorder("2px solid #fff");
     };
 
     that.setAndSaveArgs = function (args, isDuration, open) {

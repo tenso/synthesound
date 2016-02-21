@@ -24,7 +24,24 @@ var net = {
         }
         return str;
     },
+    checkRequest: function (cb) {
+        if (typeof Request !== "function") {
+            log.error("Request not defined");
+            if (typeof cb === "function") {
+                cb("reqNotDefined");
+            }
+            return false;
+        }
+        return true;
+    },
     makeRequest: function (req, cb) {
+        if (typeof fetch !== "function") {
+            log.error("fetch not defined");
+            if (typeof cb === "function") {
+                cb("fetchNotDefined");
+            }
+            return;
+        }
         fetch(req).then(function (response) {
             if (response.ok && response.status === 200) {
                 response.json().then(function (json) {
@@ -45,6 +62,9 @@ var net = {
             cb = args;
             args = {};
         }
+        if (!net.checkRequest(cb)) {
+            return;
+        }
         var req = new Request(path, {
             method: "POST",
             credentials: "same-origin",
@@ -60,6 +80,9 @@ var net = {
         if (typeof args === "function") {
             cb = args;
             args = {};
+        }
+        if (!net.checkRequest(cb)) {
+            return;
         }
         var req = new Request(path + net.packArgs(args), {
             method: "GET",

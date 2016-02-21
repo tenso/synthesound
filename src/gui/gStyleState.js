@@ -14,11 +14,7 @@ function gStyleState(that) {
 
         for (change in styleMap) {
             if (styleMap.hasOwnProperty(change)) {
-                if (that.style.hasOwnProperty(change)) {
-                    style[change] = that.style[change];
-                } else {
-                    log.error("style has no property:" + change);
-                }
+                style[change] = that.style[change];
             }
         }
         return style;
@@ -33,11 +29,7 @@ function gStyleState(that) {
         var change;
         for (change in styleMap) {
             if (styleMap.hasOwnProperty(change)) {
-                if (that.style.hasOwnProperty(change)) {
-                    that.style[change] = styleMap[change];
-                } else {
-                    log.error("style has no property:" + change);
-                }
+                that.style[change] = styleMap[change];
             }
         }
         return that;

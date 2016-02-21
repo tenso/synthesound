@@ -7,7 +7,7 @@
 /*global gLabel*/
 /*global wNote*/
 /*global app*/
-/*global screen*/
+/*global appScreen*/
 /*global files*/
 /*global lang*/
 /*global log*/
@@ -21,7 +21,7 @@
 "use strict";
 //FIXME: contentContainer used as workspace!!
 function menubar(contentContainer) {
-    var that = gContainer().abs().z(100000).w("100%").h(screen.minY).bg("#fff"),
+    var that = gContainer().abs().z(100000).w("100%").h(appScreen.minY).bg("#fff"),
         online,
         file,
         about,

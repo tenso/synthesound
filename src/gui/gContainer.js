@@ -47,7 +47,7 @@ function gContainer() {
         var cont = gBase("td").setClass("gContainerCell"),
             contentToAdd = content;
 
-        if (label !== "") {
+        if (typeof label === "string" && label !== "") {
             contentToAdd = makeLabeledCont(content, label);
         }
 

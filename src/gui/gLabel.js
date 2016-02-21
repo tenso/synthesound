@@ -8,10 +8,12 @@ function gLabel(label, type) {
     var that = gBase();
 
     that.setValue = function (str) {
-        if (type === "html") {
-            that.innerHTML = str;
-        } else {
-            that.textContent = str;
+        if (typeof str === "string") {
+            if (type === "html") {
+                that.innerHTML = str;
+            } else {
+                that.textContent = str;
+            }
         }
         return that;
     };
@@ -22,6 +24,7 @@ function gLabel(label, type) {
 
     that.typeIs = "gLabel";
     that.setValue(label);
+
     that.whiteSpace("nowrap").textAlign("center").fontFamily("sans-serif").fontSize(16).color("#444");
     that.cursor("default");
     return that;

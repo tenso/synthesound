@@ -70,7 +70,7 @@ function gKnob(min, max, callback, horizontal) {
     };
 
     that.typeIs = "gKnob";
-    that.setClass("button-class").rel().top(0).border("1px solid #000");
+    that.setClass("button-class").rel().top(0).setBorder("1px solid #000");
 
     if (horizontal) {
         that.w(20).h(9);
@@ -107,7 +107,7 @@ function gSlider(val, min, max, callback, horizontal) {
     } else {
         that.h(100).w(10);
     }
-    that.bg("#aaa").border("1px solid #000").radius(4);
+    that.bg("#aaa").setBorder("1px solid #000").radius(4);
     that.typeIs = "gSlider";
     that.add(knob);
     that.setValue(val, true);

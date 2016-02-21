@@ -107,6 +107,10 @@ var util = {
     },
 
     addMethod: function (obj, name, func) {
+        if (typeof func !== "function") {
+            log.error("not a function:" + func);
+            return;
+        }
         if (obj[name]) {
             log.error("already have:" + name);
         } else {

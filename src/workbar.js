@@ -4,7 +4,7 @@
 /*global gLabel*/
 /*global gButton*/
 /*global lang*/
-/*global screen*/
+/*global appScreen*/
 /*global wTimeBar*/
 /*global util*/
 /*global gInput*/
@@ -444,8 +444,8 @@ function workbar() {
         var newY = y;
         that.top(newY);
 
-        if (that.getTop() < screen.minY) {
-            newY = screen.minY;
+        if (that.getTop() < appScreen.minY) {
+            newY = appScreen.minY;
             that.top(newY);
         }
 

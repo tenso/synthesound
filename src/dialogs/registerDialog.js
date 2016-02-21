@@ -44,7 +44,7 @@ function registerDialog() {
 
         net.read("register", {email: email.getValue(), password: password.getValue()}, function (err, result) {
             if (err) {
-                status.setValue(err);
+                status.setValue(lang.tr("error") + " " + err);
                 log.error("register:" + err);
             } else {
                 if (result.hasOwnProperty("ok") && !result.ok) {

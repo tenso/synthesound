@@ -206,7 +206,7 @@ function gStyle(type) {
         return that;
     });
 
-    util.addMethod(that, "border", function (value) {
+    util.addMethod(that, "setBorder", function (value) {
         that.style.border = value;
         return that;
     });

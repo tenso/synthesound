@@ -16,12 +16,12 @@
 //FIXME: contentContainer!!!
 function fileDialog(contentContainer) {
     var that = gWidget().setTitle(lang.tr("files")).addRemove().w(500).h(400),
-        fileList = wList(460, "#fff").abs().overflowY("scroll").overflowX("auto").h(300).w(480).x(10).y(60).bg("#444"),
+        fileList = wList(460, "#fff").abs().overflowY("scroll").overflowX("auto").h(300).w(480).x(10).y(40).bg("#444"),
         load,
         newFile,
         saveFile,
         delFileButton,
-        status = gLabel().abs().top(35).right(10),
+        status = gLabel().abs().bottom(35).left(10),
         dialog;
 
     function updateFromUser() {
@@ -43,7 +43,7 @@ function fileDialog(contentContainer) {
     function fileOp(opName, fileName, data, okCb) {
         net[opName]("users/" + user.email() + "/files/" + fileName, data, function (err, result) {
             if (err) {
-                status.setValue(err);
+                status.setValue(lang.tr("error") + " " + err);
                 log.error(opName + ": " + err);
             } else {
                 log.d(result);
