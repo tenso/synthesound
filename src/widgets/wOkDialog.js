@@ -1,6 +1,6 @@
 /*jslint node: true */
 
-/*global gWidget*/
+/*global wModalDialog*/
 /*global gInput*/
 /*global gButton*/
 /*global lang*/
@@ -10,11 +10,9 @@
 
 "use strict";
 
-//FIXME: merge with nameDialog!
-function wOkDialog(cb, title, parent) {
-    var that = gWidget().setTitle(title).w(360).h(60),
-        ok,
-        hider;
+function wOkDialog(cb, name, parent) {
+    var that = wModalDialog(name, parent),
+        ok;
 
     ok = gButton(lang.tr("ok"), function () {
         if (typeof cb === "function") {
@@ -25,25 +23,5 @@ function wOkDialog(cb, title, parent) {
 
     that.add(ok);
 
-    if (parent) {
-        if (parent.theDialog) {
-            parent.theDialog.remove();
-        }
-        parent.theDialog = that;
-        hider = gBase().bg("rgba(0, 0, 0, 0.5)").w("100%").h("100%").x(0).y(0).abs();
-        parent.add(hider);
-        parent.add(that);
-    }
-
-    that.addRemove();
-
-    that.on("removed", function () {
-        parent.theDialog = undefined;
-        if (parent) {
-            parent.undoAdd(hider);
-        }
-    });
-
-    that.y("calc(50% - 30px)").x("calc(50% - 180px)");
-    return that.canMove(false);
+    return that;
 }

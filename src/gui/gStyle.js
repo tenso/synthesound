@@ -4,11 +4,12 @@
 /*global util*/
 /*global document*/
 /*global gStyleState*/
+/*global event*/
 
 "use strict";
 
 function gStyle(type) {
-    var that = gStyleState(document.createElement(type || "div")),
+    var that = event(gStyleState(document.createElement(type || "div"))),
         oldDisplay;
 
     util.addMethod(that, "show", function (value) {
@@ -156,7 +157,9 @@ function gStyle(type) {
     });
 
     util.addMethod(that, "w", function (value) {
-        return gui.stylePxIfInt(that, "width", value);
+        gui.stylePxIfInt(that, "width", value);
+        that.emit("wChanged", that.getW());
+        return that;
     });
 
     util.addMethod(that, "getW", function () {
@@ -170,7 +173,9 @@ function gStyle(type) {
     });
 
     util.addMethod(that, "h", function (value) {
-        return gui.stylePxIfInt(that, "height", value);
+        gui.stylePxIfInt(that, "height", value);
+        that.emit("hChanged", that.getH());
+        return that;
     });
 
     util.addMethod(that, "getH", function () {
