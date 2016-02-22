@@ -20,6 +20,7 @@ var appTexts = {
         addCommand("space", "play/pause");
         addTitle("\n");
         addTitle("Tracker");
+        addCommand("leftdrag", "add new state on release");
         addCommand("ctrl-leftclick", "move current time");
         addCommand("ctrl-a", "select all states");
         addCommand("ctrl-c", "copy selected states");
@@ -96,6 +97,8 @@ var appTexts = {
             faultyEmail: "Verify email",
             passwordToShort: "Password is to short, atleast 8 characters",
             login: "Login",
+            error: "Error",
+            selectFile: "Select a file",
             license: appTexts.buildLicenseText()
         });
         lang.setLanguage("en");
