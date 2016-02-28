@@ -105,6 +105,6 @@ function fileDialog(contentContainer) {
     user.on("updated", function (doc) {
         updateFromUser();
     });
-    updateFromUser();
+    user.refresh();
     return that;
 }

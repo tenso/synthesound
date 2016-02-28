@@ -1,7 +1,8 @@
 /*jslint node: true */
 
 /*global event*/
-
+/*global net*/
+/*global log*/
 "use strict";
 
 function userData() {
@@ -46,7 +47,7 @@ function userData() {
         return password;
     };
 
-    that.refresh = function() {
+    that.refresh = function () {
         net.read("self", function (err, result) {
             if (err) {
                 log.error("unabled to fetch self");
@@ -61,14 +62,14 @@ function userData() {
                             if (err) {
                                 log.error("login:" + err);
                             } else {
-                                user.update(result);
+                                that.update(result);
                             }
                         });
                     }
                 }
-                user.update(result);
+                that.update(result);
             }
         });
-    }
+    };
     return that;
 }

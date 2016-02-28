@@ -90,7 +90,7 @@ var appTexts = {
             files: "Files",
             saveNew: "Save New",
             "delete": "Delete",
-            registerOk: "Registration Ok, check your e-mail for final step",
+            registerOk: "Ok, check e-mail (spam folder) for last step.",
             register: "Registration",
             passwordRepeat: "Repeast password",
             logout: "Logout",
