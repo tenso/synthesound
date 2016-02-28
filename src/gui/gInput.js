@@ -75,6 +75,18 @@ function gInput(value, callback, label) {
             callback(input.value);
         }
     };
+
+    that.addEventListener("keydown", function (e) {
+        if (e.keyCode === 13) {
+            that.emit("enter");
+        }
+    });
+
+    that.focus = function () {
+        input.focus();
+        return that;
+    };
+
     that.add(inLabel);
     that.add(input);
     input.typeIs = "gInput";

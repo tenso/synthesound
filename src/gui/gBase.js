@@ -1,6 +1,7 @@
 /*jslint node: true */
 
 /*global gStyle*/
+/*global log*/
 
 "use strict";
 
@@ -119,6 +120,11 @@ function gBase(type) {
 
     that.stopPropagation = function (value) {
         stopPropagation = value;
+        return that;
+    };
+
+    that.setType = function (value) {
+        that.type = value;
         return that;
     };
 

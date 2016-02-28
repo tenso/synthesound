@@ -28,7 +28,7 @@ function loginDialog() {
         password.show(!user.loggedIn());
     }
 
-    login = gButton(lang.tr("ok"), function () {
+    function doLogin() {
         user.storePassword(password.getValue());
         user.storeEmail(email.getValue());
         net.read("login", {email: email.getValue(), password: password.getValue()}, function (err, result) {
@@ -40,9 +40,9 @@ function loginDialog() {
                 user.update(result);
             }
         });
-    }).abs().right(10).bottom(10);
+    }
 
-    logout = gButton(lang.tr("logout"), function () {
+    function doLogout() {
         net.read("logout", function (err, result) {
             if (err) {
                 status.setValue(lang.tr("error") + " " + err);
@@ -52,7 +52,12 @@ function loginDialog() {
                 user.update(result);
             }
         });
-    }).abs().right(10).bottom(10);
+    }
+
+    login = gButton(lang.tr("ok"), doLogin).abs().right(10).bottom(10);
+    logout = gButton(lang.tr("logout"), doLogout).abs().right(10).bottom(10);
+    password.on("enter", doLogin);
+    email.on("enter", doLogin);
 
     that.add(email);
     that.add(password);

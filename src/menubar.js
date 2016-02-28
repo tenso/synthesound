@@ -61,7 +61,7 @@ function menubar(contentContainer) {
         if (user.loggedIn()) {
             online.color("#8f8");
         } else {
-            online.color("#f88");
+            online.color("#fff");
         }
     });
 
