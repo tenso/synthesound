@@ -44,7 +44,7 @@ function addSequenceDataFunctions(that) {
     that.moveOff = function (movedMs) {
         if (that.hasOwnProperty("msOff")) {
             that.msOff = moveStartData.msOff + movedMs;
-            if (that.msOff < that.ms) {
+            if (that.msOff <= that.ms) {
                 that.msOff = that.ms + 10; //FIXME: min 10 ok ?
             }
         }

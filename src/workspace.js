@@ -258,13 +258,13 @@ function workspace() {
                 states[i].moveStart(undefined, timeTracker.quantizeValue(states[i].msOff));
             }
         } else if (operation === "move") {
-            selection.lenMs = timeTracker.quantizeValue(selection.lenMs, true);
+            selection.lenMs = timeTracker.quantizeValue(selection.lenMs);
             for (i = 0; i < states.length; i += 1) {
                 states[i].move(selection.lenMs, selection.numNotes);
             }
             seq.sortSteps();
         } else if (operation === "moveOff") {
-            selection.lenMs = timeTracker.quantizeValue(selection.lenMs);
+            selection.lenMs = timeTracker.quantizeValue(selection.lenMs, true);
             for (i = 0; i < states.length; i += 1) {
                 states[i].moveOff(selection.lenMs);
             }
