@@ -44,7 +44,8 @@ function tracker(sampleRate) {
             totalMs: totalMs,
             quantization: quantization,
             quantizeOn: quantizeOn,
-            currentMs: currentMs
+            currentMs: currentMs,
+            loop: loop
         };
     };
 
@@ -54,6 +55,7 @@ function tracker(sampleRate) {
         that.setQuantization(data.quantization);
         that.setQuantizationOn(data.quantizeOn);
         that.setCurrentMs(data.currentMs);
+        that.setLoop(data.loop);
     };
 
     that.setBpm = function (value) {

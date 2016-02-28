@@ -324,6 +324,7 @@ function workspace() {
             that.emit("timeParamsUpdated",
                       timeTracker.bpm(), timeTracker.quantization(),
                       timeTracker.measureMs(), timeTracker.quantizationOn());
+            that.emit("loopUpdated", timeTracker.getLoop());
             updateTime();
         } else {
             log.error("file is missing tracker data");
