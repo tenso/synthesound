@@ -226,11 +226,6 @@ function workspace() {
         }
         isLengthBased = comp.stateMode() === "notes";
 
-        //FIXME: cant do it like this when moving (relative!)
-        selection.startMs = timeTracker.quantizeValue(selection.startMs);
-        selection.endMs = timeTracker.quantizeValue(selection.endMs, true);
-        selection.lenMs = timeTracker.quantizeValue(selection.lenMs, true);
-
         if (isLengthBased) {
             stepForOpen = {gate: true, freq: selection.startValue};
         }
@@ -256,20 +251,28 @@ function workspace() {
             }
         } else if (operation === "moveStart") {
             for (i = 0; i < states.length; i += 1) {
-                states[i].moveStart();
+                states[i].moveStart(timeTracker.quantizeValue(states[i].ms));
+            }
+        } else if (operation === "moveOffStart") {
+            for (i = 0; i < states.length; i += 1) {
+                states[i].moveStart(undefined, timeTracker.quantizeValue(states[i].msOff));
             }
         } else if (operation === "move") {
+            selection.lenMs = timeTracker.quantizeValue(selection.lenMs, true);
             for (i = 0; i < states.length; i += 1) {
                 states[i].move(selection.lenMs, selection.numNotes);
             }
             seq.sortSteps();
         } else if (operation === "moveOff") {
+            selection.lenMs = timeTracker.quantizeValue(selection.lenMs);
             for (i = 0; i < states.length; i += 1) {
                 states[i].moveOff(selection.lenMs);
             }
             seq.sortSteps();
         } else if (operation === "beginNew") {
+            selection.endMs = timeTracker.quantizeValue(selection.endMs, true);
             if (!seq.openStep()) {
+                selection.startMs = timeTracker.quantizeValue(selection.startMs);
                 seq.openAt(selection.startMs, stepForOpen, !isLengthBased);
                 if (isLengthBased) {
                     seq.openStep().msOff = selection.endMs;
@@ -283,6 +286,7 @@ function workspace() {
             }
         } else if (operation === "endNew") {  //FIXME: notes vs values
             if (seq.openStep()) {
+                selection.endMs = timeTracker.quantizeValue(selection.endMs, true);
                 seq.closeAt(selection.endMs, !isLengthBased);
             }
         }

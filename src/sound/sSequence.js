@@ -10,11 +10,12 @@
 function addSequenceDataFunctions(that) {
     var moveStartData = {};
 
-    that.moveStart = function () {
-        moveStartData.ms = that.ms;
+    that.moveStart = function (ms, msOff) {
+        moveStartData.ms = typeof ms === "number" ? ms : that.ms;
 
         if (that.hasOwnProperty("msOff")) {
-            moveStartData.msOff = that.msOff;
+            moveStartData.msOff = typeof msOff === "number" ? msOff : that.msOff;
+            moveStartData.lenToOff = that.msOff - that.ms;
         }
         if (that.args && that.args.hasOwnProperty("freq")) {
             moveStartData.note = note.note(that.args.freq);
@@ -30,7 +31,7 @@ function addSequenceDataFunctions(that) {
             that.ms = 0;
         }
         if (that.hasOwnProperty("msOff")) {
-            that.msOff = moveStartData.msOff + movedMs;
+            that.msOff = that.ms + moveStartData.lenToOff;
         }
         if (that.args && that.args.hasOwnProperty("freq")) {
             that.args.freq = note.hz(moveStartData.note + numNotes);
