@@ -164,8 +164,12 @@ function tracker(sampleRate) {
 
     that.setLoop = function (args) {
         loop.isOn = args.isOn;
+
         loop.ms0 = Math.min(args.ms0, args.ms1);
         loop.ms1 = Math.max(args.ms0, args.ms1);
+
+        loop.ms0 = that.quantizeValue(loop.ms0);
+        loop.ms1 = that.quantizeValue(loop.ms1);
     };
 
     that.getLoop = function () {
