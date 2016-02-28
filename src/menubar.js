@@ -29,8 +29,10 @@ function menubar(contentContainer) {
         errorLog,
         menus = [],
         helpString = lang.tr("helpText"),
-        aboutString = "SyntheSound v." + app.ver + "\n" +
-            "<a href='https://github.com/tenso'>Source Link</a>\n\n" +
+        aboutString = "<strong>SyntheSound v." + app.ver + "</strong>\n\n" +
+            "<strong>Contact: </strong>synthesounds@gmail.com\n\n" +
+            "<strong>Source:  </strong><a href='https://github.com/tenso'>github.com/tenso</a>\n\n" +
+            "<strong>License:\n</strong>" +
             lang.tr("license"),
         loadInput,
         note;

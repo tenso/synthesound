@@ -261,6 +261,17 @@ function gStyle(type) {
         return that;
     });
 
+    //"none", "text", "all"
+    util.addMethod(that, "userSelect", function (value) {
+        that.style.webkitTouchCallout = value;
+        that.style.webkitUserSelect = value;
+        that.style.khtmlUserSelect = value;
+        that.style.mozUserSelect = value;
+        that.style.msUserSelect = value;
+        that.style.userSelect = value;
+        return that;
+    });
+
     that.typeIs = "gStyle";
     that.typeClass = "gStyle";
 

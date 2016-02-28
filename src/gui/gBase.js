@@ -9,7 +9,9 @@
 function gBase(type) {
     var that = gStyle(type),
         hoverStyle,
-        pressStyle;
+        pressStyle,
+        isDown = false,
+        stopPropagation = false;
 
     function mouseEnterCallback() {
         if (hoverStyle) {
@@ -24,7 +26,15 @@ function gBase(type) {
         }
     }
 
-    function mouseDownCallback() {
+    function mouseDownCallback(e) {
+        if (isDown) {
+            log.error("gBase.mouseDownCallback: already down");
+            return;
+        }
+        isDown = true;
+        if (stopPropagation) {
+            e.stopPropagation();
+        }
         if (pressStyle) {
             that.setStyleStateChanges(pressStyle);
             that.pushStyle();
@@ -32,6 +42,10 @@ function gBase(type) {
     }
 
     function mouseUpCallback() {
+        if (!isDown) {
+            return;
+        }
+        isDown = false;
         if (pressStyle) {
             that.popStyle();
         }
@@ -53,16 +67,6 @@ function gBase(type) {
 
     that.pressEffect = function (style) {
         pressStyle = style;
-        if (style) {
-            that.addEventListener("mousedown", mouseDownCallback);
-            that.addEventListener("mouseup", mouseUpCallback);
-            that.addEventListener("mouseleave", mouseUpCallback);
-        } else {
-            that.removeEventListener("mousedown", mouseDownCallback);
-            that.removeEventListener("mouseup", mouseUpCallback);
-            that.removeEventListener("mouseleave", mouseUpCallback);
-        }
-
         return that;
     };
 
@@ -113,9 +117,18 @@ function gBase(type) {
         return that;
     };
 
+    that.stopPropagation = function (value) {
+        stopPropagation = value;
+        return that;
+    };
+
     that.typeIs = "gBase";
     that.typeClass = "gBase";
     that.cursor("auto");
+
+    that.addEventListener("mousedown", mouseDownCallback);
+    that.addEventListener("mouseup", mouseUpCallback);
+    that.addEventListener("mouseleave", mouseUpCallback);
 
     return that;
 }

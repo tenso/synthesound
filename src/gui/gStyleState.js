@@ -46,6 +46,9 @@ function gStyleState(that) {
     };
 
     that.popStyle = function () {
+        if (!saved.length) {
+            log.error("gStyleState.popStyle: no style pushed");
+        }
         var state = saved.pop();
         that.applyStyle(state);
         return that;
