@@ -101,6 +101,7 @@ var appTexts = {
             selectFile: "Select a file",
             serverUsers: "Server Users",
             serverLogs: "Server Logs",
+            admin: "Admin",
             license: appTexts.buildLicenseText()
         });
         lang.setLanguage("en");
