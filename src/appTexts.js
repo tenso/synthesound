@@ -99,6 +99,8 @@ var appTexts = {
             login: "Login",
             error: "Error",
             selectFile: "Select a file",
+            serverUsers: "Server Users",
+            serverLogs: "Server Logs",
             license: appTexts.buildLicenseText()
         });
         lang.setLanguage("en");

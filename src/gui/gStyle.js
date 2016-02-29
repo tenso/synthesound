@@ -63,7 +63,7 @@ function gStyle(type) {
         return gui.stylePxIfInt(that, "lineHeight", value);
     });
 
-    //normal, nowrap, pre-line, ...
+    //normal, nowrap, pre-line, pre, ...
     util.addMethod(that, "whiteSpace", function (value) {
         that.style.whiteSpace = value;
         return that;

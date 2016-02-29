@@ -17,6 +17,7 @@
 /*global user*/
 /*global fileDialog*/
 /*global registerDialog*/
+/*global net*/
 
 "use strict";
 //FIXME: contentContainer used as workspace!!
@@ -26,6 +27,7 @@ function menubar(contentContainer) {
         file,
         about,
         audio,
+        admin,
         errorLog,
         menus = [],
         helpString = lang.tr("helpText"),
@@ -63,6 +65,13 @@ function menubar(contentContainer) {
         } else {
             online.color("#fff");
         }
+
+        if (user.isAdmin()) {
+            admin.show(1);
+        } else {
+            admin.show(0);
+        }
+
     });
 
     file = wMenuButton(lang.tr("export"), menus);
@@ -83,7 +92,7 @@ function menubar(contentContainer) {
     });
     that.addTabled(file);
 
-    function makePopup(message) {
+    function makePopup(message, title) {
         return function () {
             var popup,
                 mess;
@@ -92,7 +101,7 @@ function menubar(contentContainer) {
             } else {
                 mess = message;
             }
-            popup = wNote(mess);
+            popup = wNote(mess, title);
             contentContainer.add(popup);
             popup.left(contentContainer.scrollLeft).top(contentContainer.scrollTop);
             return popup;
@@ -109,13 +118,34 @@ function menubar(contentContainer) {
     that.addTabled(audio);
 
     about = wMenuButton(lang.tr("info"), menus);
-    about.addRow(lang.tr("help"), makePopup(helpString));
-    about.addRow(lang.tr("about"), makePopup(aboutString));
-    about.addRow(lang.tr("log"), makePopup(log.logText));
+    about.addRow(lang.tr("help"), makePopup(helpString, lang.tr("help")));
+    about.addRow(lang.tr("about"), makePopup(aboutString, lang.tr("about")));
+    about.addRow(lang.tr("log"), makePopup(log.logText, lang.tr("log")));
     that.addTabled(about);
 
     errorLog = wMenuButton(lang.tr("detectedErrors"), menus).show(false);
     that.addTabled(errorLog);
+
+    admin = wMenuButton(lang.tr("admin"), menus);
+    admin.addRow(lang.tr("serverLogs"), function () {
+        net.read("logs", function (err, result) {
+            if (err) {
+                log.error("logs:" + err);
+            } else {
+                makePopup(JSON.stringify(result, "", 2), lang.tr("serverLogs"))();
+            }
+        });
+    });
+    admin.addRow(lang.tr("serverUsers"), function () {
+        net.read("users", function (err, result) {
+            if (err) {
+                log.error("users:" + err);
+            } else {
+                makePopup(JSON.stringify(result, "", 2), lang.tr("serverUsers"))();
+            }
+        });
+    });
+    that.addTabled(admin);
 
     that.addEventListener("mouseleave", function () {
         file.closeAll();

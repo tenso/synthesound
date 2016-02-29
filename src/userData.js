@@ -20,6 +20,13 @@ function userData() {
         that.emit("updated", userDoc);
     };
 
+    that.isAdmin = function () {
+        if (userDoc && userDoc.info) {
+            return userDoc.info.admin;
+        }
+        return false;
+    };
+
     that.files = function () {
         if (userDoc.files) {
             return userDoc.files;
