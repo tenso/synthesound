@@ -69,7 +69,7 @@ function gStyle(type) {
         return that;
     });
 
-    util.addMethod(that, "move", function (x, y) {
+    util.addMethod(that, "moveTo", function (x, y) {
         gui.stylePxIfInt(that, "left", x);
         gui.stylePxIfInt(that, "top", y);
         return that;

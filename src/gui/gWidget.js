@@ -41,7 +41,8 @@ function gWidget() {
 
             that.iMousePressAndMove = function (e, mouse) {
                 util.unused(e);
-                that.move(mouse.relativeX, mouse.relativeY);
+                that.moveTo(mouse.relative.x, mouse.relative.y);
+
                 if (that.getX() < 0) {
                     that.x(0);
                 }

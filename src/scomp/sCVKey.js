@@ -13,7 +13,7 @@
 function sCVKey(container, uid) {
     var output = sNote(),
         that = sCBase(container, "sCVKey", output, uid),
-        currentNote = gLabel("--").abs().move(12, 50).setSize(40, 20).bg("#888").color("#000").setBorder("2px solid #888").radius(4),
+        currentNote = gLabel("--").abs().moveTo(12, 50).setSize(40, 20).bg("#888").color("#000").setBorder("2px solid #888").radius(4),
         isDown = false,
         keyboard,
         noteDisplay = {
@@ -51,7 +51,7 @@ function sCVKey(container, uid) {
 
     that.addTabled(gButton("capture", function () {
         gui.captureKey(keyboard);
-    }).abs().move(5, 170));
+    }).abs().moveTo(5, 170));
 
     that.addTabled(currentNote);
 

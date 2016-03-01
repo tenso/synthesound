@@ -188,7 +188,7 @@ function sCIO() {
         port.iMousePressAndMove = function (e, mouse) {
             util.unused(e);
             that.drawConnections();
-            drawLine(mouse.captureX, mouse.captureY, mouse.x, mouse.y);
+            drawLine(mouse.capture.x, mouse.capture.y, mouse.x, mouse.y);
         };
 
         port.iMouseUpAfterCapture = function (e) {
@@ -223,7 +223,7 @@ function sCIO() {
             }
 
             if (targetConnections.length) {
-                menu = wMenu().move(mouse.x - 20, mouse.y - 20).z(200000);
+                menu = wMenu().moveTo(mouse.x - 20, mouse.y - 20).z(200000);
                 that.parentNode.add(menu);
 
                 for (i = 0; i < targetConnections.length; i += 1) {

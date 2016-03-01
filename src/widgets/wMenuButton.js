@@ -11,7 +11,7 @@ function wMenuButton(name, group) {
 
     that = gButton(name, function () {
         that.closeAll(myIndex);
-        that.menu.move(0, that.getH());
+        that.menu.moveTo(0, that.getH());
         that.menu.show(true);
     }).hoverEffect({color: "#888"}).rel();
 

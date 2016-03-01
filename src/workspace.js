@@ -83,7 +83,7 @@ function workspace() {
             comp.setArgs(data.sArgs);
             comp.setCurrentMs(timeTracker.currentMs(), timeTracker.currentStepMs());
             //comp.saveInitialArgs();
-            comp.move(data.x, data.y);
+            comp.moveTo(data.x, data.y);
         } else {
             log.error("workspace.createSComp: dont know type:" + data.type);
             return undefined;
@@ -94,7 +94,7 @@ function workspace() {
     function initSComp() {
         that.iOpenContextMenu = function (e, mouse) {
             util.unused(e);
-            var menu = wMenu().move(mouse.x - 20, mouse.y - 20),
+            var menu = wMenu().moveTo(mouse.x - 20, mouse.y - 20),
                 sConstructor;
 
             function menuEntry(id, xPos, yPos) {
@@ -260,7 +260,7 @@ function workspace() {
         } else if (operation === "move") {
             selection.lenMs = timeTracker.quantizeValue(selection.lenMs);
             for (i = 0; i < states.length; i += 1) {
-                states[i].move(selection.lenMs, selection.numNotes);
+                states[i].moveTo(selection.lenMs, selection.numNotes);
             }
             seq.sortSteps();
         } else if (operation === "moveOff") {

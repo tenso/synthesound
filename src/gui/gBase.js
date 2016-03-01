@@ -72,7 +72,7 @@ function gBase(type) {
     };
 
     that.addAt = function (element, x, y) {
-        element.abs().move(x, y);
+        element.abs().moveTo(x, y);
         that.appendChild(element);
         return that;
     };

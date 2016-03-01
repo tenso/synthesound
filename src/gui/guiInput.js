@@ -20,14 +20,18 @@ function guiInput(container, sizeOfContainerChanged) {
     function setMouseFromEvent(e, target) {
         mouse.x = gui.getEventOffsetInElement(container,  e).x;
         mouse.y = gui.getEventOffsetInElement(container,  e).y;
-        mouse.relativeX = mouse.x - mouse.captureOffsetInElement.x;
-        mouse.relativeY = mouse.y - mouse.captureOffsetInElement.y;
+        mouse.relative = {
+            x: mouse.x - mouse.captureOffsetInElement.x,
+            y: mouse.y - mouse.captureOffsetInElement.y
+        };
+        mouse.change = {
+            x: mouse.x - mouse.capture.x,
+            y: mouse.y - mouse.capture.y
+        };
 
         if (target) {
             mouse.offsetInElement = gui.getEventOffsetInElement(target, e);
             mouse.offsetInParent = gui.getEventOffsetInElement(target.parentNode, e);
-            mouse.relativeParentX = mouse.offsetInParent.x - mouse.captureOffsetInElement.x;
-            mouse.relativeParentY = mouse.offsetInParent.y - mouse.captureOffsetInElement.y;
         }
     }
 
@@ -47,8 +51,7 @@ function guiInput(container, sizeOfContainerChanged) {
 
     function setMouseCaptureFromEvent(e, target) {
         mouse.captureOffsetInElement = gui.getEventOffsetInElement(target, e);
-        mouse.captureX = gui.getEventOffsetInElement(container, e).x;
-        mouse.captureY = gui.getEventOffsetInElement(container, e).y;
+        mouse.capture = gui.getEventOffsetInElement(container, e);
     }
 
     function checkSize(container) {

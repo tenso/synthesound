@@ -55,7 +55,7 @@ window.onload = function () {
 
     audioWork = workspace();
     audioBar = workbar();
-    topMenu = menubar(audioWork).move(0, 0);
+    topMenu = menubar(audioWork).moveTo(0, 0);
     gIO = sCIO();
     input = guiInput(audioWork, gIO.resizeCanvas); //resize is when scrollWidth/scrollHeigth changes
     gui.setInputHandler(input);
