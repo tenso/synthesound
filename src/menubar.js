@@ -140,7 +140,7 @@ function menubar(contentContainer) {
                         data += result[entry].createdAt + " " + result[entry].type + " " + result[entry].text + "\n";
                     }
                 }
-                makePopup(data, lang.tr("serverLogs"))().w(800).h(600);
+                makePopup(data, lang.tr("serverLogs"))();
             }
         });
     });

@@ -8,6 +8,7 @@
 /*global document*/
 /*global util*/
 /*global gContainer*/
+/*global gResizer*/
 
 "use strict";
 
@@ -27,6 +28,10 @@ function gWidget() {
 
         that.titleRow.add(button);
         return that;
+    };
+
+    that.addResize = function () {
+        gResizer(that);
     };
 
     that.canMove = function (value) {

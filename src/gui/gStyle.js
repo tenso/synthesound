@@ -272,6 +272,10 @@ function gStyle(type) {
         return that;
     });
 
+    util.addMethod(that, "getUserSelect", function (value) {
+        return that.style.userSelect;
+    });
+
     that.typeIs = "gStyle";
     that.typeClass = "gStyle";
 

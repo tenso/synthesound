@@ -2,6 +2,7 @@
 
 /*global gWidget*/
 /*global gLabel*/
+/*global lang*/
 
 "use strict";
 
@@ -18,6 +19,16 @@ function wNote(note, label) {
         textContent.h(value - 2);
         return that;
     };
+
+    that.addResize();
+
+    that.on("resizeStart", function () {
+        textContent.userSelect("none");
+    });
+
+    that.on("resizeEnd", function () {
+        textContent.userSelect("text");
+    });
 
     that.setTitle(label || lang.tr("note"));
     textContent.overflow("auto").whiteSpace("pre").textAlign("left").fontFamily("sans-serif").fontSize(16);
