@@ -6,10 +6,20 @@
 "use strict";
 
 function wNote(note, label) {
-    var that = gWidget(label).addRemove(),
+    var that = gWidget().addRemove(),
         textContent = gLabel(note, "html").w(650).h(250).userSelect("text").stopPropagation(true);
 
-    that.setTitle(label || "Note");
+    that.w = function (value) {
+        textContent.w(value - 2);
+        return that;
+    };
+
+    that.h = function (value) {
+        textContent.h(value - 2);
+        return that;
+    };
+
+    that.setTitle(label || lang.tr("note"));
     textContent.overflow("auto").whiteSpace("pre").textAlign("left").fontFamily("sans-serif").fontSize(16);
     that.addTabled(textContent);
     that.typeIs = "wNote";

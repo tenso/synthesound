@@ -129,10 +129,18 @@ function menubar(contentContainer) {
     admin = wMenuButton(lang.tr("admin"), menus);
     admin.addRow(lang.tr("serverLogs"), function () {
         net.read("logs", function (err, result) {
+            var data = "",
+                entry;
+
             if (err) {
                 log.error("logs:" + err);
             } else {
-                makePopup(JSON.stringify(result, "", 2), lang.tr("serverLogs"))();
+                for (entry in result) {
+                    if (result.hasOwnProperty(entry)) {
+                        data += result[entry].createdAt + " " + result[entry].type + " " + result[entry].text + "\n";
+                    }
+                }
+                makePopup(data, lang.tr("serverLogs"))().w(800).h(600);
             }
         });
     });

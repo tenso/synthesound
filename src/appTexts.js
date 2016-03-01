@@ -102,6 +102,7 @@ var appTexts = {
             serverUsers: "Server Users",
             serverLogs: "Server Logs",
             admin: "Admin",
+            note: "Note",
             license: appTexts.buildLicenseText()
         });
         lang.setLanguage("en");
