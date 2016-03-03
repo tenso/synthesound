@@ -22,7 +22,8 @@
 "use strict";
 
 var app = {
-    ver: "1.0"
+    ver: 1.1,
+    fileVer: 1.0
 };
 
 var appScreen = {

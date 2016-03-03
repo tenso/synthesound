@@ -4,6 +4,7 @@
 /*global util*/
 /*global log*/
 /*global note*/
+/*global sSequanceData*/ /*defined later*/
 
 "use strict";
 
@@ -50,6 +51,16 @@ function addSequenceDataFunctions(that) {
         }
     };
 
+    that.copy = function () {
+        return sSequanceData(util.copyData(that.args), that.ms,
+                             util.copyData(that.argsOff), that.msOff);
+    };
+
+    that.updateArgs = function (newArgs) {
+        that.args = newArgs;
+        return that;
+    };
+
     return that;
 }
 
@@ -69,16 +80,6 @@ function sSequanceData(sArgs, msTime, sArgsOff, msTimeOff) {
             ms: msTime,
             args: sArgs
         };
-
-    that.copy = function () {
-        return sSequanceData(util.copyData(that.args), that.ms,
-                             util.copyData(that.argsOff), that.msOff);
-    };
-
-    that.updateArgs = function (newArgs) {
-        that.args = newArgs;
-        return that;
-    };
 
     if (sArgsOff) {
         sCloseSequanceData(that, sArgsOff, msTimeOff);

@@ -260,7 +260,7 @@ function workspace() {
         } else if (operation === "move") {
             selection.lenMs = timeTracker.quantizeValue(selection.lenMs);
             for (i = 0; i < states.length; i += 1) {
-                states[i].moveTo(selection.lenMs, selection.numNotes);
+                states[i].move(selection.lenMs, selection.numNotes);
             }
             seq.sortSteps();
         } else if (operation === "moveOff") {
