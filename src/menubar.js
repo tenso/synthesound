@@ -18,6 +18,7 @@
 /*global fileDialog*/
 /*global registerDialog*/
 /*global net*/
+/*global adminUsers*/
 
 "use strict";
 //FIXME: contentContainer used as workspace!!
@@ -149,7 +150,7 @@ function menubar(contentContainer) {
             if (err) {
                 log.error("users:" + err);
             } else {
-                makePopup(JSON.stringify(result, "", 2), lang.tr("serverUsers"))();
+                contentContainer.add(adminUsers(result));
             }
         });
     });

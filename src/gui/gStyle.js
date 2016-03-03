@@ -276,6 +276,15 @@ function gStyle(type) {
         return that.style.userSelect;
     });
 
+    util.addMethod(that, "fontWeight", function (value) {
+        that.style.fontWeight = value;
+        return that;
+    });
+
+    util.addMethod(that, "strong", function (value) {
+        return that.fontWeight("bold");
+    });
+
     that.typeIs = "gStyle";
     that.typeClass = "gStyle";
 

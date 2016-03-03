@@ -8,7 +8,7 @@ function gLabel(label, type) {
     var that = gBase();
 
     that.setValue = function (str) {
-        if (typeof str === "string") {
+        if (typeof str === "string" || typeof str === "number" || typeof str === "boolean") {
             if (type === "html") {
                 that.innerHTML = str;
             } else {

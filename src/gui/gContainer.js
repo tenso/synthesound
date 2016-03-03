@@ -28,6 +28,10 @@ function gContainer() {
         that.nextRow();
     }
 
+    that.row = function () {
+        return that.content;
+    };
+
     that.nextRow = function () {
         that.content = gBase("tr").setClass("gContainerRow");
         that.table.add(that.content);
@@ -35,8 +39,13 @@ function gContainer() {
     };
 
     that.contentCount = function () {
-        return that.content.childNodes.length;
+        return that.table.childNodes.length;
     };
+
+    that.isEven = function () {
+        return that.contentCount() % 2 === 0;
+    };
+
 
     that.addBeforeTable = function (node) {
         that.insertBefore(node, that.table);
