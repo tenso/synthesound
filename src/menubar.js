@@ -146,13 +146,7 @@ function menubar(contentContainer) {
         });
     });
     admin.addRow(lang.tr("serverUsers"), function () {
-        net.read("users", function (err, result) {
-            if (err) {
-                log.error("users:" + err);
-            } else {
-                contentContainer.add(adminUsers(result));
-            }
-        });
+        contentContainer.add(adminUsers());
     });
     that.addTabled(admin);
 

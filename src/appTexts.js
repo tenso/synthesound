@@ -103,6 +103,13 @@ var appTexts = {
             serverLogs: "Server Logs",
             admin: "Admin",
             note: "Note",
+            name: "Name",
+            validated: "Validated",
+            createdAt: "Created at",
+            willBeDeletedStartingFrom: "Delete starting from",
+            debug: "Debug",
+            numFiles: "Num. files",
+            passwordMissmatch: "Password missmatch",
             license: appTexts.buildLicenseText()
         });
         lang.setLanguage("en");

@@ -10,7 +10,7 @@ function userData() {
         userDoc = {login: false},
         password = "",
         email = "",
-        debugLoginAsAdmin = false;
+        debugLoginAsAdmin = true;
 
     that.update = function (doc) {
         userDoc = doc;
@@ -78,5 +78,16 @@ function userData() {
             }
         });
     };
+
+    that.refreshAll = function () {
+        net.read("users", function (err, result) {
+            if (err) {
+                log.error("users:" + err);
+            } else {
+                that.emit("allUpdated", result);
+            }
+        });
+    };
+
     return that;
 }
