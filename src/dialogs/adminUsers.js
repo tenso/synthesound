@@ -21,6 +21,8 @@ function adminUsers(users) {
         data.addTabled(cell(user.info.name));
         data.addTabled(cell(user.info.validated));
         data.addTabled(cell(user.info.admin));
+        data.addTabled(cell(user.createdAt));
+        data.addTabled(cell(user.willBeDeletedStartingFrom));
         data.addTabled(cell(user.settings.debug));
         data.addTabled(cell(user.files.length));
         data.nextRow();
@@ -36,6 +38,8 @@ function adminUsers(users) {
     data.addTabled(cell("name").strong());
     data.addTabled(cell("validated").strong());
     data.addTabled(cell("admin").strong());
+    data.addTabled(cell("createdAt").strong());
+    data.addTabled(cell("willBeDeletedStartingFrom").strong());
     data.addTabled(cell("debug").strong());
     data.addTabled(cell("num files").strong());
     data.nextRow();
