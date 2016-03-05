@@ -467,14 +467,14 @@ function workbar() {
     };
 
     //keyboard and mouse
-    //FIXME: should really not use captureMouse and iMouse... routines here as that is not in workspace container.
+    //FIXME: should really not use captureMouse routines here as that is not in workspace container.
     topBar.onmousedown = function (e) {
         gui.captureMouse(e);
     };
 
-    topBar.iMousePressAndMove = function (e, mouse) {
+    topBar.on("mousePressAndMove", function (e, mouse) {
         that.setTopOfBar(e.pageY - mouse.captureOffsetInElement.y);
-    };
+    });
 
     document.addEventListener("keydown", function (e) {
         var key = String.fromCharCode(e.keyCode).toLowerCase();

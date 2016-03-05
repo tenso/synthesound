@@ -39,6 +39,11 @@ function menubar(contentContainer) {
         loadInput,
         note;
 
+    function addItem(obj) {
+        contentContainer.add(obj);
+        obj.left(contentContainer.scrollLeft).top(contentContainer.scrollTop);
+    }
+
     that.logError = function (error) {
         errorLog.bg("#f44").show(true);
         errorLog.addRow("error #" + errorLog.menu.contentCount(), function () {
@@ -49,13 +54,13 @@ function menubar(contentContainer) {
 
     online = wMenuButton(lang.tr("online"), menus);
     online.addRow(lang.tr("login"), function () {
-        contentContainer.add(loginDialog());
+        addItem(loginDialog());
     });
     online.addRow(lang.tr("files"), function () {
-        contentContainer.add(fileDialog(contentContainer));
+        addItem(fileDialog(contentContainer));
     });
     online.addRow(lang.tr("register"), function () {
-        contentContainer.add(registerDialog());
+        addItem(registerDialog());
     });
     that.addTabled(online);
 
@@ -108,8 +113,7 @@ function menubar(contentContainer) {
             if (typeof h === "number") {
                 popup.h(h);
             }
-            contentContainer.add(popup);
-            popup.left(contentContainer.scrollLeft).top(contentContainer.scrollTop);
+            addItem(popup);
             return popup;
         };
     }
@@ -153,7 +157,7 @@ function menubar(contentContainer) {
         });
     });
     admin.addRow(lang.tr("serverUsers"), function () {
-        contentContainer.add(adminUsers());
+        addItem(adminUsers());
     });
     that.addTabled(admin);
 

@@ -35,17 +35,15 @@ function guiInput(container, sizeOfContainerChanged) {
         }
     }
 
-    function runCaptureCBIfExist(name, e) {
-        if (mouseCapturer && mouseCapturer.hasOwnProperty(name)) {
+    function sendEvent(name, e) {
+        if (mouseCapturer) {
             setMouseFromEvent(e, mouseCapturer);
             e.mouseCapturer = mouseCapturer;
-            mouseCapturer[name](e, mouse);
-        }
-    }
-
-    function runCBIfExist(name, e) {
-        if (e.target.hasOwnProperty(name)) {
-            e.target[name](e, mouse);
+            if (!mouseCapturer.emit) {
+                log.error("mouseCapturer does not seem to be event type, event:" + name);
+            } else {
+                mouseCapturer.emit(name, e, mouse);
+            }
         }
     }
 
@@ -76,17 +74,15 @@ function guiInput(container, sizeOfContainerChanged) {
         }
 
         if (prevMouseCapturer) {
-            if (typeof prevMouseCapturer.iWasDeselected === "function") {
-                prevMouseCapturer.iWasDeselected(mouseCapturer);
-            }
             prevMouseCapturer = undefined;
         }
 
         setMouseCaptureFromEvent(e, mouseCapturer);
-        runCaptureCBIfExist("iMouseCaptured", e);
-
-        if (typeof mouseCapturer.iWasSelected === "function") {
-            mouseCapturer.iWasSelected();
+        sendEvent("mouseCaptured", e);
+        if (!mouseCapturer.emit) {
+            log.error("mouseCapturer is not event type");
+        } else {
+            mouseCapturer.emit("selected");
         }
     };
 
@@ -105,7 +101,7 @@ function guiInput(container, sizeOfContainerChanged) {
 
     document.addEventListener("mouseup", function (e) {
         if (mouseCapturer) {
-            runCaptureCBIfExist("iMouseUpAfterCapture", e);
+            sendEvent("mouseUpAfterCapture", e);
             prevMouseCapturer = mouseCapturer;
             mouseCapturer = undefined;
         }
@@ -113,7 +109,7 @@ function guiInput(container, sizeOfContainerChanged) {
 
     document.addEventListener("mousemove", function (e) {
         if (mouseCapturer) {
-            runCaptureCBIfExist("iMousePressAndMove", e);
+            sendEvent("mousePressAndMove", e);
 
             if (typeof mouseCapturer.iWasMoved === "function") {
                 mouseCapturer.iWasMoved(mouseCapturer);
@@ -123,47 +119,49 @@ function guiInput(container, sizeOfContainerChanged) {
         }
     });
 
-    document.addEventListener("mouseover", function (e) {
-        if (mouseCapturer) {
-            runCaptureCBIfExist("iMouseOverAfterCapture", e);
-        }
-        if (typeof that.mouseOver === "function") {
-            that.mouseOver(e, mouseCapturer);
-        }
-    });
-
     document.addEventListener("contextmenu", function (e) {
         e.preventDefault();
         //NOTE: dont set  captured here: will send all sorts of events...
         setMouseCaptureFromEvent(e, e.target);
         setMouseFromEvent(e, e.target);
-        runCBIfExist("iOpenContextMenu", e);
+        if (e.target) {
+            if (!e.target.emit) {
+                log.error("target is not event type: trying to open context menu");
+            } else {
+                e.target.emit("openContextMenu", e, mouse);
+            }
+        }
     });
 
     document.addEventListener("keydown", function (e) {
         if (keyCapturer) {
-            if (keyCapturer.iKeyDown) {
-                var key = String.fromCharCode(e.keyCode).toLowerCase();
+            var key = String.fromCharCode(e.keyCode).toLowerCase();
 
-                if (keyIsDown === key) {
-                    return;
-                }
-                keyIsDown = key;
-                keyCapturer.iKeyDown(key, e.shiftKey);
+            if (keyIsDown === key) {
+                return;
+            }
+            keyIsDown = key;
+            if (!keyCapturer.emit) {
+                log.error("keyCapturer is not event type: keyDown");
+            } else {
+                keyCapturer.emit("keyDown", key, e.shiftKey);
             }
         }
     }, false);
 
     document.addEventListener("keyup", function (e) {
         if (keyCapturer) {
-            if (keyCapturer.iKeyUp) {
-                var key = String.fromCharCode(e.keyCode).toLowerCase();
 
-                if (keyIsDown !== key) {
-                    return;
-                }
-                keyIsDown = 0;
-                keyCapturer.iKeyUp(key, e.shiftKey);
+            var key = String.fromCharCode(e.keyCode).toLowerCase();
+
+            if (keyIsDown !== key) {
+                return;
+            }
+            keyIsDown = 0;
+            if (!keyCapturer.emit) {
+                log.error("keyCapturer is not event type: keyUp");
+            } else {
+                keyCapturer.emit("keyUp", key, e.shiftKey);
             }
         }
     }, false);

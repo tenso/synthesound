@@ -92,7 +92,7 @@ function workspace() {
     }
 
     function initSComp() {
-        that.iOpenContextMenu = function (e, mouse) {
+        that.on("openContextMenu", function (e, mouse) {
             util.unused(e);
             var menu = wMenu().moveTo(mouse.x - 20, mouse.y - 20),
                 sConstructor;
@@ -100,7 +100,7 @@ function workspace() {
             function menuEntry(id, xPos, yPos) {
                 return function () {
                     var comp = createSComp({type: id, x: xPos, y: yPos});
-                    comp.iWasSelected();
+                    comp.emit("selected");
                     menu.remove();
                 };
             }
@@ -112,7 +112,7 @@ function workspace() {
                     menu.addRow(lang.tr(sConstructor), menuEntry(sConstructor, mouse.x, mouse.y));
                 }
             }
-        };
+        });
     }
 
     function addConnection(con) {

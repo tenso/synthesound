@@ -32,17 +32,17 @@ function wVKey(keyDown, keyUp) {
                 keyDown(keyNote);
             }
         };
-        key.iMouseCaptured = function (e) {
+        key.on("mouseCaptured", function (e) {
             util.unused(e);
             isDown = true;
             lastNote = keyNote;
             keyDown(lastNote);
-        };
-        key.iMouseUpAfterCapture = function (e) {
+        });
+        key.on("mouseUpAfterCapture", function (e) {
             util.unused(e);
             keyUp(lastNote);
             isDown = false;
-        };
+        });
 
         that.add(key);
 
@@ -81,19 +81,19 @@ function wVKey(keyDown, keyUp) {
         return cNote;
     }
 
-    that.iKeyDown = function (key, shift) {
+    that.on("keyDown", function (key, shift) {
         var keyNote = noteFromKey(key, shift);
         if (keyNote > 0) {
             keyDown(keyNote);
         }
-    };
+    });
 
-    that.iKeyUp = function (key, shift) {
+    that.on("keyUp", function (key, shift) {
         var keyNote = noteFromKey(key, shift);
         if (keyNote > 0) {
             keyUp(keyNote);
         }
-    };
+    });
 
     for (i = 0; i < keys; i += 1) {
         addKey(startKey + i);

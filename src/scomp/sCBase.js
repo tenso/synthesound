@@ -59,7 +59,7 @@ function sCBase(container, type, sComp, uid) {
         seq = sSequence(sComp, setGuiControlAfterArg);
     }
 
-    that.iWasSelected = function () {
+    that.on("selected", function () {
         if (sCGlobal.current === that) {
             return;
         }
@@ -71,7 +71,7 @@ function sCBase(container, type, sComp, uid) {
         sCGlobal.current.select();
 
         sCGlobal.emit("currentUpdated", sCGlobal.current);
-    };
+    });
 
     that.iWasMoved = function (obj) {
         util.unused(obj);

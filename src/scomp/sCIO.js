@@ -185,21 +185,21 @@ function sCIO() {
             }
         };
 
-        port.iMousePressAndMove = function (e, mouse) {
+        port.on("mousePressAndMove", function (e, mouse) {
             util.unused(e);
             that.drawConnections();
             drawLine(mouse.capture.x, mouse.capture.y, mouse.x, mouse.y);
-        };
+        });
 
-        port.iMouseUpAfterCapture = function (e) {
+        port.on("mouseUpAfterCapture", function (e) {
             if (e.target.sComp) {
                 that.connectPorts(e.mouseCapturer, e.target);
             } else {
                 that.drawConnections();
             }
-        };
+        });
 
-        port.iOpenContextMenu = function (e, mouse) {
+        port.on("openContextMenu", function (e, mouse) {
             var targetConnections,
                 menu,
                 i;
@@ -233,7 +233,7 @@ function sCIO() {
                              + (targetConnections[i].isOut ? "out" : "in"), makeDelCb(menu, e.target, targetConnections[i]));
                 }
             }
-        };
+        });
     };
 
     window.addEventListener("resize", that.resizeCanvas); //update size of canvas on window-resize

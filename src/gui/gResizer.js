@@ -19,7 +19,7 @@ function gResizer(that, minW, minH) {
         if (!inital) {
             inital = {
                 w: typeof minW === "number" ?  minW : that.getW(),
-                h: typeof minH === "number" ?  minH : that.getH(),
+                h: typeof minH === "number" ?  minH : that.getH()
             };
         }
 
@@ -32,42 +32,42 @@ function gResizer(that, minW, minH) {
         that.emit("resizeEnd");
     }
 
-    bottom.iMouseCaptured = captured;
-    bottom.iMouseUpAfterCapture = released;
-    right.iMouseCaptured = captured;
-    right.iMouseUpAfterCapture = released;
-    corner.iMouseCaptured = captured;
-    corner.iMouseUpAfterCapture = released;
+    bottom.on("mouseCaptured", captured);
+    bottom.on("mouseUpAfterCapture", released);
+    right.on("mouseCaptured", captured);
+    right.on("mouseUpAfterCapture", released);
+    corner.on("mouseCaptured", captured);
+    corner.on("mouseUpAfterCapture", released);
 
     bottom.onmousedown = function (e) {
         gui.captureMouse(e, bottom);
     };
 
-    bottom.iMousePressAndMove = function (e, mouse) {
+    bottom.on("mousePressAndMove", function (e, mouse) {
         util.unused(e);
         that.h(mouse.change.y + original.h - 33); //FIXME: this offset is strange! is it scrollbar?
         if (that.getH() < inital.h) {
             that.h(inital.h - 33);  //FIXME: this offset is strange! is it scrollbar?
         }
-    };
+    });
 
     right.onmousedown = function (e) {
         gui.captureMouse(e, right);
     };
 
-    right.iMousePressAndMove = function (e, mouse) {
+    right.on("mousePressAndMove", function (e, mouse) {
         util.unused(e);
         that.w(mouse.change.x + original.w - 6); //FIXME: this offset is strange! is it scrollbar?
         if (that.getW() < inital.w) {
             that.w(inital.w - 6);  //FIXME: this offset is strange! is it scrollbar?
         }
-    };
+    });
 
     corner.onmousedown = function (e) {
         gui.captureMouse(e, corner);
     };
 
-    corner.iMousePressAndMove = function (e, mouse) {
+    corner.on("mousePressAndMove", function (e, mouse) {
         util.unused(e);
 
         that.w(mouse.change.x + original.w - 6); //FIXME: this offset is strange! is it scrollbar?
@@ -78,7 +78,7 @@ function gResizer(that, minW, minH) {
         if (that.getH() < inital.h) {
             that.h(inital.h - 33);  //FIXME: this offset is strange! is it scrollbar?
         }
-    };
+    });
 
     that.add(bottom);
     that.add(right);

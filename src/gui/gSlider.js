@@ -42,7 +42,7 @@ function gKnob(min, max, callback, horizontal) {
         gui.captureMouse(e);
     };
 
-    that.iMousePressAndMove = function (e, mouse) {
+    that.on("mousePressAndMove", function (e, mouse) {
         var maxCoord,
             newCoord;
 
@@ -67,7 +67,7 @@ function gKnob(min, max, callback, horizontal) {
         } else {
             that.setValue(min + (max - min) * (1.0 - newCoord / maxCoord));
         }
-    };
+    });
 
     that.typeIs = "gKnob";
     that.setClass("button-class").rel().top(0).setBorder("1px solid #000");

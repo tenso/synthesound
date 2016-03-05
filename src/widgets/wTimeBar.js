@@ -144,7 +144,7 @@ function wTimeBar() {
         gui.captureMouse(e);
     };
 
-    canvas.iMouseCaptured = function (e) {
+    canvas.on("mouseCaptured", function (e) {
         var pos = calcMouse(e);
 
         if (keys.ctrl && keys.shift) {
@@ -169,9 +169,9 @@ function wTimeBar() {
             }
         }
         that.draw();
-    };
+    });
 
-    canvas.iMousePressAndMove = function (e, mouse) {
+    canvas.on("mousePressAndMove", function (e, mouse) {
         var pos = calcMouse(e);
         util.unused(mouse);
 
@@ -188,9 +188,9 @@ function wTimeBar() {
             loop.ms1 = pos.ms;
         }
         that.draw();
-    };
+    });
 
-    canvas.iMouseUpAfterCapture = function (e) {
+    canvas.on("mouseUpAfterCapture", function (e) {
         util.unused(e);
         if (selection.modeActive("selectionUpdated")) {
             that.emit("selectionUpdated", selection.get(), true);
@@ -201,7 +201,7 @@ function wTimeBar() {
         }
         selection.setMode("");
         that.draw();
-    };
+    });
 
     document.addEventListener("keydown", function (e) {
         keys.ctrl = e.ctrlKey;

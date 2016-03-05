@@ -21,6 +21,14 @@ function event(base) {
         listeners[eventName].push(func);
     };
 
+    that.removeOn = function (eventName) {
+        if (!listeners.hasOwnProperty(eventName)) {
+            log.error("no such event:" + eventName);
+            return;
+        }
+        delete listeners[eventName];
+    };
+
     that.emit = function (eventName) {
         var args = Array.prototype.slice.call(arguments, 1),
             cb,

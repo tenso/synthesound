@@ -8,7 +8,7 @@
 
 function gInput(value, callback, label) {
     var that = gBase().fontFamily("monospace"),
-        input = gBase("input").w(60).setClass("gInput").textAlign("center").stopPropagation(true),
+        input = gBase("input").w(60).setClass("gInput").textAlign("center").stopPropagation(true).cursor("text"),
         inLabel = gLabel(label || "");
 
     that.type = function (type) {

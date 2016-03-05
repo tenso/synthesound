@@ -107,9 +107,7 @@ function gBase(type) {
 
     that.selectParent = function () {
         if (that.gParent) {
-            if (that.gParent().iWasSelected) {
-                that.gParent().iWasSelected();
-            }
+            that.gParent().emit("selected");
         }
         return that;
     };
@@ -126,7 +124,7 @@ function gBase(type) {
 
     that.typeIs = "gBase";
     that.typeClass = "gBase";
-    that.cursor("auto");
+    that.cursor("default");
 
     that.addEventListener("mousedown", mouseDownCallback);
     that.addEventListener("mouseup", mouseUpCallback);

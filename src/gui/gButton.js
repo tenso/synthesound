@@ -95,10 +95,10 @@ function gButton(name, callback, isRadio, buttonGroup) {
         gui.captureMouse(e);
     };
 
-    that.iMouseCaptured = function (e) {
+    that.on("mouseCaptured", function (e) {
         util.unused(e);
         that.set();
-    };
+    });
 
     that.typeIs = "gButton";
     return that;

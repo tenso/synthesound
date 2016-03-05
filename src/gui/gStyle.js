@@ -256,6 +256,7 @@ function gStyle(type) {
         return that;
     });
 
+    //auto, default, ...
     util.addMethod(that, "cursor", function (value) {
         that.style.cursor = value;
         return that;

@@ -42,11 +42,11 @@ function gWidget() {
         if (value) {
             that.addEventListener("mousedown", captureMouse);
 
-            that.iMouseCaptured = function () {
+            that.on("mouseCaptured", function () {
                 that.style.zIndex = gui.nextZ();
-            };
+            });
 
-            that.iMousePressAndMove = function (e, mouse) {
+            that.on("mousePressAndMove", function (e, mouse) {
                 util.unused(e);
                 that.moveTo(mouse.relative.x, mouse.relative.y);
 
@@ -56,10 +56,10 @@ function gWidget() {
                 if (that.getY() < 0) {
                     that.y(0);
                 }
-            };
+            });
         } else {
             that.removeEventListener("mousedown", captureMouse);
-            that.iMousePressAndMove = undefined;
+            that.removeOn("mousePressAndMove");
         }
         return that;
     };
