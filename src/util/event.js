@@ -5,6 +5,7 @@
 
 "use strict";
 
+//FIXME: rename to eventHandler
 function event(base) {
     var that = base || {},
         listeners = {};

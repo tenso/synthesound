@@ -14,20 +14,23 @@ function gBase(type) {
         isDown = false,
         stopPropagation = false;
 
-    function mouseEnterCallback() {
+    function mouseEnterCallback(e) {
+        that.emit("enter");
         if (hoverStyle) {
             that.setStyleStateChanges(hoverStyle);
             that.pushStyle();
         }
     }
 
-    function mouseLeaveCallback() {
+    function mouseLeaveCallback(e) {
+        that.emit("leave", e);
         if (hoverStyle) {
             that.popStyle();
         }
     }
 
     function mouseDownCallback(e) {
+        that.emit("pressed", e);
         if (isDown) {
             log.error("gBase.mouseDownCallback: already down");
             return;
@@ -42,7 +45,8 @@ function gBase(type) {
         }
     }
 
-    function mouseUpCallback() {
+    function mouseUpCallback(e) {
+        that.emit("released", e);
         if (!isDown) {
             return;
         }
@@ -55,14 +59,6 @@ function gBase(type) {
 
     that.hoverEffect = function (style) {
         hoverStyle = style;
-        if (style) {
-            that.addEventListener("mouseenter", mouseEnterCallback);
-            that.addEventListener("mouseleave", mouseLeaveCallback);
-        } else {
-            that.removeEventListener("mouseenter", mouseEnterCallback);
-            that.removeEventListener("mouseleave", mouseLeaveCallback);
-        }
-
         return that;
     };
 
@@ -135,6 +131,7 @@ function gBase(type) {
     that.addEventListener("mousedown", mouseDownCallback);
     that.addEventListener("mouseup", mouseUpCallback);
     that.addEventListener("mouseleave", mouseUpCallback);
-
+    that.addEventListener("mouseenter", mouseEnterCallback);
+    that.addEventListener("mouseleave", mouseLeaveCallback);
     return that;
 }

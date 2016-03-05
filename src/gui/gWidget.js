@@ -16,6 +16,10 @@ function gWidget() {
     var that = gContainer(),
         titleElem = gBase().marginRight(20).cursor("default"); //that is close buttons width
 
+    function captureMouse(e) {
+        gui.captureMouse(e, that);
+    }
+
     that.setTitle = function (title) {
         titleElem.textContent = title;
         return that;
@@ -36,9 +40,7 @@ function gWidget() {
 
     that.canMove = function (value) {
         if (value) {
-            that.onmousedown = function (e) {
-                gui.captureMouse(e, that);
-            };
+            that.addEventListener("mousedown", captureMouse);
 
             that.iMouseCaptured = function () {
                 that.style.zIndex = gui.nextZ();
@@ -56,7 +58,7 @@ function gWidget() {
                 }
             };
         } else {
-            that.onmousedown = undefined;
+            that.removeEventListener("mousedown", captureMouse);
             that.iMousePressAndMove = undefined;
         }
         return that;

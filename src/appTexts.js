@@ -64,7 +64,10 @@ var appTexts = {
         addText("\n");
         addText("Add a component (say a <strong>Gen</strong>) to the <strong>Output</strong> component");
         addText("to add it to audio-output.");
-
+        addText("\n");
+        addTitle("State quantization");
+        addText("Quantization is toggled by pressing the \"1\" button in the tracker.");
+        addText("\n");
         return helpText + "</table>";
     },
 
@@ -99,10 +102,6 @@ var appTexts = {
         addCommand("shift-left-drag", "move end positions of selected states");
         addCommand("ctrl-a", "select all states");
         addCommand("ctrl-c", "make a copy of selected states over old ones (need to be moved manually)");
-        addText("\n");
-
-        addTitle("Tracker quantization");
-        addText("Quantization is toggled by pressing the \"1\" button in the tracker.");
         addText("\n");
 
         addTitle("Tracker time and loop control");
@@ -194,6 +193,7 @@ var appTexts = {
             numFiles: "Num. files",
             passwordMissmatch: "Password missmatch",
             changelog: "Changelog",
+            keys: "Keys",
             license: appTexts.buildLicenseText(),
             changelogText: appTexts.buildChangelog(),
             helpText: appTexts.buildHelpText(),
