@@ -30,8 +30,8 @@ function gWidget() {
         return that;
     };
 
-    that.addResize = function () {
-        gResizer(that);
+    that.addResize = function (minW, minH) {
+        gResizer(that, minW, minH);
     };
 
     that.canMove = function (value) {

@@ -8,7 +8,7 @@
 
 function wNote(note, label) {
     var that = gWidget().addRemove(),
-        textContent = gLabel(note, "html").w(650).h(250).userSelect("text").stopPropagation(true);
+        textContent = gLabel(note, "html").w(550).h(250).userSelect("text").stopPropagation(true);
 
     that.w = function (value) {
         textContent.w(value - 2);
@@ -20,7 +20,7 @@ function wNote(note, label) {
         return that;
     };
 
-    that.addResize();
+    that.addResize(400, 200);
 
     that.on("resizeStart", function () {
         textContent.userSelect("none");

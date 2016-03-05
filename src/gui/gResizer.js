@@ -5,7 +5,7 @@
 /*global util*/
 
 "use strict";
-function gResizer(that) {
+function gResizer(that, minW, minH) {
     var bottom = gBase().abs().bottom(0).left(0).right(0).h(4).cursor("ns-resize"),
         right = gBase().abs().top(0).bottom(0).right(0).w(4).cursor("ew-resize"),
         corner = gBase().abs().bottom(0).right(0).w(4).h(4).cursor("nwse-resize"),
@@ -18,8 +18,8 @@ function gResizer(that) {
 
         if (!inital) {
             inital = {
-                w: that.getW(),
-                h: that.getH()
+                w: typeof minW === "number" ?  minW : that.getW(),
+                h: typeof minH === "number" ?  minH : that.getH(),
             };
         }
 

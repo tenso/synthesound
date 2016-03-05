@@ -31,7 +31,6 @@ function menubar(contentContainer) {
         admin,
         errorLog,
         menus = [],
-        helpString = lang.tr("helpText"),
         aboutString = "<strong>SyntheSound v." + app.ver + "</strong>\n\n" +
             "<strong>Contact: </strong>synthesounds@gmail.com\n\n" +
             "<strong>Source:  </strong><a href='https://github.com/tenso'>github.com/tenso</a>\n\n" +
@@ -93,7 +92,7 @@ function menubar(contentContainer) {
     });
     that.addTabled(file);
 
-    function makePopup(message, title) {
+    function makePopup(message, title, w, h) {
         return function () {
             var popup,
                 mess;
@@ -103,6 +102,12 @@ function menubar(contentContainer) {
                 mess = message;
             }
             popup = wNote(mess, title);
+            if (typeof w === "number") {
+                popup.w(w);
+            }
+            if (typeof h === "number") {
+                popup.h(h);
+            }
             contentContainer.add(popup);
             popup.left(contentContainer.scrollLeft).top(contentContainer.scrollTop);
             return popup;
@@ -119,9 +124,11 @@ function menubar(contentContainer) {
     that.addTabled(audio);
 
     about = wMenuButton(lang.tr("info"), menus);
-    about.addRow(lang.tr("help"), makePopup(helpString, lang.tr("help")));
-    about.addRow(lang.tr("about"), makePopup(aboutString, lang.tr("about")));
+    about.addRow(lang.tr("help"), makePopup(lang.tr("helpText"), lang.tr("help"), 600, 500));
+    about.addRow(lang.tr("keys"), makePopup(lang.tr("keysText"), lang.tr("keys"), 600, 500));
+    about.addRow(lang.tr("about"), makePopup(aboutString, lang.tr("about"), 600, 500));
     about.addRow(lang.tr("log"), makePopup(log.logText, lang.tr("log")));
+    about.addRow(lang.tr("changelog"), makePopup(lang.tr("changelogText"), lang.tr("changelog")));
     that.addTabled(about);
 
     errorLog = wMenuButton(lang.tr("detectedErrors"), menus).show(false);
