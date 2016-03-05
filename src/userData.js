@@ -10,7 +10,7 @@ function userData() {
         userDoc = {login: false},
         password = "",
         email = "",
-        debugLoginAsAdmin = true;
+        debugLoginAsAdmin = false;
 
     that.update = function (doc) {
         userDoc = doc;

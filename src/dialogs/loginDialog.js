@@ -56,8 +56,8 @@ function loginDialog() {
 
     login = gButton(lang.tr("ok"), doLogin).abs().right(10).bottom(10);
     logout = gButton(lang.tr("logout"), doLogout).abs().right(10).bottom(10);
-    password.on("enter", doLogin);
-    email.on("enter", doLogin);
+    password.on("submit", doLogin);
+    email.on("submit", doLogin);
 
     that.add(email);
     that.add(password);

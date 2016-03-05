@@ -23,13 +23,14 @@ function wNameDialog(cb, parent) {
         }
     }
 
+    //FIXME: broken:
     that.focus = function () {
         name.focus();
         return that;
     };
 
     that.on("ok", ok);
-    name.on("enter", ok);
+    name.on("submit", ok);
 
     that.add(name);
 

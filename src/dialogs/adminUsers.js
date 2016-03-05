@@ -12,9 +12,9 @@
 "use strict";
 
 function adminUsers() {
-    var that = gWidget().addRemove(),
-        data = gContainer(),
-        status = gLabel().abs().bottom(35).left(10),
+    var that = gWidget().addRemove().w(1200).h(600),
+        data = gContainer().abs().top(50).left(10).bottom(40).right(10).overflow("auto"),
+        status = gLabel().abs().bottom(10).left(10).textAlign("left"),
         i;
 
     function userOp(opName, email, okCb) {
@@ -54,7 +54,7 @@ function adminUsers() {
         return gLabel(label).margin("2px 10px 2px 10px");
     }
 
-    function buildUser(user) {
+    function addUser(user) {
         data.addTabled(cell(user.email));
         data.addTabled(cell(user.info.name));
         data.addTabled(cell(user.info.validated));
@@ -73,7 +73,9 @@ function adminUsers() {
     }
 
     that.setTitle(lang.tr("serverUsers"));
+    that.add(data);
     that.add(status);
+    that.addResize();
 
     user.on("allUpdated", function (users) {
         data.clear();
@@ -89,7 +91,7 @@ function adminUsers() {
         data.addTabled(cell(lang.tr("delete")).strong());
         data.nextRow();
         for (i = 0; i < users.length; i += 1) {
-            that.add(buildUser(users[i]));
+            addUser(users[i]);
         }
     });
 

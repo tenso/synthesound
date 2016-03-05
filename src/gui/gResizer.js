@@ -18,8 +18,8 @@ function gResizer(that, minW, minH) {
 
         if (!inital) {
             inital = {
-                w: typeof minW === "number" ?  minW : that.getW(),
-                h: typeof minH === "number" ?  minH : that.getH()
+                w: typeof minW === "number" ?  minW : 400,
+                h: typeof minH === "number" ?  minH : 200
             };
         }
 

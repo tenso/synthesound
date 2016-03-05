@@ -20,7 +20,7 @@ function wNote(note, label) {
         return that;
     };
 
-    that.addResize(400, 200);
+    that.addResize();
 
 
     textContent.on("leave", function () {

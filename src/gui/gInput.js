@@ -78,7 +78,7 @@ function gInput(value, callback, label) {
 
     that.addEventListener("keydown", function (e) {
         if (e.keyCode === 13) {
-            that.emit("enter");
+            that.emit("submit");
         }
     });
 
