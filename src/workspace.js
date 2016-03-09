@@ -16,7 +16,6 @@
 /*global sCNotePitch*/
 /*global wMenu*/
 /*global app*/
-/*global appScreen*/
 /*global gIO*/
 /*global util*/
 /*global lang*/
@@ -413,7 +412,12 @@ function workspace() {
 
     that.setViewHeight = function (h) {
         that.h(h - that.offsetTop + 1); //FIXME: dont know why +1 is needed
+        that.emit("resize", that.getW(), that.getH());
     };
+
+    that.addEventListener("scroll", function () {
+        that.emit("scroll", that.scrollLeft, that.scrollTop);
+    });
 
     that.key = undefined; /*FIXME: globally coupled to sCVKey*/
     that.mixerOut = undefined; /*FIXME: globally coupled to sCOut*/
@@ -421,7 +425,7 @@ function workspace() {
     //callbacks
     that.onworkspacechanged = undefined;
 
-    that.setClass("workspace").top(appScreen.minY).h("100%");
+    that.setClass("workspace").h("100%");
     that.typeIs = "workspace";
 
     return that;

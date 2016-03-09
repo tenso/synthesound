@@ -7,8 +7,9 @@
 
 "use strict";
 
+//FIXME: remove container, make it transparent to "container"
 //NOTE: mouse is relative to container, dont use for nodes not in container.
-function guiInput(container, sizeOfContainerChanged) {
+function guiInput(container) {
     var that = {},
         keyIsDown = 0,
         mouseCapturer,
@@ -50,18 +51,6 @@ function guiInput(container, sizeOfContainerChanged) {
     function setMouseCaptureFromEvent(e, target) {
         mouse.captureOffsetInElement = gui.getEventOffsetInElement(target, e);
         mouse.capture = gui.getEventOffsetInElement(container, e);
-    }
-
-    function checkSize(container) {
-        var newSize = {w: container.scrollWidth, h: container.scrollHeight};
-
-        if (newSize.w !== oldSize.w
-                || newSize.h !== oldSize.h) {
-            oldSize = newSize;
-            if (sizeOfContainerChanged) {
-                sizeOfContainerChanged(newSize);
-            }
-        }
     }
 
     that.setMouseCapturer = function (e, wantedObject) {
@@ -114,8 +103,6 @@ function guiInput(container, sizeOfContainerChanged) {
             if (typeof mouseCapturer.iWasMoved === "function") {
                 mouseCapturer.iWasMoved(mouseCapturer);
             }
-
-            checkSize(container);
         }
     });
 

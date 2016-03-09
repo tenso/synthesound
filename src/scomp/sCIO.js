@@ -6,19 +6,22 @@
 /*global ioCon*/
 /*global gBase*/
 /*global util*/
-/*global window*/
 
 "use strict";
 
 function sCIO() {
     var that = gBase("canvas"),
         linesCtx,
-        connections = [];
+        connections = [],
+        scroll = {
+            x: 0,
+            y: 0
+        };
 
     function drawLine(fromX, fromY, toX, toY) {
         linesCtx.beginPath();
-        linesCtx.moveTo(fromX, fromY);
-        linesCtx.lineTo(toX, toY);
+        linesCtx.moveTo(fromX - scroll.x, fromY - scroll.y);
+        linesCtx.lineTo(toX - scroll.x, toY - scroll.y);
         linesCtx.stroke();
     }
 
@@ -59,7 +62,9 @@ function sCIO() {
     that.drawConnections = function () {
         var i,
             to,
-            from;
+            from,
+            toSize,
+            fromSize;
 
         if (!linesCtx) {
             return;
@@ -68,23 +73,22 @@ function sCIO() {
         linesCtx.clearRect(0, 0, that.width, that.height);
 
         for (i = 0; i < connections.length; i += 1) {
-            to = connections[i].to();
-            from = connections[i].from();
-            drawLine(gui.getOffsetInElement(from, that.parentNode).x + gui.getSize(from).w / 2,
-                         gui.getOffsetInElement(from, that.parentNode).y + gui.getSize(from).h / 2,
-                         gui.getOffsetInElement(to, that.parentNode).x + gui.getSize(to).w / 2,
-                         gui.getOffsetInElement(to, that.parentNode).y + gui.getSize(to).h / 2);
+            to = gui.getPos(connections[i].to());
+            from = gui.getPos(connections[i].from());
+            toSize = gui.getSize(connections[i].to());
+            fromSize = gui.getSize(connections[i].from());
+            drawLine(from.x + fromSize.w / 2 - that.getX(),
+                     from.y + fromSize.h / 2  - that.getY(),
+                     to.x + toSize.w / 2 - that.getX(),
+                     to.y + toSize.h / 2  - that.getY());
         }
     };
 
-    that.resizeCanvas = function () {
-        var workspaceWidth = that.parentNode.scrollWidth,
-            workspaceHeight = that.parentNode.scrollHeight;
-
-        that.width = workspaceWidth;
-        that.height = workspaceHeight;
-        that.style.width = workspaceWidth + "px";
-        that.style.height = workspaceHeight + "px";
+    that.resize = function (w, h) {
+        that.width = w - 21; //FIXME: hardcoded compenstation for scrollbars
+        that.height = h - 21; //FIXME: hardcoded compenstation for scrollbars
+        that.style.width = that.width + "px";
+        that.style.height = that.height + "px";
         that.drawConnections();
     };
 
@@ -188,7 +192,9 @@ function sCIO() {
         port.on("mousePressAndMove", function (e, mouse) {
             util.unused(e);
             that.drawConnections();
-            drawLine(mouse.capture.x, mouse.capture.y, mouse.x, mouse.y);
+            drawLine(gui.getPos(port).x + gui.getSize(port).w / 2 - that.getX(),
+                     gui.getPos(port).y + gui.getSize(port).h / 2  - that.getY(),
+                     mouse.x, mouse.y);
         });
 
         port.on("mouseUpAfterCapture", function (e) {
@@ -223,20 +229,26 @@ function sCIO() {
             }
 
             if (targetConnections.length) {
-                menu = wMenu().moveTo(mouse.x - 20, mouse.y - 20).z(200000);
+                menu = wMenu().moveTo(e.pageX - 20, e.pageY - 10).z(200000);
                 that.parentNode.add(menu);
 
                 for (i = 0; i < targetConnections.length; i += 1) {
                     menu.addRow(e.target.sComp.typeId() + " > "
                              + targetConnections[i].sComp.typeId() + " "
                              + targetConnections[i].portType + " "
-                             + (targetConnections[i].isOut ? "out" : "in"), makeDelCb(menu, e.target, targetConnections[i]));
+                             + (targetConnections[i].isOut ? "out" : "in"),
+                                makeDelCb(menu, e.target, targetConnections[i]));
                 }
             }
         });
     };
 
-    window.addEventListener("resize", that.resizeCanvas); //update size of canvas on window-resize
+    that.scroll = function (x, y) {
+        scroll.x = x;
+        scroll.y = y;
+        that.drawConnections();
+        return that;
+    };
 
     that.className = "gIOCanvas";
     linesCtx = that.getContext("2d");

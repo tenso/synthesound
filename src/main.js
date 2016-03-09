@@ -26,10 +26,6 @@ var app = {
     fileVer: 1.0
 };
 
-var appScreen = {
-    minY: 24 /*dont allow stuff behind topmenu*/
-};
-
 var user = userData();
 
 var globalDebug = {
@@ -54,11 +50,13 @@ window.onload = function () {
     /*testsuite*/
     test.runTests(true);
 
-    audioWork = workspace();
+    audioWork = workspace().y(24);
     audioBar = workbar();
-    topMenu = menubar(audioWork).moveTo(0, 0);
-    gIO = sCIO();
-    input = guiInput(audioWork, gIO.resizeCanvas); //resize is when scrollWidth/scrollHeigth changes
+    topMenu = menubar(audioWork, 24).moveTo(0, 0);
+    gIO = sCIO().top(24);
+    audioWork.on("scroll", gIO.scroll);
+    audioWork.on("resize", gIO.resize);
+    input = guiInput(audioWork);
     gui.setInputHandler(input);
 
     audioBar.on("changeCurrentMs", audioWork.setCurrentMs);
@@ -85,7 +83,8 @@ window.onload = function () {
 
     guiApp.add(topMenu);
     guiApp.add(audioWork);
-    audioWork.add(gIO);
+    guiApp.add(gIO);
+
     guiApp.add(audioBar);
     audioBar.resizeCanvas();
     audioBar.setDefaults();
@@ -113,12 +112,9 @@ window.onload = function () {
         topMenu.logError("need FileReader");
     }
 
-    if (audioWork.init()) {
-        audioWork.onworkspacechanged = gIO.resizeCanvas; //update size of canvas on load
-    } else {
+    if (!audioWork.init()) {
         topMenu.logError("need AudioContext and Array.fill");
     }
-
     user.refresh();
 
     /*function confirmExit(e) {
