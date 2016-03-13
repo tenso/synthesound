@@ -42,7 +42,8 @@ function workbar() {
         marginX = 4,
         marginY = 6,
         buttonH = 16,
-        minHeight = 46,
+        minHeight = 160,
+        minTop = 160,
         initialHeight = 400,
         totalMs,
         totalTime,
@@ -410,15 +411,15 @@ function workbar() {
 
     tracker.addTo(that).abs().left(marginX).right(marginX * 2 + 10).top(buttonH + 2 * marginY).bottom(10);
 
+    //FIXME: TODO: should be separate custom scrollbars outside of canvas: better control of things.
     timeScroll.addTo(tracker);
-    timeScroll.abs().w("100%").h("100%");
-    timeScroll.overflow("scroll");
+    timeScroll.abs().w("100%").h("100%").overflow("scroll");
     timeBar.addTo(timeScroll).abs().left(40).top(0).right(0).bottom(0);
 
-    infoBar.addTo(tracker).abs().left(0).top(0).w(40).h("calc(100% - 23px)");
+    infoBar.addTo(tracker).abs().left(0).top(0).w(40).h(timeScroll.clientHeight);
 
     timeCanvas.addTo(tracker);
-    timeCanvas.abs().left(40).top(0).w("calc(100% - 62px)").h("calc(100% - 23px)");
+    timeCanvas.abs().left(40).top(0).w("calc(100% - 62px)").h(timeScroll.clientHeight);
 
     timeScroll.onscroll = function () {
         updateScroll();
@@ -453,11 +454,12 @@ function workbar() {
     });
 
     that.setTopOfBar = function (y) {
-        var newY = y;
+        var newY = y,
+            newH;
         that.top(newY);
 
-        if (that.getTop() < 0) {
-            newY = 0;
+        if (that.getTop() < minTop) {
+            newY = minTop;
             that.top(newY);
         }
 
@@ -465,20 +467,18 @@ function workbar() {
             newY = that.parentNode.offsetHeight - minHeight;
             that.top(newY);
         }
+        newH = timeScroll.clientHeight;
+        if (newH < 0) {
+            newH = 0;
+        }
 
         that.emit("changeTopPosition", newY);
         initialHeight = that.getH();
-        timeCanvas.w("calc(100% - 62px)").h("calc(100% - 23px)"); //FIXME: why needed!?
+        timeCanvas.w("calc(100% - 62px)").h(newH);
         timeCanvas.resize(timeCanvas.getW(), timeCanvas.getH()); //FIXME: fill should be default
-        infoBar.h("calc(100% - 23px)"); //FIXME: why needed!?
-        infoBar.resize(infoBar.getW(), infoBar.getH());
-        timeBar.scroll({
-            x: timeScroll.scrollLeft / timeScroll.scrollWidth,
-            y: timeScroll.scrollTop / timeScroll.scrollHeight
-        });
-        infoBar.scroll({
-            y: timeScroll.scrollTop / timeScroll.scrollHeight
-        });
+        infoBar.h(newH);
+        infoBar.resize(infoBar.getW(), infoBar.getH()); //FIXME: fill should be default
+        updateScroll();
         return that;
     };
 

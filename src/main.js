@@ -22,7 +22,7 @@
 "use strict";
 
 var app = {
-    ver: 1.1,
+    ver: "1.1.1",
     fileVer: 1.0
 };
 

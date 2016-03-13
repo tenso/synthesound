@@ -17,7 +17,7 @@ function wNoteInfoBar(minNote, maxNote) {
             noteH = 1.0 / (maxNote - minNote),
             y,
             cNote,
-            fontSize = 3 * canvas.getZoom().y,
+            fontSize = 4 * canvas.getZoom().y * that.getH() / 400,
             textMargin = noteH / 4;
 
         if (fontSize > 20) {

@@ -138,6 +138,7 @@ function menubar(contentContainer, height) {
     that.addTabled(errorLog);
 
     admin = wMenuButton(lang.tr("admin"), menus);
+    admin.show(0);
     admin.addRow(lang.tr("serverLogs"), function () {
         net.read("logs", function (err, result) {
             var data = "",

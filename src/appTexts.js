@@ -7,6 +7,12 @@
 
 var appTexts = {
     changelog: {
+        "1.1.1": {
+            changes: [
+                "Graphics optimizmation."
+            ],
+            date: "2016-03-13"
+        },
         "1.1": {
             changes: [
                 "Bugfixes",
