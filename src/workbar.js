@@ -22,7 +22,9 @@ function workbar() {
     var that = gContainer(),
         topBar = gContainer(),
         timeScroll = gBase(),
+        tracker = gBase(),
         timeBar = wTimeBar(),
+        timeCanvas = timeBar.getCanvas(),
         keys = {
             ctrl: false,
             shift: false
@@ -176,18 +178,18 @@ function workbar() {
 
     /*FIXME: render sArgs, move*/
 
-    function renderPlain(canvas, ctx, currentMs, totalMs, pixelsPerMs, current) {
+    function renderPlain(canvas, ctx, currentMs, totalMs, current, viewPort) {
         var i,
             timeX;
 
         util.unused(currentMs);
         util.unused(totalMs);
-
+/*
         ctx.strokeStyle = "#aaa";
         ctx.beginPath();
         ctx.moveTo(0,  canvas.height / 2);
         ctx.lineTo(canvas.width, canvas.height / 2);
-        ctx.stroke();
+        ctx.stroke();*/
 
         ctx.lineWidth = 2;
         for (i = 0; i < current.length; i += 1) {
@@ -197,21 +199,21 @@ function workbar() {
                 ctx.strokeStyle = colors.normal;
             }
             ctx.beginPath();
-            timeX = current[i].ms * pixelsPerMs;
+            timeX = (current[i].ms - viewPort.ms.start) * viewPort.ms.pixelsPer;
             ctx.moveTo(timeX,  0);
             ctx.lineTo(timeX, canvas.height);
             ctx.stroke();
         }
     }
 
-    function renderNotes(canvas, ctx, currentMs, totalMs, pixelsPerMs, current) {
+    function renderNotes(canvas, ctx, currentMs, totalMs, current, viewPort) {
         var i,
             timeX,
             lenX,
             noteY,
             noteNum,
             y,
-            pixelsPerNote = canvas.height / (maxNote - minNote);
+            pixelsPerNote = viewPort.h.pixelsPer / (maxNote - minNote);
 
         util.unused(totalMs);
 
@@ -219,7 +221,7 @@ function workbar() {
         for (i = 0; i < maxNote - minNote; i += 1) {
             ctx.beginPath();
             ctx.strokeStyle = "#aaa";
-            y = i * pixelsPerNote;
+            y = i * pixelsPerNote - viewPort.h.start * viewPort.h.pixelsPer;
             ctx.moveTo(0,  y);
             ctx.lineTo(canvas.width, y);
             ctx.stroke();
@@ -230,32 +232,35 @@ function workbar() {
                 if (!current[i].args.hasOwnProperty("gate")) {
                     log.error("no gate for note");
                 } else {
-                    timeX = current[i].ms * pixelsPerMs;
+                    timeX = (current[i].ms - viewPort.ms.start) * viewPort.ms.pixelsPer;
                     if (current[i].msOff === -1) {
-                        lenX = currentMs * pixelsPerMs - timeX;
+                        lenX = currentMs * viewPort.ms.pixelsPer - timeX;
                         if (lenX < 0) {
                             lenX = 0;
                         }
                     } else {
-                        lenX = current[i].msOff * pixelsPerMs - timeX;
+                        lenX = (current[i].msOff - viewPort.ms.start) * viewPort.ms.pixelsPer - timeX;
                     }
 
                     noteNum = note.note(current[i].args.freq);
-                    noteY = canvas.height - (noteNum * pixelsPerNote);
+                    noteY = viewPort.h.pixelsPer - (noteNum * pixelsPerNote) - viewPort.h.start * viewPort.h.pixelsPer;
+
 
                     if (isSelectedState(current[i])) {
                         ctx.fillStyle = colors.selected;
                     } else {
                         ctx.fillStyle = colors.normal;
                     }
-                    ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
+                    if (timeX + lenX > 0 && timeX + lenX < canvas.width) {
+                        ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
+                    }
                 }
             }
         }
     }
 
 
-    function renderEvents(canvas, currentMs, totalMs, pixelsPerMs) {
+    function renderEvents(canvas, currentMs, totalMs, viewPort) {
         if (!sComp) {
             return;
         }
@@ -269,9 +274,9 @@ function workbar() {
 
 
         if (sComp.stateMode() === "notes") {
-            renderNotes(canvas, ctx, currentMs, totalMs, pixelsPerMs, sArgs);
+            renderNotes(canvas, ctx, currentMs, totalMs, sArgs, viewPort);
         } else {
-            renderPlain(canvas, ctx, currentMs, totalMs, pixelsPerMs, sArgs);
+            renderPlain(canvas, ctx, currentMs, totalMs, sArgs, viewPort);
         }
         return that;
     }
@@ -300,6 +305,16 @@ function workbar() {
     function updateRecord() {
         recordOn = record.getValue();
         that.emit("changeRecord", recordOn);
+    }
+
+    function updateScroll() {
+        infoBar.setScroll({
+            y: timeScroll.scrollTop / timeScroll.scrollHeight
+        });
+        timeBar.setScroll({
+            x: timeScroll.scrollLeft / timeScroll.scrollWidth,
+            y: timeScroll.scrollTop / timeScroll.scrollHeight
+        });
     }
 
     that.resizeCanvas = function () {
@@ -375,14 +390,15 @@ function workbar() {
 
     zoomX = gSlider(0, 100, 1200, function (value) {
         timeBar.w("calc(" + value + "% - 40px)");
-        timeBar.resizeCanvas();
+        timeBar.setZoom({x: value / 100});
+        updateScroll();
     }, true);
 
     zoomY = gSlider(0, 100, 400, function (value) {
         timeBar.h(value + "%");
-        timeBar.resizeCanvas();
-        infoBar.h(value + "%");
-        infoBar.resizeCanvas();
+        timeBar.setZoom({y: value / 100});
+        infoBar.setZoom({y: value / 100});
+        updateScroll();
     });
 
     topBar.abs().cursor("ns-resize").left(0).right(0).top(0).h(2).bg("#888");
@@ -404,16 +420,20 @@ function workbar() {
     zoomX.addTo(that).abs().right(marginX * 2 + 10).top(marginY * 2);
     zoomY.addTo(that).abs().right(marginX).top(marginY + 24);
 
+    tracker.addTo(that).abs().left(marginX).right(marginX * 2 + 10).top(buttonH + 2 * marginY).bottom(10);
 
-    //timeBar
-    timeScroll.addTo(that).abs().left(marginX).right(marginX * 2 + 10).top(buttonH + 2 * marginY).bottom(0);
+    timeScroll.addTo(tracker);
+    timeScroll.abs().w("100%").h("100%");
     timeScroll.overflow("scroll");
+    timeBar.addTo(timeScroll).abs().left(40).top(0).right(0).bottom(0);
 
-    timeBar.addTo(timeScroll).abs().left(40).top(0).w("calc(100% - 40px)").h("100%");
+    infoBar.addTo(tracker).abs().left(0).top(0).w(40).bottom(20);
 
-    infoBar.addTo(timeScroll).abs().left(0).top(0).w(40).h("100%");
+    timeCanvas.addTo(tracker);
+    timeCanvas.abs().left(40).top(0).w("calc(100% - 62px)").h("calc(100% - 23px)");
+
     timeScroll.onscroll = function () {
-        infoBar.left(timeScroll.scrollLeft);
+        updateScroll();
     };
 
     timeBar.on("changeCurrentMs", function (ms) {
@@ -460,8 +480,17 @@ function workbar() {
 
         that.emit("changeTopPosition", newY);
         initialHeight = that.getH();
-        timeBar.resizeCanvas();
-        infoBar.resizeCanvas();
+        timeCanvas.width = timeCanvas.getW();
+        timeCanvas.height = timeCanvas.getH();
+        infoBar.getCanvas().width = infoBar.getW();
+        infoBar.getCanvas().height = infoBar.getH();
+        timeBar.setScroll({
+            x: timeScroll.scrollLeft / timeScroll.scrollWidth,
+            y: timeScroll.scrollTop / timeScroll.scrollHeight
+        });
+        infoBar.setScroll({
+            y: timeScroll.scrollTop / timeScroll.scrollHeight
+        });
         return that;
     };
 

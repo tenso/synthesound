@@ -2,7 +2,6 @@
 
 /*global util*/
 /*global gBase*/
-/*global window*/
 /*global log*/
 /*global gui*/
 /*global document*/
@@ -12,17 +11,38 @@
 
 function wTimeBar() {
     var that = gBase().bg("#888"),
-        canvas = gBase("canvas").addTo(that).w("100%").h("100%"),
+        canvas = gBase("canvas"),
         ctx = canvas.getContext("2d"),
         totalMs = 1000,
         currentMs = 0,
+        scroll = {
+            x: 0,
+            y: 0
+        },
+        zoom = {
+            x: 1,
+            y: 1
+        },
         loop = {
             isOn: false,
             ms0: 0,
             ms1: 0
         },
+        viewPort = {
+            ms: {
+                start: 0,
+                len: totalMs,
+                end: totalMs,
+                pixelsPer: 0
+            },
+            h: {
+                start: 0,
+                len: canvas.height,
+                end: canvas.height,
+                pixelsPer: 0
+            }
+        },
         measureMs = 500,
-        pixelsPerMs = 0,
         quantization = 1,
         selection = timeSelection(),
         keys = {
@@ -30,15 +50,14 @@ function wTimeBar() {
             shift: false
         };
 
-    //FIXME: dont use that.parentNode here: move scroll to this comp!
     function calcMouse(e) {
-        var pos = gui.getEventOffsetInElement(that.parentNode, e);
-        pos.x -= that.getLeft();
+        var pos = gui.getEventOffsetInElement(canvas, e);
+        pos.x = scroll.x * canvas.width + pos.x / zoom.x;
         pos.x *= totalMs / canvas.width;
         if (pos.x < -1) {
             pos.x = -1;
         }
-        pos.y -= that.getTop();
+        pos.y = scroll.y * canvas.height + pos.y / zoom.y;
         pos.y /= canvas.height;
         return {
             ms: pos.x,
@@ -55,20 +74,30 @@ function wTimeBar() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.lineWidth = 1;
 
+        if (zoom.x === 0 || zoom.y === 0) {
+            log.error("zoom cant be 0");
+            return;
+        }
+
         if (measureMs > 0) {
             while (ms < totalMs) {
                 measure += 1;
                 ms += measureMs;
-                timeX = ms * pixelsPerMs;
                 if ((measure % measurePerBeat) === 0) {
                     ctx.strokeStyle = "#ddd";
                 } else {
                     ctx.strokeStyle = "#999";
                 }
-                ctx.beginPath();
-                ctx.moveTo(timeX,  0);
-                ctx.lineTo(timeX, canvas.height);
-                ctx.stroke();
+                if (ms >= viewPort.ms.start) {
+                    timeX = (ms - viewPort.ms.start) * viewPort.ms.pixelsPer;
+                    ctx.beginPath();
+                    ctx.moveTo(timeX,  0);
+                    ctx.lineTo(timeX, canvas.height);
+                    ctx.stroke();
+                }
+                if (ms >= viewPort.ms.end) {
+                    break;
+                }
             }
         }
 
@@ -76,14 +105,16 @@ function wTimeBar() {
     }
 
     function drawMarker(ms, style) {
-        var timeX = ms * pixelsPerMs;
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = style;
-        ctx.beginPath();
-        ctx.moveTo(timeX,  0);
-        ctx.lineTo(timeX, canvas.height);
-        ctx.stroke();
-        ctx.lineWidth = 1;
+        var timeX = (ms - viewPort.ms.start) * viewPort.ms.pixelsPer;
+        if (timeX > 0 && timeX < canvas.width) {
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = style;
+            ctx.beginPath();
+            ctx.moveTo(timeX,  0);
+            ctx.lineTo(timeX, canvas.height);
+            ctx.stroke();
+            ctx.lineWidth = 1;
+        }
     }
 
     function drawFg() {
@@ -94,19 +125,46 @@ function wTimeBar() {
     }
 
     that.draw = function () {
-        pixelsPerMs = canvas.width / totalMs;
+        viewPort.ms.pixelsPer = zoom.x * canvas.width / totalMs;
+        viewPort.ms.start = totalMs * scroll.x;
+        viewPort.ms.len = totalMs / zoom.x;
+        viewPort.ms.end = viewPort.ms.start + viewPort.ms.len;
+        viewPort.ms.total = totalMs;
+
+        viewPort.h.pixelsPer = zoom.y * canvas.height;
+        viewPort.h.start = scroll.y;
+        viewPort.h.len = canvas.height / zoom.y;
+        viewPort.h.end = viewPort.h.start + viewPort.h.len;
+        viewPort.h.total = 1.0;
+
         drawBg();
-        that.emit("renderOver", canvas, currentMs, totalMs, pixelsPerMs);
+        that.emit("renderOver", canvas, currentMs, totalMs, viewPort);
         drawFg();
-        selection.draw(canvas, totalMs);
+        selection.draw(canvas, totalMs, viewPort);
         return that;
     };
 
-    that.resizeCanvas = function () {
-        canvas.width = that.offsetWidth;
-        canvas.height = that.offsetHeight;
-        return that.draw();
+    that.setScroll = function (args) {
+        util.setArgs(scroll, args);
+        that.draw();
+        return that;
     };
+
+    that.setZoom = function (args) {
+        util.setArgs(zoom, args);
+        that.draw();
+        return that;
+    };
+
+    /*that.resize = function (w, h) {
+        canvas.width = w;
+        canvas.height = h;
+        canvas.w(w);
+        canvas.h(h);
+        console.log("canvas", w, h);
+        console.log("total", that.getW(), that.getH());
+        return that.draw();
+    };*/
 
     that.setCurrentMs = function (ms) {
         currentMs = ms;
@@ -138,6 +196,10 @@ function wTimeBar() {
     that.setLoop = function (args) {
         util.setArgs(loop, args);
         that.draw();
+    };
+
+    that.getCanvas = function () {
+        return canvas;
     };
 
     canvas.onmousedown = function (e) {
@@ -212,7 +274,6 @@ function wTimeBar() {
         keys.shift = e.shiftKey;
     }, false);
 
-    window.addEventListener("resize", that.resizeCanvas);
     that.typeIs = "wTimeBar";
     return that;
 }
