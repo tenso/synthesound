@@ -115,6 +115,9 @@ function tracker(sampleRate) {
         var stepBefore = that.currentMs();
 
         currentMs = parseInt(ms, 10);
+        if (currentMs > totalMs) {
+            currentMs = totalMs;
+        }
         currentFrame = parseInt(currentMs * sampleRate / 1000, 10);
         return that.currentMs() !== stepBefore;
     };

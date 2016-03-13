@@ -32,6 +32,7 @@ function workbar() {
         selectedStates = [],
         play,
         record,
+        currentMs = 0,
         loop,
         loopParams = {
             isOn: false,
@@ -43,6 +44,7 @@ function workbar() {
         buttonH = 16,
         minHeight = 46,
         initialHeight = 400,
+        totalMs,
         totalTime,
         moveActive = false,
         sComp,
@@ -178,105 +180,88 @@ function workbar() {
 
     /*FIXME: render sArgs, move*/
 
-    function renderPlain(canvas, ctx, currentMs, totalMs, current, viewPort) {
+    function renderPlain(canvas, current) {
         var i,
             timeX;
 
-        util.unused(currentMs);
-        util.unused(totalMs);
-/*
-        ctx.strokeStyle = "#aaa";
-        ctx.beginPath();
-        ctx.moveTo(0,  canvas.height / 2);
-        ctx.lineTo(canvas.width, canvas.height / 2);
-        ctx.stroke();*/
+        canvas.lineWidth(1);
+        canvas.strokeStyle("#aaa");
+        canvas.line(0, 0.5, 1.0, 0.5);
 
-        ctx.lineWidth = 2;
+        canvas.lineWidth(2);
         for (i = 0; i < current.length; i += 1) {
             if (isSelectedState(current[i])) {
-                ctx.strokeStyle = colors.selected;
+                canvas.strokeStyle(colors.selected);
             } else {
-                ctx.strokeStyle = colors.normal;
+                canvas.strokeStyle(colors.normal);
             }
-            ctx.beginPath();
-            timeX = (current[i].ms - viewPort.ms.start) * viewPort.ms.pixelsPer;
-            ctx.moveTo(timeX,  0);
-            ctx.lineTo(timeX, canvas.height);
-            ctx.stroke();
+            timeX = current[i].ms / totalMs;
+            canvas.line(timeX,  0, timeX, 1.0);
         }
     }
 
-    function renderNotes(canvas, ctx, currentMs, totalMs, current, viewPort) {
+    function renderNotes(canvas, current) {
         var i,
             timeX,
             lenX,
             noteY,
             noteNum,
             y,
-            pixelsPerNote = viewPort.h.pixelsPer / (maxNote - minNote);
-
-        util.unused(totalMs);
+            noteH = 1.0 / (maxNote - minNote);
 
         //draw note grid:
+        canvas.strokeStyle("#aaa");
         for (i = 0; i < maxNote - minNote; i += 1) {
-            ctx.beginPath();
-            ctx.strokeStyle = "#aaa";
-            y = i * pixelsPerNote - viewPort.h.start * viewPort.h.pixelsPer;
-            ctx.moveTo(0,  y);
-            ctx.lineTo(canvas.width, y);
-            ctx.stroke();
+            y = i * noteH;
+            canvas.line(0,  y, 1.0, y);
         }
+
         //draw notes:
         for (i = 0; i < current.length; i += 1) {
             if (current[i].hasOwnProperty("msOff")) {
                 if (!current[i].args.hasOwnProperty("gate")) {
                     log.error("no gate for note");
                 } else {
-                    timeX = (current[i].ms - viewPort.ms.start) * viewPort.ms.pixelsPer;
+                    timeX = current[i].ms / totalMs;
                     if (current[i].msOff === -1) {
-                        lenX = currentMs * viewPort.ms.pixelsPer - timeX;
+                        lenX = currentMs / totalMs - timeX;
                         if (lenX < 0) {
                             lenX = 0;
                         }
                     } else {
-                        lenX = (current[i].msOff - viewPort.ms.start) * viewPort.ms.pixelsPer - timeX;
+                        lenX = current[i].msOff / totalMs - timeX;
                     }
 
                     noteNum = note.note(current[i].args.freq);
-                    noteY = viewPort.h.pixelsPer - (noteNum * pixelsPerNote) - viewPort.h.start * viewPort.h.pixelsPer;
-
+                    noteY = 1.0 - (noteNum * noteH);
 
                     if (isSelectedState(current[i])) {
-                        ctx.fillStyle = colors.selected;
+                        canvas.fillStyle(colors.selected);
                     } else {
-                        ctx.fillStyle = colors.normal;
+                        canvas.fillStyle(colors.normal);
                     }
-                    if (timeX + lenX > 0 && timeX + lenX < canvas.width) {
-                        ctx.fillRect(timeX, noteY, lenX, pixelsPerNote);
-                    }
+                    //FIXME: dont need to draw notes not in viewport!
+                    canvas.fillRect(timeX, noteY, lenX, noteH);
                 }
             }
         }
     }
 
-
-    function renderEvents(canvas, currentMs, totalMs, viewPort) {
+    function renderEvents(canvas) {
         if (!sComp) {
             return;
         }
-        var sArgs = sComp.getSequencer().data(),
-            ctx = canvas.getContext("2d");
+        var sArgs = sComp.getSequencer().data();
 
         if (!sComp) {
             log.error("workbar.renderEvents: no sComp");
             return that;
         }
 
-
         if (sComp.stateMode() === "notes") {
-            renderNotes(canvas, ctx, currentMs, totalMs, sArgs, viewPort);
+            renderNotes(canvas, sArgs);
         } else {
-            renderPlain(canvas, ctx, currentMs, totalMs, sArgs, viewPort);
+            renderPlain(canvas, sArgs);
         }
         return that;
     }
@@ -288,8 +273,8 @@ function workbar() {
     }
 
     function updateTotalTime() {
-        var total = util.stringToMs(totalTime.getValue());
-        that.emit("changeTotalMs", total);
+        totalMs = util.stringToMs(totalTime.getValue());
+        that.emit("changeTotalMs", totalMs);
         return that;
     }
 
@@ -308,10 +293,10 @@ function workbar() {
     }
 
     function updateScroll() {
-        infoBar.setScroll({
+        infoBar.scroll({
             y: timeScroll.scrollTop / timeScroll.scrollHeight
         });
-        timeBar.setScroll({
+        timeBar.scroll({
             x: timeScroll.scrollLeft / timeScroll.scrollWidth,
             y: timeScroll.scrollTop / timeScroll.scrollHeight
         });
@@ -322,13 +307,15 @@ function workbar() {
         return that;
     };
 
-    that.setTime = function (currentMs) {
+    that.setTime = function (ms) {
+        currentMs = ms;
         time.setValue(util.msToString(currentMs));
         timeBar.setCurrentMs(currentMs);
         return that;
     };
 
-    that.setTotalTime = function (totalMs) {
+    that.setTotalTime = function (total) {
+        totalMs = total;
         totalTime.setValue(util.msToString(totalMs));
         timeBar.setTotalMs(totalMs);
         return that;
@@ -388,16 +375,17 @@ function workbar() {
     quantInput = gInput("", updateBpmAndQuantification, "/", 30).labelPos("left");
     quantOn = gButton("1", updateBpmAndQuantification, true).w(20).h(buttonH);
 
-    zoomX = gSlider(0, 100, 1200, function (value) {
-        timeBar.w("calc(" + value + "% - 40px)");
-        timeBar.setZoom({x: value / 100});
+    zoomX = gSlider(0, 0, 2400, function (value) {
+        var songLenScale = totalMs / 60000;
+        timeBar.w("calc(" + (100 + songLenScale * value) + "% - 40px)");
+        timeBar.zoom({x: 1 + songLenScale * value / 100});
         updateScroll();
     }, true);
 
-    zoomY = gSlider(0, 100, 400, function (value) {
+    zoomY = gSlider(0, 100, 1200, function (value) {
         timeBar.h(value + "%");
-        timeBar.setZoom({y: value / 100});
-        infoBar.setZoom({y: value / 100});
+        timeBar.zoom({y: value / 100});
+        infoBar.zoom({y: value / 100});
         updateScroll();
     });
 
@@ -427,7 +415,7 @@ function workbar() {
     timeScroll.overflow("scroll");
     timeBar.addTo(timeScroll).abs().left(40).top(0).right(0).bottom(0);
 
-    infoBar.addTo(tracker).abs().left(0).top(0).w(40).bottom(20);
+    infoBar.addTo(tracker).abs().left(0).top(0).w(40).h("calc(100% - 23px)");
 
     timeCanvas.addTo(tracker);
     timeCanvas.abs().left(40).top(0).w("calc(100% - 62px)").h("calc(100% - 23px)");
@@ -480,15 +468,15 @@ function workbar() {
 
         that.emit("changeTopPosition", newY);
         initialHeight = that.getH();
-        timeCanvas.width = timeCanvas.getW();
-        timeCanvas.height = timeCanvas.getH();
-        infoBar.getCanvas().width = infoBar.getW();
-        infoBar.getCanvas().height = infoBar.getH();
-        timeBar.setScroll({
+        timeCanvas.w("calc(100% - 62px)").h("calc(100% - 23px)"); //FIXME: why needed!?
+        timeCanvas.resize(timeCanvas.getW(), timeCanvas.getH()); //FIXME: fill should be default
+        infoBar.h("calc(100% - 23px)"); //FIXME: why needed!?
+        infoBar.resize(infoBar.getW(), infoBar.getH());
+        timeBar.scroll({
             x: timeScroll.scrollLeft / timeScroll.scrollWidth,
             y: timeScroll.scrollTop / timeScroll.scrollHeight
         });
-        infoBar.setScroll({
+        infoBar.scroll({
             y: timeScroll.scrollTop / timeScroll.scrollHeight
         });
         return that;
@@ -549,8 +537,8 @@ function workbar() {
     }, false);
 
     that.setDefaults = function () {
-        zoomX.setValue(400);
-        zoomY.setValue(400);
+        //zoomX.setValue(400);
+        //zoomY.setValue(400);
         timeScroll.scrollTop = timeBar.getH() / 2;
     };
     return that;

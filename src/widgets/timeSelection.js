@@ -49,21 +49,21 @@ function timeSelection() {
         };
     };
 
-    that.draw = function (canvas, totalMs, viewPort) {
-        var start,
-            startY,
-            end,
-            endY,
-            ctx = canvas.getContext("2d");
+    that.draw = function (canvas, totalMs) {
+        var x,
+            y,
+            w,
+            h;
 
         if (that.haveArea()) {
             if (that.modeActive("select") || that.modeActive("moveSelect")) {
-                start = (that.startMs - viewPort.ms.start) * viewPort.ms.pixelsPer;
-                end = (that.endMs - viewPort.ms.start) * viewPort.ms.pixelsPer;
-                startY = (that.startH - viewPort.h.start) * viewPort.h.pixelsPer;
-                endY = (that.endH - viewPort.h.start) * viewPort.h.pixelsPer;
-                ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
-                ctx.fillRect(start, startY, end - start, endY - startY);
+                x = that.startMs / totalMs;
+                w = (that.endMs - that.startMs) / totalMs;
+                y = that.startH;
+                h = (that.endH - that.startH);
+
+                canvas.fillStyle("rgba(255, 255, 255, 0.15)");
+                canvas.fillRect(x, y, w, h);
             }
         }
 

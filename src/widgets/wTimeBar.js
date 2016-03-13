@@ -6,41 +6,19 @@
 /*global gui*/
 /*global document*/
 /*global timeSelection*/
+/*global gViewportCanvas*/
 
 "use strict";
 
 function wTimeBar() {
     var that = gBase().bg("#888"),
-        canvas = gBase("canvas"),
-        ctx = canvas.getContext("2d"),
+        canvas = gViewportCanvas("canvas"),
         totalMs = 1000,
         currentMs = 0,
-        scroll = {
-            x: 0,
-            y: 0
-        },
-        zoom = {
-            x: 1,
-            y: 1
-        },
         loop = {
             isOn: false,
             ms0: 0,
             ms1: 0
-        },
-        viewPort = {
-            ms: {
-                start: 0,
-                len: totalMs,
-                end: totalMs,
-                pixelsPer: 0
-            },
-            h: {
-                start: 0,
-                len: canvas.height,
-                end: canvas.height,
-                pixelsPer: 0
-            }
         },
         measureMs = 500,
         quantization = 1,
@@ -50,70 +28,45 @@ function wTimeBar() {
             shift: false
         };
 
-    function calcMouse(e) {
-        var pos = gui.getEventOffsetInElement(canvas, e);
-        pos.x = scroll.x * canvas.width + pos.x / zoom.x;
-        pos.x *= totalMs / canvas.width;
-        if (pos.x < -1) {
-            pos.x = -1;
-        }
-        pos.y = scroll.y * canvas.height + pos.y / zoom.y;
-        pos.y /= canvas.height;
-        return {
-            ms: pos.x,
-            h: pos.y
-        };
-    }
-
     function drawBg() {
         var ms = 0,
             timeX = 0,
             measure = 0,
-            measurePerBeat = Math.round(1 / quantization);
+            stepMs = measureMs,
+            measurePerBeat = Math.round(1 / quantization),
+            linesOnScreen = totalMs / (canvas.getZoom().x * stepMs);
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.lineWidth = 1;
+        canvas.clear();
+        canvas.lineWidth(1);
 
-        if (zoom.x === 0 || zoom.y === 0) {
-            log.error("zoom cant be 0");
-            return;
+        if (linesOnScreen >= 1000) {
+            stepMs = totalMs / (1000 * canvas.getZoom().x);
         }
-
-        if (measureMs > 0) {
+        if (stepMs > 0) {
             while (ms < totalMs) {
                 measure += 1;
-                ms += measureMs;
-                if ((measure % measurePerBeat) === 0) {
-                    ctx.strokeStyle = "#ddd";
-                } else {
-                    ctx.strokeStyle = "#999";
-                }
-                if (ms >= viewPort.ms.start) {
-                    timeX = (ms - viewPort.ms.start) * viewPort.ms.pixelsPer;
-                    ctx.beginPath();
-                    ctx.moveTo(timeX,  0);
-                    ctx.lineTo(timeX, canvas.height);
-                    ctx.stroke();
-                }
-                if (ms >= viewPort.ms.end) {
-                    break;
+                ms += stepMs;
+                timeX = ms / totalMs;
+
+                if (canvas.xVisible(timeX)) {
+                    if ((measure % measurePerBeat) === 0) {
+                        canvas.strokeStyle("#ddd");
+                    } else {
+                        canvas.strokeStyle("#999");
+                    }
+                    canvas.line(timeX,  0, timeX, 1.0);
                 }
             }
         }
-
         return that;
     }
 
     function drawMarker(ms, style) {
-        var timeX = (ms - viewPort.ms.start) * viewPort.ms.pixelsPer;
-        if (timeX > 0 && timeX < canvas.width) {
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = style;
-            ctx.beginPath();
-            ctx.moveTo(timeX,  0);
-            ctx.lineTo(timeX, canvas.height);
-            ctx.stroke();
-            ctx.lineWidth = 1;
+        var timeX = ms / totalMs;
+        if (canvas.xVisible(timeX)) {
+            canvas.lineWidth(2);
+            canvas.strokeStyle(style);
+            canvas.line(timeX,  0, timeX, 1.0);
         }
     }
 
@@ -125,46 +78,29 @@ function wTimeBar() {
     }
 
     that.draw = function () {
-        viewPort.ms.pixelsPer = zoom.x * canvas.width / totalMs;
-        viewPort.ms.start = totalMs * scroll.x;
-        viewPort.ms.len = totalMs / zoom.x;
-        viewPort.ms.end = viewPort.ms.start + viewPort.ms.len;
-        viewPort.ms.total = totalMs;
-
-        viewPort.h.pixelsPer = zoom.y * canvas.height;
-        viewPort.h.start = scroll.y;
-        viewPort.h.len = canvas.height / zoom.y;
-        viewPort.h.end = viewPort.h.start + viewPort.h.len;
-        viewPort.h.total = 1.0;
-
         drawBg();
-        that.emit("renderOver", canvas, currentMs, totalMs, viewPort);
+        that.emit("renderOver", canvas);
         drawFg();
-        selection.draw(canvas, totalMs, viewPort);
+        selection.draw(canvas, totalMs);
         return that;
     };
 
-    that.setScroll = function (args) {
-        util.setArgs(scroll, args);
+    that.scroll = function (args) {
+        canvas.scroll(args);
         that.draw();
         return that;
     };
 
-    that.setZoom = function (args) {
-        util.setArgs(zoom, args);
+    that.zoom = function (args) {
+        canvas.zoom(args);
         that.draw();
         return that;
     };
 
-    /*that.resize = function (w, h) {
-        canvas.width = w;
-        canvas.height = h;
-        canvas.w(w);
-        canvas.h(h);
-        console.log("canvas", w, h);
-        console.log("total", that.getW(), that.getH());
+    that.resize = function (w, h) {
+        canvas.resize(w, h);
         return that.draw();
-    };*/
+    };
 
     that.setCurrentMs = function (ms) {
         currentMs = ms;
@@ -207,47 +143,53 @@ function wTimeBar() {
     };
 
     canvas.on("mouseCaptured", function (e) {
-        var pos = calcMouse(e);
+        var pos = canvas.calcMouse(e, totalMs, 1.0);
+        if (pos.x < -1) {
+            pos.x = -1;
+        }
 
         if (keys.ctrl && keys.shift) {
             if (e.button === 0) {
                 selection.setMode("moveLoop0");
-                loop.ms0 = pos.ms;
+                loop.ms0 = pos.x;
             } else if (e.button === 2) {
                 selection.setMode("moveLoop1");
-                loop.ms1 = pos.ms;
+                loop.ms1 = pos.x;
             }
         } else if (e.button === 2) {
             selection.setMode("select");
-            selection.start(pos.ms, pos.h);
+            selection.start(pos.x, pos.y);
             that.draw();
         } else if (keys.ctrl && e.button === 0) {
             selection.setMode("setMs");
-            that.emit("changeCurrentMs", pos.ms);
+            that.emit("changeCurrentMs", pos.x);
         } else if (e.button === 0) {
             if (selection.modeActive("")) {
                 selection.setMode("selectionUpdated");
-                selection.start(pos.ms, pos.h);
+                selection.start(pos.x, pos.y);
             }
         }
         that.draw();
     });
 
     canvas.on("mousePressAndMove", function (e, mouse) {
-        var pos = calcMouse(e);
+        var pos = canvas.calcMouse(e, totalMs, 1.0);
+        if (pos.x < -1) {
+            pos.x = -1;
+        }
         util.unused(mouse);
 
         if (selection.modeActive("select")) {
-            selection.end(pos.ms, pos.h);
+            selection.end(pos.x, pos.y);
         } else if (selection.modeActive("setMs")) {
-            that.emit("changeCurrentMs", pos.ms);
+            that.emit("changeCurrentMs", pos.x);
         } else if (selection.modeActive("selectionUpdated")) {
-            selection.end(pos.ms, pos.h);
+            selection.end(pos.x, pos.y);
             that.emit("selectionUpdated", selection.get(), false);
         } else if (selection.modeActive("moveLoop0")) {
-            loop.ms0 = pos.ms;
+            loop.ms0 = pos.x;
         } else if (selection.modeActive("moveLoop1")) {
-            loop.ms1 = pos.ms;
+            loop.ms1 = pos.x;
         }
         that.draw();
     });
